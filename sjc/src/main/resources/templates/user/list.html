@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	  layout:decorate="~{common/layouts/default_layout}"
-	  layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 <!-- <meta name="ctxPath" th:value="${contextPath}"> -->
 <title>userList</title>
 </head>
 <body>
-    <div class="container">
-        <h3>사용자 조회</h3>
-        <h3>사용자 조회</h3>
-        <h3>사용자 조회</h3>
+    <div class="main-container">
+        <h3>사용자 관리</h3>
         <table class="table table-secondary table-hover">
             <thead>
                 <tr>
