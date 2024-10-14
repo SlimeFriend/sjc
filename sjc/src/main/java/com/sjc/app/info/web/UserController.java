@@ -29,6 +29,7 @@ public class UserController {
 	// GET  : 조회, 빈페이지 // pk만 전달해서 삭제하는 경우는 가능.
 	// POST : 데이터 조작(등록, 수정, 삭제)
 	
+
 	// 전체조회
 	@GetMapping("userList")
 	public String userList(Model model) { // Model = Request + Response
@@ -40,6 +41,17 @@ public class UserController {
 		return "user/list"; // 3) 데이터를 출력할 페이지 결정
 		// prefix + return + suffix => 실제 경로/ViewResolver
         // classpath:/tuserlates/user/list.html		
+	}
+	
+	@GetMapping("userListGrid")
+	public String userListGrid(Model model) {
+		List<UserVO> list = userService.userList();
+		model.addAttribute("users", list);		
+		return "user/listGrid";
+	}
+	@GetMapping("userGrid")
+	public String userGrid() {
+		return "user/listGridFetch";
 	}
 	
 //	// 단건조회 : Get => QueryString(커맨드 객체 or @RequestParam), userloyeeId
