@@ -22,7 +22,6 @@ public class EqVO {
 	private String lineCode;	  // 라인
 	private String eqType;		  // 설비 구분
 	private String eqName;		  // 설비명
-	private String processCode;	  // 공정 코드
 	private String typeName;	  // 구분명
 	private Date eqCkDate;		  // 점검일자
 	private String description;	  // 설명
