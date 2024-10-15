@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.OrderRequestMapper">
+ <!-- 발주 요청 목록 조회 -->
+    <select id="selectAllOrderRequests" resultType="com.sjc.app.mt.service.OrderRequestVO">
+        SELECT 
+            ORDER_REQUEST_CODE AS orderRequestCode,
+            ORDER_DATE AS orderDate,
+            MT_CODE AS mtCode,
+            QUANTITY AS quantity,
+            CP_CODE AS cpCode,
+            USER_ID AS userId,
+            COMMENT AS remarks
+        FROM 
+            OD_REQUEST
+    </select>
+
+    <!-- 발주 요청 단건 조회 -->
+    <select id="selectOrderRequestByCode" parameterType="String" resultType="com.sjc.app.mt.service.OrderRequestVO">
+        SELECT 
+            ORDER_REQUEST_CODE AS orderRequestCode,
+            ORDER_DATE AS orderDate,
+            MT_CODE AS mtCode,
+            QUANTITY AS quantity,
+            CP_CODE AS cpCode,
+            USER_ID AS userId,
+            COMM AS comm
+        FROM 
+            OD_REQUEST
+        WHERE 
+            ORDER_REQUEST_CODE = #{orderRequestCode}
+    </select>
+
+    <!-- 발주 요청 생성 -->
+    <insert id="insertOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
+        INSERT INTO OD_REQUEST (
+            ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM
+        ) VALUES (
+            #{orderRequestCode}, #{orderDate}, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm}
+        )
+    </insert>
+
+    <!-- 발주 요청 수정 -->
+    <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
+        UPDATE OD_REQUEST
+        SET 
+            ORDER_DATE = #{orderDate}, 
+            MT_CODE = #{mtCode}, 
+            QUANTITY = #{quantity}, 
+            CP_CODE = #{cpCode}, 
+            USER_ID = #{userId}, 
+            COMM = #{comm}
+        WHERE 
+            ORDER_REQUEST_CODE = #{orderRequestCode}
+    </update>
+
+    <!-- 발주 요청 삭제 -->
+    <delete id="deleteOrderRequest" parameterType="String">
+        DELETE FROM OD_REQUEST
+        WHERE ORDER_REQUEST_CODE = #{orderRequestCode}
+    </delete>
+</mapper>
