@@ -1,11 +1,13 @@
 package com.sjc.app.pr.service;
 
-import java.util.List;
 
+import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 @Data
 public class PlanVO {
+
     private String planCode;    // 생산코드
     
     private String startDate;    // 시작 일자
@@ -16,3 +18,4 @@ public class PlanVO {
     
     private List<PlanDVO> planDetails; // 생산계획 상세 리스트
 }
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>생산 계획</title>
+</head>
+
+<body>
+    <div class="main-container">
+        <h3>생산 계획</h3>
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>생산계획 코드</th>
+                    <th>시작 일자</th>
+                    <th>완료 일자</th>
+                    <th>담당자</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            <tbody id="plan">
+                <th:block th:each="list, sts : ${list}"> <!-- 반복문 block th:each="임시변수 : ${}" -->
+					<tr>
+                        <td th:text="${list.planCode}"/>
+                        <td>[[ ${#dates.format(list.startDate, "yyyy/MM/dd")} ]]</td>
+                        <td>[[ ${#dates.format(list.endDate, "yyyy/MM/dd")} ]]</td>
+                        <td th:text="${list.manager}"/>
+                        <td th:text="${list.comm}"/>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+                <h3>생산 계획 상세</h3>
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>수량</th>
+                    <th>우선 순위</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            <tbody>
+                <th:block th:each="list, sts : ${planD}"> <!-- 반복문 block th:each="임시변수 : ${}" -->
+					<tr>
+                        <td th:text="${list.prdName}"/>
+                        <td>[[ ${list.quantity} ]]</td>
+                        <td>[[ ${list.no} ]]</td>
+                        <td>[[ ${list.comm]]</td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+    
+<script>
+	const plan = document.getElementById("plan");
+	
+	plan.children.on('click', function(event){
+			
+	})
+
+</script>
+
+</body>
+</html>

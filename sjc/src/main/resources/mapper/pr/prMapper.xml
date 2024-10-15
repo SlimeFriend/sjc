@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.pr.mapper.PrdtMapper">
+
+<!-- 조회 -->
+<select id="selectPlanAll" resultType="PlanVO">
+	select plan_code, 
+			start_date,
+			end_date,
+			manager,
+			comm,
+			status
+	from plan
+</select>
+
+
+<!-- 계획 상세 조회 -->
+
+<select id="selectPlan" parameterType="String"  resultType="PlanDVO">
+	select plan_detail_code,
+			prd_name,
+			quantity,
+			no,
+			comm,
+			plan_code,
+			prd_code
+	from plan_detail
+	where plan_code = #{planCode}
+</select>
+
+</mapper>
