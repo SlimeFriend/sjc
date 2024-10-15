@@ -1,5 +1,8 @@
 package com.sjc.app.pr.service;
 
+import lombok.Data;
+
+@Data
 public class PlanDVO {
 	private String planDetailCode;  // 생산계획상세 코드
 	private String prdName;			// 제품명

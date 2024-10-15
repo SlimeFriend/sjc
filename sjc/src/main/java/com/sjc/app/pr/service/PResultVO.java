@@ -1,6 +1,9 @@
 package com.sjc.app.pr.service;
 
-public class PResult {	
+import lombok.Data;
+
+@Data
+public class PResultVO {	
 	private String presultCode;		// 생산공정실적 코드
 	private String prdCode;			// 제품 코드
 	private String startTime;		// 시작 시간

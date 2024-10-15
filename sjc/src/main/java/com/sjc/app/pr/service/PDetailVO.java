@@ -1,6 +1,9 @@
 package com.sjc.app.pr.service;
 
-public class PDetail {
+import lombok.Data;
+
+@Data
+public class PDetailVO {
 	private String pdetailCode;	// 생산지시상세 코드
 	private String prdName;		// 제품이름
 	private Integer want;		// 목표량

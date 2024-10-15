@@ -1,5 +1,8 @@
 package com.sjc.app.pr.service;
 
+import lombok.Data;
+
+@Data
 public class POrderVO {
 	private String porderCode;
 	private String startDate;
