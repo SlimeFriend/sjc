@@ -18,7 +18,7 @@
             LEADTIME
         FROM 
             MT  
-    </select>
+    </select> 
     
    <select id="selectMaterialsByPlanCode" resultType="com.sjc.app.mt.service.MtVO">
         SELECT 
