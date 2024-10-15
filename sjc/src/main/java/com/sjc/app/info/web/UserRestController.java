@@ -28,12 +28,18 @@ public class UserRestController {
 		return "test/main";
 	}
 	
-	//전체조회 : GET + URI(자원 => users)
-	//REST => 사실상 Model 객체 사용하지 않음
+//	//전체조회 : GET + URI(자원 => users)
+//	//REST => 사실상 Model 객체 사용하지 않음
+//	@GetMapping("users")
+//	public List<UserVO> userList(){
+//		return userService.userList();
+//	}
+	
 	@GetMapping("users")
-	public List<UserVO> userList(){
-		return userService.userList();
+	public List<UserVO> userList(UserVO uservo){
+		return userService.userList(uservo);
 	}
+	
 //	//단건조회 : GET + URI(자원 => users)
 //	@GetMapping("users/{userId}") //PathVariable방식
 //	public UserVO userInfo(@PathVariable Integer userId) {
