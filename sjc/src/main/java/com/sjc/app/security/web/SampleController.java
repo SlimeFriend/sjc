@@ -9,7 +9,7 @@ public class SampleController {
 	public String root() {
 		return "redirect:main";
 	}
-
+	
 	@GetMapping("main")
 	public void main() {}
 	
