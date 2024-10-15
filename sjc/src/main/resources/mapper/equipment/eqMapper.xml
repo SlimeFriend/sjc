@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.eq.mapper.EqMapper">
+
+	<!-- 전체조회 -->
+<select id="selectEqAll" resultType="EqVO">
+	SELECT eq_code
+	    , eq_mdnm
+	    , use
+	    , eq_mdno
+	    , eq_dep
+	    , eq_temp
+	    , eq_min
+	    , eq_max
+	    , eq_standtemp
+	    , eq_period
+	    , manager
+	    , eq_location
+	    , eq_img
+	    , line_code
+	    , eq_type
+	    , eq_name
+	    , process_code
+	    , type_name
+	    , eq_ckdate
+	    , description
+	    , employee_no
+	FROM eq
+	ORDER BY eq_code
+</select>
+
+</mapper>

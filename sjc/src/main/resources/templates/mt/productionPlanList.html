@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+	<meta charset="UTF-8">
+	<title>생산 계획 목록</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="main-container">
+		<div class="container">
+			<h1>생산 계획 목록</h1>
+			<!-- 생산 계획 목록 테이블 -->
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>선택</th>
+						<th>생산계획코드</th>
+						<th>제품명</th>
+						<th>시작일자</th>
+						<th>종료일자</th>
+						<th>수량</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="plan : ${productionPlans}">
+						
+						<td><input type="checkbox" class="plan-checkbox" th:value="${plan.planCode}" th:data-quantity="${plan.planDetails[0].quantity}" /></td>
+						<td th:text="${plan.planCode}">생산계획 코드</td>
+						<td>
+							
+							<ul>
+								<li th:each="detail : ${plan.planDetails}" th:text="${detail.prdName}">제품명</li>
+							</ul>
+						</td>
+						<td th:text="${plan.startDate}">시작일자</td>
+						<td th:text="${plan.endDate}">종료일자</td>
+						<td>
+						
+							<ul>
+								<li th:each="detail : ${plan.planDetails}" th:text="${detail.quantity}">수량</li>
+							</ul>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(productionPlans)}">
+						<td colspan="6" class="text-center">등록된 생산 계획이 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="text-right">
+				<button class="btn btn-primary" id="selectProductionPlans">선택</button>
+			</div>
+
+			<!-- 자재 목록 테이블 -->
+			<h2>생산계획별 자재재고</h2>
+			<table id="materialsTable" class="table table-striped">
+				<thead>
+					<tr>
+						<th>선택</th>
+						<th>자재명</th>
+						<th>제품명</th>
+						<th>필요수량</th>
+						<th>현재재고</th>
+						<th>안전재고</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${#lists.isEmpty(materials)}">
+						<td colspan="6" class="text-center">등록된 자재가 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="text-right">
+				<button class="btn btn-primary" id="selectMaterial">선택</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// 생산 계획 선택 이벤트
+		document.getElementById('selectProductionPlans').addEventListener('click', function() {
+			const selectedPlans = Array.from(document.querySelectorAll('.plan-checkbox:checked'))
+				.map(checkbox => ({ planCode: checkbox.value, quantity: checkbox.dataset.quantity }));
+
+			if (selectedPlans.length > 0) {
+				const selectedPlan = selectedPlans[0];  
+				const planQuantity = parseInt(selectedPlan.quantity);  
+
+				
+				fetch(`/getMaterialsByPlan?planCode=${selectedPlan.planCode}`)
+					.then(response => response.json())
+					.then(data => {
+						const materialsTableBody = document.querySelector('#materialsTable tbody');
+						materialsTableBody.innerHTML = ''; 
+						
+						data.forEach(material => {
+							const multipliedQuantity = material.quantityRequired * planQuantity;
+
+							const row = `<tr>
+								<td><input type="checkbox" class="material-checkbox" value="${material.mtCode}" /></td>
+								<td>${material.mtName}</td>
+								<td>${material.prdName}</td>
+								<td>${multipliedQuantity}</td> 
+								<td>${material.currentStc}</td>
+								<td>${material.safetyStock}</td>
+							</tr>`;
+							materialsTableBody.innerHTML += row;
+						});
+					})
+					.catch(error => {
+						console.error('Error fetching materials:', error);
+					});
+			} else {
+				alert('생산 계획을 선택해 주세요.');
+			}
+		});
+	</script>
+</body>
+</html>
