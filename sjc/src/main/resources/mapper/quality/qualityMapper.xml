@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
+	<select id="selectQualityWaitInfo" resultType="MtlOdVO">
+		SELECT mtl_od_code
+               , mtl_od_quantity
+               , mtl_od_date
+               , dilivery_date
+               , price
+               , mt_code
+               , cp_code
+               , user_id
+               , mtl_od_status
+		FROM mtl_od
+		WHERE mtl_od_status = '품질검사 대기'
+	</select>
+
+
+</mapper>
