@@ -15,6 +15,7 @@ private Integer price;//금액
 private String mtCode;//자재 코드
 private String cpCode;//업체 코드
 private Integer userId;//사용자번호
+private String mtlOdStatus;//발주상태
 
 
 }
