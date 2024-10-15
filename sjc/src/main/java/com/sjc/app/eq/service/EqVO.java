@@ -2,7 +2,6 @@ package com.sjc.app.eq.service;
 
 import java.util.Date;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data

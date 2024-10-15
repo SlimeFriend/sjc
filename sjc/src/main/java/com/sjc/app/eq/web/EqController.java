@@ -13,6 +13,10 @@ import com.sjc.app.eq.service.EqVO;
 public class EqController {
 	private EqService eqService;
 	
+	public EqController(EqService eqService) {
+		this.eqService = eqService;
+	}
+	
 	// 전체조회 : URI - eqList / RETURN - eq/eqList
 	@GetMapping("eqList")
 	public String equipList(Model model) {
