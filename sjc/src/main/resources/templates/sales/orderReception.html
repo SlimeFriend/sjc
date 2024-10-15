@@ -1,0 +1,66 @@
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+	<!-- 페이징필요한사람 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+
+	<h2 class="h2 mb-20">주문 접수</h2>
+	<form>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+			<div class="col-sm-12 col-md-5">
+				<input class="form-control" type="text" placeholder="Johnny Brown">
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-1 col-form-label">납기요청일</label>
+			<div class="col-sm-12 col-md-5">
+				<input class="form-control date-picker" placeholder="Select Date"
+					type="text">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-1 col-form-label">요청사항</label>
+			<div class="col-sm-12 col-md-5">
+				<textarea class="form-control"></textarea>
+			</div>
+		</div>
+	</form>
+	<h2 class="h4">제품 선택</h2>
+	<div id="grid"></div>
+
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const gridData = /*[[${products}]]*/[];
+
+			const grid = new tui.Grid({
+				el : document.getElementById('grid'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'prdCode',
+					align : 'center',
+				}, {
+					header : '단가',
+					name : 'unitPrice',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+		});
+	</script>
+</div>

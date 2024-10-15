@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<th:block th:insert="~{common/configs/default_config :: css}"></th:block>
+<th:block th:replace="~{common/configs/default_config :: css}"></th:block>
 </head>
 <body>
 
@@ -16,14 +16,20 @@
 	<div th:replace="~{common/fragments/default_sidebar :: defaultSidebar}"></div>
 
 	<!-- content 영역 -->
-	<div class="content" layout:fragment="Content"></div>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<div class="pd-20 card-box mb-30">
+				<div layout:fragment="Content"></div>
+			</div>
+		</div>
+	</div>
 
 	<!-- footer 영역 -->
 	<!--  
 	<div th:replace="~{common/fragments/default_footer :: defaultFooter}"></div>
 	-->
 
-	<th:block th:insert="~{common/configs/default_config :: js}"></th:block>
+	<th:block th:replace="~{common/configs/default_config :: js}"></th:block>
 
 </body>
 </html>
