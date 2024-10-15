@@ -5,7 +5,7 @@
 		<div class="brand-logo">
 			<a href="/main">
 				<img th:src="@{/assets/vendors/images/deskapp-logo.svg}" alt="" class="dark-logo">
-				<img th:src="@{/assets/vendors/images/deskapp-logo-white.svg}" alt="" class="light-logo">
+				<img th:src="@{/assets/vendors/images/logolee.jpg}" alt="" class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
@@ -19,12 +19,7 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">영업</span>
 						</a>
 						<ul class="submenu">
-							<li><a th:href="@{/sales/order}">주문접수</a></li>
-							<li><a href="#">주문내역</a></li>
-							<li><a href="#">완제품 관리</a></li>
-							<li><a href="#">완제품 입고</a></li>
-							<li><a href="#">완제풀 출고</a></li>
-							<li><a href="#">입/출고 내역</a></li>
+							<li><a href="">영업1</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -32,12 +27,7 @@
 							<span class="micon dw dw-edit2"></span><span class="mtext">생산</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="">생산 계획 생성</a></li>
-							<li><a href="">생산 계획 조회</a></li>
-							<li><a href="">생산 지시</a></li>
-							<li><a href="">생산 지시 조회</a></li>
-							<li><a href="">생산 관리</a></li>
-							<li><a href="">생산 관리 실적</a></li>
+							<li><a href="">생산1</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -45,7 +35,19 @@
 							<span class="micon dw dw-library"></span><span class="mtext">자재</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="">자재1</a></li>
+							<li><a th:href="@{/productionPlanList}">발주 등록</a></li>
+						</ul>
+												<ul class="submenu">
+							<li><a href="">발주 관리</a></li>
+						</ul>
+												<ul class="submenu">
+							<li><a href="">입고 등록, 관리</a></li>
+						</ul>
+												<ul class="submenu">
+							<li><a href="">출고 등록, 관리</a></li>
+						</ul>
+												<ul class="submenu">
+							<li><a href="">안전재고 관리</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -75,14 +77,6 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="">부서관리</a></li>
-							<li><a th:href="@{userListGrid}" >사용자관리</a></li>
-							<li><a href="">업체관리</a></li>
-							<li><a href="">불량이력관리</a></li>
-							<li><a href="">코드관리</a></li>
-							<li><a href="">BOM관리</a></li>
-							<li><a href="">제품관리</a></li>
-							<li><a href="">라인관리</a></li>
-							<li><a href="">자재관리</a></li>
 						</ul>
 					</li>
 				</ul>

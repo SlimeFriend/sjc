@@ -1,17 +1,20 @@
 package com.sjc.app.pr.service;
 
-public class PResult {	
-	private String presultCode;		// 생산공정실적 코드
-	private String prdCode;			// 제품 코드
-	private String startTime;		// 시작 시간
-	private String endTime;			// 종료 시간
-	private String output;			// 생산량
-	private String err;				// 불량량
-	private String processDate;		// 공정 일자
-	private String eqName;			// 설비 이름
-	private String processName;		// 공정 이름
-	private String manager;			// 담당자
-	private String pdetailCode;		// 생산지시상세 코드
-	private String ldetailCode;		// 라인상세정보 코드
-	private Integer input;			// 투입량
-}		
+import lombok.Data;
+
+@Data
+public class PResult {    
+    private String presultCode;        // 생산공정실적 코드
+    private String prdCode;            // 제품 코드
+    private String startTime;        // 시작 시간
+    private String endTime;            // 종료 시간
+    private String output;            // 생산량
+    private String err;                // 불량량
+    private String processDate;        // 공정 일자
+    private String eqName;            // 설비 이름
+    private String processName;        // 공정 이름
+    private String manager;            // 담당자
+    private String pdetailCode;        // 생산지시상세 코드
+    private String ldetailCode;        // 라인상세정보 코드
+    private Integer input;            // 투입량
+}    

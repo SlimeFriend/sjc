@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.ProductionPlanMapper">
+
+    <select id="selectAllProductionPlans" resultMap="PlanWithDetails">
+        SELECT 
+            p.PLAN_CODE,
+            p.START_DATE,
+            p.END_DATE,
+            p.MANAGER,
+            p.COMM,
+            p.STATUS,
+            pd.PLAN_DETAIL_CODE,
+            pd.PRD_NAME,         
+            pd.QUANTITY,         
+            pd.NO,
+            pd.COMM AS PLAN_DETAIL_COMM,
+            pd.PRD_CODE
+        FROM 
+            PLAN p
+        LEFT JOIN 
+            PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
+    </select>
+
+    <resultMap id="PlanWithDetails" type="com.sjc.app.pr.service.PlanVO">
+        <id property="planCode" column="PLAN_CODE" />
+        <result property="startDate" column="START_DATE" />
+        <result property="endDate" column="END_DATE" />
+        <result property="manager" column="MANAGER" />
+        <result property="comm" column="COMM" />
+        <result property="status" column="STATUS" />
+        <collection property="planDetails" ofType="com.sjc.app.pr.service.PlanDVO">
+            <id property="planDetailCode" column="PLAN_DETAIL_CODE" />
+            <result property="prdName" column="PRD_NAME" />
+            <result property="quantity" column="QUANTITY" />
+            <result property="no" column="NO" />
+            <result property="comm" column="PLAN_DETAIL_COMM" />
+            <result property="prdCode" column="PRD_CODE" />
+        </collection>
+    </resultMap>
+
+</mapper>
