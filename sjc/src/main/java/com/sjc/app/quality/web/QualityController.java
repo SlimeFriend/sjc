@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.sjc.app.quality.service.MtlOdVO;
+import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.service.QualityService;
 
 @Controller

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>발주요청서 등록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>발주 요청 목록</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>발주 요청 코드</th>
+                <th>발주일</th>
+                <th>자재 코드</th>
+                <th>수량</th>
+                <th>업체 코드</th>
+                <th>사용자 ID</th>
+                <th>비고</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody id="orderRequestTable">
+            <!-- 발주 요청 데이터가 여기 추가됩니다. -->
+        </tbody>
+    </table>
+
+    <button onclick="openCreateForm()">발주 요청 생성</button>
+
+    <div id="createForm" style="display: none;">
+        <h2>발주 요청 생성</h2>
+        <form id="orderRequestForm">
+            <label for="orderRequestCode">발주 요청 코드:</label>
+            <input type="text" id="orderRequestCode" name="orderRequestCode"><br>
+
+            <label for="orderDate">발주일:</label>
+            <input type="date" id="orderDate" name="orderDate"><br>
+
+            <label for="mtCode">자재 코드:</label>
+            <input type="text" id="mtCode" name="mtCode"><br>
+
+            <label for="quantity">수량:</label>
+            <input type="number" id="quantity" name="quantity"><br>
+
+            <label for="cpCode">업체 코드:</label>
+            <input type="text" id="cpCode" name="cpCode"><br>
+
+            <label for="userId">사용자 ID:</label>
+            <input type="text" id="userId" name="userId"><br>
+
+            <label for="comm">비고:</label>
+            <input type="text" id="comm" name="comm"><br>
+
+            <button type="button" onclick="createOrderRequest()">생성</button>
+        </form>
+    </div>
+
+    <script>
+ // 발주 요청 목록 조회
+    function fetchOrderRequests() {
+        fetch('/order-request/list')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('orderRequestTable');
+                tableBody.innerHTML = '';  // 기존 내용을 초기화
+                data.forEach(order => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${order.orderRequestCode}</td>
+                        <td>${order.orderDate}</td>
+                        <td>${order.mtCode}</td>
+                        <td>${order.quantity}</td>
+                        <td>${order.cpCode}</td>
+                        <td>${order.userId}</td>
+                        <td>${order.comm}</td>
+                        <td>
+                            <button onclick="deleteOrderRequest('${order.orderRequestCode}')">삭제</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+    }
+
+    // 발주 요청 생성 폼 열기
+    function openCreateForm() {
+        document.getElementById('createForm').style.display = 'block';
+    }
+
+    // 발주 요청 생성
+    function createOrderRequest() {
+        const formData = new FormData(document.getElementById('orderRequestForm'));
+        const orderRequest = Object.fromEntries(formData.entries());
+
+        fetch('/order-request/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderRequest)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('발주 요청이 성공적으로 생성되었습니다.');
+                fetchOrderRequests();  // 목록 갱신
+            } else {
+                alert('발주 요청 생성에 실패했습니다.');
+            }
+        });
+    }
+
+    // 발주 요청 삭제
+    function deleteOrderRequest(orderRequestCode) {
+        fetch(`/order-request/delete/${orderRequestCode}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('발주 요청이 삭제되었습니다.');
+                fetchOrderRequests();  // 목록 갱신
+            } else {
+                alert('발주 요청 삭제에 실패했습니다.');
+            }
+        });
+    }
+
+    // 페이지 로딩 시 발주 요청 목록을 가져옴
+    document.addEventListener('DOMContentLoaded', fetchOrderRequests);
+    </script>
+</body>
+</html>

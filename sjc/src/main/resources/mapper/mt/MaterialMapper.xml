@@ -46,5 +46,45 @@
         ORDER BY 
             mt.MT_CODE
     </select>
+    
+        <!-- 발주 요청서를 등록하는 메서드 -->
+    <insert id="insertMaterialOrder" parameterType="com.sjc.app.mt.service.MtlOdVO">
+        INSERT INTO MTL_OD (MTL_OD_CODE, MTL_OD_QUANTITY, MTL_OD_DATE, DILIVERY_DATE, PRICE, MT_CODE, CP_CODE, USER_ID)
+        VALUES (#{mtlOdCode}, #{mtlOdQuantity}, #{mtlOdDate}, #{diliveryDate}, #{price}, #{mtCode}, #{cpCode}, #{userId})
+    </insert>
+
+ 
+
+    <!-- 발주 요청서 목록을 가져오는 메서드 -->
+    <select id="selectAllMaterialOrders" resultType="com.sjc.app.mt.service.MtlOdVO">
+        SELECT 
+            MTL_OD_CODE,
+            MTL_OD_QUANTITY,
+            MTL_OD_DATE,
+            DILIVERY_DATE,
+            PRICE,
+            MT_CODE,
+            CP_CODE,
+            USER_ID
+        FROM 
+            MTL_OD
+    </select>
+
+    <!-- 특정 발주 요청서를 가져오는 메서드 -->
+    <select id="selectMaterialOrderByCode" parameterType="String" resultType="com.sjc.app.mt.service.MtlOdVO">
+        SELECT 
+            MTL_OD_CODE,
+            MTL_OD_QUANTITY,
+            MTL_OD_DATE,
+            DILIVERY_DATE,
+            PRICE,
+            MT_CODE,
+            CP_CODE,
+            USER_ID
+        FROM 
+            MTL_OD
+        WHERE 
+            MTL_OD_CODE = #{mtlOdCode}
+    </select>
 
 </mapper>
