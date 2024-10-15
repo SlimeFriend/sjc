@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>입고 검사 대기 목록</title>
+</head>
+
+<th:block th:fragment="css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/core.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/style.css">
+</th:block>
+
+<body>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<div class="card-box mb-30">
+				<h2 class="h4 pd-20">입고 검사 대기 목록</h2>
+				<table class="data-table table nowrap">
+					<thead>
+						<tr>
+							<th class="table-plus datatable-nosort">입고코드</th>
+							<th>입고 수량</th>
+							<th>유통 기한</th>
+							<th>자재 코드</th>
+							<th>업체 코드</th>
+							<th>품질 검사 코드</th>
+							<th class="datatable-nosort">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="wait : ${incomingQualityWaits}">
+							<td class="table-plus" th:text="${wait.mtlOdCode}"></td>
+							<td>
+								<h5 class="font-16" th:text="${wait.mtlOdQuantity}"></h5>
+							</td>
+							<td th:text="${wait.mtlOdDate}"></td>
+							<td th:text="${wait.diliveryDate}"></td>
+							<td th:text="${wait.price}"></td>
+							<td th:text="${wait.mtCode}"></td>
+							<td th:text="${wait.cpCode}"></td>
+							<td th:text="${wait.userID}"></td>
+							<td th:text="${wait.mtlOdStatus}"></td>
+							<td>
+								<div class="dropdown">
+									<a
+										class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
+										href="#" role="button" data-toggle="dropdown"> <i
+										class="dw dw-more"></i>
+									</a>
+									<div
+										class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i>
+											View</a> <a class="dropdown-item" href="#"><i
+											class="dw dw-edit2"></i> Edit</a> <a class="dropdown-item"
+											href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+							
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</body>
+<th:block th:fragment="js">
+	<script src="assets/vendors/scripts/core.js"></script>
+	<script src="assets/vendors/scripts/script.min.js"></script>
+	<script src="assets/vendors/scripts/process.js"></script>
+	<script src="assets/vendors/scripts/layout-settings.js"></script>
+	<script src="assets/src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<script src="assets/vendors/scripts/dashboard.js"></script>
+</th:block>
+</html>
