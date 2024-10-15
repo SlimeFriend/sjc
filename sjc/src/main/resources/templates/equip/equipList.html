@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<h3>설비 목록</h3>
+<table class="table">
+ <thead>
+  <tr>
+   <th>No.</th>
+   <th>설비코드</th>
+   <th>설비구분</th>
+   <th>설비명</th>
+   <th>공정코드</th>
+   <th>공정명</th>
+   <th>최저온도</th>
+   <th>최고온도</th>
+   <th>사용여부</th>
+  </tr>
+ </thead>
+ <tbody>
+  <th:block th:each="info : ${equips}">
+ </tbody>
+</table>
+</html>
