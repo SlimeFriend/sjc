@@ -30,25 +30,29 @@ public class UserServiceImpl implements UserService {
 		//this.registry = registry;
 	}
 	
-	@Override
-	public List<UserVO> userList() {
-		/*
-		 * 
-		Timer timer = Timer.builder("my.list")
-				.tag("class", this.getClass().getName())
-				.tag("method", "userList")
-				.description("list")
-				.register(registry);
-		
-		timer.record(() -> {
-			log.info("userList");
-			sleep(500);
-		});
-		 */
-		
-		return userMapper.selectUserAllList();
-	}
+//	@Override
+//	public List<UserVO> userList() {
+//		/*
+//		 * 
+//		Timer timer = Timer.builder("my.list")
+//				.tag("class", this.getClass().getName())
+//				.tag("method", "userList")
+//				.description("list")
+//				.register(registry);
+//		
+//		timer.record(() -> {
+//			log.info("userList");
+//			sleep(500);
+//		});
+//		 */
+//		
+//		return userMapper.selectUserAllList();
+//	}
 	
+	@Override
+	public List<UserVO> userList(UserVO uservo) {
+		return userMapper.selectUserAllList(uservo);
+	}
 //	private static void sleep(int i) {
 //		
 //		try {

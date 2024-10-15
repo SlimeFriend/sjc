@@ -30,26 +30,27 @@ public class UserController {
 	// POST : 데이터 조작(등록, 수정, 삭제)
 	
 
-	// 전체조회
-	@GetMapping("userList")
-	public String userList(Model model) { // Model = Request + Response
-		
-		// 1) 기능 수행 => Service
-		List<UserVO> list = userService.userList();
-		// 2) 클라이언트에 전달할 데이터 담기
-		model.addAttribute("users", list);
-		return "user/list"; // 3) 데이터를 출력할 페이지 결정
-		// prefix + return + suffix => 실제 경로/ViewResolver
-        // classpath:/tuserlates/user/list.html		
-	}
+//	// 전체조회
+//	@GetMapping("userList")
+//	public String userList(Model model) { // Model = Request + Response
+//		
+//		// 1) 기능 수행 => Service
+//		List<UserVO> list = userService.userList();
+//		// 2) 클라이언트에 전달할 데이터 담기
+//		model.addAttribute("users", list);
+//		return "user/list"; // 3) 데이터를 출력할 페이지 결정
+//		// prefix + return + suffix => 실제 경로/ViewResolver
+//        // classpath:/tuserlates/user/list.html		
+//	}
+//	
+//	@GetMapping("userListGrid")
+//	public String userListGrid(Model model) {
+//		List<UserVO> list = userService.userList();
+//		model.addAttribute("users", list);		
+//		return "user/listGrid";
+//	}
 	
-	@GetMapping("userListGrid")
-	public String userListGrid(Model model) {
-		List<UserVO> list = userService.userList();
-		model.addAttribute("users", list);		
-		return "user/listGrid";
-	}
-	@GetMapping("userGrid")
+	@GetMapping("userListGridFetch")
 	public String userGrid() {
 		return "user/listGridFetch";
 	}

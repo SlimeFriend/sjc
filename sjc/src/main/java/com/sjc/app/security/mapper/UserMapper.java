@@ -6,5 +6,6 @@ import com.sjc.app.security.service.UserVO;
 
 public interface UserMapper {
 	public UserVO getUserInfo(String username);
-	public List<UserVO> selectUserAllList();
+//	public List<UserVO> selectUserAllList();
+	public List<UserVO> selectUserAllList(UserVO uservo);
 }
