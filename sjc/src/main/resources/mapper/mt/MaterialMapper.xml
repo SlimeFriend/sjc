@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.MaterialMapper">
+
+    <select id="selectAllMaterials" resultType="com.sjc.app.mt.service.MtVO">
+        SELECT 
+            MT_CODE, 
+            MT_NAME, 
+            MATERIAL_TYPE, 
+            SPECIFICATION, 
+            UNIT, 
+            UNIT_PRICE, 
+            SAFETY_STOCK, 
+            COMM, 
+            STC_CODE, 
+            UPDATE_DATE, 
+            CURRENT_STC, 
+            LEADTIME
+        FROM 
+            MT  
+    </select>
+    
+   <select id="selectMaterialsByPlanCode" resultType="com.sjc.app.mt.service.MtVO">
+        SELECT 
+            mt.MT_CODE,
+            mt.MT_NAME,
+         
+            bd.QUANTITY_REQUIRED,
+            mt.CURRENT_STC,
+            mt.SAFETY_STOCK,  
+            prd.PRD_NAME AS prdName     
+        FROM 
+            PLAN p
+        JOIN 
+            PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE      
+        JOIN 
+            PRD prd ON pd.PRD_NAME = prd.PRD_NAME             
+        JOIN 
+            BOM bom ON prd.PRD_CODE = bom.PRD_CODE             
+        JOIN 
+            B_DETAIL bd ON bom.BOM_CODE = bd.BOM_CODE          
+        JOIN 
+            MT mt ON bd.MT_CODE = mt.MT_CODE                  
+        WHERE 
+            p.PLAN_CODE = #{planCode}  
+        ORDER BY 
+            mt.MT_CODE
+    </select>
+
+</mapper>
