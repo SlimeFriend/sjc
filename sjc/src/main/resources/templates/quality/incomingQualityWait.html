@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>입고 검사 대기 목록</title>
+</head>
+
+<!-- <th:block th:fragment="css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/core.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="assets/vendors/styles/style.css">
+</th:block> -->
+
+<body>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<div class="card-box mb-30">
+				<h2 class="h4 pd-20">입고 검사 대기 목록</h2>
+				<table class="data-table table nowrap">
+					<thead>
+						<tr>
+							<th class="table-plus datatable-nosort">입고코드</th>
+							<th>자재발주 코드</th>
+							<th>자재발주량</th>
+							<th>자재발주 일자</th>
+							<th>납기 일</th>
+							<th>금액</th>
+							<th>업체 코드</th>
+							<th>사원번호</th>
+							<th>발주품질검사상태</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="wait : ${incomingQualityWaits}">
+						<tr>
+						
+							<td class="table-plus">[[${wait.mtlOdCode}]]</td>
+							<td>
+								<h5 class="font-16">[[${wait.mtlOdQuantity}]]</h5>
+							</td>
+							<td>[[${wait.mtlOdDate}]]</td>
+							<td>[[${wait.diliveryDate}]]</td>
+							<td>[[${wait.price}]]</td>
+							<td>[[${wait.mtCode}]]</td>
+							<td>[[${wait.cpCode}]]</td>
+							<td>[[${wait.userID}]]</td>
+							<td>[[${wait.mtlOdStatus}]]</td>
+						</tr>
+					
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</body>
+<!-- <th:block th:fragment="js">
+	<script src="assets/vendors/scripts/core.js"></script>
+	<script src="assets/vendors/scripts/script.min.js"></script>
+	<script src="assets/vendors/scripts/process.js"></script>
+	<script src="assets/vendors/scripts/layout-settings.js"></script>
+	<script src="assets/src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script
+		src="assets/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<script src="assets/vendors/scripts/dashboard.js"></script>
+</th:block> -->
+</html>
