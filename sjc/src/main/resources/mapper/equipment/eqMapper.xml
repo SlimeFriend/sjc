@@ -20,7 +20,6 @@
 	    , line_code
 	    , eq_type
 	    , eq_name
-	    , process_code
 	    , type_name
 	    , eq_ckdate
 	    , description

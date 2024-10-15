@@ -46,6 +46,7 @@
         ORDER BY 
             mt.MT_CODE
     </select>
+
     
         <!-- 발주 요청서를 등록하는 메서드 -->
     <insert id="insertMaterialOrder" parameterType="com.sjc.app.mt.service.MtlOdVO">
@@ -86,5 +87,6 @@
         WHERE 
             MTL_OD_CODE = #{mtlOdCode}
     </select>
+
 
 </mapper>
