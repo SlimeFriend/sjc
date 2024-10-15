@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<!-- <meta name="ctxPath" th:value="${contextPath}"> -->
+<title>userList</title>
+</head>
+<body>
+    <div class="main-container">
+        <h3>사용자 관리</h3>
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>사용자번호</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>권한</th>
+                    <th>부서코드</th>
+                    <th>부서명</th>
+                </tr>
+            </thead>    
+            <tbody>
+                <th:block th:each="info, sts : ${users}"> <!-- 반복문 block th:each="임시변수 : ${}" -->
+					<tr>
+                        <td>[[${sts.count}]]</td>
+                        <td th:text="${info.userId}"/>
+                        <td th:text="${info.loginId}"/>
+                        <td th:text="${info.userName}"/>
+                        <td th:text="${info.roleName}"/>
+                        <td th:text="${info.deptCode}"/>
+                        <td th:text="${info.deptName}"/>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+    
+<script>
+	//const context = $('meta[name="ctxPath"]').attr('value'); // val();
+	$('tbody > tr').on('click', function(event){
+		let trTag = event.currentTarget;
+		let uid = $(trTag).children().eq(1).text();
+		//let url = context + '/userInfo?userId=' + uid;
+		let url = '/userInfo?userId=' + uid;
+		location.href=url;
+	});
+</script>
+    
+</body>
+</html>

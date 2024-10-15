@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.css"
+    />    
+</head>
+<body>
+<div class="main-container">
+    <h3>사용자 관리</h3>
+    <div id="grid"></div>
+</div>
+
+<script th:inline="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const gridData = /*[[${users}]]*/ [];
+
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        data: gridData,
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '사용자번호',
+                name: 'userId',
+                align: 'center',
+            },
+            {
+                header: '아이디',
+                name: 'loginId',
+                align: 'center',
+            },
+            {
+                header: '이름',
+                name: 'userName',
+                align: 'center',
+            },
+            {
+                header: '권한',
+                name: 'roleName',
+                align: 'center',
+            },
+            {
+                header: '부서코드',
+                name: 'deptCode',
+                align: 'center',
+            },
+            {
+                header: '부서명',
+                name: 'deptName',
+                align: 'center',
+            }
+        ],
+	    rowHeaders: ['rowNum'],
+	    pageOptions: {
+	      useClient: true,
+	      perPage: 10
+    	}
+    });
+});
+</script>
+
+</body>
+</html>

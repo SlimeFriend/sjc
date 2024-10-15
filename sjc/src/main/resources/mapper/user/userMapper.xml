@@ -3,8 +3,8 @@
 <mapper namespace="com.sjc.app.security.mapper.UserMapper">
 	<!-- 조회 -->
 	<select id="getUserInfo" resultType="UserVO">
-	
-		select  login_id
+		select  u.user_id user_id
+				,login_id
 		        ,password
 		        ,role_name
 		        ,user_name
@@ -18,9 +18,26 @@
 		join	department d
 		on		d.dept_code = u.dept_code
 		where   login_id = #{username}
-	
 	</select>
 
+	<!-- 전체조회 -->
+	<select id="selectUserAllList" resultType="UserVO">
+		select	u.user_id user_id  
+				,login_id
+		        ,password
+		        ,role_name
+		        ,user_name
+		        ,d.dept_code dept_code
+		        ,dept_name
+		from    user_role ur
+		join    sjc_user  u
+		on      ur.user_id = u.user_id
+		join    sjc_role  r
+		on      ur.role_id = r.role_id
+		join	department d
+		on		d.dept_code = u.dept_code
+		ORDER BY user_id	
+	</select>
 </mapper>
 
 	
