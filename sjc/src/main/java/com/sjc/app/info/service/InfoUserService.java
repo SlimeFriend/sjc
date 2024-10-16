@@ -9,7 +9,7 @@ import com.sjc.app.security.service.UserVO;
 public interface InfoUserService {
 	// 전체 사용자정보 조회
 //	public List<UserVO> userList();
-	public List<UserVO> userList(UserVO uservo);
+	public List<UserVO> userList(UserVO userVO);
 //	// 사용자정보 단건 조회
 //	public UserVO userInfo(UserVO userVO);
 //	// 사용자정보 단건 등록
