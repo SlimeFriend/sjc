@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.mapper.QualityMapper;
-
+import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
 @Service
@@ -22,6 +22,12 @@ public class QualityServiceImpl implements QualityService{
 	@Override
 	public List<MtlOdVO> incomingWaitInfo() {
 		return qualityMapper.selectQualityWaitInfo();
+	}
+
+	@Override
+	public List<InspectionVO> incomingRegistrationInfo() {
+		// TODO Auto-generated method stub
+		return qualityMapper.selectQualityRegistrationInfo();
 	}
 
 }

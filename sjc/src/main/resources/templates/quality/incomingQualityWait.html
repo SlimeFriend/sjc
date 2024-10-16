@@ -8,6 +8,153 @@
 <meta charset="UTF-8">
 
 <title>입고 검사 대기 목록</title>
+
+
+<link rel="i on" sizes="180x180"
+	href="vendors/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+	href="vendors/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+	href="vendors/images/favicon-16x16.png">
+
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<link
+	href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+	rel="stylesheet">
+
+
+</head>
+
+
+
+<body>
+	<div class="mobile-menu-overlay"></div>
+	<div class="main-container">
+		<div class="pd-ltr-20 xs-pd-20-10">
+			<div class="min-height-200px">
+				<div class="card-box mb-30">
+					<div class="pd-20">
+						<h4 class="text-blue h4">Data Table with Export Buttons</h4>
+					</div>
+					<div class="pb-20">
+						<div id="DataTables_Table_2_wrapper"
+							class="dataTables_wrapper dt-bootstrap4 no-footer">
+							<div class="dt-buttons btn-group flex-wrap">
+								<button class="btn btn-secondary buttons-copy buttons-html5"
+									tabindex="0" aria-controls="DataTables_Table_2" type="button">
+									<span>Copy</span>
+								</button>
+								<button class="btn btn-secondary buttons-csv buttons-html5"
+									tabindex="0" aria-controls="DataTables_Table_2" type="button">
+									<span>CSV</span>
+								</button>
+								<button class="btn btn-secondary buttons-pdf buttons-html5"
+									tabindex="0" aria-controls="DataTables_Table_2" type="button">
+									<span>PDF</span>
+								</button>
+								<button class="btn btn-secondary buttons-print" tabindex="0"
+									aria-controls="DataTables_Table_2" type="button">
+									<span>Print</span>
+								</button>
+							</div>
+							<div id="DataTables_Table_2_filter" class="dataTables_filter">
+								<label>Search:<input type="search"
+									class="form-control form-control-sm" placeholder="Search"
+									aria-controls="DataTables_Table_2"></label>
+							</div>
+
+
+									<table class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline" id="DataTables_Table_2" role="grid">
+										<thead>
+											<tr role="row"><th class="table-plus datatable-nosort sorting_disabled">자재발주 코드</th>
+												<th>자재발주량</th>
+												<th>자재발주 일자</th>
+												<th>납기 일</th>
+												<th>금액</th>
+												<th>자재코드</th>
+												<th>업체 코드</th>
+												<th>사원번호</th>
+												<th>발주품질검사상태</th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:each="wait : ${incomingQualityWaits}">
+												<tr>
+
+													<td class="table-plus">[[${wait.mtlOdCode}]]</td>
+													<td>
+														<h5 class="font-16">[[${wait.mtlOdQuantity}]]</h5>
+													</td>
+													<td>[[${wait.mtlOdDate}]]</td>
+													<td>[[${wait.diliveryDate}]]</td>
+													<td>[[${wait.price}]]</td>
+													<td>[[${wait.mtCode}]]</td>
+													<td>[[${wait.cpCode}]]</td>
+													<td>[[${wait.userId}]]</td>
+													<td>[[${wait.mtlOdStatus}]]</td>
+												</tr>
+
+											</th:block>
+										</tbody>
+									</table>
+						</div>
+					</div>
+					<!-- Export Datatable End -->
+				</div>
+			</div>
+		</div>
+</div>
+
+
+		<!-- buttons for Export datatable -->
+		<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+		<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+		<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+		<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+		<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+		<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+		<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+		<!-- Datatable Setting js -->
+		<script src="vendors/scripts/datatable-setting.js"></script>
+</body>
+
+<script>
+	// contextpath 사용. 
+		const context = $('meta[name="ctxPath"]').attr('value'); // val();
+		//메타태그를 생성해서 메타태그를 가진 정보를 이용해서 값을 불러오는 코드.
+		$('tbody > tr').on('click', function(event) {
+			let trTag = event.currentTarget;
+			let mtlOdCode = $(trTag).children().eq(0).text(); // tr태그 안에 있는 두 번째를 찾음.
+			let url = context + '/incomingQualityRegistrationInfo?mtlOdCode=' + mtlOdCode;
+			location.href = url;
+		});
+	</script>
+</html>
+
+
+
+
+
+
+
+<!-- 
+부트스트랩 deskapp2-master/datatable.html 넣어보기 전 소스
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>입고 검사 대기 목록</title>
 </head>
 
 
@@ -56,4 +203,4 @@
 	</div>
 
 </body>
-</html>
+</html> -->
