@@ -8,7 +8,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sjc.app.info.service.UserService;
+import com.sjc.app.info.service.InfoUserService;
 import com.sjc.app.security.mapper.UserMapper;
 import com.sjc.app.security.service.UserVO;
 
@@ -16,15 +16,15 @@ import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
-@Timed("my.user")
+@Timed("info.user")
 @Slf4j
 @Service // AOP 적용가능한 Bean
-public class UserServiceImpl implements UserService {
+public class InfoUserServiceImpl implements InfoUserService {
 	//private MeterRegistry registry;
 	private UserMapper userMapper;
 	
 	@Autowired // 생성자 1개면 자동 autowired됨.
-	UserServiceImpl(UserMapper userMapper, MeterRegistry registry){
+	InfoUserServiceImpl(UserMapper userMapper, MeterRegistry registry){
 //	UserServiceImpl(UserMapper userMapper, MeterRegistry registry){
 		this.userMapper = userMapper;
 		//this.registry = registry;

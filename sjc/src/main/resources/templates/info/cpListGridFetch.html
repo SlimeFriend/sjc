@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>업체 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+</head>
+<body>
+<div class="main-container">
+    <h3>업체 관리</h3>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">업체코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpCode" placeholder="업체코드 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpName" placeholder="업체명 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">업체구분</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpType" placeholder="업체구분 입력">
+        </div>
+
+		<button class="btn btn-primary" id="searchBtn">검색</button>
+		
+    </div>
+
+    <div id="grid"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '업체코드',
+                name: 'cpCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '업체명',
+                name: 'cpName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '업체구분',
+                name: 'cpType',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '사업자번호',
+                name: 'businessNo',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '주소',
+                name: 'address',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            }
+        ],
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 10
+        }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const search = {
+        		cpCode: document.getElementById('inputCpCode').value,
+        		cpName: document.getElementById('inputCpName').value,
+        		cpType: document.getElementById('inputCpType').value,
+        };
+        fetchUsers(search);
+    });
+
+    function fetchUsers(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/cps?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                grid.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    fetchUsers();
+});
+</script>
+</body>
+</html>

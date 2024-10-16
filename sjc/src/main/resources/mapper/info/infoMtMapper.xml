@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoMtMapper">
+
+	<select id="selectMtAllList" resultType="MtVO" parameterType="MtVO">
+		select	MT_CODE  
+				,MT_NAME
+		        ,MATERIAL_TYPE
+		        ,SPECIFICATION
+		        ,UNIT
+		        ,UNIT_PRICE
+		        ,SAFETY_STOCK
+		        ,COMM
+		        ,STC_CODE
+		        ,UPDATE_DATE
+		        ,CURRENT_STC
+		        ,LEADTIME
+		from    MT
+	    <where>
+	        <if test="mtCode != null and mtCode != ''">
+	            AND UPPER(mt_code) LIKE UPPER('%' || #{mtCode} || '%')
+	        </if>
+	        <if test="mtName != null and mtName != ''">
+	            AND UPPER(mt_ame) LIKE UPPER('%' || #{mtName} || '%')
+	        </if>
+	        <if test="materialType != null and materialType != ''">
+	            AND UPPER(material_type) LIKE UPPER('%' || #{materialType} || '%')
+	        </if>
+
+	    </where>
+	    ORDER BY MT_CODE
+	</select>
+</mapper>
