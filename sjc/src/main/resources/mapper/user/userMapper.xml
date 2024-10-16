@@ -59,5 +59,3 @@
 	    ORDER BY u.user_id
 	</select>
 </mapper>
-
-	

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sjc.app.info.service.UserService;
+import com.sjc.app.info.service.InfoUserService;
 import com.sjc.app.security.service.UserVO;
 
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RestController // @Controller + 모든 메소드에 @ResponseBody를 적용 : AJAX 사용 O, Model 사용 X
 				// @ResponseBody : AJAX
 @RequiredArgsConstructor
-public class UserRestController {
+public class InfoUserRestController {
 	
-	private final UserService userService;
+	private final InfoUserService userService;
 
 	@GetMapping("/restTest")
 	public String restTest() {

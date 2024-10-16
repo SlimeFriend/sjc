@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoPrdMapper">
+
+	<select id="selectPrdAllList" resultType="PrdVO" parameterType="PrdVO">
+		select	prd_code  
+				,comm
+		        ,prd_name
+		        ,description
+		        ,unit_price
+		from    prd
+	    <where>
+	        <if test="prdCode != null and prdCode != ''">
+	            AND UPPER(prd_code) LIKE UPPER('%' || #{prdCode} || '%')
+	        </if>
+	        <if test="comm != null and comm != ''">
+	            AND UPPER(comm) LIKE UPPER('%' || #{comm} || '%')
+	        </if>
+	        <if test="prdName != null and prdName != ''">
+	            AND UPPER(prd_name) LIKE UPPER('%' || #{prdName} || '%')
+	        </if>
+	        <if test="description != null and description != ''">
+	            AND UPPER(description) LIKE UPPER('%' || #{description} || '%')
+	        </if>
+	    </where>
+	    ORDER BY prd_code
+	</select>
+</mapper>
