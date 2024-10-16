@@ -1,83 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>생산 계획 목록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>생산 계획 목록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>생산 계획 목록</h1>
-            <!-- 생산 계획 목록 테이블 -->
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>선택</th>
-                        <th>생산계획코드</th>
-                        <th>제품명</th>
-                        <th>시작일자</th>
-                        <th>종료일자</th>
-                        <th>수량</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="plan : ${productionPlans}">
-                        <td><input type="radio" name="planRadio" class="plan-radio" th:value="${plan.planCode}" th:data-quantity="${plan.planDetails[0].quantity}" /></td>
-                        <td th:text="${plan.planCode}">생산계획 코드</td>
-                        <td th:text="${plan.planDetails[0].prdName}">제품명</td>
-                        <td th:text="${plan.startDate}">시작일자</td>
-                        <td th:text="${plan.endDate}">종료일자</td>
-                        <td th:text="${plan.planDetails[0].quantity}">수량</td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(productionPlans)}">
-                        <td colspan="6" class="text-center">등록된 생산 계획이 없습니다.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-right">
-                <button class="btn btn-primary" id="selectProductionPlans">선택</button>
-            </div>
+	<div class="main-container">
+		<div class="container">
+			<h1>생산 계획 목록</h1>
+			<!-- 생산 계획 목록 테이블 -->
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>선택</th>
+						<th>생산계획코드</th>
+						<th>제품명</th>
+						<th>시작일자</th>
+						<th>종료일자</th>
+						<th>수량</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="plan : ${productionPlans}">
+						<td>
+							<input type="radio" name="planRadio" class="plan-radio"
+								th:value="${plan.planCode}"
+								th:data-quantity="${plan.planDetails[0].quantity}" />
+						</td>
+						<td th:text="${plan.planCode}">생산계획 코드</td>
+						<td>
+							<div th:each="detail : ${plan.planDetails}">
+								<span th:text="${detail.prdName}">제품명</span><br/>
+							</div>
+						</td>
+						<td th:text="${plan.startDate}">시작일자</td>
+						<td th:text="${plan.endDate}">종료일자</td>
+						<td>
+							<div th:each="detail : ${plan.planDetails}">
+								<span th:text="${detail.quantity}">수량</span><br/>
+							</div>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(productionPlans)}">
+						<td colspan="6" class="text-center">등록된 생산 계획이 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="text-right">
+				<button class="btn btn-primary" id="selectProductionPlans">선택</button>
+			</div>
 
-            <!-- 자재 목록 테이블 -->
-            <h2>생산계획별 자재재고</h2>
-            <table id="materialsTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>자재명</th>
-                        <th>제품명</th>
-                   
-                        <th>현재재고</th>
-                        <th>안전재고</th>
-                        <th>총소요량</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:if="${#lists.isEmpty(materials)}">
-                        <td colspan="6" class="text-center">등록된 자재가 없습니다.</td>
-                    </tr>
-                    <tr th:each="material : ${materials}">
-                        <td th:text="${material.mtName}">자재명</td>
-                        <td th:text="${material.prdName}">제품명</td>
-                        
-                        <td th:text="${material.currentStc}">현재재고</td>
-                        <td th:text="${material.safetyStock}">안전재고</td>
-                        <td th:text="${material.totalRequired}">총소요량</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+			<!-- 자재 목록 테이블 -->
+			<h2>생산계획별 자재재고</h2>
+			<table id="materialsTable" class="table table-striped">
+				<thead>
+					<tr>
+						<th>자재명</th>
+						<th>제품명</th>
+						<th>요청수량</th>
+						<th>현재재고</th>
+						<th>안전재고</th>
+						<th>총소요량</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${#lists.isEmpty(materials)}">
+						<td colspan="6" class="text-center">등록된 자재가 없습니다.</td>
+					</tr>
+					<tr th:each="material : ${materials}">
+						<td th:text="${material.mtName}">자재명</td>
+						<td th:text="${material.prdName}">제품명</td>
+						<!-- 요청 수량을 각 자재에 맞게 동적으로 설정 -->
+						<td th:text="${material.quantity}">요청수량</td>
+						<td th:text="${material.currentStc}">현재재고</td>
+						<td th:text="${material.safetyStock}">안전재고</td>
+						<td th:text="${material.totalRequired}">총소요량</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-    <script>
+	<script>
     document.getElementById('selectProductionPlans').addEventListener('click', function () {
         const selectedPlan = document.querySelector('.plan-radio:checked');
         if (selectedPlan) {
             const planCode = selectedPlan.value;
+            const requestedQuantity = selectedPlan.getAttribute('data-quantity'); // 요청수량 가져오기
             fetch(`/getMaterialsByPlan?planCode=${planCode}`)
                 .then(response => response.json())
                 .then(data => {
@@ -92,7 +107,7 @@
                             const row = `<tr>
                                 <td>${material.mtName}</td>
                                 <td>${material.prdName}</td>
-                            
+                                <td>${material.quantity}</td>  <!-- 각 자재의 요청수량 표시 -->
                                 <td>${material.currentStc}</td>
                                 <td>${material.safetyStock}</td>
                                 <td>${material.totalRequired}</td>

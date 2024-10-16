@@ -2,101 +2,108 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.MaterialMapper">
 
-    <!-- 모든 자재 조회 -->
-    <select id="selectAllMaterials" resultType="com.sjc.app.mt.service.MtVO">
-        SELECT 
-            mt.MT_CODE,
-            mt.MT_NAME,
-            mt.MATERIAL_TYPE,
-            mt.SPECIFICATION,
-            mt.UNIT,
-            mt.UNIT_PRICE,
-            mt.SAFETY_STOCK,
-            mt.COMM,
-            mt.STC_CODE,
-            mt.UPDATE_DATE,
-            mt.CURRENT_STC,
-            mt.LEADTIME
-        FROM 
-            MT mt
-    </select>
+	<!-- 모든 자재 조회 -->
+	<select id="selectAllMaterials"
+		resultType="com.sjc.app.mt.service.MtVO">
+	SELECT
+		mt.MT_CODE,
+		mt.MT_NAME,
+		mt.MATERIAL_TYPE,
+		mt.SPECIFICATION,
+		mt.UNIT,
+		mt.UNIT_PRICE,
+		mt.SAFETY_STOCK,
+		mt.COMM,
+		mt.STC_CODE,
+		mt.UPDATE_DATE,
+		mt.CURRENT_STC,
+		mt.LEADTIME
+	FROM
+		MT mt
+	</select>
 
-    <!-- 특정 자재 조회 -->
-    <select id="selectMaterialById" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
-        SELECT 
-            mt.MT_CODE,
-            mt.MT_NAME,
-            mt.MATERIAL_TYPE,
-            mt.SPECIFICATION,
-            mt.UNIT,
-            mt.UNIT_PRICE,
-            mt.SAFETY_STOCK,
-            mt.COMM,
-            mt.STC_CODE,
-            mt.UPDATE_DATE,
-            mt.CURRENT_STC,
-            mt.LEADTIME
-        FROM 
-            MT mt
-        WHERE 
-            mt.MT_CODE = #{mtCode}
-    </select>
+	<!-- 특정 자재 조회 -->
+	<select id="selectMaterialById" parameterType="String"
+		resultType="com.sjc.app.mt.service.MtVO">
+	SELECT
+		mt.MT_CODE,
+		mt.MT_NAME,
+		mt.MATERIAL_TYPE,
+		mt.SPECIFICATION,
+		mt.UNIT,
+		mt.UNIT_PRICE,
+		mt.SAFETY_STOCK,
+		mt.COMM,
+		mt.STC_CODE,
+		mt.UPDATE_DATE,
+		mt.CURRENT_STC,
+		mt.LEADTIME
+	FROM
+		MT mt
+	WHERE
+		mt.MT_CODE = #{mtCode}
+	</select>
 
-    <!-- 자재 코드 목록에 따른 자재 조회 -->
-    <select id="selectMaterialsByCodes" parameterType="list" resultType="com.sjc.app.mt.service.MtVO">
-        SELECT 
-            mt.MT_CODE,
-            mt.MT_NAME,
-            mt.MATERIAL_TYPE,
-            mt.SPECIFICATION,
-            mt.UNIT,
-            mt.UNIT_PRICE,
-            mt.SAFETY_STOCK,
-            mt.COMM,
-            mt.STC_CODE,
-            mt.UPDATE_DATE,
-            mt.CURRENT_STC,
-            mt.LEADTIME
-        FROM 
-            MT mt
-        WHERE 
-            mt.MT_CODE IN
-            <foreach item="materialCode" collection="list" open="(" separator="," close=")">
-                #{materialCode}
-            </foreach>
-    </select>
+	<!-- 자재 코드 목록에 따른 자재 조회 -->
+	<select id="selectMaterialsByCodes" parameterType="list"
+		resultType="com.sjc.app.mt.service.MtVO">
+	SELECT
+		mt.MT_CODE,
+		mt.MT_NAME,
+		mt.MATERIAL_TYPE,
+		mt.SPECIFICATION,
+		mt.UNIT,
+		mt.UNIT_PRICE,
+		mt.SAFETY_STOCK,
+		mt.COMM,
+		mt.STC_CODE,
+		mt.UPDATE_DATE,
+		mt.CURRENT_STC,
+		mt.LEADTIME
+	FROM
+		MT mt
+	WHERE
+		mt.MT_CODE IN
+		<foreach item="materialCode" collection="list" open="("
+			separator="," close=")">
+			#{materialCode}
+		</foreach>
+	</select>
 
-    <!-- 생산 계획 코드에 따른 자재 조회 -->
-    <select id="selectMaterialsByPlanCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
-        SELECT 
-            p.PLAN_CODE,
-            bd.MT_CODE,
-            pd.PRD_NAME,
-            pd.QUANTITY,
-            m.MT_NAME,
-            m.CURRENT_STC,
-            m.SAFETY_STOCK,
-            SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
-        FROM 
-            PLAN p
-        JOIN 
-            PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
-        JOIN 
-            BOM b ON pd.PRD_CODE = b.PRD_CODE
-        JOIN 
-            B_DETAIL bd ON b.BOM_CODE = bd.BOM_CODE
-        JOIN 
-            MT m ON bd.MT_CODE = m.MT_CODE
-        WHERE 
-            p.PLAN_CODE = #{planCode}
-        GROUP BY 
-            p.PLAN_CODE, 
-            bd.MT_CODE,
-            pd.PRD_NAME,
-            pd.QUANTITY,
-            m.MT_NAME, 
-            m.CURRENT_STC, 
-            m.SAFETY_STOCK
-    </select>
+	<!-- 생산 계획 코드에 따른 자재 조회 -->
+	<select id="selectMaterialsByPlanCode" parameterType="String"
+		resultType="com.sjc.app.mt.service.MtVO">
+	SELECT
+		p.PLAN_CODE,
+		bd.MT_CODE,
+		pd.PRD_NAME,
+		pd.QUANTITY,
+		m.MT_NAME,
+		m.CURRENT_STC,
+		m.SAFETY_STOCK,
+		SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
+	FROM
+		PLAN p
+	JOIN
+		PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
+	JOIN
+		BOM b ON pd.PRD_CODE = b.PRD_CODE
+	JOIN
+		B_DETAIL bd ON b.BOM_CODE = bd.BOM_CODE
+	JOIN
+		MT m ON bd.MT_CODE = m.MT_CODE
+	WHERE
+		p.PLAN_CODE = #{planCode}
+	GROUP BY
+		p.PLAN_CODE,
+		bd.MT_CODE,
+		pd.PRD_NAME,
+		pd.QUANTITY,
+		m.MT_NAME,
+		m.CURRENT_STC,
+		m.SAFETY_STOCK
+	ORDER BY
+		pd.PRD_NAME
+	</select>
 
 </mapper>

@@ -17,5 +17,6 @@ public class PlanVO {
     private Integer status;        // 상태 
     
     private List<PlanDVO> planDetails; // 생산계획 상세 리스트
+   
 }
 
