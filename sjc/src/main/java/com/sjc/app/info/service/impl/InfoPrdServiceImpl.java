@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sjc.app.info.mapper.InfoPrdMapper;
 import com.sjc.app.info.service.InfoPrdService;
-import com.sjc.app.sales.service.PrdVO;
+import com.sjc.app.sales.service.ProductVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -26,8 +26,8 @@ public class InfoPrdServiceImpl implements InfoPrdService {
 	}
 	
 	@Override
-	public List<PrdVO> prdList(PrdVO prdvo) {
-		return infoPrdMapper.selectPrdAllList(prdvo);
+	public List<ProductVO> prdList(ProductVO productVO) {
+		return infoPrdMapper.selectPrdAllList(productVO);
 	}
 
 }

@@ -2,8 +2,8 @@ package com.sjc.app.info.mapper;
 
 import java.util.List;
 
-import com.sjc.app.sales.service.PrdVO;
+import com.sjc.app.sales.service.ProductVO;
 
 public interface InfoPrdMapper {
-	public List<PrdVO> selectPrdAllList(PrdVO prdvo);
+	public List<ProductVO> selectPrdAllList(ProductVO prdvo);
 }
