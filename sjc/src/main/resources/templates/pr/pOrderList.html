@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+layout:decorate="~{common/layouts/default_layout}"
+layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>생산지시</title>
+</head>
+
+<body>
+    <div class="main-container">
+        <h3>생산관리 실적</h3>
+        <table id="bl" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>생산지시 코드</th>
+                    <th>시작 일자</th>
+                    <th>완료 일자</th>
+                    <th>담당자</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            <tbody id="plan">
+                <th:block th:each="list: ${list}">
+                    <tr>
+                        <td th:text="${list.porderCode}"></td>
+                        <td>[[ ${list.startDate} ]]</td>
+                        <td>[[ ${list.endDate} ]]</td>
+                        <td th:text="${list.manager}"></td>
+                        <td th:text="${list.comm}"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    <script>
+
+    </script>
+</body>
+
+</html>

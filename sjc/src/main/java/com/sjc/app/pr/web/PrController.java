@@ -7,7 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sjc.app.pr.service.PDetailVO;
+import com.sjc.app.pr.service.POrderVO;
+import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrdtService;
 
@@ -42,7 +47,50 @@ public class PrController {
 		return 0;
 	}
 	
+	// 계획 상세 조회
+	@GetMapping("planDList")
+	@ResponseBody
+	public List<PlanDVO> planDList(@RequestParam String planCode) {
+		
+		return prdtService.planDetail(planCode);
+	}
 	
+	// 지시 전체 조회
+	@GetMapping("pOrderList")
+	public String pOrderList(Model model) {
+		List<POrderVO> list = prdtService.pOrderList();
+		
+		model.addAttribute("list", list);
+		
+		
+		return "pr/pOrderList";
+	}
 	
+	// 지시 페이지
+	@GetMapping("pOrder")
+	public String pOrder(Model model) {
+
+		return "pr/pOrder";
+	}
+	
+	// 생산 공정 실적
+	@GetMapping("pResult")
+	public String pResult() {
+		return "pr/pResult";
+	}
+	
+	// 생산 관리 페이지
+	@GetMapping("pManage")
+	public String pManage() {
+		return "pr/pManage";
+	}
+	
+	// 지시 상세 조회
+	@GetMapping("pOList")
+	@ResponseBody
+	public List<PDetailVO> pOList(@RequestParam String porderCode) {
+		
+		return prdtService.pDetail(porderCode);
+	}
 	
 }

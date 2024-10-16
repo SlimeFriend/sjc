@@ -7,5 +7,11 @@ public interface PrdtService {
 	public List<PlanVO> planList();
 	
 	// 상세 계획 조회
-	public List<PlanDVO> planDetail();
+	public List<PlanDVO> planDetail(String planCode);
+	
+	// 전체 지시 조회
+	public List<POrderVO> pOrderList();
+	
+	// 상세 지시 조회
+	public List<PDetailVO> pDetail(String porderCode);
 }
