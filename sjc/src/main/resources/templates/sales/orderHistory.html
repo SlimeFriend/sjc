@@ -6,33 +6,37 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<h2 class="h2">주문 내역</h2>
-	<form>
-		<div class="form-group row">
-			<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
-			<div class="col-sm-12 col-md-5">
-				<input class="form-control" type="text" placeholder="Johnny Brown">
-			</div>
-		</div>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<h2 class="h2">주문 내역</h2>
+			<form>
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+					<div class="col-sm-12 col-md-5">
+						<input class="form-control" type="text" placeholder="Johnny Brown">
+					</div>
+				</div>
 
-		<div class="form-group row">
-			<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
-			<div class="col-sm-12 col-md-5">
-				<input class="form-control date-picker" placeholder="Select Date"
-					type="text">
-			</div>
-		</div>
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+					<div class="col-sm-12 col-md-5">
+						<input class="form-control date-picker" placeholder="Select Date"
+							type="text">
+					</div>
+				</div>
 
-		<div class="form-group row">
-			<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
-			<div class="col-sm-12 col-md-5">
-				<input class="form-control date-picker" placeholder="Select Date"
-					type="text">
-			</div>
-		</div>
-	</form>
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+					<div class="col-sm-12 col-md-5">
+						<input class="form-control date-picker" placeholder="Select Date"
+							type="text">
+					</div>
+				</div>
+			</form>
 
-	<div id="grid"></div>
+			<div id="grid"></div>
+		</div>
+	</div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
@@ -67,7 +71,7 @@
 					header : '요청사항',
 					name : 'unitPrice',
 					align : 'center',
-				},],
+				}, ],
 				rowHeaders : [ 'rowNum' ],
 				pageOptions : {
 					useClient : true,

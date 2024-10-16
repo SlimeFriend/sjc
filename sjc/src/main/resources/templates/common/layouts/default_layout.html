@@ -16,13 +16,8 @@
 	<div th:replace="~{common/fragments/default_sidebar :: defaultSidebar}"></div>
 
 	<!-- content 영역 -->
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<div class="pd-20 card-box mb-30">
-				<div layout:fragment="Content"></div>
-			</div>
-		</div>
-	</div>
+	<div layout:fragment="Content"></div>
+
 
 	<!-- footer 영역 -->
 	<!--  
