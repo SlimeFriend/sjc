@@ -33,7 +33,7 @@ public class EqController {
 	@GetMapping("eqInfo")
 	public String eqInfo(EqVO eqVO, Model model) {
 		EqVO findVO = eqService.eqInfo(eqVO);
-		model.addAttribute("equip", findVO);
+		model.addAttribute("eq", findVO);
 		return "equip/equipInfo";
 	}
 
