@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('searchBtn').addEventListener('click', function() {
-        const searchCriteria = {
+        const search = {
         		userId: document.getElementById('inputUserId').value,
         		loginId: document.getElementById('inputLoginId').value,
             	roleName: document.getElementById('inputRoleName').value,
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             	deptCode: document.getElementById('inputDeptCode').value,
             	deptName: document.getElementById('inputDeptName').value,
         };
-        fetchUsers(searchCriteria);
+        fetchUsers(search);
     });
 
     function fetchUsers(search = {}) {
