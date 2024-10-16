@@ -7,12 +7,12 @@ layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 
-<title>생산지시</title>
+<title>생산관리 실적</title>
 </head>
 
 <body>
     <div class="main-container">
-        <h3>생산관리 실적</h3>
+        <h3>생산지시</h3>
         <table id="bl" class="table table-secondary table-hover">
             <thead>
                 <tr>
@@ -35,8 +35,61 @@ layout:fragment="Content">
                 </th:block>
             </tbody>
         </table>
+        <h3>생산지시 상세</h3>
+        <table id="detail-table" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>목표량</th>
+                    <th>지시량</th>
+                    <th>생산량</th>
+                    <th>우선 순위</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            <tbody id="dbody">
+            </tbody>
+        </table>
+    </div>
+    
     <script>
+        const plan = document.getElementById('plan');
+        const detailBody = document.getElementById('detail-body');
+        
+        Array.from(plan.children).forEach((pl) => {
+            pl.addEventListener('click', (event) => {
+                const pCode = event.currentTarget.children[0].textContent;
+                
+                fetch('/pOList?porderCode=' + pCode)
+                    .then(function(resp) {
+                        if (!resp.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return resp.json();
+                    })
+                    .then(function(resp) {
+                        // 상세 테이블 내용 초기화
+                        dbody.innerHTML = '';
 
+                        // 받아온 데이터로 테이블 행 추가
+                        resp.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.prdName}</td>
+                                <td>${item.want}</td>
+                                <td>${item.command}</td>
+                                <td>${item.output}</td>
+                                <td>${item.no}</td>
+                                <td>${item.comm}</td>
+                            `;
+                            dbody.appendChild(row);
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('fetch err');
+                    });
+            });
+        });
     </script>
 </body>
 
