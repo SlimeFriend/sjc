@@ -1,6 +1,8 @@
 package com.sjc.app.mt.service;
 
-import java.util.Date;
+
+
+import java.sql.Date;
 
 import lombok.Data;
 

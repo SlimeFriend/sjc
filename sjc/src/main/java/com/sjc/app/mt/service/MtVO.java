@@ -22,4 +22,5 @@ public class MtVO {
     private Integer quantityRequired; // 필요수량
     private String prdName;          // 제품명
     private Integer totalRequired;    // 총소요량 추가
+    private Integer quantity;        // 제품수량
 }
