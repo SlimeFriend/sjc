@@ -7,8 +7,10 @@ public interface EqService {
 	public List<EqVO> eqList();
 	
 	// 단건 조회
+	public EqVO eqInfo(EqVO eqVO);
 	
 	// 등록
+	public int eqInsert(EqVO eqVO);
 	
 	// 수정
 	

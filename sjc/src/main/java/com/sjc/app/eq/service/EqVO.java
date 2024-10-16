@@ -8,7 +8,7 @@ import lombok.Data;
 public class EqVO {
 	private String eqCode;		  // 설비 코드
 	private String eqMdnm;		  // 모델명
-	private String use;			  // 사용여부
+	private String use;			  // 사용 여부
 	private String eqMdno;		  // 모델 번호
 	private String eqDep;		  // 담당부서
 	private Integer eqTemp;		  // 가용 온도
