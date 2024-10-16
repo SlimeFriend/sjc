@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>자재 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+</head>
+<body>
+<div class="main-container">
+    <h3>자재 관리</h3>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">자재코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputMtCode" placeholder="자재코드 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">자재이름</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputMtName" placeholder="자재이름 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">자재구분</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputMaterialType" placeholder="자재구분 입력">
+        </div>
+
+		<button class="btn btn-primary" id="searchBtn">검색</button>
+		
+    </div>
+
+    <div id="grid"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '자재코드',
+                name: 'mtCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '자재이름',
+                name: 'mtName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '자재구분',
+                name: 'materialType',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '규격',
+                name: 'specification',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단위',
+                name: 'unit',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '안전재고',
+                name: 'safetyStock',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '재고코드',
+                name: 'stcCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '재고변동일',
+                name: 'updateDate',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '현재재고',
+                name: 'currentStc',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '리드타임',
+                name: 'leadtime',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '현재수량',
+                name: 'quantityRequired',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '제품명',
+                name: 'prdName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+        ],
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 10
+        }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const search = {
+        		mtCode: document.getElementById('inputMtCode').value,
+        		mtName: document.getElementById('inputMtName').value,
+        		materialType: document.getElementById('inputMaterialType').value,
+        };
+        fetchUsers(search);
+    });
+
+    function fetchUsers(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/mts?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                grid.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    fetchUsers();
+});
+</script>
+</body>
+</html>
