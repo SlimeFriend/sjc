@@ -1,0 +1,65 @@
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+	<!-- 페이징 필요하신분 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<h2 class="h2 mb-20">완제품 출고</h2>
+			
+			<div class="pd-30 card-box mb-20">
+				<h4 class="h5 mb-20">주문내역</h4>
+				<div id="grid"></div>
+			</div>
+			
+			<div class="pd-30 card-box mb-20">
+				<h4 class="h5 mb-20">출고현황</h4>
+				<div id="grid"></div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const gridData = /*[[${productOut}]]*/[];
+
+			const grid = new tui.Grid({
+				el : document.getElementById('grid'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '주문일자',
+					name : 'ordDate',
+					align : 'center',
+				}, {
+					header : '납기일자',
+					name : 'dlvReqDate',
+					align : 'center',
+				}, {
+					header : '진행상황',
+					name : '',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+		});
+	</script>
+</div>

@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sjc.app.sales.mapper.SalesMapper;
-import com.sjc.app.sales.service.PrdVO;
+import com.sjc.app.sales.service.OrderVO;
+import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.SalesService;
 
 import io.micrometer.core.instrument.MeterRegistry;
@@ -23,8 +24,38 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	@Override
-	public List<PrdVO> prdList() {
-		return salesMapper.selectPrdAllList();
+	public List<ProductVO> productList() {
+		return salesMapper.selectProduct();
+	}
+
+	@Override
+	public List<OrderVO> orderHistory() {
+		return salesMapper.selectOrderHistory();
+	}
+
+	@Override
+	public List<ProductVO> productManagement() {
+		return salesMapper.selectProductManagement();
+	}
+
+	@Override
+	public List<ProductVO> productIn() {
+		return salesMapper.selectProductIn();
+	}
+
+	@Override
+	public List<OrderVO> productOut() {
+		return salesMapper.selectProductOut();
+	}
+
+	@Override
+	public List<ProductVO> inoutHistory() {
+		return salesMapper.selectInOutHistory();
+	}
+
+	@Override
+	public List<OrderVO> companyList() {
+		return salesMapper.selectCompany();
 	}
 
 }

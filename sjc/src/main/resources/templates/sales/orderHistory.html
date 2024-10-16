@@ -8,39 +8,56 @@
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2">주문 내역</h2>
-			<form>
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
-					<div class="col-sm-12 col-md-5">
-						<input class="form-control" type="text" placeholder="Johnny Brown">
+			<h2 class="h2 mb-20">주문 내역</h2>
+			<div class="pd-30 card-box mb-20">
+				<form>
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="text" placeholder="업체명">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
-					<div class="col-sm-12 col-md-5">
-						<input class="form-control date-picker" placeholder="Select Date"
-							type="text">
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
-					<div class="col-sm-12 col-md-5">
-						<input class="form-control date-picker" placeholder="Select Date"
-							type="text">
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<button class="btn btn-dark">조회</button>
+							<button class="btn btn-dark">초기화</button>
+						</div>
 					</div>
-				</div>
-			</form>
-
+				</form>
+			</div>
 			<div id="grid"></div>
 		</div>
 	</div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${products}]]*/[];
+			const gridData = /*[[${orderHistory}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('grid'),
@@ -49,27 +66,27 @@
 				scrollY : false,
 				columns : [ {
 					header : '주문코드',
-					name : 'prdName',
+					name : 'ordCode',
 					align : 'center',
 				}, {
 					header : '업체명',
-					name : 'prdCode',
+					name : 'cpName',
 					align : 'center',
 				}, {
 					header : '주문일자',
-					name : 'unitPrice',
+					name : 'ordDate',
 					align : 'center',
 				}, {
 					header : '납기일자',
-					name : 'unitPrice',
+					name : 'dlvReqDate',
 					align : 'center',
 				}, {
 					header : '진행상황',
-					name : 'unitPrice',
+					name : 'ordStatus',
 					align : 'center',
 				}, {
 					header : '요청사항',
-					name : 'unitPrice',
+					name : 'comm',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],

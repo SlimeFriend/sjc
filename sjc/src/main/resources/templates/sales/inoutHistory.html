@@ -1,0 +1,66 @@
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+	<!-- 페이징 필요하신분 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<h2 class="h2 mb-20">완제품 입/출고 내역</h2>
+			<div class="pd-30 card-box mb-20">
+				<div class="d-flex justify-content-between align-items-center mb-20">
+					<h2 class="h5 mb-0">입고</h2>
+					<div>
+						<button class="btn btn-danger">입고</button>
+						<button class="btn btn-primary">출고</button>
+					</div>
+				</div>
+				<div id="grid"></div>
+			</div>
+		</div>
+
+		<script th:inline="javascript">
+			document.addEventListener('DOMContentLoaded', function() {
+				const gridData = /*[[${productManagement}]]*/[];
+
+				const grid = new tui.Grid({
+					el : document.getElementById('grid'),
+					data : gridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '제품명',
+						name : 'prdName',
+						align : 'center',
+					}, {
+						header : '제품코드',
+						name : 'prdCode',
+						align : 'center',
+					}, {
+						header : 'LOT',
+						name : 'lot',
+						align : 'center',
+					}, {
+						header : '제조일자',
+						name : 'md',
+						align : 'center',
+					}, {
+						header : '유통기한',
+						name : 'ed',
+						align : 'center',
+					}, {
+						header : '수량',
+						name : 'stcQuantity',
+						align : 'center',
+					}, ],
+					rowHeaders : [ 'rowNum' ],
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
+			});
+		</script>
+	</div>
