@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoBomMapper">
+
+	<select id="selectBomAllList" resultType="BomVO" parameterType="BomVO">
+		select	BOM_CODE  
+				,REG_DATE
+		        ,DESCRIPTION
+		        ,COMM
+		        ,MANAGER
+		        ,PRD_CODE
+		from    BOM
+	    <where>
+	        <if test="bomCode != null and bomCode != ''">
+	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
+	        </if>
+	    </where>
+	    ORDER BY BOM_CODE
+	</select>
+</mapper>

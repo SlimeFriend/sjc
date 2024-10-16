@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>BOM 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+</head>
+<body>
+<div class="main-container">
+    <h3>BOM 관리</h3>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">BOM코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputBomCode" placeholder="BOM코드 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">제품코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputPrdCode" placeholder="제품코드 입력">
+        </div>
+
+		<button class="btn btn-primary" id="searchBtn">검색</button>
+    </div>
+    
+    <div id="grid"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: 'BOM',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '제품코드',
+                name: 'prdCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '설명',
+                name: 'description',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '등록일자',
+                name: 'regDate',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '담당자',
+                name: 'manager',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+        ],
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 10
+        }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const search = {
+        		bomCode: document.getElementById('inputBomCode').value,
+        		prdCode: document.getElementById('inputPrdCode').value,
+        };
+        fetchPrds(search);
+    });
+
+    function fetchPrds(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/boms?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                grid.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    fetchPrds();
+});
+</script>
+</body>
+</html>
