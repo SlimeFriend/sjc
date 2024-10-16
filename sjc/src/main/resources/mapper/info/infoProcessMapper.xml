@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoProcessMapper">
+
+	<select id="selectProcessAllList" resultType="ProcessVO" parameterType="ProcessVO">
+		select	PROCESS_NAME  
+				,DESCRIPTION
+		        ,COMM
+		        ,PROCESS_CODE
+		        ,PROCESS_TYPE
+		from    PROCESS
+	    <where>
+	        <if test="processCode != null and processCode != ''">
+	            AND UPPER(PROCESS_CODE) LIKE UPPER('%' || #{processCode} || '%')
+	        </if>
+	        <if test="processName != null and processName != ''">
+	            AND UPPER(PROCESS_NAME) LIKE UPPER('%' || #{processName} || '%')
+	        </if>
+	        <if test="prccessType != null and prccessType != ''">
+	            AND UPPER(PROCESS_TYPE) LIKE UPPER('%' || #{prccessType} || '%')
+	        </if>
+	    </where>
+	    ORDER BY PROCESS_CODE
+	</select>
+</mapper>
