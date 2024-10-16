@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>설비 등록</title>
+</head>
+
+<body>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<div class="card-box mb-30">
+				<h2 class="h4 pd-20">설비 등록</h2>
+			</div>
+			<form th:action="@{/eqInsert}" name="insertForm" method="post"
+				class="form-control">
+				<div>
+					<label for=mdNm>모델명(필수)</label> 
+					<input type="text" id="mdNm" name="mdNm">
+				</div>
+				<div>
+					<label for="eqCd">설비코드</label> 
+					<input type="text" id="eqCd" name="eqCd">
+				</div>
+				<div>
+					<label for="mdNo">모델번호</label> 
+					<input type="text" id="mdNo" name="mdNo">
+				</div>
+				<div>
+					<label for="dept">담당부서</label> 
+					<input type="text" id="dept" name="dept">
+				</div>
+				<div>
+					<label for="temp">가용온도</label> 
+					<input type="text" id="temp" name="temp">
+				</div>
+				<div>
+					<label for="per">점검주기</label> 
+					<input type="text" id="per" name="per">
+				</div>
+				<div>
+					<label for="empNo">사원번호</label> 
+					<input type="text" id="empNo" name="empNo">
+				</div>
+				<div>
+					<label for="dept">담당자</label> 
+					<input type="text" id="dept" name="dept">
+				</div>
+				<div>
+					<label for="regdate">설비위치</label> 
+					<input type="date" id="regdate" name="regdate">
+				</div>
+				<div>
+					<label for="image">설비사진</label> 
+					<input type="file" id="image" name="image">
+				</div>
+				<div>
+					<button type="reset">초기화</button>
+				</div>
+				<div>
+					<button type="submit">등록</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

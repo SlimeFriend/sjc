@@ -28,4 +28,58 @@
 	ORDER BY eq_code
 </select>
 
+    <!-- 등록 -->
+<insert id="insertEqInfo" parameterType="EqVO">
+	<selectKey keyProperty="eqMdno"
+			   resultType="Integer"
+			   order="BEFORE">
+		SELECT NVL(MAX(eqMdno), 1000) +  1
+        FROM   eq
+    </selectKey>
+  	INSERT INTO eq
+  				(
+  				eq_mdnm
+  			  , use
+	    	  , eq_code
+	     	  , eq_mdno
+	    	  , eq_dep
+	    	  , eq_temp
+	    	  , eq_period
+	    	  , employee_no
+	    	  , manager
+	    	  , eq_location
+	    	  , eq_img
+  				)
+  	VALUES (
+  			#{eqMdnm}
+  			,#{use}
+  			,#{eqCode}
+  			,#{eqMdno}
+  			,#{eqDep}
+  			,#{eqTemp}
+  			,#{eqPeriod}
+  			,#{employeeNo}
+  			,#{manager}
+  			,#{eqLocation}
+  			,#{eqImg}
+  			
+  			)
+</insert>
+
+    <!-- 단건조회 -->
+<select id="selectEqInfo" resultType="EqVO">
+    SELECT eq_mdnm
+	    , eq_mdno
+	    , eq_ckdate
+	    , use
+	    , eq_dep
+	    , manager
+	    , eq_code
+	    , eq_standtemp
+	    , eq_location
+	    , line_code
+    FROM   eq
+    WHERE  eq_code = #{eqCode}
+</select>
+
 </mapper>

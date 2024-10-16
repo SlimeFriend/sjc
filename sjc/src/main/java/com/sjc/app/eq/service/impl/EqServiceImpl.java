@@ -18,9 +18,24 @@ public class EqServiceImpl implements EqService {
 		this.eqMapper = eqMapper;
 	}
 	
+	// 전체 조회
 	@Override
 	public List<EqVO> eqList() {
 		return eqMapper.selectEqAll();
+	}
+	
+	// 등록
+	@Override
+	public int eqInsert(EqVO eqVO) {
+		int result = eqMapper.insertEqInfo(eqVO);
+		return result;
+	}
+	
+	// 단건 조회
+	@Override
+	public EqVO eqInfo(EqVO eqVO) {
+		// TODO Auto-generated method stub
+		return eqMapper.selectEqInfo(eqVO);
 	}
 	
 } // end of class
