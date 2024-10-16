@@ -3,7 +3,9 @@ package com.sjc.app.mt.serviceImpl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
 import com.sjc.app.mt.mapper.ProductionPlanMapper;
+import com.sjc.app.mt.service.MtVO;
 import com.sjc.app.mt.service.ProductionPlanService;
 import com.sjc.app.pr.service.PlanVO;
 
@@ -18,7 +20,11 @@ public class ProductionPlanServiceImpl implements ProductionPlanService {
 
     @Override
     public List<PlanVO> getAllProductionPlans() {
-       
         return productionPlanMapper.selectAllProductionPlans();
+    }
+
+    @Override
+    public List<MtVO> getMaterialsByPlanCode(String planCode) {
+        return productionPlanMapper.selectMaterialsByPlanCode(planCode);
     }
 }
