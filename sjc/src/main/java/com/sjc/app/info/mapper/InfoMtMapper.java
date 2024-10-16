@@ -5,5 +5,5 @@ import java.util.List;
 import com.sjc.app.mt.service.MtVO;
 
 public interface InfoMtMapper {
-	public List<MtVO> selectMtAllList(MtVO mtvo);
+	public List<MtVO> selectMtAllList(MtVO mtVO);
 }

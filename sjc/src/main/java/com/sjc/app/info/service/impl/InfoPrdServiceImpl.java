@@ -26,8 +26,8 @@ public class InfoPrdServiceImpl implements InfoPrdService {
 	}
 	
 	@Override
-	public List<PrdVO> prdList(PrdVO prdvo) {
-		return infoPrdMapper.selectPrdAllList(prdvo);
+	public List<PrdVO> prdList(PrdVO prdVO) {
+		return infoPrdMapper.selectPrdAllList(prdVO);
 	}
 
 }

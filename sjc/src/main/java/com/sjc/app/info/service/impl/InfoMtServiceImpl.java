@@ -26,8 +26,8 @@ public class InfoMtServiceImpl implements InfoMtService {
 	}
 	
 	@Override
-	public List<MtVO> mtList(MtVO mtvo) {
-		return infoMtMapper.selectMtAllList(mtvo);
+	public List<MtVO> mtList(MtVO mtVO) {
+		return infoMtMapper.selectMtAllList(mtVO);
 	}
 
 }
