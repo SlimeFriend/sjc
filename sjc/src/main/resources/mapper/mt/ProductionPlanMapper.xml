@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.ProductionPlanMapper">
 
+    <!-- 기존 생산 계획 목록 조회 -->
     <select id="selectAllProductionPlans" resultMap="PlanWithDetails">
         SELECT 
             p.PLAN_CODE,
@@ -21,6 +22,50 @@
         LEFT JOIN 
             PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
     </select>
+
+    <!-- 생산 계획 코드에 따른 자재 조회 -->
+    <select id="selectMaterialsByPlanCode" parameterType="String" resultMap="PlanMaterialResultMap">
+        SELECT 
+            p.PLAN_CODE,
+            bd.MT_CODE,
+            pd.PRD_NAME,
+            pd.QUANTITY,
+            m.MT_NAME,
+            m.CURRENT_STC,
+            m.SAFETY_STOCK,
+            SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
+        FROM 
+            PLAN p
+        JOIN 
+            PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
+        JOIN 
+            BOM b ON pd.PRD_CODE = b.PRD_CODE
+        JOIN 
+            B_DETAIL bd ON b.BOM_CODE = bd.BOM_CODE
+        JOIN 
+            MT m ON bd.MT_CODE = m.MT_CODE
+        WHERE 
+            p.PLAN_CODE = #{planCode}
+        GROUP BY 
+            p.PLAN_CODE, 
+            bd.MT_CODE,
+            pd.PRD_NAME,
+            pd.QUANTITY,
+            m.MT_NAME, 
+            m.CURRENT_STC, 
+            m.SAFETY_STOCK
+    </select>
+
+    <!-- 자재 조회 결과 매핑 -->
+    <resultMap id="PlanMaterialResultMap" type="com.sjc.app.mt.service.MtVO">
+        <result property="mtCode" column="MT_CODE"/>
+        <result property="mtName" column="MT_NAME"/>
+        <result property="prdName" column="PRD_NAME"/>
+        <result property="quantityRequired" column="QUANTITY"/>
+        <result property="currentStc" column="CURRENT_STC"/>
+        <result property="safetyStock" column="SAFETY_STOCK"/>
+        <result property="totalRequired" column="TOTAL_REQUIRED"/> 
+    </resultMap>
 
     <resultMap id="PlanWithDetails" type="com.sjc.app.pr.service.PlanVO">
         <id property="planCode" column="PLAN_CODE" />

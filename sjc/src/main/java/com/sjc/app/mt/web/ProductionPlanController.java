@@ -34,7 +34,6 @@ public class ProductionPlanController {
     @GetMapping("/getMaterialsByPlan")
     @ResponseBody
     public List<MtVO> getMaterialsByPlan(@RequestParam String planCode) {
-        // 선택된 생산 계획 코드에 해당하는 자재 목록을 가져옴
         return materialService.getMaterialsByPlanCode(planCode);
     }
 }
