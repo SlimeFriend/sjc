@@ -28,4 +28,32 @@
 	where plan_code = #{planCode}
 </select>
 
+<!-- 지시 전체 조회 -->
+<select id="selectOrderAll" resultType="POrderVO">
+	select porder_code,
+			start_date,
+			end_date,
+			manager,
+			comm,
+			plan_code
+	from porder
+	
+</select>
+
+<!-- 지시 상세 조회 -->
+<select id="selectOrder" parameterType="String" resultType="PDetailVO">
+	select pdetail_code,
+			prd_name,
+			want,
+			command,
+			output,
+			no,
+			comm,
+			porder_code,
+			status,
+			line_code
+	from pdetail
+	where porder_code = #{porderCode}
+</select>
+
 </mapper>
