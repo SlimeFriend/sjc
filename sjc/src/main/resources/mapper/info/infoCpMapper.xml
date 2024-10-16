@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoCpMapper">
+
+	<select id="selectCpAllList" resultType="CpVO" parameterType="CpVO">
+		select	CP_CODE  
+				,cp_name
+		        ,BUSINESS_NO
+		        ,ADDRESS
+		        ,COMM
+		        ,CP_TYPE
+		from    CP
+	    <where>
+	        <if test="cpCode != null and cpCode != ''">
+	            AND UPPER(cp_code) LIKE UPPER('%' || #{cpCode} || '%')
+	        </if>
+
+	    </where>
+	    ORDER BY CP_CODE
+	</select>
+</mapper>
