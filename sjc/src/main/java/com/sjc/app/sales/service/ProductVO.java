@@ -8,7 +8,7 @@ import lombok.Data;
 public class ProductVO {
 	private String prdCode;
 	private String prdName;
-	private String descripition;
+	private String description;
 	private String comm;
 	private String lot;
 	private Date md;
