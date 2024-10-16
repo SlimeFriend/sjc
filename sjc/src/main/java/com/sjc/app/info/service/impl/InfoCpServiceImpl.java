@@ -26,8 +26,8 @@ public class InfoCpServiceImpl implements InfoCpService {
 	}
 	
 	@Override
-	public List<CpVO> cpList(CpVO cpvo) {
-		return infoCpMapper.selectCpAllList(cpvo);
+	public List<CpVO> cpList(CpVO cpVO) {
+		return infoCpMapper.selectCpAllList(cpVO);
 	}
 
 }
