@@ -17,8 +17,8 @@ public class InfoBomRestController {
 	private final InfoBomService bomService;
 
 	@GetMapping("boms")
-	public List<BomVO> bomList(BomVO bomvo){
-		return bomService.bomList(bomvo);
+	public List<BomVO> bomList(BomVO bomVO){
+		return bomService.bomList(bomVO);
 	}
 
 }

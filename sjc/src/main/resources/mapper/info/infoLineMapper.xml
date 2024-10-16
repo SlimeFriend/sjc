@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoLineMapper">
+
+	<select id="selectLineAllList" resultType="LineVO" parameterType="LineVO">
+		select	LINE_CODE  
+		        ,PRD_CODE
+				,USE
+		from    LINE
+	    <where>
+	        <if test="lineCode != null and lineCode != ''">
+	            AND UPPER(line_code) LIKE UPPER('%' || #{lineCode} || '%')
+	        </if>
+	        <if test="prdCode != null and prdCode != ''">
+	            AND UPPER(prd_code) LIKE UPPER('%' || #{prdCode} || '%')
+	        </if>
+	        <if test="use != null and use != ''">
+	            AND UPPER(use) LIKE UPPER('%' || #{use} || '%')
+	        </if>
+	    </where>
+	    ORDER BY LINE_CODE
+	</select>
+</mapper>

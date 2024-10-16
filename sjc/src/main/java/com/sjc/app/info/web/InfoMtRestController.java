@@ -17,8 +17,8 @@ public class InfoMtRestController {
 	private final InfoMtService infoMtService;
 
 	@GetMapping("mts")
-	public List<MtVO> mtList(MtVO mtvo){
-		return infoMtService.mtList(mtvo);
+	public List<MtVO> mtList(MtVO mtVO){
+		return infoMtService.mtList(mtVO);
 	}
 
 }
