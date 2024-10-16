@@ -3,41 +3,24 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-	<!-- 페이징필요한사람 -->
-	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
+	<!-- 페이징 필요하신분 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">주문접수</h2>
-
-			<div class="pd-20 card-box mb-20">
-				<h2 class="h5 mb-20">제품 선택</h2>
+			<h2 class="h2 mb-20">완제품 입고</h2>
+			<div class="pd-30 card-box mb-20">
+				<div class="d-flex justify-content-between align-items-center mb-20">
+					<h2 class="h5 mb-0">생산완료 제품</h2>
+					<button class="btn btn-primary">입고</button>
+				</div>
 				<div id="grid"></div>
 			</div>
-
-			<div class="pd-20 card-box mb-20">
-				<h2 class="h5 mb-20">주문서 작성</h2>
-				<form>
-					<div class="form-group">
-						<label>업체명</label> <select class="form-control custom-select" type="text"
-							placeholder="업체명"></select>
-					</div>
-					<div class="form-group">
-						<label>납기일자</label> <input class="form-control" type="date">
-					</div>
-					<div class="form-group">
-						<label>요청사항</label>
-						<textarea class="form-control"></textarea>
-					</div>
-					<button class="btn btn-primary">제출</button>
-				</form>
-			</div>
-
 		</div>
 
 		<script th:inline="javascript">
 			document.addEventListener('DOMContentLoaded', function() {
-				const gridData = /*[[${products}]]*/[];
+				const gridData = /*[[${productIn}]]*/[];
 
 				const grid = new tui.Grid({
 					el : document.getElementById('grid'),
@@ -53,16 +36,24 @@
 						name : 'prdCode',
 						align : 'center',
 					}, {
-						header : '단가',
-						name : 'unitPrice',
+						header : 'LOT',
+						name : 'lot',
 						align : 'center',
 					}, {
-						header : '가격',
-						name : 'unitPrice',
+						header : '제조일자',
+						name : 'md',
+						align : 'center',
+					}, {
+						header : '유통기한',
+						name : 'ed',
 						align : 'center',
 					}, {
 						header : '수량',
-						name : 'unitPrice',
+						name : 'stcQuantity',
+						align : 'center',
+					}, {
+						header : '입고',
+						name : '',
 						align : 'center',
 					}, ],
 					rowHeaders : [ 'checkbox' ],
