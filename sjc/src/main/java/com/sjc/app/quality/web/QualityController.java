@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
 @Controller
@@ -22,5 +23,12 @@ public class QualityController {
     	List<MtlOdVO> list = qualityService.incomingWaitInfo();
     	model.addAttribute("incomingQualityWaits", list);
 		return "/quality/incomingQualityWait";
+    }
+    
+    @GetMapping("incomingQualityRegistrationInfo")
+    public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
+    	List<InspectionVO> list = qualityService.incomingRegistrationInfo();
+    	model.addAttribute("incomingQualityRegistrationList", list);
+		return "/quality/incomingQualityRegistration";
     }
 }
