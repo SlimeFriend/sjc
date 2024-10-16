@@ -7,6 +7,6 @@ public class PrdVO {
 	private String prdCode;
 	private String prdName;
 	private Integer unitPrice;
-	private String descripition;
+	private String description;
 	private String comm;
 }

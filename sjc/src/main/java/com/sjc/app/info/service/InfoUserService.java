@@ -6,7 +6,7 @@ import com.sjc.app.security.service.UserVO;
 
 // 실제로 사용자에게 제공하는 기능
 
-public interface UserService {
+public interface InfoUserService {
 	// 전체 사용자정보 조회
 //	public List<UserVO> userList();
 	public List<UserVO> userList(UserVO uservo);

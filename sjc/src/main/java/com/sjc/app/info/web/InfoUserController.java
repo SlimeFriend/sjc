@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sjc.app.info.service.UserService;
+import com.sjc.app.info.service.InfoUserService;
 import com.sjc.app.security.service.UserVO;
 
 @Controller // Route : 사용자의 요청(endpoint)와 그에 대한 처리
 // URI + METHOD => Service => View
 //@RequiredArgsConstructor
-public class UserController {
+public class InfoUserController {
 	// 해당 컨트롤러에서 제공하는 서비스
-	private UserService userService;
+	private InfoUserService userService;
 	
 	@Autowired
-	UserController(UserService userService){
+	InfoUserController(InfoUserService userService){
 		this.userService = userService;
 	}
 	
@@ -50,9 +50,14 @@ public class UserController {
 //		return "user/listGrid";
 //	}
 	
-	@GetMapping("userListGridFetch")
-	public String userGrid() {
-		return "user/listGridFetch";
+//	@GetMapping("ListGridFetch")
+//	public String userGrid() {
+//		return "user/listGridFetch";
+//	}
+	
+	@GetMapping("infoUserListGridFetch")
+	public String infoUserListGridFetch() {
+		return "info/userListGridFetch";
 	}
 	
 //	// 단건조회 : Get => QueryString(커맨드 객체 or @RequestParam), userloyeeId
