@@ -17,8 +17,8 @@ public class InfoLineRestController {
 	private final InfoLineService lineService;
 
 	@GetMapping("lines")
-	public List<LineVO> lineList(LineVO linevo){
-		return lineService.lineList(linevo);
+	public List<LineVO> lineList(LineVO lineVO){
+		return lineService.lineList(lineVO);
 	}
 
 }

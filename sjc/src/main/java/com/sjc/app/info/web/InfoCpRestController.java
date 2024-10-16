@@ -17,8 +17,8 @@ public class InfoCpRestController {
 	private final InfoCpService infoCpService;
 
 	@GetMapping("cps")
-	public List<CpVO> cpList(CpVO cpvo){
-		return infoCpService.cpList(cpvo);
+	public List<CpVO> cpList(CpVO cpVO){
+		return infoCpService.cpList(cpVO);
 	}
 
 }

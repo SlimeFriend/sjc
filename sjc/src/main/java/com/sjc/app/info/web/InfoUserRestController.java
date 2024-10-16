@@ -36,8 +36,8 @@ public class InfoUserRestController {
 //	}
 	
 	@GetMapping("users")
-	public List<UserVO> userList(UserVO uservo){
-		return userService.userList(uservo);
+	public List<UserVO> userList(UserVO userVO){
+		return userService.userList(userVO);
 	}
 	
 //	//단건조회 : GET + URI(자원 => users)
