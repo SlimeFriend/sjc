@@ -24,8 +24,12 @@ public class SalesController {
 	// 주문접수 페이지
 	@GetMapping("/orderReception")
 	public String orderReceptionPage(Model model) {
-	    List<ProductVO> list = salesService.productList();
-	    model.addAttribute("products", list);
+	    List<ProductVO> productList = salesService.productList();
+	    List<OrderVO> companyList = salesService.companyList();
+	    
+	    model.addAttribute("products", productList);
+	    model.addAttribute("companyList", companyList);
+	    
 	    return "sales/orderReception";
 	}
     
