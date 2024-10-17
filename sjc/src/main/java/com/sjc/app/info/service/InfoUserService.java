@@ -18,4 +18,9 @@ public interface InfoUserService {
 //	public Map<String, Object> userUpdate(UserVO userVO);
 //	// 사용자정보 단건 삭제
 //	public Map<String, Object> userDelete(int userId);
+	public List<UserVO> modifyUsers(List<UserVO> userVOs);
+    UserVO insertUser(UserVO userVO);
+    List<String> deleteUsers(List<String> userIds);
+    public List<String> copyUsers(List<String> userIds);
+
 }

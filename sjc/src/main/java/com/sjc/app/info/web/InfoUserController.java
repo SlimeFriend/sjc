@@ -60,6 +60,22 @@ public class InfoUserController {
 		return "info/userListGridFetch";
 	}
 	
+	@GetMapping("infoUserListGridUpdate")
+	public String infoUserListGridUpdate() {
+		return "info/userListGridUpdate";
+	}
+	
+	@GetMapping("infoUserListGridApi")
+	public String infoUserListGridApi() {
+		return "info/userListGridApi";
+	}
+	
+	@GetMapping("infoUserListGrid")
+	public String infoUserListGrid() {
+		return "info/userListGrid";
+	}
+	
+	
 //	// 단건조회 : Get => QueryString(커맨드 객체 or @RequestParam), userloyeeId
 //	@GetMapping("userInfo") // userInfo?userloyeeId=value
 //	public String userInfo(UserVO userVO, Model model) {

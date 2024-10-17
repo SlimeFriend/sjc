@@ -52,8 +52,11 @@
             <input class="form-control" type="text" id="inputDeptName" placeholder="부서명 입력">
         </div>
         
-		<button class="btn btn-primary" id="updateBtn">업데이트</button>
-		
+	    <div class="form-group row">
+	        <button class="btn btn-success" id="insertBtn">추가</button>
+	        <button class="btn btn-danger" id="deleteBtn">삭제</button>
+	        <button class="btn btn-warning" id="updateBtn">업데이트</button>
+	    </div>		
     </div>
 
     <div id="grid"></div>
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             }
         ],
-        rowHeaders: ['rowNum'],
+        rowHeaders: ['checkbox','rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 10
@@ -128,6 +131,60 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchUsers(search);
     });
 
+    document.getElementById('insertBtn').addEventListener('click', function() {
+        const newUser = {
+            loginId: document.getElementById('inputLoginId').value,
+            userName: document.getElementById('inputUserName').value,
+            roleName: document.getElementById('inputRoleName').value,
+            deptCode: document.getElementById('inputDeptCode').value,
+            // Add other necessary fields
+        };
+        insertUser(newUser);
+    });
+
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+        const selectedRows = grid.getCheckedRows();
+        if (selectedRows.length > 0) {
+            deleteUsers(selectedRows.map(row => row.userId));
+        } else {
+            alert('삭제할 사용자를 선택해주세요.');
+        }
+    });
+
+    function insertUser(user) {
+        fetch('/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        })
+        .then(response => response.json())
+        .then(result => {
+            fetchUsers();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function deleteUsers(userIds) {
+        fetch('/users', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userIds),
+        })
+        .then(response => response.json())
+        .then(result => {
+            fetchUsers();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }    
+    
     function fetchUsers(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/users?${params.toString()}`;

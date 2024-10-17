@@ -1,12 +1,11 @@
 package com.sjc.app.info.service.impl;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.service.InfoUserService;
 import com.sjc.app.security.mapper.UserMapper;
@@ -30,91 +29,70 @@ public class InfoUserServiceImpl implements InfoUserService {
 		//this.registry = registry;
 	}
 	
-//	@Override
-//	public List<UserVO> userList() {
-//		/*
-//		 * 
-//		Timer timer = Timer.builder("my.list")
-//				.tag("class", this.getClass().getName())
-//				.tag("method", "userList")
-//				.description("list")
-//				.register(registry);
-//		
-//		timer.record(() -> {
-//			log.info("userList");
-//			sleep(500);
-//		});
-//		 */
-//		
-//		return userMapper.selectUserAllList();
-//	}
-	
 	@Override
-	public List<UserVO> userList(UserVO uservo) {
-		return userMapper.selectUserAllList(uservo);
+	public List<UserVO> userList(UserVO userVO) {
+		return userMapper.selectUserAllList(userVO);
 	}
-//	private static void sleep(int i) {
-//		
-//		try {
-//			Thread.sleep(i + new Random().nextInt(500));
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//
-//	@Override
-//	public UserVO userInfo(UserVO userVO) {
-//		return userMapper.selectUserInfo(userVO);
-//	}
-//
-//	@Override
-//	public int userInsert(UserVO userVO) {
-//		int result = userMapper.insertUserInfo(userVO);
-//		
-//		return result == 1 ? userVO.getUserloyeeId() : -1;
-//	}
-//
-//	@Override
-//	public Map<String, Object> userUpdate(UserVO userVO) {
-//		Map<String, Object> map = new HashMap<>();
-//		boolean isSuccessed = false;
-//		
-//		int result = userMapper.updateUserInfo(userVO.getUserloyeeId(), userVO);
-//		
-//		if(result == 1) {
-//			isSuccessed = true;
-//		}
-//		
-//		map.put("result", isSuccessed);
-//		map.put("target", userVO);
-//		/**
-//		 * AJAX
-//		{
-//			"result" : true,
-//			"target" : {
-//							userloyeeId : 100,
-//							lastName : "King",
-//							...
-//						}
-//		}
-//		 */
-//		
-//		return map;
-//	}
-//
-//	@Override
-//	public Map<String, Object> userDelete(int userId) {
-//		Map<String, Object> map = new HashMap<>();
-//		// 삭제가 안될 경우 : {}
-//		// 삭제가 될 경우 : { "userloyeeId" : 104}
-//		int result = userMapper.deleteUserInfo(userId);
-//		
-//		if(result == 1) {
-//			map.put("userloyeeId", userId); 
-//		}
-//		
-//		return map;
-//	}
+	
+    @Override
+    @Transactional
+    public List<UserVO> modifyUsers(List<UserVO> UserVOs) {
+        List<UserVO> savedUsers = new ArrayList<>();
 
+        for (UserVO userVO : UserVOs) {
+            try {
+                // 1. Update user information
+                int userUpdateCount = userMapper.updateUser(userVO);
+                if (userUpdateCount == 0) {
+                    throw new RuntimeException("User not found with id: " + userVO.getUserId());
+                }
+
+                // 2. Update user role
+                int roleUpdateCount = userMapper.updateUserRole(userVO);
+                if (roleUpdateCount == 0) {
+                    userMapper.insertUserRole(userVO);
+                }
+
+                // 3. Fetch updated user information
+                UserVO savedUserVO = userMapper.getUserById(userVO.getUserId());
+                savedUsers.add(savedUserVO);
+
+            } catch (Exception e) {
+                // 에러 로깅 및 처리
+                log.error("Error updating user with id: " + userVO.getUserId(), e);
+                // 여기서 예외를 다시 던지면 트랜잭션이 롤백됩니다.
+                // throw new RuntimeException("Failed to update user", e);
+            }
+        }
+
+        return savedUsers;
+    }
+    
+    @Override
+    @Transactional
+    public UserVO insertUser(UserVO userVO) {
+        userMapper.insertUser(userVO);
+        userMapper.insertUserRole(userVO);
+        return userMapper.getUserById(userVO.getUserId());
+    }
+
+    @Override
+    @Transactional
+    public List<String> deleteUsers(List<String> userIds) {
+        userMapper.deleteUsers(userIds);
+        userMapper.deleteUserRoles(userIds);
+        return userIds;
+    }
+    
+    
+    @Override
+    @Transactional
+    public List<String> copyUsers(List<String> userIds) {
+        List<UserVO> usersToCopy = userMapper.getUsersByIds(userIds);
+
+        userMapper.insertCopyLog();
+        userMapper.insertCopyDetail(usersToCopy);
+
+        return userIds;
+    }
 }
