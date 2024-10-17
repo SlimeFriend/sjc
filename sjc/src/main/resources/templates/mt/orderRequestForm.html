@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>발주 요청 등록</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>발주 요청 등록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="main-container">
@@ -17,23 +16,23 @@
             <form th:action="@{/orderRequest}" method="post">
                 <div class="form-group">
                     <label for="mtCode">자재 코드</label>
-                    <input type="text" id="mtCode" name="mtCode" class="form-control" required>
+                    <input type="text" id="mtCode" name="mtCode" class="form-control" th:value="${orderRequest.mtCode}" required>
                 </div>
                 <div class="form-group">
                     <label for="quantity">수량</label>
-                    <input type="number" id="quantity" name="quantity" class="form-control" required>
+                    <input type="number" id="quantity" name="quantity" class="form-control" th:value="${orderRequest.quantity}" required>
                 </div>
                 <div class="form-group">
                     <label for="cpCode">업체 코드</label>
-                    <input type="text" id="cpCode" name="cpCode" class="form-control">
+                    <input type="text" id="cpCode" name="cpCode" class="form-control" th:value="${orderRequest.cpCode}">
                 </div>
                 <div class="form-group">
                     <label for="userId">사용자 ID</label>
-                    <input type="text" id="userId" name="userId" class="form-control">
+                    <input type="text" id="userId" name="userId" class="form-control" th:value="${orderRequest.userId}">
                 </div>
                 <div class="form-group">
                     <label for="comm">비고</label>
-                    <textarea id="comm" name="comm" class="form-control"></textarea>
+                    <textarea id="comm" name="comm" class="form-control" th:text="${orderRequest.comm}"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">등록</button>
             </form>

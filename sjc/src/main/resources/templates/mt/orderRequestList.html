@@ -14,36 +14,38 @@
         <div class="container">
             <h1>발주 요청 목록</h1>
             <div class="text-right mb-3">
-                <a class="btn btn-primary" href="orderRequest/new">새 발주 요청 등록</a>
+                <a class="btn btn-primary" href="orderRequestNew">새 발주 요청 등록</a>
             </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>발주 ID</th>
+                        <th>발주 코드</th>
+                        <th>자재 코드</th>
                         <th>자재명</th>
                         <th>수량</th>
-                        <th>담당자</th>
+                        <th>업체 코드</th>
                         <th>비고</th>
                         <th>작업</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="orderRequest : ${orderRequests}">
-                        <td th:text="${orderRequest.orderId}">발주 ID</td>
+                        <td th:text="${orderRequest.orderRequestCode}">발주 코드</td>
+                        <td th:text="${orderRequest.mtCode}">자재 코드</td>
                         <td th:text="${orderRequest.mtName}">자재명</td>
                         <td th:text="${orderRequest.quantity}">수량</td>
-                        <td th:text="${orderRequest.manager}">담당자</td>
+                        <td th:text="${orderRequest.cpCode}">업체 코드</td>
                         <td th:text="${orderRequest.comm}">비고</td>
                         <td>
-                            <a th:href="@{/mt/orderRequest/{orderId}(orderId=${orderRequest.orderId})}" class="btn btn-info">상세보기</a>
-                            <form th:action="@{/mt/orderRequest/{orderId}(orderId=${orderRequest.orderId})}" method="post" style="display:inline;">
+                            <a th:href="@{/orderRequestDetail/{orderRequestCode}(orderRequestCode=${orderRequest.orderRequestCode})}" class="btn btn-info">상세보기</a>
+                            <form th:action="@{/orderRequest/{orderRequestCode}(orderRequestCode=${orderRequest.orderRequestCode})}" method="post" style="display:inline;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
                             </form>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(orderRequests)}">
-                        <td colspan="6" class="text-center">등록된 발주 요청이 없습니다.</td>
+                        <td colspan="7" class="text-center">등록된 발주 요청이 없습니다.</td>
                     </tr>
                 </tbody>
             </table>

@@ -15,4 +15,5 @@ public class OrderRequestVO {
     private String cpCode;           // 업체 코드
     private String userId;           // 사용자 ID
     private String comm;          // 비고
+    private String mtName; //자재명 
 }
