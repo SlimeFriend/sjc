@@ -9,7 +9,7 @@ public class POrderVO {
     private String endDate;
     private String manager;
     private String comm;
-    private Integer status;
+    private String status;
     private String planCode;
     
 }

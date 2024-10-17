@@ -56,4 +56,23 @@
 	where porder_code = #{porderCode}
 </select>
 
+<!-- 공정 실적 조회 -->
+<select id="selectPResult" resultType="PResultVO">
+	select presult_code,
+			prd_code,
+			start_time,
+			end_time,
+			output,
+			err,
+			process_date,
+			eq_name,
+			process_name,
+			manager,
+			pdetail_code,
+			ldetail_code,
+			input
+	from presult
+			
+</select>
+
 </mapper>

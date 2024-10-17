@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sjc.app.pr.mapper.PrdtMapper;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
+import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrdtService;
@@ -41,6 +42,12 @@ public class PrdtServiceImpl implements PrdtService {
 	@Override
 	public List<PDetailVO> pDetail(String porderCode) {
 		return prdtMapper.selectOrder(porderCode);
+	}
+
+	@Override
+	public List<PResultVO> pResultList() {
+		// TODO Auto-generated method stub
+		return prdtMapper.selectPResult();
 	}
 
 }
