@@ -22,6 +22,7 @@ public class LoginUserVO implements UserDetails{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> auths = new ArrayList<>();
 		auths.add(new SimpleGrantedAuthority(userVO.getRoleName()));
+		auths.add(new SimpleGrantedAuthority(userVO.getUserId()));
 		auths.add(new SimpleGrantedAuthority(userVO.getUserName()));
 		auths.add(new SimpleGrantedAuthority(userVO.getDeptCode()));
 		auths.add(new SimpleGrantedAuthority(userVO.getDeptName()));
