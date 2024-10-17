@@ -15,4 +15,10 @@ public interface EqService {
 	// 수정
 	
 	// 삭제
+	
+	// 비가동 목록 중 일부 Eq쪽 조회
+	public List<EqVO> eqList2();
+	
+	// 비가동 목록 중 EqChck 조회
+	public List<EqChckVO> eqChckList();
 }

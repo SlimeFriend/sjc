@@ -16,13 +16,13 @@
 			<div class="card-box mb-30">
 				<h2 class="h4 pd-20">설비 상세</h2>
 				<table>
-					
+
 					<tr>
 						<th></th>
 						<td><img style="width: 100%;"
 							th:src="@{/assets/vendors/images/{file}(file=${equip.eqImg})}"></td>
 					</tr>
-					
+
 					<tr>
 						<th>모델명</th>
 						<td>[[${equip.eqMdnm}]]</td>
@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<th>기준온도</th>
-						<td>[[${equip.eqStandtemp}]]</td>
+						<td>[[${equip.eqStandTemp}]]</td>
 					</tr>
 					<tr>
 						<th>설치위치</th>
@@ -64,6 +64,9 @@
 						<td>[[${equip.lineCode}]]</td>
 					</tr>
 				</table>
+				<button class="btn btn-primary">수정</button>
+				<button class="btn btn-danger">삭제</button>
+				<button class="btn btn-dark" type="button" onclick="location.href='eqList'">목록으로</button>
 			</div>
 		</div>
 	</div>

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.sjc.app.eq.service.EqChckVO;
 import com.sjc.app.eq.service.EqService;
 import com.sjc.app.eq.service.EqVO;
 
@@ -22,6 +23,7 @@ public class EqController {
 	public String equipList(Model model) {
 		List<EqVO> list = eqService.eqList();
 		model.addAttribute("equips", list);
+		
 		return "equip/equipList";
 	}
 	
@@ -41,6 +43,17 @@ public class EqController {
 	@GetMapping("eqInsert")
 	public String eqInsertForm() {
 		return "equip/equipInsert";
+	}
+	
+	// 비가동 설비 목록 전체조회 : URI - eqList / RETURN - eq/eqList
+	@GetMapping("eqChckList")
+	public String eqChckList(Model model) {
+		List<EqVO> list = eqService.eqList2();
+		model.addAttribute("equips", list);
+		
+		List<EqChckVO> list2 = eqService.eqChckList();
+		model.addAttribute("equipChck", list2);
+		return "equip/eqChckList";
 	}
 
 } // end of class

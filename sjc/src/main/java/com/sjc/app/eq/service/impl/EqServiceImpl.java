@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sjc.app.eq.mapper.EqMapper;
+import com.sjc.app.eq.service.EqChckVO;
 import com.sjc.app.eq.service.EqService;
 import com.sjc.app.eq.service.EqVO;
 
@@ -37,5 +38,16 @@ public class EqServiceImpl implements EqService {
 		// TODO Auto-generated method stub
 		return eqMapper.selectEqInfo(eqVO);
 	}
+
+	@Override
+	public List<EqVO> eqList2() {
+		return eqMapper.selectEqAll2();
+	}
+
+	@Override
+	public List<EqChckVO> eqChckList() {
+		return eqMapper.selctEqChckAll();
+	}
+	
 	
 } // end of class
