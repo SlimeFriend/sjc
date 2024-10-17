@@ -14,4 +14,6 @@ public class EqChckVO {
 	private Date endDate;		// 종료 일자
 	private String reason;		// 사유
 	private String comm;		// 비고
+	// 조인 정보 받아온 속성
+	private String eqName;
 }

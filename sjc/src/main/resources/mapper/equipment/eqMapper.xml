@@ -6,7 +6,7 @@
 <select id="selectEqAll" resultType="EqVO">
 	SELECT eq_code
 	    , eq_mdnm
-	    , use
+	    , use 
 	    , eq_mdno
 	    , eq_dep
 	    , eq_temp
@@ -81,5 +81,34 @@
     FROM   eq
     WHERE  eq_code = #{eqCode}
 </select>
+
+	<!-- 비가동 목록 중 일부 Eq쪽 조회 -->
+<select id="selectEqAll2" resultType="EqVO">
+	SELECT eq_code
+	, eq_type
+	, eq_name
+	, eq_period
+	, use
+	FROM eq
+	ORDER BY eq_code
+</select>
+
+	<!-- 비가동 목록 조회 -->
+<select id="selctEqChckAll" resultType="EqChckVO">
+	SELECT ec.eq_chck_opcd
+	, ec.eq_code
+	, ec.eq_nextchck
+	, ec.eq_chckox
+	, ec.start_date
+	, ec.end_date
+	, ec.reason
+	, ec.comm
+	, e.eq_name
+	FROM eq_chck ec
+	join eq e
+	on ec.eq_code = e.eq_code
+	ORDER BY eq_code
+</select>
+
 
 </mapper>
