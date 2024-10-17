@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sjc.app.sales.mapper.SalesMapper;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
+import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
 
 import io.micrometer.core.instrument.MeterRegistry;
@@ -21,6 +22,12 @@ public class SalesServiceImpl implements SalesService {
 	@Autowired
 	SalesServiceImpl(SalesMapper salesMapper, MeterRegistry registry) {
 		this.salesMapper = salesMapper;
+	}
+	
+	// 주문접수
+	@Override
+	public int insertOrder(OrderVO orderVO) {
+		return salesMapper.insertOrder(orderVO);
 	}
 	
 	@Override
