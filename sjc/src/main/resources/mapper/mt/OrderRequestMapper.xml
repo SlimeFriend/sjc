@@ -24,10 +24,10 @@
         FROM OD_REQUEST WHERE ORDER_REQUEST_CODE = #{orderId} <!-- 특정 발주 요청 조회 -->
     </select>
 
-    <insert id="insertOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
-        INSERT INTO OD_REQUEST (ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM) 
-        VALUES (#{orderRequestCode}, #{orderDate}, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm}) <!-- 발주 요청 등록 -->
-    </insert>
+  <insert id="insertOrderRequest" parameterType="OrderRequestVO">
+    INSERT INTO OD_REQUEST (ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM)
+    VALUES (ORDER_REQUEST_SEQ.NEXTVAL, #{orderDate}, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
+</insert>
 
     <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
         UPDATE OD_REQUEST 
