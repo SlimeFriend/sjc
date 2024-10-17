@@ -14,4 +14,7 @@ public interface PrdtService {
 	
 	// 상세 지시 조회
 	public List<PDetailVO> pDetail(String porderCode);
+	
+	// 생산 공정 실적 조회
+	public List<PResultVO> pResultList();
 }

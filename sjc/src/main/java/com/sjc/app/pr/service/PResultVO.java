@@ -8,8 +8,8 @@ public class PResultVO {
 	private String prdCode;			// 제품 코드
 	private String startTime;		// 시작 시간
 	private String endTime;			// 종료 시간
-	private String output;			// 생산량
-	private String err;				// 불량량
+	private Integer output;			// 생산량
+	private Integer err;			// 불량량
 	private String processDate;		// 공정 일자
 	private String eqName;			// 설비 이름
 	private String processName;		// 공정 이름

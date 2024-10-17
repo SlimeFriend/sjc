@@ -14,7 +14,7 @@ public class PlanVO {
     private String endDate;        // 종료 일자
     private String manager;        // 담당자
     private String comm;        // 비고
-    private Integer status;        // 상태 
+    private String status;        // 상태 
     
     private List<PlanDVO> planDetails; // 생산계획 상세 리스트
    

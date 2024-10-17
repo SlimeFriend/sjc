@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
+import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrdtService;
@@ -75,7 +76,11 @@ public class PrController {
 	
 	// 생산 공정 실적
 	@GetMapping("pResult")
-	public String pResult() {
+	public String pResult(Model model) {
+		List<PResultVO> list = prdtService.pResultList();
+		
+		model.addAttribute("list", list);
+		
 		return "pr/pResult";
 	}
 	
