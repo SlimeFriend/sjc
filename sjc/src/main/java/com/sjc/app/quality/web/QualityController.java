@@ -22,13 +22,13 @@ public class QualityController {
     public String incomingWaitInfo(MtlOdVO mtlOdVO, Model model) {
     	List<MtlOdVO> list = qualityService.incomingWaitInfo();
     	model.addAttribute("incomingQualityWaits", list);
-		return "/quality/incomingQualityWait";
+		return "quality/incomingQualityWait";
     }
     
     @GetMapping("incomingQualityRegistrationInfo")
     public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
     	List<InspectionVO> list = qualityService.incomingRegistrationInfo();
     	model.addAttribute("incomingQualityRegistrationList", list);
-		return "/quality/incomingQualityRegistration";
+		return "quality/incomingQualityRegistration";
     }
 }
