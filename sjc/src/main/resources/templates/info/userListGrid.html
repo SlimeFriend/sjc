@@ -210,33 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	}
     
-    document.getElementById('insertBtn').addEventListener('click', function() {
-        const newUser = {
-            loginId: document.getElementById('inputLoginId').value,
-            userName: document.getElementById('inputUserName').value,
-            roleName: document.getElementById('inputRoleName').value,
-            deptCode: document.getElementById('inputDeptCode').value,
-            // Add other necessary fields
-        };
-        insertUser(newUser);
-    });
-    
-    function insertUser(user) {
-        fetch('/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user),
-        })
-        .then(response => response.json())
-        .then(result => {
-            fetchUsers();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
     /*
     document.getElementById('insertBtn').addEventListener('click', function() {
         const newUser = {
