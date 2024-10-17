@@ -63,6 +63,23 @@
 		 	o.mtl_od_code = #{mtlOdCode}
 	</select>
 	
+	<select id="selectQualityTestInfo" resultType="InsItemVO">
+		SELECT  i.ins_item_name ins_item_name
+        		,i.ins_item_citeria ins_item_citeria
+		FROM    ins_type t
+		JOIN    ins_item i
+			ON      t.ins_type_code = i.ins_type_code
+		WHERE   t.MATERIAL_TYPE = (
+    								SELECT MATERIAL_TYPE
+    								FROM    mt
+   									WHERE   mt_code = (
+												        SELECT  mt_code
+												        FROM    mtl_od
+												        WHERE   mtl_od_code = #{mtlOdCode}
+									    				)
+									)
+	</select>
+	
 
 
 </mapper>

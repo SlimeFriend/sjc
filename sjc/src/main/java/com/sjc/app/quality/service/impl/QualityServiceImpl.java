@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.mapper.QualityMapper;
+import com.sjc.app.quality.service.InsItemVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -36,6 +37,13 @@ public class QualityServiceImpl implements QualityService{
 	public InspectionVO incomingRegistrationInfo(InspectionVO inspectionVO) {
 		// TODO Auto-generated method stub
 		return qualityMapper.selectQualityRegistrationInfo(inspectionVO);
+	}
+	
+	// 검사항목 - 입고등록 페이지
+	@Override
+	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO) {
+		// TODO Auto-generated method stub
+		return qualityMapper.selectQualityTestInfo(mtlOdVO);
 	}
 
 }

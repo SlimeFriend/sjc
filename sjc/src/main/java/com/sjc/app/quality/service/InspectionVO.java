@@ -44,4 +44,14 @@ public class InspectionVO {
 		private String cpCode;//업체 코드
 		private String mtlOdStatus;//발주상태
 		
+		
+	// InsItemVO
+		private String insItemCode;
+		private String insItemName;
+		private String insItemCiteria;
+		
+		
+	// InsTypeVO
+		private String insTypeName;
+		
 }
