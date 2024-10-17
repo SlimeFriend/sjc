@@ -16,56 +16,52 @@
 			<div class="card-box mb-30">
 				<h2 class="h4 pd-20">설비 상세</h2>
 				<table>
-					<!-- 
+					
 					<tr>
-						<th>첨부파일</th>
-						<td><img style="width: 50%;"
-							th:src="@{/images/{file}(file=${board.image})}"></td>
+						<th></th>
+						<td><img style="width: 100%;"
+							th:src="@{/assets/vendors/images/{file}(file=${equip.eqImg})}"></td>
 					</tr>
-					 -->
+					
 					<tr>
 						<th>모델명</th>
-						<td>[[${eq.eqMdnm}]]</td>
+						<td>[[${equip.eqMdnm}]]</td>
 					</tr>
 					<tr>
 						<th>모델번호</th>
-						<td>[[${eq.eqMdno}]]</td>
+						<td>[[${equip.eqMdno}]]</td>
 					</tr>
 					<tr>
 						<th>점검날짜</th>
-						<td>[[${eq.eqCkdate}]]</td>
+						<td>[[${equip.eqCkDate}]]</td>
 					</tr>
 					<tr>
 						<th>가동여부</th>
-						<td>[[${eq.use}]]</td>
+						<td>[[${equip.use}]]</td>
 					</tr>
 					<tr>
 						<th>담당부서</th>
-						<td>[[${eq.eqDep}]]</td>
+						<td>[[${equip.eqDep}]]</td>
 					</tr>
 					<tr>
 						<th>담당자</th>
-						<td>[[${eq.manager}]]</td>
-					</tr>
-					<tr>
-						<th>담당자</th>
-						<td>[[${eq.manager}]]</td>
+						<td>[[${equip.manager}]]</td>
 					</tr>
 					<tr>
 						<th>설비코드</th>
-						<td>[[${eq.eqCode}]]</td>
+						<td>[[${equip.eqCode}]]</td>
 					</tr>
 					<tr>
 						<th>기준온도</th>
-						<td>[[${eq.eqStandtemp}]]</td>
+						<td>[[${equip.eqStandtemp}]]</td>
 					</tr>
 					<tr>
 						<th>설치위치</th>
-						<td>[[${eq.eqLocation}]]</td>
+						<td>[[${equip.eqLocation}]]</td>
 					</tr>
 					<tr>
 						<th>라인코드</th>
-						<td>[[${eq.lineCode}]]</td>
+						<td>[[${equip.lineCode}]]</td>
 					</tr>
 				</table>
 			</div>

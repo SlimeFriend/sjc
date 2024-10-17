@@ -20,7 +20,6 @@
 	    , line_code
 	    , eq_type
 	    , eq_name
-	    , type_name
 	    , eq_ckdate
 	    , description
 	    , employee_no
@@ -74,6 +73,7 @@
 	    , use
 	    , eq_dep
 	    , manager
+	    , eq_img
 	    , eq_code
 	    , eq_standtemp
 	    , eq_location
