@@ -20,67 +20,67 @@
                         <th:block th:each="registration : ${incomingQualityWaits}">
                         <div>
                             <label for="insCode">품질검사 코드</label> 
-                            <input type="text" id="insCode" value="[[${registration.insCode]]">
+                            <input type="text" id="insCode" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="insStatus">품질검사 상태</label> 
-                            <input type="text" id="insStatus" value="[[${registration.insCode]]">
+                            <input type="text" id="insStatus" value="[[${registration.insStatus}]]">
                         </div>
                         <div>
                             <label for="insDate">품질검사 일자</label> 
-                            <input type="date" id="insDate" value="[[${registration.insCode]]">
+                            <input type="date" id="insDate" value="[[${registration.insDate}]]">
                         </div>
                         <div>
                             <label for="insSort">품질검사 종류</label> 
-                            <input type="text" id="insSort" value="[[${registration.insCode]]">
+                            <input type="text" id="insSort" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="insTarget">품질검사 대상</label> 
-                            <input type="text" id="insTarget" value="[[${registration.insCode]]">
+                            <input type="text" id="insTarget" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="insTypeCode">품질검사 유형코드</label> 
-                            <input type="text" id="insTypeCode" value="[[${registration.insCode]]">
+                            <input type="text" id="insTypeCode" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="userId">사용자 번호</label> 
-                            <input type="number" step="0.01" min="1" id="userId" value="[[${registration.insCode]]">
+                            <input type="number" step="0.01" min="1" id="userId" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="userName">사용자 이름</label> 
-                            <input type="text" id="userName" value="[[${registration.insCode]]">
+                            <input type="text" id="userName" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="mtlOdCode">자재발주 코드</label> 
-                            <input type="text" id="mtlOdCode" value="[[${registration.insCode]]">
+                            <input type="text" id="mtlOdCode" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="mtlOdQuantity">자재발주 수량</label> 
-                            <input type="number" step="0.01" min="1" id="mtlOdQuantity" value="[[${registration.insCode]]">
+                            <input type="number" step="0.01" min="1" id="mtlOdQuantity" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="mtlOdDate">자재발주 일자</label> 
-                            <input type="date" id="mtlOdDate" value="[[${registration.insCode]]">
+                            <input type="date" id="mtlOdDate" value="[[${registration.insCode}]]">
                         </div>
                         <div>
                             <label for="diliveryDate">납기일</label> 
-                            <input type="date" id="diliveryDate" th:field="*{diliveryDate}">
+                            <input type="date" id="diliveryDate" value="[[${registration.diliveryDate}]]">
                         </div>
                         <div>
                             <label for="price">금액</label> 
-                            <input type="number" step="0.01" min="1" id="price" th:field="*{price}">
+                            <input type="number" step="0.01" min="1" id="price" value="[[${registration.price}]]">
                         </div>
                         <div>
                             <label for="mtCode">자재코드</label> 
-                            <input type="text" id="mtCode" th:field="*{mtCode}">
+                            <input type="text" id="mtCode" value="[[${registration.mtCode}]]">
                         </div>
                         <div>
                             <label for="cpCode">업체 코드</label> 
-                            <input type="text" id="cpCode" th:field="*{cpCode}">
+                            <input type="text" id="cpCode" value="[[${registration.cpCode}]]">
                         </div>
                         <div>
                             <label for="mtName">자재이름</label> 
-                            <input type="text" id="mtName" th:field="*{mtName}">
+                            <input type="text" id="mtName" value="[[${registration.mtName}]]">
                         </div>
                         <div>
                             <button type="button" id="updateBtn">저장</button>

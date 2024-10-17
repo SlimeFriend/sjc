@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class MtlOdVO {
 private String mtlOdCode; //자재발주 코드
-
 private Integer mtlOdQuantity; //자재발주 수량
 private Date mtlOdDate;//자재발주 일자
 private Date diliveryDate;//납기일
