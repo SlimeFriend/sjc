@@ -14,4 +14,6 @@ public interface QualityService {
 	
 	// 단건조회 - 입고등록 페이지
 	public InspectionVO incomingRegistrationInfo(InspectionVO inspectionVO);
+	// 검사항목 - 입고등록 페이지
+	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO);
 }

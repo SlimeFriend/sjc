@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InsItemVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -27,19 +28,31 @@ public class QualityController {
 		return "quality/incomingQualityWait";
     }
     
-//	// 전체 조회 - 입고등록 페이지    
-//    @GetMapping("incomingQualityRegistrationInfo")
-//    public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
-//    	List<InspectionVO> list = qualityService.incomingRegistrationInfo();
-//    	model.addAttribute("incomingQualityRegistrationList", list);
-//		return "quality/incomingQualityRegistration";
-//    }
-    
-    // 단건조회 - 입고등록 페이지
+	// 전체 조회 - 입고등록 페이지    
     @GetMapping("incomingQualityRegistrationInfo")
     public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
     	InspectionVO findVO = qualityService.incomingRegistrationInfo(inspectionVO);
     	model.addAttribute("incomingQualityRegistrationList", findVO);
+    	
+    	String mtlOdCode = findVO.getMtlOdCode();
+    	MtlOdVO mtlOdVO = new MtlOdVO();
+    	mtlOdVO.setMtlOdCode(mtlOdCode);
+    	// 단건조회 - 입고등록 페이지
+    	List<InsItemVO> insItemlist = qualityService.incomingQualityTestInfo(mtlOdVO);
+    	model.addAttribute("testList", insItemlist);
+    	
     	return "quality/incomingQualityRegistration";
     }
+    
+	/*
+	 * // 단건조회 - 입고등록 페이지
+	 * 
+	 * @GetMapping("incomingQualityRegistrationInfo") public String
+	 * incomingRegistrationInfo(MtlOdVO mtlOdVO, Model model) { List<MtlOdVO> list =
+	 * qualityService.incomingQualityTestInfo(mtlOdVO);
+	 * model.addAttribute("testList", list); return
+	 * "quality/incomingQualityRegistration"; }
+	 */
+    
+    
 }
