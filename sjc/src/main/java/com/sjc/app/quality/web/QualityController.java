@@ -18,6 +18,8 @@ public class QualityController {
     public QualityController(QualityService qualityService) {
     	this.qualityService = qualityService;
     }
+
+	// 조회 - 입고대기 조회페이지
     @GetMapping("incomingQualityWaitInfo")
     public String incomingWaitInfo(MtlOdVO mtlOdVO, Model model) {
     	List<MtlOdVO> list = qualityService.incomingWaitInfo();
@@ -25,10 +27,19 @@ public class QualityController {
 		return "quality/incomingQualityWait";
     }
     
+//	// 전체 조회 - 입고등록 페이지    
+//    @GetMapping("incomingQualityRegistrationInfo")
+//    public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
+//    	List<InspectionVO> list = qualityService.incomingRegistrationInfo();
+//    	model.addAttribute("incomingQualityRegistrationList", list);
+//		return "quality/incomingQualityRegistration";
+//    }
+    
+    // 단건조회 - 입고등록 페이지
     @GetMapping("incomingQualityRegistrationInfo")
     public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
-    	List<InspectionVO> list = qualityService.incomingRegistrationInfo();
-    	model.addAttribute("incomingQualityRegistrationList", list);
-		return "quality/incomingQualityRegistration";
+    	InspectionVO findVO = qualityService.incomingRegistrationInfo(inspectionVO);
+    	model.addAttribute("incomingQualityRegistrationList", findVO);
+    	return "quality/incomingQualityRegistration";
     }
 }

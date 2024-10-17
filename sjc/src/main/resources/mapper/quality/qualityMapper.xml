@@ -14,7 +14,7 @@
 		FROM mtl_od
 		WHERE mtl_od_status = '품질검사 대기'
 	</select>
-	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
+<!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
 		       , i.ins_status
 		       , i.ins_date
@@ -36,6 +36,31 @@
 		        ON o.mtl_od_code = i.mtl_od_code
 		    JOIN mt m
 		        ON o.mt_code = m.mt_code
+		 WHERE
+		 	o.mtl_od_code = #{mtlOdCode}
+	</select> -->
+	
+	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
+		SELECT i.ins_code ins_code
+		       , i.ins_status
+		       , i.ins_sort
+		       , i.ins_target
+		       , i.ins_type_code
+		       , o.mtl_od_code
+		       , o.mtl_od_quantity
+		       , o.mtl_od_date
+		       , o.dilivery_date
+		       , o.price
+		       , o.mt_code
+		       , o.cp_code
+		       , m.mt_name
+		FROM mtl_od o
+		    JOIN inspection i
+		        ON o.mtl_od_code = i.mtl_od_code
+		    JOIN mt m
+		        ON o.mt_code = m.mt_code
+		 WHERE
+		 	o.mtl_od_code = #{mtlOdCode}
 	</select>
 	
 

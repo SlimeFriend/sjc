@@ -9,6 +9,9 @@ public interface QualityService {
 	// 조회 - 입고대기 조회페이지
 	public List<MtlOdVO> incomingWaitInfo();
 	
-	// 조회 - 입고등록 페이지
-	public List<InspectionVO> incomingRegistrationInfo();
+//	// 전체조회 - 입고등록 페이지
+//	public List<InspectionVO> incomingRegistrationInfo();
+	
+	// 단건조회 - 입고등록 페이지
+	public InspectionVO incomingRegistrationInfo(InspectionVO inspectionVO);
 }
