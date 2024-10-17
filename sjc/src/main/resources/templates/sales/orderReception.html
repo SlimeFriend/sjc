@@ -19,8 +19,14 @@
 				<h2 class="h5 mb-20">주문서 작성</h2>
 				<form>
 					<div class="form-group">
-						<label>업체명</label> <select class="form-control custom-select" type="text"
-							placeholder="업체명"></select>
+						<label for="companies">업체명</label> <input list="company"
+							name="companyCode" id="companies"
+							class="form-control custom-select" placeholder="업체를 선택하세요">
+						<datalist id="company">
+							<th:block th:each="company : ${companyList}">
+								<option th:value="${company.cpCode}" th:text="${company.cpName}"></option>
+							</th:block>
+						</datalist>
 					</div>
 					<div class="form-group">
 						<label>납기일자</label> <input class="form-control" type="date">

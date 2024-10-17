@@ -3,8 +3,10 @@
 <mapper namespace="com.sjc.app.sales.mapper.SalesMapper">
 
 	<!-- 업체 리스트 조회 -->
-	<select id="selectCompanyList" resultType="OrderVO">
-		
+	<select id="selectCompany" resultType="OrderVO">
+		SELECT cp_code,
+               cp_name
+		FROM cp
 	</select>
 
 	<!-- 제품조회 -->
