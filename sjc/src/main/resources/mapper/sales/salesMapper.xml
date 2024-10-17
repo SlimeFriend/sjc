@@ -5,7 +5,7 @@
 	<!-- 업체 리스트 조회 -->
 	<select id="selectCompany" resultType="OrderVO">
 		SELECT cp_code,
-               cp_name
+		cp_name
 		FROM cp
 	</select>
 
@@ -17,15 +17,29 @@
 		FROM prd
 	</select>
 
+	<!-- 주문 접수 -->
+	<insert id="insertOrder" parameterType="OrderVO">
+		INSERT INTO ORD (ord_code, 
+                 ord_date, 
+                 dlv_req_date, 
+                 cp_code, 
+                 comm)
+        VALUES ('ORD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, 
+                 SYSDATE,
+                 SYSDATE,
+                 #{cpCode}, 
+                 #{comm})
+	</insert>
+
 	<!-- 주문내역 조회 -->
 	<select id="selectOrderHistory" resultType="OrderVO">
 		SELECT o.ord_code,
-		c.cp_name,
-		o.ord_date,
-		o.dlv_req_date
-		FROM ord o JOIN ord_detail od
-		ON
-		o.ord_code = od.ord_code JOIN cp c
+		       c.cp_name,
+		       o.ord_date,
+		       o.dlv_req_date,
+		       o.ord_status,
+		       o.comm
+		FROM ord o LEFT JOIN cp c
 		ON o.cp_code = c.cp_code
 	</select>
 

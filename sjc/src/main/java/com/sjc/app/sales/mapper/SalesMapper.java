@@ -4,9 +4,16 @@ import java.util.List;
 
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
+import com.sjc.app.sales.service.SalesDTO;
 
 public interface SalesMapper {
 
+	// 주문접수
+	public int insertOrder(OrderVO orderVO);
+	
+	// 주문상세
+	public int insertOrderDetail(SalesDTO salesDTO);
+	
 	// 제품 테이블
 	public List<ProductVO> selectProduct();
 
@@ -27,5 +34,6 @@ public interface SalesMapper {
 	
 	// 업체 리스트
 	public List<OrderVO> selectCompany();
+
 
 }
