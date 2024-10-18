@@ -327,20 +327,26 @@
 															</li>
 														</ul>
 														-->
-														
-                        <th:block th:each="ttt : ${testList}">
-                        <div>
-                            <label for="insCode1">품질검사 코드</label> 
-                            <input type="text" id="insCode1" th:value="${ttt.insItemCiteria}">
-                        </div>
-                        <div>
-                            <label for="insCode2">품질검사 코드</label> 
-                            <input type="text" id="insCode2" th:value="${ttt.insItemName}">
-                        </div>
-                    </th:block>														
-														
-														
-														
+														<table>
+															<thead>
+																<tr>
+																	<th>항목 이름 :</th>
+																	<th>합격 기준값 :</th>
+																</tr>
+															</thead>
+															<tbody>
+																<th:block th:each="ttt : ${testList}">
+
+																	<tr>
+																		<td>[[${ttt.insItemName}]]</td>
+																		<td>[[${ttt.insItemCiteria}]]</td>
+																	</tr>
+																</th:block>
+															</tbody>
+														</table>
+
+
+
 													</div>
 													<!-- Open Task End -->
 													<!-- Close Task start -->

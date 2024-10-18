@@ -19,13 +19,20 @@ public class QualityServiceImpl implements QualityService{
 	public QualityServiceImpl (QualityMapper qualityMapper) {
 		this.qualityMapper = qualityMapper;
 	}
-	// 조회 - 입고대기 조회페이지
+	// 조회 - 입고검사대기 조회페이지
 	@Override
 	public List<MtlOdVO> incomingWaitInfo() {
 		return qualityMapper.selectQualityWaitInfo();
 	}
+	
+	// 조회 - 입고검사완료 조회페이지
+	@Override
+	public List<InspectionVO> incomingDoneInfo() {
+		// TODO Auto-generated method stub
+		return qualityMapper.selectQualityDoneInfo();
+	}
 
-//	// 전체 조회 - 입고등록 페이지   
+	//	// 전체 조회 - 입고등록 페이지   
 //	@Override
 //	public List<InspectionVO> incomingRegistrationInfo() {
 //		// TODO Auto-generated method stub

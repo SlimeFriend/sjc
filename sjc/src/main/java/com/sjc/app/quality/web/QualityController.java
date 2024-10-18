@@ -28,6 +28,15 @@ public class QualityController {
 		return "quality/incomingQualityWait";
     }
     
+    
+    // 조회 - 입고대기 조회페이지
+    @GetMapping("incomingQualityDoneInfo")
+    public String incomingQualityDone(MtlOdVO mtlOdVO, Model model) {
+    	List<InspectionVO> list = qualityService.incomingDoneInfo();
+    	model.addAttribute("incomingQualityDones", list);
+    	return "quality/incomingQualityDone";
+    }
+    
 	// 전체 조회 - 입고등록 페이지    
     @GetMapping("incomingQualityRegistrationInfo")
     public String incomingRegistrationInfo(InspectionVO inspectionVO, Model model) {
