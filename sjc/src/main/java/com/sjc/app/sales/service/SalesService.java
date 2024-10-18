@@ -5,7 +5,8 @@ import java.util.List;
 public interface SalesService {
 	
 	// 주문접수
-	public int insertOrder(OrderVO orderVO);
+    public int insertOrder(OrderVO orderVO);
+    public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
 	// 제품
 	public List<ProductVO> productList();

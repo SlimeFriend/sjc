@@ -24,11 +24,16 @@
                  dlv_req_date, 
                  cp_code, 
                  comm)
-        VALUES ('ORD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, 
+        VALUES ( #{ordCode}, 
                  SYSDATE,
                  SYSDATE,
                  #{cpCode}, 
                  #{comm})
+	</insert>
+	
+	<insert id="insertOrderDetail" parameterType="map">
+	    INSERT INTO ORD_DETAIL (ord_detail_code, ord_code, prd_code, prd_name, ord_quantity, price)
+	    VALUES ('ORDDETAIL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
 
 	<!-- 주문내역 조회 -->

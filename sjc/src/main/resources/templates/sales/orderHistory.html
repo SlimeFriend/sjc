@@ -57,7 +57,7 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${orderHistory}]]*/[];
+			const gridData = /*[[${ord}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('grid'),
@@ -87,6 +87,41 @@
 				}, {
 					header : '요청사항',
 					name : 'comm',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+		});
+	</script>
+	
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const gridData = /*[[${ordDetail}]]*/[];
+
+			const grid = new tui.Grid({
+				el : document.getElementById('grid'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'prdCode',
+					align : 'center',
+				}, {
+					header : '주문량',
+					name : 'ord_quantity',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
