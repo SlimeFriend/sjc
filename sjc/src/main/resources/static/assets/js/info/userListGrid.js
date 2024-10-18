@@ -7,6 +7,7 @@
         el: document.getElementById('grid'),
         scrollX: false,
         scrollY: false,
+        rowHeaders: ['checkbox', 'rowNum'],
         columns: [
             {
                 header: '사용자번호',
@@ -74,10 +75,9 @@
 				}
 	            */
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 10
+            perPage: 4
         }
     });
 
@@ -107,13 +107,13 @@
             });
     }
 
-    // 데이터 수정을 위한 이벤트 리스너 추가
     grid.on('editingFinish', (event) => {
         const { rowKey, columnName, value } = event;
         grid.setValue(rowKey, columnName, value);
     });
 
-    // 수정된 데이터를 다른 DB에 저장하는 함수
+    document.getElementById('updateBtn').addEventListener('click', saveModifiedData);
+    
 	function saveModifiedData() {
 	    const modifiedData = grid.getModifiedRows();
 	    
@@ -237,15 +237,142 @@
         .then(response => response.json())
         .then(result => {
             fetchUsers();
+            fetchCopyLogs();
+            fetchCopyDetails();
         })
         .catch(error => {
             console.error('Error:', error);
         });
     }      
 
-    // 저장 버튼에 이벤트 리스너 설정
-    document.getElementById('updateBtn').addEventListener('click', saveModifiedData);
 
-    // 초기 데이터 로드
     fetchUsers();
+    
+    
+    
+    const gridCopyLog = new tui.Grid({
+        el: document.getElementById('gridCopyLog'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['rowNum'],
+        columns: [
+            {
+                header: '복사번호',
+                name: 'logId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '입력일',
+                name: 'copyDate',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+        ],
+        pageOptions: {
+            useClient: true,
+            perPage: 3
+        }
+    });
+
+
+    function fetchCopyLogs(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/copyLogs?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                gridCopyLog.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    fetchCopyLogs();
+    
+    
+        
+    const gridCopyDetail = new tui.Grid({
+        el: document.getElementById('gridCopyDetail'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['rowNum'],
+        columns: [
+            {
+                header: '복사상세번호',
+                name: 'detailId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '복사번호',
+                name: 'logId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '사용자번호',
+                name: 'userId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '아이디',
+                name: 'loginId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '이름',
+                name: 'userName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '부서코드',
+                name: 'DeptCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '권한',
+                name: 'roleName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+        ],
+        pageOptions: {
+            useClient: true,
+            perPage: 3
+        }
+    });
+
+
+    function fetchCopyDetails(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/copyDetails?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                gridCopyDetail.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    fetchCopyDetails();    
+    
 });

@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sjc.app.info.mapper.InfoUserMapper;
+import com.sjc.app.info.service.InfoCopyDetailVO;
+import com.sjc.app.info.service.InfoCopyLogVO;
 import com.sjc.app.info.service.InfoUserService;
-import com.sjc.app.security.mapper.UserMapper;
-import com.sjc.app.security.service.UserVO;
+import com.sjc.app.info.service.InfoUserVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -20,26 +22,26 @@ import lombok.extern.slf4j.Slf4j;
 @Service // AOP 적용가능한 Bean
 public class InfoUserServiceImpl implements InfoUserService {
 	//private MeterRegistry registry;
-	private UserMapper userMapper;
+	private InfoUserMapper userMapper;
 	
 	@Autowired // 생성자 1개면 자동 autowired됨.
-	InfoUserServiceImpl(UserMapper userMapper, MeterRegistry registry){
-//	UserServiceImpl(UserMapper userMapper, MeterRegistry registry){
+	InfoUserServiceImpl(InfoUserMapper userMapper, MeterRegistry registry){
+//	UserServiceImpl(InfoUserMapper userMapper, MeterRegistry registry){
 		this.userMapper = userMapper;
 		//this.registry = registry;
 	}
 	
 	@Override
-	public List<UserVO> userList(UserVO userVO) {
+	public List<InfoUserVO> userList(InfoUserVO userVO) {
 		return userMapper.selectUserAllList(userVO);
 	}
 	
     @Override
     @Transactional
-    public List<UserVO> modifyUsers(List<UserVO> UserVOs) {
-        List<UserVO> savedUsers = new ArrayList<>();
+    public List<InfoUserVO> modifyUsers(List<InfoUserVO> InfoUserVOs) {
+        List<InfoUserVO> savedUsers = new ArrayList<>();
 
-        for (UserVO userVO : UserVOs) {
+        for (InfoUserVO userVO : InfoUserVOs) {
             try {
                 int userUpdateCount = userMapper.updateUser(userVO);
                 if (userUpdateCount == 0) {
@@ -51,8 +53,8 @@ public class InfoUserServiceImpl implements InfoUserService {
                     userMapper.insertUserRole(userVO);
                 }
 
-                UserVO savedUserVO = userMapper.getUserById(userVO.getUserId());
-                savedUsers.add(savedUserVO);
+                InfoUserVO savedInfoUserVO = userMapper.getUserById(userVO.getUserId());
+                savedUsers.add(savedInfoUserVO);
 
             } catch (Exception e) {
                 log.error("Error updating user with id: " + userVO.getUserId(), e);
@@ -64,7 +66,7 @@ public class InfoUserServiceImpl implements InfoUserService {
     
     @Override
     @Transactional
-    public UserVO insertUser(UserVO userVO) {
+    public InfoUserVO insertUser(InfoUserVO userVO) {
         userMapper.insertUser(userVO);
         userMapper.insertUserRole(userVO);
         return userMapper.getUserById(userVO.getUserId());
@@ -82,11 +84,22 @@ public class InfoUserServiceImpl implements InfoUserService {
     @Override
     @Transactional
     public List<String> copyUsers(List<String> userIds) {
-        List<UserVO> usersToCopy = userMapper.getUsersByIds(userIds);
+        List<InfoUserVO> usersToCopy = userMapper.getUsersByIds(userIds);
 
         userMapper.insertCopyLog();
         userMapper.insertCopyDetail(usersToCopy);
 
         return userIds;
     }
+    
+	@Override
+	public List<InfoCopyLogVO> copyLogList() {
+		return userMapper.selectCopyLogAllList();
+	}
+	
+	@Override
+	public List<InfoCopyDetailVO> copyDetailList() {
+		return userMapper.selectCopyDetailAllList();
+	}
+    
 }
