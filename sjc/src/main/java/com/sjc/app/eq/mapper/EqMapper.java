@@ -25,4 +25,8 @@ public interface EqMapper {
 	
 	// 비가동 목록
 	public List<EqChckVO> selctEqChckAll();
+	
+	// 설비 점검 목록
+	public List<EqChckVO> selectjumgumAll();
+	
 }
