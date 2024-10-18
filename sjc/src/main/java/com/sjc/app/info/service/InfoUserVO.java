@@ -11,6 +11,7 @@ public class InfoUserVO {
 	private String userName;
 	private String deptCode;
 	private String deptName;
+	private String phone;
 	
 	private String perPage;
 	private String page;

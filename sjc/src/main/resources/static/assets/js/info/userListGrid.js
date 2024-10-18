@@ -28,7 +28,9 @@
                 name: 'userName',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                editor: 'text',
+                                  
             },
             {
                 header: '권한',
@@ -55,25 +57,13 @@
                   }
                 }
               },
-              
-              /*
-				{
-				    header: '부서코드',
-				    name: 'deptCode',
-				    align: 'center',
-				    sortingType: 'desc',
-				    sortable: true                  
-				},
-				
-				
-				{
-				    header: '부서명',
-				    name: 'deptName',
-				    align: 'center',
-				    sortingType: 'desc',
-				    sortable: true,
-				}
-	            */
+              {
+			    header: '연락처',
+			    name: 'phone',
+			    align: 'center',
+			    sortingType: 'desc',
+			    sortable: true
+			  },
         ],
         pageOptions: {
             useClient: true,
