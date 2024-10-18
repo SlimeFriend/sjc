@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoUserMapper">
+
+	<insert id="insertCopyLog" parameterType="Integer">
+	    INSERT INTO copy_log (log_id)
+	    VALUES (
+	        (
+	        SELECT 	NVL(MAX(log_id), 0) + 1 
+	        FROM 	copy_log
+	        )
+	    )
+	</insert>
+	
+	<insert id="insertCopyDetail" parameterType="list">
+	    INSERT INTO copy_detail (
+	    	detail_id, 
+	    	log_id, 
+	    	user_id, 
+	    	login_id, 
+	    	user_name, 
+	    	dept_code, 
+	    	role_name
+	    )
+	    <foreach collection="list" item="user" index="index" separator="UNION ALL">
+	        SELECT	(
+	        		SELECT 	NVL(MAX(detail_id), 0) + #{index} + 1 
+	        		FROM 	copy_detail
+	        		),
+	        		(
+	        		SELECT 	MAX(log_id) 
+	        		FROM 	copy_log
+	        		),
+	        		#{user.userId},
+	        		#{user.loginId},
+	        		#{user.userName},
+	        		#{user.deptCode},
+	        		#{user.roleName}
+	        FROM 	dual
+	    </foreach>
+	</insert>
+
+    <select id="getUsersByIds" parameterType="list" resultType="UserVO">
+        SELECT 	u.user_id, 
+        		u.login_id, 
+        		u.user_name, 
+        		u.dept_code, 
+        		r.role_name
+        FROM 	sjc_user u
+        JOIN 	user_role ur 
+        ON 		u.user_id = ur.user_id
+        JOIN 	sjc_role r 
+        ON 		ur.role_id = r.role_id
+        WHERE 	u.user_id IN
+        <foreach collection="list" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <insert id="insertUser" parameterType="UserVO">
+    INSERT INTO sjc_user (
+        user_id,
+        login_id,
+        password,
+        user_name,
+        dept_code
+    ) VALUES (
+        #{userId},
+        #{loginId},
+        #{password},
+        #{userName},
+        #{deptCode}
+    )
+    </insert>
+
+    <delete id="deleteUsers" parameterType="java.util.List">
+        DELETE 	FROM sjc_user
+        WHERE 	user_id IN
+        <foreach collection="list" item="userId" open="(" separator="," close=")">
+            	#{userId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteUserRoles" parameterType="java.util.List">
+        DELETE 	FROM user_role
+        WHERE 	user_id IN
+        <foreach collection="list" item="userId" open="(" separator="," close=")">
+            	#{userId}
+        </foreach>
+    </delete>
+
+    <update id="updateUser" parameterType="UserVO">
+        UPDATE 	sjc_user
+        SET 	login_id = #{loginId},
+            	password = #{password},
+            	user_name = #{userName},
+            	dept_code = #{deptCode}
+        WHERE 	user_id = #{userId}
+    </update>
+
+    <update id="updateUserRole" parameterType="UserVO">
+		UPDATE	user_role ur
+		SET 	ur.role_id = ( 
+					SELECT	role_id
+					FROM    sjc_role
+					WHERE	role_name = #{roleName}
+				)
+		WHERE	ur.user_id = #{userId}
+    </update>
+
+    <insert id="insertUserRole" parameterType="UserVO">
+    INSERT INTO user_role (
+        user_id,
+        role_id
+    ) VALUES (
+        #{userId},
+        (
+            SELECT	role_id
+            FROM	sjc_role
+            WHERE	role_name = #{roleName}
+        )
+    )
+    </insert>
+
+    <select id="getUserById" resultType="UserVO">
+		SELECT
+		    u.user_id,
+		    u.login_id,
+		    u.password,
+		    r.role_name,
+		    u.user_name,
+		    d.dept_code,
+		    d.dept_name
+		FROM
+		         sjc_user u
+		    JOIN user_role  ur ON u.user_id = ur.user_id
+		    JOIN sjc_role   r ON ur.role_id = r.role_id
+		    JOIN department d ON u.dept_code = d.dept_code
+		WHERE
+		    u.user_id = #{userId}
+    </select>
+
+	<!-- 조회 -->
+	<select id="getUserInfo" resultType="UserVO">
+	select  
+	        u.user_id user_id
+	        ,login_id
+	        ,password
+	        ,role_name
+	        ,user_name
+	        ,d.dept_code dept_code
+	        ,dept_name
+	from    user_role ur
+	join    sjc_user  u
+	on      ur.user_id = u.user_id
+	join    sjc_role  r
+	on      ur.role_id = r.role_id
+	join	department d
+	on      d.dept_code = u.dept_code
+	where   login_id = #{username}
+	</select>
+
+	<!-- 전체조회 -->
+	<select id="selectUserAllList" resultType="UserVO" parameterType="UserVO">
+		select	u.user_id user_id  
+				,login_id
+		        ,password
+		        ,role_name
+		        ,user_name
+		        ,d.dept_code dept_code
+		        ,dept_name
+		from    user_role ur
+		join    sjc_user  u
+		on      ur.user_id = u.user_id
+		join    sjc_role  r
+		on      ur.role_id = r.role_id
+		join	department d
+		on		d.dept_code = u.dept_code
+	    <where>
+	        <if test="userId != null and userId != ''">
+	            AND u.user_id = #{userId}
+	        </if>
+	        <if test="loginId != null and loginId != ''">
+	            AND UPPER(u.login_id) LIKE UPPER('%' || #{loginId} || '%')
+	        </if>
+	        <if test="userName != null and userName != ''">
+	            AND UPPER(u.user_name) LIKE UPPER('%' || #{userName} || '%')
+	        </if>
+	        <if test="roleName != null and roleName != ''">
+	            AND UPPER(r.role_name) LIKE UPPER('%' || #{roleName} || '%')
+	        </if>
+	        <if test="deptCode != null and deptCode != ''">
+	            AND UPPER(d.dept_code) LIKE UPPER('%' || #{deptCode} || '%')
+	        </if>
+	        <if test="deptName != null and deptName != ''">
+	            AND UPPER(d.dept_name) LIKE UPPER('%' || #{deptName} || '%')
+	        </if>
+	    </where>
+	    ORDER BY u.user_id
+	</select>
+	
+	<select id="selectCopyLogAllList" resultType="InfoCopyLogVO">
+		select	log_id
+				,copy_date
+		from	copy_log				
+	</select>
+	
+	<select id="selectCopyDetailAllList" resultType="InfoCopyDetailVO">
+		select	detail_id
+				,log_id
+				,user_id
+				,login_id
+				,user_name
+				,dept_code
+				,role_name
+		from	copy_detail				
+	</select>
+</mapper>

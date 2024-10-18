@@ -2,7 +2,6 @@
 	
 	import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +9,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sjc.app.info.service.InfoCopyDetailVO;
+import com.sjc.app.info.service.InfoCopyLogVO;
 import com.sjc.app.info.service.InfoUserService;
-import com.sjc.app.security.service.UserVO;
+import com.sjc.app.info.service.InfoUserVO;
 
 import lombok.RequiredArgsConstructor;
 	
@@ -22,17 +23,17 @@ import lombok.RequiredArgsConstructor;
 		private final InfoUserService infoUserService;
 	
 		@GetMapping("users")
-		public List<UserVO> userList(UserVO userVO){
+		public List<InfoUserVO> userList(InfoUserVO userVO){//@RequestBody 적용예정.토스트 ui
 			return infoUserService.userList(userVO);
 		}
 	
 	    @PutMapping("users")
-	    public List<UserVO> updateUsers(@RequestBody List<UserVO> UserVOs) {
-	        return infoUserService.modifyUsers(UserVOs);
+	    public List<InfoUserVO> updateUsers(@RequestBody List<InfoUserVO> InfoUserVOs) {
+	        return infoUserService.modifyUsers(InfoUserVOs);
 	    }	
 	
 	    @PostMapping("users")
-	    public UserVO insertUser(@RequestBody UserVO userVO) {
+	    public InfoUserVO insertUser(@RequestBody InfoUserVO userVO) {
 	        return infoUserService.insertUser(userVO);
 	    }
 
@@ -46,5 +47,13 @@ import lombok.RequiredArgsConstructor;
 	    	return infoUserService.copyUsers(userIds);
 	    }
    
+		@GetMapping("copyLogs")
+		public List<InfoCopyLogVO> copyLogList(){//@RequestBody 적용예정.토스트 ui
+			return infoUserService.copyLogList();
+		}
 		
+		@GetMapping("copyDetails")
+		public List<InfoCopyDetailVO> copyDetailList(){//@RequestBody 적용예정.토스트 ui
+			return infoUserService.copyDetailList();
+		}
 	}

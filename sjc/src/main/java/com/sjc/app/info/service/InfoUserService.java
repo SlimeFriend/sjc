@@ -2,13 +2,14 @@ package com.sjc.app.info.service;
 
 import java.util.List;
 
-import com.sjc.app.security.service.UserVO;
 
 public interface InfoUserService {
-	public List<UserVO> userList(UserVO userVO);
-	public List<UserVO> modifyUsers(List<UserVO> userVOs);
-    UserVO insertUser(UserVO userVO);
+	public List<InfoUserVO> userList(InfoUserVO userVO);
+	public List<InfoUserVO> modifyUsers(List<InfoUserVO> userVOs);
+    InfoUserVO insertUser(InfoUserVO userVO);
     List<String> deleteUsers(List<String> userIds);
     public List<String> copyUsers(List<String> userIds);
-
+    
+    public List<InfoCopyLogVO> copyLogList();
+    public List<InfoCopyDetailVO> copyDetailList();
 }
