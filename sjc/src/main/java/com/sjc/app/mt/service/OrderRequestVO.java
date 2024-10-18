@@ -16,4 +16,5 @@ public class OrderRequestVO {
     private String userId;           // 사용자 ID
     private String comm;          // 비고
     private String mtName; //자재명 
+    private String status; // 발주상태 
 }
