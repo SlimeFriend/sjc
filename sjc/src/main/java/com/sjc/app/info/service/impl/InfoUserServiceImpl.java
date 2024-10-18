@@ -41,27 +41,21 @@ public class InfoUserServiceImpl implements InfoUserService {
 
         for (UserVO userVO : UserVOs) {
             try {
-                // 1. Update user information
                 int userUpdateCount = userMapper.updateUser(userVO);
                 if (userUpdateCount == 0) {
                     throw new RuntimeException("User not found with id: " + userVO.getUserId());
                 }
 
-                // 2. Update user role
                 int roleUpdateCount = userMapper.updateUserRole(userVO);
                 if (roleUpdateCount == 0) {
                     userMapper.insertUserRole(userVO);
                 }
 
-                // 3. Fetch updated user information
                 UserVO savedUserVO = userMapper.getUserById(userVO.getUserId());
                 savedUsers.add(savedUserVO);
 
             } catch (Exception e) {
-                // 에러 로깅 및 처리
                 log.error("Error updating user with id: " + userVO.getUserId(), e);
-                // 여기서 예외를 다시 던지면 트랜잭션이 롤백됩니다.
-                // throw new RuntimeException("Failed to update user", e);
             }
         }
 
