@@ -11,7 +11,4 @@ public class UserVO {
 	private String userName;
 	private String deptCode;
 	private String deptName;
-	
-	private String perPage;
-	private String page;
 }
