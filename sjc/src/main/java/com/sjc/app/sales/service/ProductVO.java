@@ -17,4 +17,6 @@ public class ProductVO {
 	private Integer outQuantity;
 	private Integer stcQuantity;
 	private Integer unitPrice;
+	private Integer ordQuantity;
+	private Integer price;
 }

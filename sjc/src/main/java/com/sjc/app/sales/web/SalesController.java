@@ -1,13 +1,15 @@
 package com.sjc.app.sales.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
@@ -39,22 +41,35 @@ public class SalesController {
 	
 	// 주문접수 프로세스
 	@PostMapping("/orderReception")
-	public String insertOrder(OrderVO orderVO) {
+	public String insertOrder(@RequestBody SalesDTO salesDTO) {
 		
-		int result = salesService.insertOrder(orderVO);
-		System.err.println(orderVO);
-		 if (result > 0) {
-	            return "redirect:/main"; 
-	        } else {
-	            return "redirect:/orderReception";
-	        }
+		 String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + (int)(Math.random() * 1000);
+		 
+	    OrderVO orderVO = salesDTO.getOrderVO();
+	    List<ProductVO> productVOList = salesDTO.getProductVO(); 
+	    
+	    orderVO.setOrdCode(ordCode);
+	    
+	    System.err.println(orderVO);
+	    System.err.println(productVOList);
+	    
+	    int orderResult = salesService.insertOrder(orderVO);
+	    
+	    if(orderResult > 0) {
+	        productVOList.forEach(productVO -> {
+	            salesService.insertOrderDetail(productVO, orderVO.getOrdCode());
+	        });
+	    }
+
+	    return "redirect:/main";
 	}
 	
 	// 주문내역 페이지
 	@GetMapping("/orderHistory")
 	public String orderHistoryPage(Model model) {
-		List<OrderVO> list = salesService.orderHistory();
-		model.addAttribute("orderHistory", list);
+		List<OrderVO> orderList = salesService.orderHistory();
+		model.addAttribute("ord", orderList);
+		model.addAttribute("ordDetail", orderList);
 		return "sales/orderHistory";
 	}
 	

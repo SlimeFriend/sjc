@@ -31,6 +31,11 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	@Override
+	public int insertOrderDetail(ProductVO productVO, String ordCode) {
+	    return salesMapper.insertOrderDetail(productVO, ordCode);
+	}
+	
+	@Override
 	public List<ProductVO> productList() {
 		return salesMapper.selectProduct();
 	}
