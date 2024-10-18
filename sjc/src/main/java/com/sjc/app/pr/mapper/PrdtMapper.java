@@ -25,5 +25,5 @@ public interface PrdtMapper {
 	public List<PResultVO> selectPResult();
 	
 	// 계획 조건 검색
-	public List<PlanVO> selectPlanS();
+	public List<PlanVO> selectPlanS(String status);
 }

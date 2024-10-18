@@ -17,4 +17,7 @@ public interface PrdtService {
 	
 	// 생산 공정 실적 조회
 	public List<PResultVO> pResultList();
+	
+	// 계획 조건 조회
+	public List<PlanVO> planListS(String status);
 }

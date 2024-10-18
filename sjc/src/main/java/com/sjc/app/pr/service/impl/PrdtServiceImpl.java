@@ -50,4 +50,10 @@ public class PrdtServiceImpl implements PrdtService {
 		return prdtMapper.selectPResult();
 	}
 
+	@Override
+	public List<PlanVO> planListS(String status) {
+		// TODO Auto-generated method stub
+		return prdtMapper.selectPlanS(status);
+	}
+
 }

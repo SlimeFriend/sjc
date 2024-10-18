@@ -23,7 +23,7 @@ layout:fragment="Content">
                     <th>비고</th>
                 </tr>
             </thead>    
-            <input name="btn" id="all" type="radio" value="a%">
+            <input name="btn" type="radio" value="a" id="all" checked>
             <label for="all">전체</label>
             <input name="btn" type="radio" value="a1" id="no">
             <label for="no">미이행</label>
@@ -63,8 +63,116 @@ layout:fragment="Content">
     
     <script>
         const plan = document.getElementById('plan');
-        const detailBody = document.getElementById('detail-body');
+        const detailBody = document.getElementById('detail-body');  
+        const be = document.getElementsByName('btn');
         
+		Array.from(be).forEach((b) =>{ 
+        
+        	b.addEventListener('change', (event) => {
+        		console.log(1);
+                const val = document.querySelector('input[type=radio][name=btn]:checked').value;
+                
+                fetch('/planListS?status=' + val)
+                    .then(function(resp) {
+                        if (!resp.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return resp.json();
+                    })
+                    .then(function(resp) {
+                        // 상세 테이블 내용 초기화
+                        plan.innerHTML = '';
+
+                        // 받아온 데이터로 테이블 행 추가
+                        resp.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.planCode}</td>
+                                <td>${item.startDate}</td>
+                                <td>${item.endDate}</td>
+                                <td>${item.manager}</td>
+                                <td>${item.comm}</td>
+                            `;
+                            plan.appendChild(row);
+                            
+                            dbody.innerHTML = '';
+                            
+                            Array.from(plan.children).forEach((pl) => {
+                                pl.addEventListener('click', (event) => {
+                                    const planCode = event.currentTarget.children[0].textContent;
+                                    
+                                    fetch('/planDList?planCode=' + planCode)
+                                        .then(function(resp) {
+                                            if (!resp.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return resp.json();
+                                        })
+                                        .then(function(resp) {
+                                            // 상세 테이블 내용 초기화
+                                            dbody.innerHTML = '';
+
+                                            // 받아온 데이터로 테이블 행 추가
+                                            resp.forEach(item => {
+                                                const row = document.createElement('tr');
+                                                row.innerHTML = `
+                                                    <td>${item.prdName}</td>
+                                                    <td>${item.quantity}</td>
+                                                    <td>${item.no}</td>
+                                                    <td>${item.comm}</td>
+                                                `;
+                                                dbody.appendChild(row);
+                                            });
+                                        })
+                                        .catch(function(error) {
+                                            console.error('Fetch error:', error);
+                                        });
+                                });
+                            });
+                            
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Fetch error:', error);
+                    });
+                
+                
+                Array.from(plan.children).forEach((pl) => {
+                    pl.addEventListener('click', (event) => {
+                        const planCode = event.currentTarget.children[0].textContent;
+                        
+                        fetch('/planDList?planCode=' + planCode)
+                            .then(function(resp) {
+                                if (!resp.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return resp.json();
+                            })
+                            .then(function(resp) {
+                                // 상세 테이블 내용 초기화
+                                dbody.innerHTML = '';
+
+                                // 받아온 데이터로 테이블 행 추가
+                                resp.forEach(item => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${item.prdName}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.no}</td>
+                                        <td>${item.comm}</td>
+                                    `;
+                                    dbody.appendChild(row);
+                                });
+                            })
+                            .catch(function(error) {
+                                console.error('Fetch error:', error);
+                            });
+                    });
+                });
+            });
+        	
+		});
+		
         Array.from(plan.children).forEach((pl) => {
             pl.addEventListener('click', (event) => {
                 const planCode = event.currentTarget.children[0].textContent;
@@ -97,40 +205,9 @@ layout:fragment="Content">
                     });
             });
         });
-        
-        const btn = document.getElementsByName('btn');
-        
-        btn.addEventListener('click', (event) => {
-        	const val = event.currentTarget.value;
-        	
-        	fetch('/planList?status=' + val)
-            .then(function(resp) {
-                if (!resp.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return resp.json();
-            })
-            .then(function(resp) {
-                // 상세 테이블 내용 초기화
-                plan.innerHTML = '';
 
-                // 받아온 데이터로 테이블 행 추가
-                resp.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.planCode}</td>
-                        <td>${item.startDate}</td>
-                        <td>${item.endDate}</td>
-                        <td>${item.manager}</td>
-                        <td>${item.comm}</td>
-                    `;
-                    plan.appendChild(row);
-                });
-            })
-            .catch(function(error) {
-                console.error('Fetch error:', error);
-            });
-        })
+       	
+        	
     </script>
 </body>
 
