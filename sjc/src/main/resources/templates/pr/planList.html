@@ -23,6 +23,17 @@ layout:fragment="Content">
                     <th>비고</th>
                 </tr>
             </thead>    
+            <input name="btn" id="all" type="radio" value="a%">
+            <label for="all">전체</label>
+            <input name="btn" type="radio" value="a1" id="no">
+            <label for="no">미이행</label>
+            <input name="btn" type="radio" value="a2" id="ing">
+            <label for="ing">진행중</label>
+            <input name="btn" type="radio" value="a3" id="com">
+            <label for="com">완료</label>
+            
+            
+            
             <tbody id="plan">
                 <th:block th:each="list, sts : ${list}">
                     <tr>
@@ -86,6 +97,40 @@ layout:fragment="Content">
                     });
             });
         });
+        
+        const btn = document.getElementsByName('btn');
+        
+        btn.addEventListener('click', (event) => {
+        	const val = event.currentTarget.value;
+        	
+        	fetch('/planList?status=' + val)
+            .then(function(resp) {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then(function(resp) {
+                // 상세 테이블 내용 초기화
+                plan.innerHTML = '';
+
+                // 받아온 데이터로 테이블 행 추가
+                resp.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.planCode}</td>
+                        <td>${item.startDate}</td>
+                        <td>${item.endDate}</td>
+                        <td>${item.manager}</td>
+                        <td>${item.comm}</td>
+                    `;
+                    plan.appendChild(row);
+                });
+            })
+            .catch(function(error) {
+                console.error('Fetch error:', error);
+            });
+        })
     </script>
 </body>
 

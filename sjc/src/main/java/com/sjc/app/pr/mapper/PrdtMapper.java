@@ -23,4 +23,7 @@ public interface PrdtMapper {
 	
 	// 공정 실적 조회
 	public List<PResultVO> selectPResult();
+	
+	// 계획 조건 검색
+	public List<PlanVO> selectPlanS();
 }
