@@ -8,9 +8,12 @@ import com.sjc.app.quality.service.InspectionVO;
 
 
 public interface QualityMapper {
-	// 조회 - 입고대기 조회페이지
+	// 조회 - 입고검사대기 조회페이지
 	public List<MtlOdVO> selectQualityWaitInfo();
 	
+	// 조회 - 입고검사완료 조회페이지
+	public List<InspectionVO> selectQualityDoneInfo();
+
 //	// 전체 조회 - 입고등록 페이지
 //	public List<InspectionVO> selectQualityRegistrationInfo();
 	
@@ -20,5 +23,6 @@ public interface QualityMapper {
 	
 	// 검사항목 - 입고등록 페이지
 	public  List<InsItemVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
+
 
 }
