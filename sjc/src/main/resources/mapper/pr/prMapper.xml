@@ -32,7 +32,7 @@
 <select id="selectOrderAll" resultType="POrderVO">
 	select porder_code,
 			start_date,
-			end_date,
+			porder_date,
 			manager,
 			comm,
 			plan_code
@@ -73,6 +73,18 @@
 			input
 	from presult
 			
+</select>
+
+<!-- 계획 조건부 조회 -->
+<select id="selectPlanS" resultType="PlanVO" parameterType="String">
+		select plan_code, 
+			start_date,
+			end_date,
+			manager,
+			comm,
+			status
+	from plan
+	where status like #{status}||'%'
 </select>
 
 </mapper>

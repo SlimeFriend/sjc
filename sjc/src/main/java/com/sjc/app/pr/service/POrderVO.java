@@ -6,7 +6,7 @@ import lombok.Data;
 public class POrderVO {
     private String porderCode;
     private String startDate;
-    private String endDate;
+    private String porderDate;
     private String manager;
     private String comm;
     private String status;

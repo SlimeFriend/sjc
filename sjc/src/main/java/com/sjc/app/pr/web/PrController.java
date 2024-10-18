@@ -36,6 +36,14 @@ public class PrController {
 		return "pr/planList";
 	}
 	
+	// 계획 조건 조회
+	@GetMapping("planListS")
+	@ResponseBody
+	public List<PlanVO> planListS(@RequestParam String status) {
+		return  prdtService.planListS(status);
+	
+	}
+	
 	// 계획 생성 Get
 	@GetMapping("planCreate")
 	public String planCreatePage(Model model) {
@@ -97,5 +105,6 @@ public class PrController {
 		
 		return prdtService.pDetail(porderCode);
 	}
+	
 	
 }
