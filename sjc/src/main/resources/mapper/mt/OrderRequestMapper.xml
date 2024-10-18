@@ -1,47 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.OrderRequestMapper">
- 
+
+    <!-- 모든 발주 요청 목록 조회 -->
     <select id="getAllOrderRequests" resultType="com.sjc.app.mt.service.OrderRequestVO">
-        SELECT ORDER_REQUEST_CODE AS orderRequestCode, 
-               ORDER_DATE AS orderDate, 
-               MT_CODE AS mtCode, 
-               QUANTITY AS quantity, 
-               CP_CODE AS cpCode, 
-               USER_ID AS userId, 
-               COMM AS comm 
-        FROM OD_REQUEST <!-- 발주 요청 테이블에서 모든 데이터 조회 -->
+        SELECT
+            OD_REQUEST.ORDER_REQUEST_CODE AS orderRequestCode,
+            OD_REQUEST.ORDER_DATE AS orderDate,
+            OD_REQUEST.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,
+            OD_REQUEST.QUANTITY AS quantity,
+            OD_REQUEST.CP_CODE AS cpCode,
+            OD_REQUEST.USER_ID AS userId,
+            OD_REQUEST.COMM AS comm,
+            MTL_OD.MTL_OD_STATUS AS status  <!-- 자재발주 상태 추가 -->
+        FROM
+            OD_REQUEST
+        LEFT JOIN
+            MT ON OD_REQUEST.MT_CODE = MT.MT_CODE
+        LEFT JOIN
+            MTL_OD ON OD_REQUEST.MT_CODE = MTL_OD.MT_CODE  <!-- MTL_OD 테이블과 조인 -->
+        ORDER BY
+            ORDER_REQUEST_CODE
     </select>
 
+    <!-- 특정 발주 요청 조회 -->
     <select id="getOrderRequestById" parameterType="String" resultType="com.sjc.app.mt.service.OrderRequestVO">
-        SELECT ORDER_REQUEST_CODE AS orderRequestCode, 
-               ORDER_DATE AS orderDate, 
-               MT_CODE AS mtCode, 
-               QUANTITY AS quantity, 
-               CP_CODE AS cpCode, 
-               USER_ID AS userId, 
-               COMM AS comm 
-        FROM OD_REQUEST WHERE ORDER_REQUEST_CODE = #{orderId} <!-- 특정 발주 요청 조회 -->
+        SELECT
+            OD_REQUEST.ORDER_REQUEST_CODE AS orderRequestCode,
+            OD_REQUEST.ORDER_DATE AS orderDate,
+            OD_REQUEST.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,  
+            OD_REQUEST.QUANTITY AS quantity,
+            OD_REQUEST.CP_CODE AS cpCode,
+            OD_REQUEST.USER_ID AS userId,
+            OD_REQUEST.COMM AS comm,
+            MTL_OD.MTL_OD_STATUS AS status  
+        FROM
+            OD_REQUEST
+        LEFT JOIN
+            MT ON OD_REQUEST.MT_CODE = MT.MT_CODE  
+        LEFT JOIN
+            MTL_OD ON OD_REQUEST.MT_CODE = MTL_OD.MT_CODE  
+        WHERE
+            OD_REQUEST.ORDER_REQUEST_CODE = #{orderId} 
     </select>
 
-  <insert id="insertOrderRequest" parameterType="OrderRequestVO">
-    INSERT INTO OD_REQUEST (ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM)
-    VALUES (ORDER_REQUEST_SEQ.NEXTVAL, #{orderDate}, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
-</insert>
+    <!-- 발주 요청 등록 -->
+    <insert id="insertOrderRequest" parameterType="OrderRequestVO">
+        INSERT INTO OD_REQUEST
+        (ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM)
+        VALUES
+        (ORDER_REQUEST_SEQ.NEXTVAL, SYSDATE, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
+    </insert>
 
+    <!-- 발주 요청 수정 (동적 SQL 적용) -->
     <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
-        UPDATE OD_REQUEST 
-        SET MT_CODE = #{mtCode}, 
-            QUANTITY = #{quantity}, 
-            COMM = #{comm}, 
-            ORDER_DATE = #{orderDate},
-            CP_CODE = #{cpCode},
-            USER_ID = #{userId} 
-        WHERE ORDER_REQUEST_CODE = #{orderRequestCode} <!-- 발주 요청 수정 -->
+        UPDATE OD_REQUEST
+        <set>
+            <if test="mtCode != null">MT_CODE = #{mtCode},</if>
+            <if test="quantity != null">QUANTITY = #{quantity},</if>
+            <if test="comm != null">COMM = #{comm},</if>
+            <if test="cpCode != null">CP_CODE = #{cpCode},</if>
+            <if test="userId != null">USER_ID = #{userId},</if>
+        </set>
+        WHERE
+            ORDER_REQUEST_CODE = #{orderRequestCode}
     </update>
 
+    <!-- 발주 요청 삭제 -->
     <delete id="deleteOrderRequest" parameterType="String">
-        DELETE FROM OD_REQUEST WHERE ORDER_REQUEST_CODE = #{orderRequestCode} <!-- 발주 요청 삭제 -->
+        DELETE FROM OD_REQUEST WHERE ORDER_REQUEST_CODE = #{orderRequestCode}
     </delete>
+
+    <!-- 자재 상태 업데이트 -->
+    <update id="updateOrderRequestStatus">
+        UPDATE MTL_OD 
+        SET MTL_OD_STATUS = #{status}
+        WHERE MTL_OD_CODE = #{orderRequestCode}
+    </update>
+
 
 </mapper>

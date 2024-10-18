@@ -1,44 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 상세</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>발주 요청 상세</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>발주 요청 상세</h1>
-            <form th:action="@{/mt/orderRequest/{orderId}(orderId=${orderRequest.orderId})}" method="post">
-                <input type="hidden" name="_method" value="PUT">
-                <div class="form-group">
-                    <label for="mtName">자재명</label>
-                    <input type="text" class="form-control" id="mtName" name="mtName" th:value="${orderRequest.mtName}" required>
-                </div>
-                <div class="form-group">
-                    <label for="quantity">수량</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" th:value="${orderRequest.quantity}" required>
-                </div>
-                <div class="form-group">
-                    <label for="manager">담당자</label>
-                    <input type="text" class="form-control" id="manager" name="manager" th:value="${orderRequest.manager}" required>
-                </div>
-                <div class="form-group">
-                    <label for="comm">비고</label>
-                    <textarea class="form-control" id="comm" name="comm" th:text="${orderRequest.comm}"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">수정</button>
-                <a th:href="@{/mt/orderRequest/all}" class="btn btn-secondary">목록으로 돌아가기</a>
-            </form>
-            <form th:action="@{/mt/orderRequest/{orderId}(orderId=${orderRequest.orderId})}" method="post" style="display:inline;">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-            </form>
-        </div>
+	<div class="main-container">
+		<div class="container">
+			<h1>발주 요청 상세</h1>
+			<form th:action="@{/orderRequest/{orderRequestCode}(orderRequestCode=${orderRequest.orderRequestCode})}" method="post">
+    <input type="hidden" name="_method" value="PUT">
+    
+    <!-- 자재 코드 -->
+    <div class="form-group">
+        <label for="mtCode">자재 코드</label>
+        <input type="text" class="form-control" id="mtCode" name="mtCode" th:value="${orderRequest.mtCode}" required>
     </div>
+
+    <!-- 자재명 -->
+    <div class="form-group">
+        <label for="mtName">자재명</label>
+        <input type="text" class="form-control" id="mtName" name="mtName" th:value="${orderRequest.mtName}" readonly>
+    </div>
+
+    <!-- 수량 -->
+    <div class="form-group">
+        <label for="quantity">수량</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" th:value="${orderRequest.quantity}" required>
+    </div>
+
+    <!-- 업체 코드 -->
+    <div class="form-group">
+        <label for="cpCode">업체 코드</label>
+        <input type="text" class="form-control" id="cpCode" name="cpCode" th:value="${orderRequest.cpCode}" required>
+    </div>
+
+    <!-- 사용자 ID -->
+    <div class="form-group">
+        <label for="userId">담당자ID</label>
+        <input type="text" class="form-control" id="userId" name="userId" th:value="${orderRequest.userId}" required>
+    </div>
+
+    <!-- 비고 -->
+    <div class="form-group">
+        <label for="comm">비고</label>
+        <textarea class="form-control" id="comm" name="comm" th:text="${orderRequest.comm}"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">수정</button>
+</form>
+			<form
+				th:action="@{/mt/orderRequest/{orderRequestCode}(orderRequestCode=${orderRequest.orderRequestCode})}"
+				method="post" style="display: inline;">
+				<input type="hidden" name="_method" value="DELETE">
+				<button type="submit" class="btn btn-danger"
+					onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+			</form>
+		</div>
+	</div>
 </body>
 </html>
