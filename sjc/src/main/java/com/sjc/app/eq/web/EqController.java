@@ -55,5 +55,14 @@ public class EqController {
 		model.addAttribute("equipChck", list2);
 		return "equip/eqChckList";
 	}
+	
+	// 설비 점검 목록 조회
+	@GetMapping("jgList")
+	public String jgList(Model model) {
+		List<EqChckVO> list = eqService.jgList();
+		model.addAttribute("equipjg", list);
+		
+		return "equip/eqJumgum";
+	}
 
 } // end of class

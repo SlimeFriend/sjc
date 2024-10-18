@@ -110,5 +110,17 @@
 	ORDER BY eq_code
 </select>
 
+<!-- 설비 점검 조회 -->
+<select id="selectjumgumAll" resultType="EqVO">
+	SELECT  e.eq_code
+		  , e.eq_period
+		  , e.eq_ckdate
+		  , ec.eq_nextchck
+		  , ec.eq_chckox
+	FROM  eq e
+	JOIN  eq_chck ec
+	ON	  e.eq_code = ec.eq_code
+	ORDER BY eq_code
+</select>
 
 </mapper>

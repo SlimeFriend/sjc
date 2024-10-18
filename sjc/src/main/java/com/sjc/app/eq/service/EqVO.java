@@ -2,6 +2,8 @@ package com.sjc.app.eq.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -22,7 +24,12 @@ public class EqVO {
 	private String lineCode;	  // 라인
 	private String eqType;		  // 설비 구분
 	private String eqName;		  // 설비명
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eqCkDate;		  // 점검일자
 	private String description;	  // 설명
 	private Integer employeeNo;	  // 사원번호
+	
+	// 조인 정보 받아온 속성
+	private Date eqNextChck;	// 다음 점검일
+	private String eqChckOx;	// 점검 유무
 }

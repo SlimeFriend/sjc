@@ -38,16 +38,26 @@ public class EqServiceImpl implements EqService {
 		// TODO Auto-generated method stub
 		return eqMapper.selectEqInfo(eqVO);
 	}
-
+	
+	// 설비 가동 상태 내역
 	@Override
 	public List<EqVO> eqList2() {
 		return eqMapper.selectEqAll2();
 	}
-
+	
+	// 비가동 목록 중 EqChck 속성 조회
 	@Override
 	public List<EqChckVO> eqChckList() {
 		return eqMapper.selctEqChckAll();
 	}
+	
+	
+	// 점검 목록 조회
+	@Override
+	public List<EqChckVO> jgList() {
+		return eqMapper.selectjumgumAll();
+	}
+	
 	
 	
 } // end of class

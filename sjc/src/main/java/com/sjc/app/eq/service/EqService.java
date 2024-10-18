@@ -21,4 +21,8 @@ public interface EqService {
 	
 	// 비가동 목록 중 EqChck 조회
 	public List<EqChckVO> eqChckList();
+	
+	// 점검 목록 조회 eqChckVO 쪽
+	public List<EqChckVO> jgList();
+	
 }
