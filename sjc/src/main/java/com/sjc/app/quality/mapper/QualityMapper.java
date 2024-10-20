@@ -1,6 +1,7 @@
 package com.sjc.app.quality.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.service.InsItemVO;
@@ -23,6 +24,8 @@ public interface QualityMapper {
 	
 	// 검사항목 - 입고등록 페이지
 	public  List<InsItemVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
+
+	public void updateIncoming(Map<String, Object> item);
 
 
 }

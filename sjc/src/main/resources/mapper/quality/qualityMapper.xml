@@ -24,6 +24,7 @@
                , i.number_of_tests
                , i.number_of_passes
                , i.total_pass
+              
 		FROM copy_mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
@@ -97,6 +98,23 @@
 									)
 	</select>
 	
+	
+	<update id="updateIncoming" parameterType="map">
+    UPDATE incoming_quality
+    SET i.ins_status = #{insStatus},
+        o.cp_code = #{cpCode},
+        m.mt_name = #{mtName},
+        m.specification = #{specification},
+        i.number_of_tests = #{numberOfTests},
+        i.number_of_passes = #{numberOfPasses},
+        i.total_pass = #{totalPass}
+		FROM copy_mtl_od o
+		    JOIN inspection i
+		        ON o.mtl_od_code = i.mtl_od_code
+		    JOIN copy_mt m
+		        ON o.mt_code = m.mt_code
+		WHERE i.ins_code = #{insCode}
+</update>
 
 
 </mapper>

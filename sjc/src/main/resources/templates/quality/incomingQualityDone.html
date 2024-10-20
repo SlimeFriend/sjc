@@ -6,11 +6,12 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <title>입고 검사 완료 목록</title>
 
 
-<link rel="i on" sizes="180x180"
+<link rel="icon" sizes="180x180"
 	href="vendors/images/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32"
 	href="vendors/images/favicon-32x32.png">
@@ -37,13 +38,30 @@
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
 				<div class="card-box mb-30">
-					<div class="pd-20">
-						<h4 class="text-blue h4">Data Table with Export Buttons</h4>
+				
+				
+				
+				<div class="filter-buttons mb-3">
+    <button id="filter-pass" class="btn btn-secondary">합격</button>
+    <button id="filter-fail" class="btn btn-secondary">불합격</button>
+    <button id="filter-all" class="btn btn-secondary">전체</button>
+</div>
+
+
+
+					<div
+						class="d-flex justify-content-between align-items-center mb-20">
+						<p style="font-size: 300%">입고검사 완료목록</p>
+
+
+				</div>
 					</div>
+					
 					<div class="pb-20">
 						<div id="DataTables_Table_2_wrapper"
 							class="dataTables_wrapper dt-bootstrap4 no-footer">
 							<div class="dt-buttons btn-group flex-wrap">
+
 								<button class="btn btn-secondary buttons-copy buttons-html5"
 									tabindex="0" aria-controls="DataTables_Table_2" type="button">
 									<span>Copy</span>
@@ -68,75 +86,163 @@
 							</div>
 
 
-									<table class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline" id="DataTables_Table_2" role="grid">
-										<thead>
-											<tr role="row"><th class="table-plus datatable-nosort sorting_disabled">품질검사 날짜</th>
-												<th>품질검사 코드</th>
-												<th>품질검사 상태</th>
-												<th>거래처코드</th>
-												<th>자재명</th>
-												<th>규격</th>
-												<th>검사수</th>
-												<th>합격수</th>
-												<th>합격여부</th>
-											</tr>
-										</thead>
-										<tbody>
-											<th:block th:each="done : ${incomingQualityDones}">
-												<tr>
 
-													<td class="table-plus">[[${done.insDate}]]</td>
-													<td>
-														<h5 class="font-16">[[${done.insCode}]]</h5>
-													</td>
-													<td>[[${done.insStatus}]]</td>
-													<td>[[${done.cpCode}]]</td>
-													<td>[[${done.mtName}]]</td>
-													<td>[[${done.specification}]]</td>
-													<td>[[${done.numberOfTests}]]</td>
-													<td>[[${done.numberOfPasses}]]</td>
-													<td>[[${done.totalPass}]]</td>
-												</tr>
-
-											</th:block>
-										</tbody>
-									</table>
+						<button type="button" class="btn btn-primary" id="success1">입고처리</button>
+						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
+							<table
+								class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
+								id="DataTables_Table_2" role="grid">
+								<thead>
+									<tr role="row">
+										<th class="table-plus datatable-nosort sorting_disabled">품질검사
+											날짜</th>
+										<th>품질검사 코드</th>
+										<th>품질검사 상태</th>
+										<th>거래처코드</th>
+										<th>자재명</th>
+										<th>규격</th>
+										<th>검사수</th>
+										<th>합격수</th>
+										<th>합격여부</th>
+									</tr>
+								</thead>
+<tbody>
+    <th:block th:each="done : ${incomingQualityDones}">
+        <tr>
+            <td class="table-plus">[[${done.insDate}]]</td>
+            <td><h5 class="font-16">[[${done.insCode}]]</h5></td>
+            <td>[[${done.insStatus}]]</td>
+            <td>[[${done.cpCode}]]</td>
+            <td>[[${done.mtName}]]</td>
+            <td>[[${done.specification}]]</td>
+            <td>[[${done.numberOfTests}]]</td>
+            <td>[[${done.numberOfPasses}]]</td>
+            <td>[[${done.totalPass}]]</td>
+            <td>
+								<input type=checkbox name=incomingQualityCheck></td>
+        </tr>
+    </th:block>
+</tbody>
+							</table>
+							<div class="col-lg-12" id="ex3_Result1"></div>
+							<div class="col-lg-12" id="ex3_Result2"></div>
 						</div>
 					</div>
 					<!-- Export Datatable End -->
 				</div>
 			</div>
+			
+		
+			
+			
+			
+			
+			
 		</div>
-</div>
+	</div>
 
 
-		<!-- buttons for Export datatable -->
-		<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-		<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-		<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-		<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-		<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-		<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
-		<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
-		<!-- Datatable Setting js -->
-		<script src="vendors/scripts/datatable-setting.js"></script>
+ 	<!-- buttons for Export datatable -->
+<!-- 	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="src/plugins/datatables/js/vfs_fonts.js"></script> -->
+	<!-- Datatable Setting js -->
+<!-- 	<script src="vendors/scripts/datatable-setting.js"></script> -->
 </body>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+/*   	document.addEventListener('DOMContentLoaded', function() {
 
-			//메타태그를 생성해서 메타태그를 가진 정보를 이용해서 값을 불러오는 코드.
-			$('tbody > tr').on('click', function(event) {
-				let trTag = event.currentTarget;
-				let mtlOdCode = $(trTag).children().eq(0).text(); // tr태그 안에 있는 두 번째를 찾음.
-				let url = '/incomingQualityTestInfo?insCode=' + insCode;
-				location.href = url;
-				
-			});
+		//메타태그를 생성해서 메타태그를 가진 정보를 이용해서 값을 불러오는 코드.
+ 		$('tbody > tr').on('click', function(event) {
+			let trTag = event.currentTarget;
+			let insCode = $(trTag).children().eq(1).text(); // tr태그 안에 있는 두 번째를 찾음.
+			let url = '/incomingQualityTestInfo?insCode=' + insCode;
+			location.href = url;
 
-});	
+		});
+
+	});   */ 
 	
-	</script>
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    // 합격 여부에 따라 필터링
+	    document.getElementById('filter-pass').addEventListener('click', function() {
+	        filterRows('합격');
+	    });
+	    
+	    document.getElementById('filter-fail').addEventListener('click', function() {
+	        filterRows('불합격');
+	    });
+	    
+	    document.getElementById('filter-all').addEventListener('click', function() {
+	        filterRows('전체');
+	    });
+
+	    function filterRows(status) {
+	        const rows = document.querySelectorAll('tbody > tr');
+	        rows.forEach(row => {
+	            const totalPassStatus = row.querySelector('td:nth-child(9)').innerText; // 9번째 열 (total_pass)
+	            if (status === '전체' || totalPassStatus === status) {
+	                row.style.display = ''; // 표시
+	            } else {
+	                row.style.display = 'none'; // 숨김
+	            }
+	        });
+	    }
+	});
+	
+	document.addEventListener('DOMContentLoaded', function() {
+ 	$("#success1").click(function(){
+ 		console.log("버튼 클릭됨");
+
+		var checkbox = $("input[name=incomingQualityCheck]:checked");
+		var data = [];
+
+		checkbox.each(function(i){
+
+			var tr = $(this).closest("tr")
+			var td = tr.children();
+
+			var item = {
+			insDate : td.eq(0).text(),
+			insCode : td.eq(1).text(),
+			insStatus : td.eq(2).text(),
+			cpCode : td.eq(3).text(),
+			mtName : td.eq(4).text(),
+			specification : td.eq(5).text(),
+			numberOfTests : td.eq(6).text(),
+			numberOfPasses : td.eq(7).text(),
+			totalPass : td.eq(8).text()
+			};
+			
+			data.push(item);
+
+		});
+		
+		$.ajax({
+			url: '/http://localhost/updateIncoming',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: function(response){
+				console.log('입고성공', response);
+				
+				location.reload();
+			},
+			
+			error: function(xhr, status, error){
+				console.error('입고 실패', error);
+			}
+		
+		})
+ 	});
+	});
+</script>
 </html>
 
 

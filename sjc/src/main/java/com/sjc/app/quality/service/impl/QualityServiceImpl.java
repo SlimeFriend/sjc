@@ -1,6 +1,7 @@
 package com.sjc.app.quality.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,14 @@ public class QualityServiceImpl implements QualityService{
 	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO) {
 		// TODO Auto-generated method stub
 		return qualityMapper.selectQualityTestInfo(mtlOdVO);
+	}
+	@Override
+	public void updateIncoming(List<Map<String, Object>> items) {
+        for (Map<String, Object> item : items) {
+            // DB 업데이트 로직
+            qualityMapper.updateIncoming(item);
+        }
+		
 	}
 
 }

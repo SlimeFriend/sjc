@@ -1,6 +1,7 @@
 package com.sjc.app.quality.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
 
@@ -20,4 +21,6 @@ public interface QualityService {
 	// 검사항목 - 입고등록 페이지
 	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO);
 
+	
+	public void updateIncoming(List<Map<String, Object>> items);
 }
