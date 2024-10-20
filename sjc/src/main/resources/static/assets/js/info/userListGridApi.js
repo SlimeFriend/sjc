@@ -83,11 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     tui.Grid.applyTheme('striped');
-    
 
     document.getElementById('searchBtn').addEventListener('click', function() {
-		//const currentPage = grid.getPagination().getCurrentPage();
-
+		
         const searchParams = {
             userId: document.getElementById('inputUserId').value,
             loginId: document.getElementById('inputLoginId').value,
@@ -98,93 +96,51 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
   		grid.readData(1, searchParams);
-  		
-        //fetchUsers(search);
     });
     
-/*
-	function fetchUsers(search = {}) {
-	    const params = new URLSearchParams(search);
-	    const url = `/usersApi?${params.toString()}`;
-	    fetch(url)
-	        .then(response => response.json())
-	        .then(response => {
-	            if (response.result) {
-	                const { contents, pagination } = response.data;
-	                
-	                grid.resetData(contents);
-	                
-	                updatePagination(pagination);
-	                
-	                updateTotalCount(pagination.totalCount);
-	            } else {
-	                console.error('Failed to fetch users');
-	            }
-	        })
-	        .catch(error => {
-	            console.error('Error fetching users:', error);
-	        });
-	}
-	
-	function updatePagination(pagination) {
-	    console.log('Current page:', pagination.page);
-	    console.log('Total count:', pagination.totalCount);
-	}
-	
-	function updateTotalCount(totalCount) {
-	    console.log('Total users:', totalCount);
-	}
-
-*/
-
-
     grid.on('editingFinish', (event) => {
         const { rowKey, columnName, value } = event;
         grid.setValue(rowKey, columnName, value);
 	  	console.log('editingFinish:', rowKey);
     });
 	
-    document.getElementById('updateBtn').addEventListener('click', saveModifiedData);
-    
-	function saveModifiedData() {
-	    const modifiedData = grid.getModifiedRows();
+    document.getElementById('updateBtn').addEventListener('click', function() {
+	    //const modifiedRows = grid.getModifiedRows();
+	    const modifiedRows = grid.getModifiedRows().updatedRows;
 	    
-	    if (modifiedData.updatedRows.length === 0) {
+	    if (modifiedRows.length === 0) {
 	        alert('수정된 데이터가 없습니다.');
 	        return;
 	    }
 	
 		if (confirm("수정 하시겠습니까??")){
+			modifyUsers(modifiedRows);
 		}else{
 			return;
 		}	
+	});
 
-	
-		//grid.refreshLayout();
-	
-	
+    function modifyUsers(modifiedRows) {
 	    fetch('users', {
 	        method: 'PUT',
 	        headers: {
 	            'Content-Type': 'application/json',
 	        },
-	        body: JSON.stringify(modifiedData.updatedRows),
+	        body: JSON.stringify(modifiedRows),
 	    })
 	    .then(response => {
 	        if (response.ok) {
-				const allModifiedRowKeys = [
-				  ...modifiedData.updatedRows.map(row => row.rowKey),
+				const modifiedRowKeys = [
+				  ...modifiedRows.map(row => row.rowKey),
 				];
 				
-				allModifiedRowKeys.forEach(rowKey => {
+				modifiedRowKeys.forEach(rowKey => {
 				  if (rowKey !== undefined) {
 				    grid.addRowClassName(rowKey, 'bg-warning');
 				  }
 		  		});
-		  		
-	        }else{
-	            throw new Error(`HTTP error! status: ${response.status}`);
-			}
+	        }
+	        
 	        return response.json();
 	    })
 	    .then(result => {
@@ -197,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    .finally(() => {
 	    	
 	    });
-	}
+    }
 
     
     /*
@@ -232,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	document.getElementById('deleteBtn').addEventListener('click', function() {
 		
-		
 		const checkedRows = grid.getCheckedRows();
 		if (checkedRows.length === 0) {
 			alert('삭제할 항목을 선택해주세요.');
@@ -240,12 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	  
 		if (confirm("삭제하시겠습니까??")){
+			deleteUsers(checkedRows.map(row => row.userId));
 		}else{
 			return;
 		}
-		
- 		const userIds = checkedRows.map(row => row.userId);
-  
+	});
+
+    function deleteUsers(userIds) {
 		fetch('/users', {
 			method: 'DELETE',
 			headers: {
@@ -255,50 +211,29 @@ document.addEventListener('DOMContentLoaded', function() {
 			})
 		.then(response => response.json())
 		.then(result => {
-			console.log('Delete success:', result);
-	        console.error('result:', result);
+			console.log('Delete result:', result);
 			grid.removeCheckedRows();
 			grid.refreshLayout();
 		})
-			.catch(error => {
+		.catch(error => {
 			console.error('Delete error:', error);
 			alert('삭제 중 오류가 발생했습니다.');
 		});
-	});
-
-/*
-    function deleteUsers(userIds) {
-        fetch('/users', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userIds),
-        })
-        .then(response => response.json())
-        .then(result => {
-            fetchUsers();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
     }
-   */ 
+    
     document.getElementById('copyBtn').addEventListener('click', function() {
         const selectedRows = grid.getCheckedRows();
+        
         if (selectedRows.length > 0) {
-        	
         	if (confirm("복사하시겠습니까??") == true){
         		copyUsers(selectedRows.map(row => row.userId));
         	}else{
         		return false;
         	}
-        	
         } else {
             alert('복사할 사용자를 선택해주세요.');
         }
     });
-
 
     function copyUsers(userIds) {
         fetch('/copyUsers', {
@@ -320,11 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }      
 
-
-    //fetchUsers();
-    
-    
-    
     const gridCopyLog = new tui.Grid({
         el: document.getElementById('gridCopyLog'),
         scrollX: false,
@@ -352,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
     function fetchCopyLogs(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/copyLogs?${params.toString()}`;
@@ -369,8 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fetchCopyLogs();
     
-    
-        
     const gridCopyDetail = new tui.Grid({
         el: document.getElementById('gridCopyDetail'),
         scrollX: false,
@@ -432,7 +359,6 @@ document.addEventListener('DOMContentLoaded', function() {
             perPage: 3
         }
     });
-
 
     function fetchCopyDetails(search = {}) {
         const params = new URLSearchParams(search);
