@@ -1,6 +1,7 @@
 package com.sjc.app.info.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sjc.app.info.service.InfoCopyDetailVO;
 import com.sjc.app.info.service.InfoCopyLogVO;
@@ -9,7 +10,6 @@ import com.sjc.app.info.service.InfoUserVO;
 
 public interface InfoUserMapper {
 	public InfoUserVO getUserInfo(String username);
-//	public List<InfoUserVO> selectUserAllList();
 	public List<InfoUserVO> selectUserAllList(InfoUserVO userVO);
 	
     int updateUser(InfoUserVO userVO);
@@ -26,5 +26,6 @@ public interface InfoUserMapper {
     public List<InfoCopyLogVO> selectCopyLogAllList();
     public List<InfoCopyDetailVO> selectCopyDetailAllList();
     
-    
+    List<InfoUserVO> selectUserList(Map<String, Object> params);
+    int countUserList(Map<String, Object> params);
 }

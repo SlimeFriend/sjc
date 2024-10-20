@@ -1,6 +1,7 @@
 	package com.sjc.app.info.web;
 	
 	import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,14 @@ import lombok.RequiredArgsConstructor;
 		private final InfoUserService infoUserService;
 	
 		@GetMapping("users")
-		public List<InfoUserVO> userList(InfoUserVO userVO){//@RequestBody 적용예정.토스트 ui
+		public List<InfoUserVO> userList(InfoUserVO userVO){
 			return infoUserService.userList(userVO);
 		}
+		
+	    @GetMapping("usersApi")
+	    public Map<String, Object> infoUserList(InfoUserVO infoUserVO) {
+	        return infoUserService.getUserListResponse(infoUserVO);
+	    }
 	
 	    @PutMapping("users")
 	    public List<InfoUserVO> updateUsers(@RequestBody List<InfoUserVO> InfoUserVOs) {

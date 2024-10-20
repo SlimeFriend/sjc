@@ -13,6 +13,6 @@ public class InfoUserVO {
 	private String deptName;
 	private String phone;
 	
-	private String perPage;
-	private String page;
+	private int perPage;
+	private int page;
 }
