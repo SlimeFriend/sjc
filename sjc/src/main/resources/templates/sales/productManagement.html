@@ -19,8 +19,8 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const productLotgridData = /*[[${productManagement}]]*/[];
 			const productGridData = /*[[${products}]]*/[];
+			const productLotgridData = /*[[${productManagement}]]*/[];
 
 			const productGrid = new tui.Grid({
 				el : document.getElementById('selectProduct'),
@@ -49,6 +49,21 @@
 					useClient : true,
 					perPage : 10
 				}
+			});
+			
+			productGrid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const prdCodeValue = productGrid.getValue(rowKey, 'prdCode');
+			    console.log(prdCodeValue);
+			    
+			    if(prdCodeValue) {
+			    	$.ajax({
+			    		url : '/getProductDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({prdCode : prdCodeValue}),
+			    	})
+			    }
 			});
 
 			const productLotgrid = new tui.Grid({

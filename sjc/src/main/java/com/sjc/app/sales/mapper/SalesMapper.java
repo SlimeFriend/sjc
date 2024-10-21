@@ -28,6 +28,7 @@ public interface SalesMapper {
 
 	// 제품관리
 	public List<ProductVO> selectProductManagement();
+	public List<ProductVO> selectProductLot();
 
 	// 제품입고
 	public List<ProductVO> selectProductIn();

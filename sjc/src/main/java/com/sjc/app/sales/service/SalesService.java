@@ -15,6 +15,7 @@ public interface SalesService {
 	// 제품
 	public List<ProductVO> productList();
 	public List<ProductVO> productManagement();
+	public List<ProductVO> productLot();
 	public List<ProductVO> productIn();
 	
 	public List<OrderVO> productOut();
