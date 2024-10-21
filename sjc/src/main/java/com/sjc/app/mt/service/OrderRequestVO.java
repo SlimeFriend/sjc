@@ -10,6 +10,7 @@ import lombok.Data;
 public class OrderRequestVO {
     private String orderRequestCode; // 발주 요청 코드
     private Date orderDate;          // 발주일
+    private Date diliveryDate;//납기일
     private String mtCode;           // 자재 코드
     private int quantity;            // 수량
     private String cpCode;           // 업체 코드
