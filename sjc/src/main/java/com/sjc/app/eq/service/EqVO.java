@@ -30,6 +30,7 @@ public class EqVO {
 	private Integer employeeNo;	  // 사원번호
 	
 	// 조인 정보 받아온 속성
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eqNextChck;	// 다음 점검일
 	private String eqChckOx;	// 점검 유무
 }
