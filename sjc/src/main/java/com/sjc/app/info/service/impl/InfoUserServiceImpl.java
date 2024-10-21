@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class InfoUserServiceImpl implements InfoUserService {
 	//private MeterRegistry registry;
 	private InfoUserMapper userMapper;
 	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	@Autowired // 생성자 1개면 자동 autowired됨.
 	InfoUserServiceImpl(InfoUserMapper userMapper, MeterRegistry registry){
 //	UserServiceImpl(InfoUserMapper userMapper, MeterRegistry registry){
@@ -41,13 +45,18 @@ public class InfoUserServiceImpl implements InfoUserService {
     @Override
     @Transactional
     public List<InfoUserVO> modifyUsers(List<InfoUserVO> InfoUserVOs) {
+    	
+    	
         List<InfoUserVO> savedUsers = new ArrayList<>();
 
         for (InfoUserVO userVO : InfoUserVOs) {
             try {
                 int userUpdateCount = userMapper.updateUser(userVO);
                 if (userUpdateCount == 0) {
-                    throw new RuntimeException("User not found with id: " + userVO.getUserId());
+//            		String password = "1234";
+                	String password = userVO.getPassword();
+            		userVO.setPassword(passwordEncoder.encode(password));	                	
+                    userMapper.insertUser(userVO);
                 }
 
                 int roleUpdateCount = userMapper.updateUserRole(userVO);
@@ -59,7 +68,7 @@ public class InfoUserServiceImpl implements InfoUserService {
                 savedUsers.add(savedInfoUserVO);
 
             } catch (Exception e) {
-                log.error("Error updating user with id: " + userVO.getUserId(), e);
+                log.error("error : " , e);
             }
         }
 

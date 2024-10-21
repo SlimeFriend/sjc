@@ -137,13 +137,15 @@
         login_id,
         password,
         user_name,
-        dept_code
+        dept_code,
+        phone
     ) VALUES (
         #{userId},
         #{loginId},
         #{password},
         #{userName},
-        #{deptCode}
+        #{deptCode},
+        #{phone}
     )
     </insert>
 

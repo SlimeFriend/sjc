@@ -70,6 +70,11 @@ public class InfoUserController {
 		return "info/userListGridApi";
 	}
 	
+	@GetMapping("infoUserListGridApiInsert")
+	public String infoUserListGridApiInsert() {
+		return "info/userListGridApiInsert";
+	}
+	
 	@GetMapping("infoUserListGrid")
 	public String infoUserListGrid() {
 		return "info/userListGrid";
