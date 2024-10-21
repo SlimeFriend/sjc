@@ -25,16 +25,20 @@ public interface QualityMapper {
 	
 	
 	// 검사항목 - 입고등록 페이지
-	public  List<InsItemVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
+	//public  List<InsItemVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
+	public  List<InspectionVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
 
 	
 	// 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
 	public void updateIncoming(Map<String, Object> item);
 
 	
-	// 입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status), ins(품질검사 상태) 완료로 넘기기
+	// 입고검사완료페이지 - 값 입고처리 버튼 누르면 ins(품질검사 상태) 완료로 넘기기
 	public int updateInspectionDone(InspectionVO inspectionVO);
+	// 입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status)완료로 넘기기
 	public int updateMtlOdDone(InspectionVO inspectionVO);
+
+	public void updateMtlOdBack(InspectionVO inspectionVO);
 
 	//public int updateMtlOdDone(@Param("mtlOdStatus")String mtlOdStatus, InspectionVO inspectionVO);
 

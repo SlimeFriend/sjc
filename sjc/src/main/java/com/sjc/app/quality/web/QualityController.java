@@ -1,6 +1,7 @@
 package com.sjc.app.quality.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,7 +52,8 @@ public class QualityController {
     	MtlOdVO mtlOdVO = new MtlOdVO();
     	mtlOdVO.setMtlOdCode(mtlOdCode);
     	// 단건조회 - 입고검사등록 페이지
-    	List<InsItemVO> insItemlist = qualityService.incomingQualityTestInfo(mtlOdVO);
+    	//List<InsItemVO> insItemlist = qualityService.incomingQualityTestInfo(mtlOdVO);
+    	List<InspectionVO> insItemlist = qualityService.incomingQualityTestInfo(mtlOdVO);
     	model.addAttribute("testList", insItemlist);
     	
     	return "quality/incomingQualityRegistration";
@@ -108,10 +110,30 @@ public class QualityController {
 //		
 //		return empService.empUpdate(empVO);
 //	}
+    
+    
+//    @PostMapping("updateIncoming")
+//    @ResponseBody
+//    public List<InspectionVO> updateIncoming(@RequestBody List<InspectionVO> inspectionVOs) {
+//        return qualityService.updateIncoming(inspectionVOs);
+//    }	
+    
+        @PostMapping("updateInspectionDone")
+    @ResponseBody
+    public List<InspectionVO> updateinspectionDone(@RequestBody List<InspectionVO> inspectionVOs) {
+    	return qualityService.inspectionDoneUpdate(inspectionVOs);
+    }	
     @PostMapping("updateIncoming")
     @ResponseBody
-    public List<InspectionVO> updateIncoming(@RequestBody List<InspectionVO> inspectionVOs) {
-        return qualityService.updateIncoming(inspectionVOs);
+    public List<InspectionVO> updateMtlOdDone(@RequestBody List<InspectionVO> inspectionVOs) {
+    	return qualityService.mtlOdDoneUpdate(inspectionVOs);
     }	
+    @PostMapping("updateMtlOdBack")
+    @ResponseBody
+    public List<InspectionVO> updateMtlOdBack(@RequestBody List<InspectionVO> inspectionVOs) {
+    	return qualityService.mtlOdBackUpdate(inspectionVOs);
+    }	
+    
+
     
 }

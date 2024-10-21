@@ -50,7 +50,8 @@ public class QualityServiceImpl implements QualityService{
 	
 	// 검사항목 - 입고등록 페이지
 	@Override
-	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO) {
+	//public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO) {
+	public List<InspectionVO> incomingQualityTestInfo(MtlOdVO mtlOdVO) {
 		// TODO Auto-generated method stub
 		return qualityMapper.selectQualityTestInfo(mtlOdVO);
 	}
@@ -100,20 +101,56 @@ public class QualityServiceImpl implements QualityService{
 	 */
 	
 	
-    @Override
-    @Transactional
-    public List<InspectionVO> updateIncoming(List<InspectionVO> inspectionVOs) {
-        List<InspectionVO> list = new ArrayList<>();
 
-        for (InspectionVO inspectionVO : inspectionVOs) {
-                qualityMapper.updateInspectionDone(inspectionVO);
+	/*
+	 * @Override
+	 * 
+	 * @Transactional 
+	 * public List<InspectionVO> updateIncoming(List<InspectionVO> inspectionVOs) { List<InspectionVO> list = new ArrayList<>();
+	 * 
+	 * for (InspectionVO inspectionVO : inspectionVOs) {
+	 * System.out.println(inspectionVO);
+	 * 
+	 * qualityMapper.updateInspectionDone(inspectionVO);
+	 * 
+	 * qualityMapper.updateMtlOdDone(inspectionVO);
+	 * 
+	 * list.add(inspectionVO); }
+	 * 
+	 * return list; }
+	 */
+	
+	@Override
+	@Transactional 
+	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs) {
+		List<InspectionVO> list = new ArrayList<>();
+		for (InspectionVO inspectionVO : inspectionVOs) {
+		qualityMapper.updateInspectionDone(inspectionVO);
+		list.add(inspectionVO);
+		}
+		return list;
+	}
+	
+	@Override
+	@Transactional 
+	public List<InspectionVO> mtlOdDoneUpdate(List<InspectionVO> inspectionVOs) {
+		List<InspectionVO> list = new ArrayList<>();
+		for (InspectionVO inspectionVO : inspectionVOs) {
+		qualityMapper.updateMtlOdDone(inspectionVO);
+		list.add(inspectionVO);
+		
+	}
+		return list;
 
-                qualityMapper.updateMtlOdDone(inspectionVO);
-
-                list.add(inspectionVO);
-        }
-
-        return list;
-    }	
-
+}
+	@Override
+	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs) {
+		List<InspectionVO> list = new ArrayList<>();
+		for (InspectionVO inspectionVO : inspectionVOs) {
+		qualityMapper.updateMtlOdBack(inspectionVO);
+		list.add(inspectionVO);
+		
+	}
+		return list;
+	}
 }
