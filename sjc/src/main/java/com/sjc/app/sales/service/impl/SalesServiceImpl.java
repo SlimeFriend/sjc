@@ -1,7 +1,13 @@
 package com.sjc.app.sales.service.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service 
 public class SalesServiceImpl implements SalesService {
 	private SalesMapper salesMapper;
+	private DataSource dataSource;
 	
 	@Autowired
-	SalesServiceImpl(SalesMapper salesMapper, MeterRegistry registry) {
+	SalesServiceImpl(SalesMapper salesMapper, DataSource dataSource, MeterRegistry registry) {
 		this.salesMapper = salesMapper;
+		this.dataSource = dataSource;
 	}
 	
 	// 주문접수
@@ -29,6 +37,25 @@ public class SalesServiceImpl implements SalesService {
 	public int insertOrder(OrderVO orderVO) {
 		return salesMapper.insertOrder(orderVO);
 	}
+	
+	// 주문번호 시퀀스 값 가져오기
+	@Override
+	public int getOrdCode() {
+		int nextId = 0;
+		String sql = "SELECT ord_seq.NEXTVAL FROM dual";
+		try (Connection connection = dataSource.getConnection();
+	             PreparedStatement ps = connection.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            
+	            if (rs.next()) {
+	                nextId = rs.getInt(1);  // 시퀀스 값 가져오기
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return nextId;
+	}
+	
 	
 	@Override
 	public int insertOrderDetail(ProductVO productVO, String ordCode) {

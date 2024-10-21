@@ -45,7 +45,9 @@ public class SalesController {
 	@PostMapping("/orderReception")
 	public String insertOrder(@RequestBody SalesDTO salesDTO) {
 		
-		String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + (int)(Math.random() * 1000);
+		int nextId = salesService.getOrdCode();
+		System.err.print(nextId);
+		String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + String.format("%03d", nextId);
 		 
 	    OrderVO orderVO = salesDTO.getOrderVO();
 	    List<ProductVO> productVOList = salesDTO.getProductVO(); 

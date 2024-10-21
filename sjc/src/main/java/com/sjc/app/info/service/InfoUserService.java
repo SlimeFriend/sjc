@@ -9,6 +9,7 @@ public interface InfoUserService {
 	public List<InfoUserVO> modifyUsers(List<InfoUserVO> userVOs);
     InfoUserVO insertUser(InfoUserVO userVO);
     List<String> deleteUsers(List<String> userIds);
+    List<String> deleteUsersProcedure(List<String> userIds);
     public List<String> copyUsers(List<String> userIds);
     
     public List<InfoCopyLogVO> copyLogList();
