@@ -14,4 +14,5 @@ public class PDetailVO {
 	private String porderCode;	// 생산지시 코드
 	private String status;		// 상태
 	private String lineCode;	// 라인 코드
+	private String prdCode; 	// 제품 코드
 }

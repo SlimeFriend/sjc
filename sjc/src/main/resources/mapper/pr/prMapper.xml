@@ -87,4 +87,36 @@
 	where status like #{status}||'%'
 </select>
 
+<!-- 생산 관리쪽 지시 -->
+<select id="useD" resultType="PDetailVO">
+	select pdetail_code,
+			prd_name,
+			want,
+			command,
+			output,
+			no,
+			comm,
+			porder_code,
+			status,
+			line_code,
+			prd_code
+	from pdetail
+	where status = 'b1'
+</select>
+
+<!-- 생산 관리 필요 자재 -->
+<select id="pNeed" parameterType="String" resultType="NeedVO">
+select d.mt_code,
+        d.quantity_required,
+        m.mt_name
+from prd p
+join bom b 
+on p.prd_code = b.prd_code
+join b_detail d 
+on b.bom_code = d.bom_code
+join mt m
+on d.mt_code = m.mt_code
+where p.prd_code = #{prdCode}
+</select>
+
 </mapper>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sjc.app.pr.mapper.PrdtMapper;
+import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
@@ -54,6 +55,17 @@ public class PrdtServiceImpl implements PrdtService {
 	public List<PlanVO> planListS(String status) {
 		// TODO Auto-generated method stub
 		return prdtMapper.selectPlanS(status);
+	}
+
+	@Override
+	public List<PDetailVO> useD() {
+
+		return prdtMapper.useD();
+	}
+
+	@Override
+	public List<NeedVO> pNeed(String prdCode) {
+		return prdtMapper.pNeed(prdCode);
 	}
 
 }

@@ -78,8 +78,8 @@ layout:fragment="Content">
                                 <td>${item.prdName}</td>
                                 <td>${item.want}</td>
                                 <td>${item.command}</td>
-                                <td>${item.output}</td>
-                                <td>${item.no}</td>
+								<td>${item.output != null ? item.output : 0}</td> 
+								<td>${item.no}</td>
                                 <td>${item.comm}</td>
                             `;
                             dbody.appendChild(row);
