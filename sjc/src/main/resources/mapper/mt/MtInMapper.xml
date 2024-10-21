@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.MtInMapper">
+
+    <!-- 검사 완료된 발주 자재 목록 조회 -->
+    <select id="getCompletedMaterials" resultType="com.sjc.app.mt.service.MtInVO">
+        SELECT 
+            MTL_OD.MTL_OD_CODE AS mtlOdCode,
+            MTL_OD.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,
+            MTL_OD.CP_CODE AS cpCode,
+            MTL_OD.MTL_OD_QUANTITY AS inquantity,
+            MTL_OD.MTL_OD_DATE AS inputDate
+        FROM MTL_OD
+        JOIN MT ON MTL_OD.MT_CODE = MT.MT_CODE
+        WHERE MTL_OD.MTL_OD_STATUS = '검사완료'
+    </select>
+
+    <!-- 입고 목록 조회 -->
+    <select id="getMtInList" resultType="com.sjc.app.mt.service.MtInVO">
+        SELECT
+            IN_CODE AS inCode,
+            MT_CODE AS mtCode,
+            (SELECT MT_NAME FROM MT WHERE MT.MT_CODE = MT_IN.MT_CODE) AS mtName, 
+            CP_CODE AS cpCode,
+            INQUANTITY AS inquantity,
+            INPUT_DATE AS inputDate,
+            ED AS ed,
+            LOT_NO AS lotNo,
+            COMM AS comm
+        FROM MT_IN
+    </select>
+
+    <!-- 입고 등록 -->
+    <insert id="insertMtIn" parameterType="com.sjc.app.mt.service.MtInVO">
+        INSERT INTO MT_IN (IN_CODE, MT_CODE, CP_CODE, INQUANTITY, INPUT_DATE, ED, LOT_NO, COMM)
+        VALUES (#{inCode}, #{mtCode}, #{cpCode}, #{inquantity}, #{inputDate}, #{ed}, #{lotNo}, #{comm})
+    </insert>
+
+    <!-- 입고 삭제 -->
+    <delete id="deleteMtIn" parameterType="String">
+        DELETE FROM MT_IN WHERE IN_CODE = #{inCode}
+    </delete>
+
+</mapper>
