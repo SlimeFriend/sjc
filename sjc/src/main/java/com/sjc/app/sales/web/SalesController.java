@@ -89,9 +89,10 @@ public class SalesController {
 	// 제품관리 페이지
 	@GetMapping("/productManagement")
 	public String productManagementPage(Model model) {
-		List<ProductVO> list = salesService.productManagement();
-		model.addAttribute("productManagement", list);
-		model.addAttribute("products", list);
+		List<ProductVO> productList = salesService.productManagement();
+		List<ProductVO> productLotList = salesService.productLot();
+		model.addAttribute("products", productList);
+		model.addAttribute("productManagement", productLotList);
 		return "sales/productManagement";
 	}
 

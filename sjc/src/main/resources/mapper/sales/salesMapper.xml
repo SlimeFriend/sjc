@@ -37,7 +37,6 @@
 	</insert>
 
 	<!-- 주문내역 조회 -->
-	
 	<select id="selectOrder" resultType="OrderVO">
 		SELECT o.ord_code,
 		       c.cp_name,
@@ -62,6 +61,16 @@
 
 	<!-- 제품관리 조회 -->
 	<select id="selectProductManagement" resultType="ProductVO">
+	SELECT   p.prd_name, 
+         	 p.prd_code, 
+         	 p.unit_price,
+         	 COALESCE(SUM(pm.stc_quantity), 0) AS stcQuantity
+	FROM     prd p LEFT JOIN prd_management pm
+	ON       p.prd_code = pm.prd_code
+	GROUP BY p.prd_name, p.prd_code, p.unit_price
+	</select>
+	
+	<select id="selectProductLot" resultType="ProductVO">
 		SELECT
 		p.prd_name,
 		p.prd_code,

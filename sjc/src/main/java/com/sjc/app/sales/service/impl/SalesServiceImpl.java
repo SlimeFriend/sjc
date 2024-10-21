@@ -52,8 +52,8 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public List<ProductVO> productManagement() {
-		return salesMapper.selectProductManagement();
+	public List<ProductVO> productLot() {
+		return salesMapper.selectProductLot();
 	}
 
 	@Override
@@ -74,6 +74,11 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<OrderVO> companyList() {
 		return salesMapper.selectCompany();
+	}
+
+	@Override
+	public List<ProductVO> productManagement() {
+		return salesMapper.selectProductManagement();
 	}
 
 }
