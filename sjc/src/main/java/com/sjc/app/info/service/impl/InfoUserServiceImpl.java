@@ -91,6 +91,14 @@ public class InfoUserServiceImpl implements InfoUserService {
         return userIds;
     }
     
+    @Override
+    @Transactional
+    public List<String> deleteUsersProcedure(List<String> userIds) {
+    	String stringUserIds = String.join(",", userIds);
+    	userMapper.deleteUsersProcedure(stringUserIds);        
+    	return userIds;
+    }
+    
     
     @Override
     @Transactional
