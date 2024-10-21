@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class WebAdvice {
 	// 예외처리
 	//@ExceptionHandler(IllegalAccessException.class)
-	@ExceptionHandler(SQLException.class)
+	//@ExceptionHandler(SQLException.class)
 	public ResponseEntity<String> invokeError(SQLException sqlException){
 		return new ResponseEntity<>("Error Message", HttpStatus.BAD_REQUEST);
 	}
