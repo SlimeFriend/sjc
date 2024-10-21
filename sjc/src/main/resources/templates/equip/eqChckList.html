@@ -38,7 +38,7 @@
 				<!-- 
 				<table class="data-table table nowrap">
 				 -->
-				<table class="table nowrap">
+				<table class="table nowrap table-hover">
 					<thead>
 						<tr>
 							<th class="table-plus datatable-nosort">No.</th>
@@ -63,7 +63,7 @@
 					</tbody>
 				</table>
 				
-				<table class="table nowrap">
+				<table class="table nowrap table-hover">
 				<div class="d-flex justify-content-between align-items-center mb-20">
 				<p style="font-size:300%">비가동 설비 내역</p>
 				<div>
@@ -140,11 +140,16 @@
 								</div>
 								<div class="mb-3">
 									<label for="eqName" class="form-label">사유 :</label> 
-									<input type="text">
+									<select name="reasonList">
+									<option value="temporary">상시점검
+									<option value="momentary">임시점검
+									<option value="broken">고장
+									<option value="replace">부품교체
+									</select>
 								</div>
 								<div class="mb-3">
-									<label for="eqName" class="form-label">사용여부</label> <select
-										name="useOrNot">
+									<label for="eq" class="form-label">사용여부</label> 
+									<select name="useOrNot">
 										<option value="can" selected>가동
 										<option value="cannot">비가동
 									</select>
@@ -164,18 +169,58 @@
 			</div>
 		</div>
 	</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        //제이쿼리 객체 생성
+        // tr 클릭 시 이벤트 설정
         $('tbody > tr').on('click', function(event) {
             let trTag = event.currentTarget; // tr 찾기
-            let eqCode = $(trTag).children().eq(1).text(); // 정보 가져오기
-            let eqName = $(trTag).children().eq(2).text(); // 정보 가져오기
-            // 모달 창을 띄우기 전에 필요한 데이터 설정 가능
-            $('#nOpModal').modal('show'); // 모달 표시
+            let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
+            let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
+            
+            // 모달의 input 필드에 값 설정
+            $('#eqC').val(eqCode);
+            $('#eqN').val(eqName);
+            
+            // 모달 창 표시
+            $('#nOpModal').modal('show');
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 라디오 버튼 클릭 시 필터링 함수
+        $('input[name="section"]').on('change', function() {
+            let selectedValue = $('input[name="section"]:checked').val(); // 선택된 라디오 버튼의 값 가져오기
+
+            // 테이블 행 필터링
+            $('tbody tr').each(function() {
+                let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼 값 가져오기
+
+                if (selectedValue === 'all') {
+                    // '전체' 선택 시 모든 행을 보여줌
+                    $(this).show();
+                } else if (selectedValue === 'op') {
+                    // '가동' 선택 시 'Y'인 행만 보여줌
+                    if (useStatus === 'Y') {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                } else if (selectedValue === 'nOp') {
+                    // '비가동' 선택 시 'N'인 행만 보여줌
+                    if (useStatus === 'N') {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+
 
 </body>
 </html>
