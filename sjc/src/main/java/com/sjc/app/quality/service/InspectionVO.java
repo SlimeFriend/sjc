@@ -11,8 +11,6 @@ public class InspectionVO {
 	private int userId; // 사용자 번호
 	private String userName; // 사용자 이름
 	private String insStatus; // 품질검사 상태
-	private String insSort; // 품질검사 종류 - 제품, 자재, ...
-	private String insTarget; // 품질검사 대상 - 제품번호, 자재번호, ...
 	private String insTypeCode; // 품질검사 유형코드
 	private String mtlOdCode; // 자재발주 코드
 	private int numberOfTests;// 검사수

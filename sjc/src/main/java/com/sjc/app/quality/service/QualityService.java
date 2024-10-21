@@ -21,6 +21,10 @@ public interface QualityService {
 	// 검사항목 - 입고등록 페이지
 	public List<InsItemVO> incomingQualityTestInfo(MtlOdVO mtlOdVO);
 
-	
+	// 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
 	public void updateIncoming(List<Map<String, Object>> items);
+	
+	// 입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status), ins(품질검사 상태) 완료로 넘기기
+	public Map<String, Object> inspectionDoneUpdate(String insStatus);
+	public Map<String, Object> mtlOdDoneUpdate(String mtlOdStatus);
 }
