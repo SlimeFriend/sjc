@@ -106,6 +106,8 @@ public class QualityServiceImpl implements QualityService{
         List<InspectionVO> list = new ArrayList<>();
 
         for (InspectionVO inspectionVO : inspectionVOs) {
+        		System.out.println(inspectionVO);
+        	
                 qualityMapper.updateInspectionDone(inspectionVO);
 
                 qualityMapper.updateMtlOdDone(inspectionVO);
