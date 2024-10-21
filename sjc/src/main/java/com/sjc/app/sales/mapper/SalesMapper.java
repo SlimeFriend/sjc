@@ -1,19 +1,27 @@
 package com.sjc.app.sales.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
+import com.sjc.app.sales.service.SalesDTO;
 
 public interface SalesMapper {
 
 	// 주문접수
 	public int insertOrder(OrderVO orderVO);
 	
+	// 주문내역
+	public List<OrderVO> selectOrder();
+	
 	// 주문상세
 	public int insertOrderDetail(@Param("productVO") ProductVO productVO, @Param("ordCode") String ordCode);
+	
+	// 주문상세 테이블
+	public List<Map<String, Object>> selectOrderDetail(String ordCode);
 	
 	// 제품 테이블
 	public List<ProductVO> selectProduct();
@@ -27,14 +35,10 @@ public interface SalesMapper {
 	// 제품 출고
 	public List<OrderVO> selectProductOut();
 	
-	// 주문내역
-	public List<OrderVO> selectOrderHistory();
-	
 	// 입출고 내역
 	public List<ProductVO> selectInOutHistory();
 	
 	// 업체 리스트
 	public List<OrderVO> selectCompany();
-
 
 }

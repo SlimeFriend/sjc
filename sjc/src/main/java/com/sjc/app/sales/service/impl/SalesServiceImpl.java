@@ -1,6 +1,7 @@
 package com.sjc.app.sales.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.sjc.app.sales.mapper.SalesMapper;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
-import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
 
 import io.micrometer.core.instrument.MeterRegistry;
@@ -32,6 +32,7 @@ public class SalesServiceImpl implements SalesService {
 	
 	@Override
 	public int insertOrderDetail(ProductVO productVO, String ordCode) {
+		System.err.print(productVO);
 	    return salesMapper.insertOrderDetail(productVO, ordCode);
 	}
 	
@@ -41,8 +42,13 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public List<OrderVO> orderHistory() {
-		return salesMapper.selectOrderHistory();
+	public List<OrderVO> order() {
+		return salesMapper.selectOrder();
+	}
+	
+	@Override
+	public List<Map<String, Object>> orderDetail(String ordCode) {
+	    return salesMapper.selectOrderDetail(ordCode);
 	}
 
 	@Override

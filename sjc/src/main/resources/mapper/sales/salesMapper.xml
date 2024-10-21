@@ -26,7 +26,7 @@
                  comm)
         VALUES ( #{ordCode}, 
                  SYSDATE,
-                 SYSDATE,
+                 #{dlvReqDate},
                  #{cpCode}, 
                  #{comm})
 	</insert>
@@ -37,7 +37,8 @@
 	</insert>
 
 	<!-- 주문내역 조회 -->
-	<select id="selectOrderHistory" resultType="OrderVO">
+	
+	<select id="selectOrder" resultType="OrderVO">
 		SELECT o.ord_code,
 		       c.cp_name,
 		       o.ord_date,
@@ -46,6 +47,17 @@
 		       o.comm
 		FROM ord o LEFT JOIN cp c
 		ON o.cp_code = c.cp_code
+	</select>
+	
+	<select id="selectOrderDetail" parameterType="String" resultType="map">
+    SELECT o.ord_code AS ordCode,
+           od.prd_name AS prdName,
+           od.prd_code AS prdCode,
+           od.ord_quantity AS ordQuantity,
+           o.ord_status AS ordStatus
+    FROM   ord o
+    JOIN   ord_detail od ON o.ord_code = od.ord_code
+    WHERE  o.ord_code = #{ordCode}
 	</select>
 
 	<!-- 제품관리 조회 -->
@@ -89,12 +101,11 @@
 	<!-- 제품 입출고 내역 -->
 	<select id="selectInOutHistory" resultType="ProductVO">
 		SELECT o.ord_code,
-		c.cp_name,
-		o.ord_date,
-		o.dlv_req_date
-		FROM ord o join cp c
-		ON o.cp_code =
-		c.cp_code
+		       c.cp_name,
+		       o.ord_date,
+		       o.dlv_req_date
+		FROM   ord o join cp c	
+		               ON o.cp_code = c.cp_code
 	</select>
 </mapper>
 
