@@ -25,6 +25,8 @@ public interface QualityMapper {
 	// 검사항목 - 입고등록 페이지
 	public  List<InsItemVO> selectQualityTestInfo(MtlOdVO mtlOdVO);
 
+	
+	// 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
 	public void updateIncoming(Map<String, Object> item);
 
 

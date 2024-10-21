@@ -41,18 +41,7 @@ public class QualityController {
     	model.addAttribute("incomingQualityDones", list);
     	return "quality/incomingQualityDone";
     }
-    @PostMapping("/updateIncoming")
-    public ResponseEntity<String> updateIncoming(@RequestBody List<Map<String, Object>> items) {
-        try {
-                // DB 업데이트 로직
-                qualityService.updateIncoming(items); // 적절한 서비스 메서드를 호출
-            
-            return ResponseEntity.ok("입고 처리 완료");
-        } catch (Exception e) {
-            // 예외 처리
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("입고 처리 실패");
-        }
-    }
+    
     
 	// 전체 조회 - 입고검사등록 페이지    
     @GetMapping("incomingQualityRegistrationInfo")
@@ -70,6 +59,19 @@ public class QualityController {
     	return "quality/incomingQualityRegistration";
     }
     
+    // 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
+    @PostMapping("/updateIncoming")
+    public ResponseEntity<String> updateIncoming(@RequestBody List<Map<String, Object>> items) {
+    	try {
+    		// DB 업데이트 로직
+    		qualityService.updateIncoming(items); // 적절한 서비스 메서드를 호출
+    		
+    		return ResponseEntity.ok("입고 처리 완료");
+    	} catch (Exception e) {
+    		// 예외 처리
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("입고 처리 실패");
+    	}
+    }
 	/*
 	 * // 단건조회 - 입고등록 페이지
 	 * 

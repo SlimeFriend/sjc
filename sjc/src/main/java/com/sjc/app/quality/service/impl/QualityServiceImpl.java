@@ -1,5 +1,6 @@
 package com.sjc.app.quality.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class QualityServiceImpl implements QualityService{
 		// TODO Auto-generated method stub
 		return qualityMapper.selectQualityTestInfo(mtlOdVO);
 	}
+	
+	// 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
 	@Override
 	public void updateIncoming(List<Map<String, Object>> items) {
         for (Map<String, Object> item : items) {
@@ -60,6 +63,16 @@ public class QualityServiceImpl implements QualityService{
             qualityMapper.updateIncoming(item);
         }
 		
+	}
+	@Override
+	public Map<String, Object> inspectionDoneUpdate(String insStatus) {
+		Map<String, Object> map = new HashMap<>();
+		return null;
+	}
+	@Override
+	public Map<String, Object> mtlOdDoneUpdate(String mtlOdStatus) {
+		Map<String, Object> map = new HashMap<>();
+		return null;
 	}
 
 }
