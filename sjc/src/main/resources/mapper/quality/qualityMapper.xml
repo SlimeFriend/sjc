@@ -11,8 +11,10 @@
                , cp_code
                , user_id
                , mtl_od_status
+
 		FROM mtl_od
 		WHERE mtl_od_status = '품질검사대기'
+
 	</select>
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
 		SELECT i.ins_date
@@ -24,13 +26,13 @@
                , i.number_of_tests
                , i.number_of_passes
                , i.total_pass
-              
+               , o.mtl_od_code
 		FROM copy_mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
-		    JOIN mt m
+		    JOIN copy_mt m
 		        ON o.mt_code = m.mt_code
-		WHERE ins_status = '검사 완료'
+		WHERE i.ins_status = '검사 완료'
 	</select>
 <!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
@@ -114,6 +116,9 @@
 		WHERE i.ins_code = #{insCode}
 	</update>
 
+
+
+<!--  입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status), ins(품질검사 상태) 완료로 넘기기 -->
 	<update id="updateInspectionDone" parameterType="map">
 		UPDATE inspection
 		SET ins_status = '검사 완료'

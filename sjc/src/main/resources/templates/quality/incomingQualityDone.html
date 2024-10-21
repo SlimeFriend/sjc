@@ -118,6 +118,7 @@
             <td>[[${done.numberOfTests}]]</td>
             <td>[[${done.numberOfPasses}]]</td>
             <td>[[${done.totalPass}]]</td>
+            <td>[[${done.mtlOdCode}]]</td>
             <td>
 								<input type=checkbox name=incomingQualityCheck></td>
         </tr>
@@ -139,7 +140,7 @@
 			
 			
 		</div>
-	</div>
+
 
 
  	<!-- buttons for Export datatable -->
@@ -170,6 +171,8 @@
 	
 	
 	document.addEventListener('DOMContentLoaded', function() {
+		
+		
 	    // 합격 여부에 따라 필터링
 	    document.getElementById('filter-pass').addEventListener('click', function() {
 	        filterRows('합격');
@@ -194,9 +197,123 @@
 	            }
 	        });
 	    }
+	    
+	    
+	    
+	    
+	    
+	    
+/* 	    		$("#success1").on('click', updateAjax);
+		console.log("버튼 클릭됨");
+		
+		function updateAjax(event){
+			// 1) 보낼 데이터 가져오기
+			let dataObj = getFormData();
+			// 2) AJAX
+			$.ajax("inspectionDoneUpdate", {
+				type : 'post', //method
+				//data : dataObj // 객체 => QueryString
+				
+				//JSON : @RequestBody 선언되어있을 때 이 방식.
+				contentType : 'application/json', 
+				data:JSON.stringify(dataObj)
+				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
+				/*beforeSend: function (xhr) {
+					xhr.setRequestHeader(csrfHeader, csrfToken);
+				}*/
+/* 			})
+			.done((result)=>{
+				console.log(result);
+			})
+			.done((data)=>{
+				//return 'result : ' + data.result;
+				if(data.result){
+					alert('성공적으로 수정되었습니다.');
+					
+				}else{
+					alert('수정되지 않았습니다.');
+				}
+			})
+			.fail((err)=>console.log(err));
+		}  */
+		
+/* 		function getFormData(){
+			
+			let formAry1 = $("input[name=incomingQualityCheck]:checked").serializeArray();
+			console.log(formAry1);
+			let formObj1 = {};
+			console.log(formObj1);
+			$.each(formAry1, function(idx, tag){
+				// tag) { name : "employeeId", value : "100"} 
+				formObj1[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
+												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
+				// formObj["employeeId"] = "100";
+			});
+			
+			return formObj1;
+			
+		} */
+		
+/* 		
+		
+				$("#success1").on('click', updateAjax);
+		console.log("버튼 클릭됨"); */
+		
+/* 		function updateAjax(event){
+			// 1) 보낼 데이터 가져오기
+			let dataObj = getFormData();
+			// 2) AJAX
+			$.ajax("mtlOdDoneUpdate", {
+				type : 'post', //method
+				//data : dataObj // 객체 => QueryString
+				
+				//JSON : @RequestBody 선언되어있을 때 이 방식.
+				contentType : 'application/json', 
+				data:JSON.stringify(dataObj)
+				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
+				/*beforeSend: function (xhr) {
+					xhr.setRequestHeader(csrfHeader, csrfToken);
+				}*/
+/* 			})
+			.done((result)=>{
+				console.log(result);
+			})
+			.done((data)=>{
+				//return 'result : ' + data.result;
+				if(data.result){
+					alert('성공적으로 수정되었습니다.');
+					
+				}else{
+					alert('수정되지 않았습니다.');
+				}
+			})
+			.fail((err)=>console.log(err));
+		} */ 
+		
+/* 		
+		function getFormData(){
+			
+			let formAry2 = $("input[name=incomingQualityCheck]:checked").serializeArray();
+			console.log(formAry2);
+			let formObj2 = {};
+			console.log(formObj2);
+			$.each(formAry2, function(idx, tag){
+				// tag) { name : "employeeId", value : "100"} 
+				formObj[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
+												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
+				// formObj["employeeId"] = "100";
+			});
+			
+			return formObj2;
+			
+		} */
+
 	});
 	
-	document.addEventListener('DOMContentLoaded', function() {
+	
+
+	
+ 	document.addEventListener('DOMContentLoaded', function() {
  	$("#success1").click(function(){
  		console.log("버튼 클릭됨");
 
@@ -209,7 +326,7 @@
 			var td = tr.children();
 
 			var item = {
-			insDate : td.eq(0).text(),
+			//insDate : td.eq(0).text(),
 			insCode : td.eq(1).text(),
 			insStatus : td.eq(2).text(),
 			cpCode : td.eq(3).text(),
@@ -220,13 +337,15 @@
 			totalPass : td.eq(8).text()
 			};
 			
+			console.log(item);
+
 			data.push(item);
 
 		});
 		
 		$.ajax({
-			url: '/http://localhost/updateIncoming',
-			type: 'POST',
+			url: 'updateIncoming',
+			method: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(data),
 			success: function(response){
@@ -241,7 +360,10 @@
 		
 		})
  	});
-	});
+	}); 
+	
+	
+	
 </script>
 </html>
 

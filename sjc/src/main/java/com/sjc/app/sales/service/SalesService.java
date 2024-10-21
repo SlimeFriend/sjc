@@ -1,6 +1,7 @@
 package com.sjc.app.sales.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SalesService {
 	
@@ -8,13 +9,15 @@ public interface SalesService {
     public int insertOrder(OrderVO orderVO);
     public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
+	public List<OrderVO> order();
+	public List<Map<String, Object>> orderDetail(String ordCode);
+    
 	// 제품
 	public List<ProductVO> productList();
 	public List<ProductVO> productManagement();
 	public List<ProductVO> productIn();
 	
 	public List<OrderVO> productOut();
-	public List<OrderVO> orderHistory();
 	public List<ProductVO> inoutHistory();
 	
 	// 업체

@@ -1,11 +1,8 @@
 package com.sjc.app.quality.web;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,19 +56,18 @@ public class QualityController {
     	return "quality/incomingQualityRegistration";
     }
     
-    // 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
-    @PostMapping("/updateIncoming")
-    public ResponseEntity<String> updateIncoming(@RequestBody List<Map<String, Object>> items) {
-    	try {
-    		// DB 업데이트 로직
-    		qualityService.updateIncoming(items); // 적절한 서비스 메서드를 호출
-    		
-    		return ResponseEntity.ok("입고 처리 완료");
-    	} catch (Exception e) {
-    		// 예외 처리
-    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("입고 처리 실패");
-    	}
-    }
+	/*
+	 * // 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정
+	 * 
+	 * @PostMapping("/updateIncoming") public ResponseEntity<String>
+	 * updateIncoming(@RequestBody List<Map<String, Object>> items) { try {
+	 * 
+	 * // DB 업데이트 로직 qualityService.updateIncoming(items); // 적절한 서비스 메서드를 호출
+	 * 
+	 * return ResponseEntity.ok("입고 처리 완료"); } catch (Exception e) {
+	 * e.printStackTrace(); // 예외 처리 return
+	 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("입고 처리 실패"); } }
+	 */
 	/*
 	 * // 단건조회 - 입고등록 페이지
 	 * 
@@ -82,5 +78,38 @@ public class QualityController {
 	 * "quality/incomingQualityRegistration"; }
 	 */
     
+    
+	/*
+	 * // 입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status), ins(품질검사 상태) 완료로 넘기기 //
+	 * 수정 : PUT + URI(자원 => emps)
+	 * 
+	 * @PostMapping("inspectionDoneUpdate")
+	 * 
+	 * @ResponseBody // AJAX public Map<String, Object>
+	 * inspectionDoneUpdateAJAXJSON(@RequestBody InspectionVO inspectionVO){ return
+	 * qualityService.inspectionDoneUpdate(inspectionVO); } // 수정 : PUT + URI(자원 =>
+	 * emps)
+	 * 
+	 * @PostMapping("mtlOdDoneUpdate")
+	 * 
+	 * @ResponseBody // AJAX public Map<String, Object>
+	 * mtlOdDoneUpdateAJAXJSON(@RequestBody InspectionVO inspectionVO){ return
+	 * qualityService.mtlOdDoneUpdate(inspectionVO); }
+	 */
+	
+
+	
+//	@PutMapping("emps/{employeeId}")
+//	public Map<String, Object>
+//			empUpdate(@PathVariable Integer employeeId, 
+//							@RequestBody EmpVO empVO) {
+//		empVO.setEmployeeId(employeeId);
+//		
+//		return empService.empUpdate(empVO);
+//	}
+    @PostMapping("updateIncoming")
+    public List<InspectionVO> updateIncoming(@RequestBody List<InspectionVO> inspectionVOs) {
+        return qualityService.updateIncoming(inspectionVOs);
+    }	
     
 }
