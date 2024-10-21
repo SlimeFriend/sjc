@@ -72,8 +72,8 @@
 								<td>[[${wait.eqCode}]]</td>
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.reason}]]</td>
-								<td>[[${wait.startDate}]]</td>
-								<td>[[${wait.endDate}]]</td>
+								<td>[[ ${ #dates.format(wait.startDate, "yyyy년 MM월 dd일" )} ]]</td>
+								<td>[[ ${ #dates.format(wait.endDate, "yyyy년 MM월 dd일" )} ]]</td>
 							</tr>
 						</th:block>
 					</tbody>

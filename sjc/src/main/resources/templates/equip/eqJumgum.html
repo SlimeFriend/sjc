@@ -46,14 +46,15 @@
 						<th:block th:each="wait, sts : ${equipjg}">
 							<tr>
 								<td><div class="form-check form-check-inline">
-  <input class="form-check-input" type="checkbox" id="eqchck" value="option1">
-  <label class="form-check-label" for="eqchck"></label>
-</div></td>
+										<input class="form-check-input" type="checkbox" id="eqchck"
+											value="option1"> <label class="form-check-label"
+											for="eqchck"></label>
+									</div></td>
 								<td>[[${sts.count}]]</td>
 								<td>[[${wait.eqCode}]]</td>
 								<td>[[${wait.eqPeriod}]]</td>
-								<td>[[${wait.eqCkDate}]]</td>
-								<td>[[${wait.eqNextChck}]]</td>
+								<td>[[ ${ #dates.format(wait.eqCkDate, "yyyy년 MM월 dd일" )} ]]</td>
+								<td>[[ ${ #dates.format(wait.eqNextChck, "yyyy년 MM월 dd일" )} ]]</td>
 								<td>[[${wait.eqChckOx}]]</td>
 							</tr>
 						</th:block>
