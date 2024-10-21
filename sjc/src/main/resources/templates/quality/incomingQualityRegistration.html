@@ -31,14 +31,6 @@
                             <input type="date" id="insDate" th:value="${registration.insDate}">
                         </div>
                         <div>
-                            <label for="insSort">품질검사 종류</label> 
-                            <input type="text" id="insSort" th:value="${registration.insSort}">
-                        </div>
-                        <div>
-                            <label for="insTarget">품질검사 대상</label> 
-                            <input type="text" id="insTarget" th:value="${registration.insTarget}">
-                        </div>
-                        <div>
                             <label for="insTypeCode">품질검사 유형코드</label> 
                             <input type="text" id="insTypeCode" th:value="${registration.insTypeCode}">
                         </div>
@@ -76,12 +68,12 @@
                         </div>
                         <div>
                             <label for="userId">관리자 번호</label> 
-                            <input class="form-control" type="text" th:value="${#authentication.principal.authorities[1]}" />
+                            <input class="form-control" id="userId" type="text" th:value="${#authentication.principal.authorities[1]}" />
                             
                         </div>
                         <div>
                             <label for="userName">관리자 이름</label> 
-                            <input class="form-control" type="text" th:value="${#authentication.principal.authorities[2]}" />
+                            <input class="form-control" type="text" id="userName" th:value="${#authentication.principal.authorities[2]}" />
                         </div>
                         <div>
                             <button type="button" id="updateBtn">저장</button>
@@ -330,16 +322,32 @@
 														<table>
 															<thead>
 																<tr>
-																	<th>항목 이름 :</th>
-																	<th>합격 기준값 :</th>
+																	<th>항목 이름 :ins_item.INS_ITEM_NAME</th>
+																	<th>합격 기준값 :ins_item.INS_ITEM_CITERIA</th>
+																	<th>결과 값 :ins_detail.ins_value</th>
+																	<th>개별 판정 :ins_detail.INS_RESULT</th>
 																</tr>
 															</thead>
 															<tbody>
 																<th:block th:each="ttt : ${testList}">
 
 																	<tr>
-																		<td>[[${ttt.insItemName}]]</td>
-																		<td>[[${ttt.insItemCiteria}]]</td>
+																		<td>
+																			<label for="insItemName"></label> 
+                            												<input type="text" id="insItemName" th:value="${ttt.insItemName}">
+                            											</td>
+																		<td>
+																			<label for="insItemCiteria"></label> 
+                            												<input type="text" id="insItemCiteria" th:value="${ttt.insItemCiteria}">
+                            											</td>
+																		<td>
+																			<label for="insValue"></label> 
+                            												<input type="text" id="insValue" th:value="${ttt.insValue}">
+                            											</td>
+																		<td>
+																			<label for="insResult"></label> 
+                            												<input type="text" id="insResult" th:value="${ttt.insResult}">
+                            											</td>
 																	</tr>
 																</th:block>
 															</tbody>
@@ -756,11 +764,7 @@
 			
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
-
-
-
-    function fetchUsers(search = {}) {
+/*     function fetchUsers(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/users?${params.toString()}`;
 
@@ -774,8 +778,53 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    fetchUsers();
-});
+    fetchUsers(); */
+    document.getElementById('updateBtn').addEventListener('click', function() {
+    	console.log("버튼 클릭됨");
+    	var data = [];
+    	const search = {
+        		insCode: document.getElementById('insCode').value,
+        		insStatus: document.getElementById('insStatus').value,
+        		//insDate: document.getElementById('insDate').value,
+        		insTypeCode: document.getElementById('insTypeCode').value,
+        		mtlOdCode: document.getElementById('mtlOdCode').value,
+        		mtlOdQuantity: document.getElementById('mtlOdQuantity').value,
+        		//mtlOdDate: document.getElementById('mtlOdDate').value,
+        		//diliveryDate: document.getElementById('diliveryDate').value,
+        		price: document.getElementById('price').value,
+        		mtCode: document.getElementById('mtCode').value,
+        		cpCode: document.getElementById('cpCode').value,
+        		mtName: document.getElementById('mtName').value,
+        		userId: document.getElementById('userId').value,
+        		userName: document.getElementById('userName').value,
+            };
+    	console.log(search);
+    	data.push(search);
+            //fetchUsers(search);
+    	console.log(data);
+    	
+        $.ajax({
+			url: 'updateInspectionDone',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: function(response){
+				console.log('검사완료 성공', response);
+				
+				location.reload();
+			},
+			
+			error: function(xhr, status, error){
+				console.error('검사완료 실패', error);
+			}
+		
+		})
+		});
+		
+		
+ 	});
+    
+   
 </script>			
 			
 

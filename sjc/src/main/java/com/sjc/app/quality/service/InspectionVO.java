@@ -56,4 +56,9 @@ public class InspectionVO {
 	// InsTypeVO
 		private String insTypeName;
 		
+	// InsDetailVO
+		private String insDetailCode;
+		private String insValue;
+		private String insResult;
+		
 }
