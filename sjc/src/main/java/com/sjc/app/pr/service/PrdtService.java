@@ -20,4 +20,10 @@ public interface PrdtService {
 	
 	// 계획 조건 조회
 	public List<PlanVO> planListS(String status);
+
+	// 관리 리스트 조회
+	public List<PDetailVO> useD();
+	
+	// 관리 필요자재
+	public List<NeedVO> pNeed(String prdCode);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
@@ -94,7 +95,11 @@ public class PrController {
 	
 	// 생산 관리 페이지
 	@GetMapping("pManage")
-	public String pManage() {
+	public String pManage(Model model) {
+		List<PDetailVO> list = prdtService.useD();
+		
+		model.addAttribute("list", list);
+		
 		return "pr/pManage";
 	}
 	
@@ -104,6 +109,14 @@ public class PrController {
 	public List<PDetailVO> pOList(@RequestParam String porderCode) {
 		
 		return prdtService.pDetail(porderCode);
+	}
+	
+	// 생산 관리 필요 자재수
+	@GetMapping("pNeed")
+	@ResponseBody
+	public List<NeedVO> pNeed(@RequestParam String prdCode) {
+		
+		return prdtService.pNeed(prdCode);
 	}
 	
 	

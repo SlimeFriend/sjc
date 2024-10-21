@@ -6,9 +6,130 @@
 	layout:fragment="Content">
 
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-<div class="main-container">
-	<div class="pd-ltr-20">
 
+<title>생산 관리</title>
+</head>
+
+<body>
+    <div class="main-container">
+        <h3>생산 관리</h3>
+        <table id="bl" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>라인코드</th>
+                    <th>목표량</th>
+                    <th>지시량</th>
+                    <th>생산량</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            <tbody id="plan">
+                <th:block th:each="list: ${list}">
+                    <tr th:data-code="${list.prdCode}">
+                        <td th:text="${list.prdName}"></td>
+                        <td th:text="${list.lineCode}"></td>
+                        <td th:text="${list.want}"></td>
+                        <td>[[ ${list.command} ]]</td>
+                        <td>[[ ${list.output} ]]</td>
+                        <td th:text="${list.comm}"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+        <h3>필요 자재</h3>
+        <table id="detail-table" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>자재명</th>
+                    <th>수량</th>
+                </tr>
+            </thead>    
+            <tbody id="dbody"> 
+            </tbody>
+        </table>
+        <h3>진행 공정</h3>
+        <table id="dtable" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                	<th>공정순서</th>
+					<th>공정명</th>
+                    <th>설비명</th>
+                    <th>가동상태</th>
+                    <th>투입량</th>
+                    <th>불량량</th>
+                    <th>생산량</th>
+                    <th>담당자</th>
+                </tr>
+            </thead>    
+            <tbody id="cbody"> 
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+    const plan = document.getElementById('plan');
+    const detailBody = document.getElementById('detail-body');  
+    const be = document.getElementsByName('btn');
+    
+    // 지시 클릭 시 필요 자재와 공정 리스트 보여주는 기능
+    Array.from(plan.children).forEach((pl) => {
+        pl.addEventListener('click', (event) => {
+            const prd = event.currentTarget.dataset.code;
+            let cnt = event.currentTarget.children[3].innerText;
+            
+            let line = event.currentTarget.children[1].innerText;
+            
+
+            
+            console.log(cnt);
+            console.log(prd);
+
+            fetch('/pNeed?prdCode=' + prd)
+                .then(function(resp) {
+                    if (!resp.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return resp.json();
+                })
+                .then(function(resp) {
+                    // 상세 테이블 내용 초기화
+                    dbody.innerHTML = '';
+
+                    // 받아온 데이터로 테이블 행 추가
+                    resp.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.mtName}</td>
+                            <td>${item.quantityRequired * cnt}</td>
+                        `;
+                        dbody.appendChild(row);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Fetch error:', error);
+                });
+            
+            fetch('/pPrc?lineCode=' + line)
+            	.then(function(resp){
+            		if (!resp.ok) {
+            			throw new Error('Network response was not ok');
+            		}
+            		return resp.json();
+            	})
+            	.then(function(resp){
+            		cbody.innerHTML = '';
+            		
+            		resp.forEach(item => {
+            			
+            		})
+            	})
+
+        });
+    });
+    </script>
+</body>
+		
 			
 		
 
