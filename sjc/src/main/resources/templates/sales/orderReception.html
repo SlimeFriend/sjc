@@ -39,12 +39,10 @@
 						<label>요청사항</label>
 						<textarea class="form-control" name="comm" th:field="*{comm}"></textarea>
 					</div>
-					<button class="btn btn-primary" type="submit">제출</button>
+					<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
 
 				</form>
 			</div>
-			<button class="btn btn-primary" onclick="sendCheckedRows()">체크된
-				데이터 확인</button>
 		</div>
 	</div>
 
@@ -80,7 +78,7 @@
 						editor: 'text',
 					}, {
 						header : '수량',
-						name : 'order_quantity',
+						name : 'ordQuantity',
 						align : 'center',
 						editor: 'text',
 					}, ],
@@ -129,10 +127,6 @@
 		        success: function(response) {
 		            alert('데이터가 성공적으로 전송되었습니다.');
 		            console.log(response); // 서버에서 받은 응답 처리
-		        },
-		        error: function(xhr, status, error) {
-		            alert('데이터 전송 중 오류가 발생했습니다.');
-		            console.error(error);
 		        }
 		    });
 		}

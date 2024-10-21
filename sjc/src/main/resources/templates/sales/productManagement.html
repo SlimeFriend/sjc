@@ -19,11 +19,41 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${productManagement}]]*/[];
+			const productLotgridData = /*[[${productManagement}]]*/[];
+			const productGridData = /*[[${products}]]*/[];
 
-			const grid = new tui.Grid({
+			const productGrid = new tui.Grid({
+				el : document.getElementById('selectProduct'),
+				data : productGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'prdCode',
+					align : 'center',
+				}, {
+					header : '단가',
+					name : 'unitPrice',
+					align : 'center',
+				}, {
+					header : '재고',
+					name : 'stcQuantity',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+
+			const productLotgrid = new tui.Grid({
 				el : document.getElementById('showProduct'),
-				data : gridData,
+				data : productLotgridData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
@@ -59,42 +89,4 @@
 			});
 		});
 	</script>
-	
-	<script th:inline="javascript">
-			document.addEventListener('DOMContentLoaded', function() {
-				const gridData = /*[[${products}]]*/[];
-				const grid = new tui.Grid({
-					el : document.getElementById('selectProduct'),
-					data : gridData,
-					scrollX : false,
-					scrollY : false,
-					columns : [ {
-						header : '제품명',
-						name : 'prdName',
-						align : 'center',
-					}, {
-						header : '제품코드',
-						name : 'prdCode',
-						align : 'center',
-					}, {
-						header : '단가',
-						name : 'unitPrice',
-						align : 'center',
-					}, {
-						header : '가격',
-						name : 'price',
-						align : 'center',
-					}, {
-						header : '수량',
-						name : 'orderQuantity',
-						align : 'center',
-					}, ],
-					rowHeaders : [ 'rowNum' ],
-					pageOptions : {
-						useClient : true,
-						perPage : 10
-					}
-				});
-			});
-		</script>
 </div>

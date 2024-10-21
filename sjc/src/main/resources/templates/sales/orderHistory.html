@@ -51,16 +51,18 @@
 					</div>
 				</form>
 			</div>
-			<div id="grid"></div>
+			<div id="gridOrder"></div>
+			<div id="gridOrderDetail" style="opacity : 0"></div>
 		</div>
 	</div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${ord}]]*/[];
+			const gridModalData = /*[[${ordDetail}]]*/[];
 
 			const grid = new tui.Grid({
-				el : document.getElementById('grid'),
+				el : document.getElementById('gridOrder'),
 				data : gridData,
 				scrollX : false,
 				scrollY : false,
@@ -95,39 +97,57 @@
 					perPage : 10
 				}
 			});
-		});
-	</script>
-	
-	<script th:inline="javascript">
-		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${ordDetail}]]*/[];
-
-			const grid = new tui.Grid({
-				el : document.getElementById('grid'),
-				data : gridData,
+			
+			grid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
+			    
+			    if(ordCodeValue) {
+			    	$.ajax({
+			    		url : '/getOrderDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({ordCode : ordCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			gridmodal.resetData(response); 
+			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
+			    	});
+			    }
+			    
+			});
+			
+			
+			const gridmodal = new tui.Grid({
+				el : document.getElementById('gridOrderDetail'),
+				data : gridModalData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
 					header : '주문코드',
-					name : 'ordCode',
+					name : 'ORDCODE',
 					align : 'center',
 				}, {
 					header : '제품명',
-					name : 'prdName',
+					name : 'PRDNAME',
 					align : 'center',
 				}, {
 					header : '제품코드',
-					name : 'prdCode',
+					name : 'PRDCODE',
 					align : 'center',
 				}, {
 					header : '주문량',
-					name : 'ord_quantity',
+					name : 'ORDQUANTITY',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
 				pageOptions : {
 					useClient : true,
-					perPage : 10
+					perPage : 5
 				}
 			});
 		});

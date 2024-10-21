@@ -3,6 +3,7 @@ package com.sjc.app.sales.web;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
@@ -43,7 +45,7 @@ public class SalesController {
 	@PostMapping("/orderReception")
 	public String insertOrder(@RequestBody SalesDTO salesDTO) {
 		
-		 String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + (int)(Math.random() * 1000);
+		String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + (int)(Math.random() * 1000);
 		 
 	    OrderVO orderVO = salesDTO.getOrderVO();
 	    List<ProductVO> productVOList = salesDTO.getProductVO(); 
@@ -52,6 +54,7 @@ public class SalesController {
 	    
 	    System.err.println(orderVO);
 	    System.err.println(productVOList);
+	    System.err.println(salesDTO);
 	    
 	    int orderResult = salesService.insertOrder(orderVO);
 	    
@@ -60,17 +63,26 @@ public class SalesController {
 	            salesService.insertOrderDetail(productVO, orderVO.getOrdCode());
 	        });
 	    }
-
 	    return "redirect:/main";
 	}
 	
 	// 주문내역 페이지
 	@GetMapping("/orderHistory")
 	public String orderHistoryPage(Model model) {
-		List<OrderVO> orderList = salesService.orderHistory();
-		model.addAttribute("ord", orderList);
-		model.addAttribute("ordDetail", orderList);
+		List<OrderVO> order = salesService.order();
+		model.addAttribute("ord", order);
 		return "sales/orderHistory";
+	}
+	
+	// 주문내역 상세페이지
+	@PostMapping("/getOrderDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getOrderDetail(@RequestBody Map<String, String> requestData) {
+		String ordCode = requestData.get("ordCode");
+		
+		List<Map<String, Object>> ordDetail = salesService.orderDetail(ordCode);
+		
+		return ordDetail;
 	}
 	
 
