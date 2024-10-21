@@ -28,4 +28,5 @@ public interface InfoUserMapper {
     
     List<InfoUserVO> selectUserList(Map<String, Object> params);
     int countUserList(Map<String, Object> params);
+    List<InfoUserVO> deleteUsersProcedure(String userIds);
 }

@@ -165,6 +165,12 @@
         </foreach>
     </delete>
 
+    <select id="deleteUsersProcedure" statementType="CALLABLE">
+		{ 
+			CALL delete_users_procedure(#{userIds}) 
+		}
+    </select>
+
     <update id="updateUser" parameterType="InfoUserVO">
         UPDATE 	sjc_user
         SET 	login_id = #{loginId},

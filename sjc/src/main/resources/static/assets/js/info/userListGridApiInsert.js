@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		//data: dataSource,
         scrollX: false,
         scrollY: false,
-        rowHeaders: ['checkbox', 'rowNum'],
+        rowHeaders: ['rowNum'],
         columns: [
             {
                 header: '사용자번호',
@@ -100,6 +100,15 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 header: '아이디',
                 name: 'loginId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',
+      
+            },
+            {
+                header: '비밀번호',
+                name: 'password',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
@@ -342,7 +351,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
     function deleteUsers(userIds) {
-		fetch('/users', {
+		//fetch('/users', {
+		fetch('/usersProcedure', {
 			method: 'DELETE',
 			headers: {
 			  'Content-Type': 'application/json',

@@ -48,6 +48,11 @@ import lombok.RequiredArgsConstructor;
 	        return infoUserService.deleteUsers(userIds);
 	    }
 	    
+	    @DeleteMapping("usersProcedure")
+	    public List<String> deleteUsersProcedure(@RequestBody List<String> userIds) {
+	    	return infoUserService.deleteUsersProcedure(userIds);
+	    }
+	    
 	    @PutMapping("copyUsers")
 	    public List<String> copyUsers(@RequestBody List<String> userIds) {
 	    	return infoUserService.copyUsers(userIds);
