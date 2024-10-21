@@ -13,7 +13,8 @@
             MTL_OD.CP_CODE AS cpCode,
             MTL_OD.USER_ID AS userId,
             MTL_OD.MTL_OD_STATUS AS status,
-            MTL_OD.COMM AS comm
+            MTL_OD.COMM AS comm,
+            MTL_OD.PRICE AS price
         FROM
             MTL_OD  
         LEFT JOIN
@@ -32,7 +33,8 @@
             MTL_OD.MTL_OD_QUANTITY AS quantity,
             MTL_OD.CP_CODE AS cpCode,
             MTL_OD.USER_ID AS userId,
-            MTL_OD.MTL_OD_STATUS AS status  
+            MTL_OD.MTL_OD_STATUS AS status,
+            MTL_OD.PRICE AS price
         FROM
             MTL_OD 
         LEFT JOIN
@@ -41,15 +43,25 @@
             MTL_OD.MTL_OD_CODE = #{orderId}  
     </select>
 
-    <!-- 발주 요청 등록 -->
+    <!-- 발주 요청 등록 (PRICE 계산 추가) -->
     <insert id="insertOrderRequest" parameterType="OrderRequestVO">
         INSERT INTO MTL_OD  
-        (MTL_OD_CODE, MTL_OD_DATE, MT_CODE, MTL_OD_QUANTITY, CP_CODE, USER_ID, COMM)
+        (MTL_OD_CODE, MTL_OD_DATE, MT_CODE, MTL_OD_QUANTITY, CP_CODE, USER_ID, COMM, DILIVERY_DATE, PRICE)
         VALUES
-        ('MTL' || TO_CHAR(SYSDATE, 'YYMMDD') || LPAD(MTL_OD_SEQ.NEXTVAL, 3, '0'), SYSDATE, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
+        (
+            'MTL' || TO_CHAR(SYSDATE, 'YYMMDD') || LPAD(MTL_OD_SEQ.NEXTVAL, 3, '0'),
+            SYSDATE,
+            #{mtCode},
+            #{quantity},
+            #{cpCode},
+            #{userId},
+            #{comm},
+            SYSDATE + 7,
+            (SELECT UNIT_PRICE FROM MT WHERE MT.MT_CODE = #{mtCode}) * #{quantity}
+        )
     </insert>
 
-    <!-- 발주 요청 수정 (동적 SQL 적용) -->
+    <!-- 발주 요청 수정 (PRICE 자동 계산 추가) -->
     <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
         UPDATE MTL_OD  
         <set>
@@ -57,6 +69,10 @@
             <if test="quantity != null">MTL_OD_QUANTITY = #{quantity},</if>
             <if test="cpCode != null">CP_CODE = #{cpCode},</if>
             <if test="userId != null">USER_ID = #{userId},</if>
+            <!-- 자재 단가와 수량에 따른 PRICE 자동 계산 -->
+            <if test="mtCode != null and quantity != null">
+                PRICE = (SELECT UNIT_PRICE FROM MT WHERE MT.MT_CODE = #{mtCode}) * #{quantity},
+            </if>
         </set>
         WHERE
             MTL_OD_CODE = #{orderRequestCode}  

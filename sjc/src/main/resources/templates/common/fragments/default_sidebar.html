@@ -3,9 +3,11 @@
 <th:block th:fragment="defaultSidebar">
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="/main">
-				<img th:src="@{/assets/vendors/images/deskapp-logo.svg}" alt="" class="dark-logo">
-				<img th:src="@{/assets/vendors/images/logolee.jpg}" alt="" class="light-logo">
+			<a href="/main"> <img
+				th:src="@{/assets/vendors/images/deskapp-logo.svg}" alt=""
+				class="dark-logo"> <img
+				th:src="@{/assets/vendors/images/logolee.jpg}" alt=""
+				class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
@@ -14,10 +16,10 @@
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-house-1"></span><span class="mtext">영업</span>
-						</a>
+					<li class="dropdown"><a href="javascript:;"
+						class="dropdown-toggle"> <span class="micon dw dw-house-1"></span><span
+							class="mtext">영업</span>
+					</a>
 						<ul class="submenu">
 
 
@@ -28,12 +30,11 @@
 							<li><a th:href="@{/productOut}">완제풀 출고</a></li>
 							<li><a th:href="@{/inoutHistory}">입/출고 내역</a></li>
 
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit2"></span><span class="mtext">생산</span>
-						</a>
+						</ul></li>
+					<li class="dropdown"><a href="javascript:;"
+						class="dropdown-toggle"> <span class="micon dw dw-edit2"></span><span
+							class="mtext">생산</span>
+					</a>
 						<ul class="submenu">
 
 							<li><a href="planCreate">생산 계획 생성</a></li>
@@ -43,41 +44,38 @@
 							<li><a href="pManage">생산 관리</a></li>
 							<li><a href="pResult">생산 관리 실적</a></li>
 
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-library"></span><span class="mtext">자재</span>
-						</a>
+						</ul></li>
+					<li class="dropdown"><a href="javascript:;"
+						class="dropdown-toggle"> <span class="micon dw dw-library"></span><span
+							class="mtext">자재</span>
+					</a>
 						<ul class="submenu">
-							<li><a th:href="@{/productionPlanList}">생산계획별 발주확인</a></li>	
+							<li><a th:href="@{/productionPlanList}">생산계획별 발주확인</a></li>
 						</ul>
-					    <ul class="submenu">
+						<ul class="submenu">
 							<li><a th:href="@{/orderRequest}">발주 등록, 관리</a></li>
 						</ul>
-					    <ul class="submenu">
+						<ul class="submenu">
 							<li><a th:href="@{/mtInList}">입고 관리</a></li>
 						</ul>
 						<ul class="submenu">
 							<li><a href="">출고 관리</a></li>
 						</ul>
 						<ul class="submenu">
-							<li><a href="">안전재고 관리</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-library"></span><span class="mtext">품질</span>
-						</a>
+							<li><a th:href="@{/stock}">전체재고 관리</a></li>
+						</ul></li>
+					<li class="dropdown"><a href="javascript:;"
+						class="dropdown-toggle"> <span class="micon dw dw-library"></span><span
+							class="mtext">품질</span>
+					</a>
 						<ul class="submenu">
 							<li><a href="/incomingQualityWaitInfo">입고 검사 대기 목록</a></li>
 							<li><a href="/incomingQualityDoneInfo">입고 검사 완료 목록</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-apartment"></span><span class="mtext">설비</span>
-						</a>
+						</ul></li>
+					<li class="dropdown"><a href="javascript:;"
+						class="dropdown-toggle"> <span class="micon dw dw-apartment"></span><span
+							class="mtext">설비</span>
+					</a>
 						<ul class="submenu">
 							<li><a th:href="@{eqInsert}">설비 등록</a></li>
 							<li><a th:href="@{eqList}">설비 목록</a></li>
@@ -85,12 +83,10 @@
 							<li><a th:href="@{eqChckList}">설비 비가동 관리</a></li>
 							<li><a th:href="@{jgList}">설비 점검</a></li>
 							<li><a href="">실시간 모니터링</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit-2"></span><span class="mtext">기준정보</span>
-						</a>
+						</ul></li>
+					<li><a href="javascript:;" class="dropdown-toggle"> <span
+							class="micon dw dw-edit-2"></span><span class="mtext">기준정보</span>
+					</a>
 						<ul class="submenu">
 							<li><a th:href="@{infoUserListGridApiInsert}">사용자관리</a></li>
 							<li><a th:href="@{infoPrdListGridFetch}">제품관리</a></li>
@@ -99,8 +95,7 @@
 							<li><a th:href="@{infoBomListGridFetch}">BOM관리</a></li>
 							<li><a th:href="@{infoLineListGridFetch}">라인관리</a></li>
 							<li><a th:href="@{infoProcessListGridFetch}">공정관리</a></li>
-						</ul>
-					</li>
+						</ul></li>
 				</ul>
 			</div>
 		</div>

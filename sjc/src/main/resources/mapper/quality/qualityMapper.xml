@@ -11,9 +11,10 @@
                , cp_code
                , user_id
                , mtl_od_status
-		FROM copy_mtl_od
+
+		FROM mtl_od
 		WHERE mtl_od_status = '품질검사대기'
-		ORDER BY MTL_OD_CODE
+
 	</select>
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
 		SELECT i.ins_date
