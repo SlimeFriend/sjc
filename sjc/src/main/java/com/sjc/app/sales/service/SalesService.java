@@ -7,6 +7,7 @@ public interface SalesService {
 	
 	// 주문접수
     public int insertOrder(OrderVO orderVO);
+    public int getOrdCode();
     public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
 	public List<OrderVO> order();
