@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.service.InsItemVO;
@@ -108,6 +109,7 @@ public class QualityController {
 //		return empService.empUpdate(empVO);
 //	}
     @PostMapping("updateIncoming")
+    @ResponseBody
     public List<InspectionVO> updateIncoming(@RequestBody List<InspectionVO> inspectionVOs) {
         return qualityService.updateIncoming(inspectionVOs);
     }	
