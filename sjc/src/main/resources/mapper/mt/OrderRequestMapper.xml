@@ -5,80 +5,73 @@
     <!-- 모든 발주 요청 목록 조회 -->
     <select id="getAllOrderRequests" resultType="com.sjc.app.mt.service.OrderRequestVO">
         SELECT
-            OD_REQUEST.ORDER_REQUEST_CODE AS orderRequestCode,
-            OD_REQUEST.ORDER_DATE AS orderDate,
-            OD_REQUEST.MT_CODE AS mtCode,
+            MTL_OD.MTL_OD_CODE AS orderRequestCode,  
+            MTL_OD.MTL_OD_DATE AS orderDate,
+            MTL_OD.MT_CODE AS mtCode,
             MT.MT_NAME AS mtName,
-            OD_REQUEST.QUANTITY AS quantity,
-            OD_REQUEST.CP_CODE AS cpCode,
-            OD_REQUEST.USER_ID AS userId,
-            OD_REQUEST.COMM AS comm,
-            MTL_OD.MTL_OD_STATUS AS status  <!-- 자재발주 상태 추가 -->
+            MTL_OD.MTL_OD_QUANTITY AS quantity,
+            MTL_OD.CP_CODE AS cpCode,
+            MTL_OD.USER_ID AS userId,
+            MTL_OD.MTL_OD_STATUS AS status,
+            MTL_OD.COMM AS comm
         FROM
-            OD_REQUEST
+            MTL_OD  
         LEFT JOIN
-            MT ON OD_REQUEST.MT_CODE = MT.MT_CODE
-        LEFT JOIN
-            MTL_OD ON OD_REQUEST.MT_CODE = MTL_OD.MT_CODE  <!-- MTL_OD 테이블과 조인 -->
+            MT ON MTL_OD.MT_CODE = MT.MT_CODE  
         ORDER BY
-            ORDER_REQUEST_CODE
+            MTL_OD.MTL_OD_CODE
     </select>
 
     <!-- 특정 발주 요청 조회 -->
     <select id="getOrderRequestById" parameterType="String" resultType="com.sjc.app.mt.service.OrderRequestVO">
         SELECT
-            OD_REQUEST.ORDER_REQUEST_CODE AS orderRequestCode,
-            OD_REQUEST.ORDER_DATE AS orderDate,
-            OD_REQUEST.MT_CODE AS mtCode,
-            MT.MT_NAME AS mtName,  
-            OD_REQUEST.QUANTITY AS quantity,
-            OD_REQUEST.CP_CODE AS cpCode,
-            OD_REQUEST.USER_ID AS userId,
-            OD_REQUEST.COMM AS comm,
+            MTL_OD.MTL_OD_CODE AS orderRequestCode,  
+            MTL_OD.MTL_OD_DATE AS orderDate,
+            MTL_OD.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,
+            MTL_OD.MTL_OD_QUANTITY AS quantity,
+            MTL_OD.CP_CODE AS cpCode,
+            MTL_OD.USER_ID AS userId,
             MTL_OD.MTL_OD_STATUS AS status  
         FROM
-            OD_REQUEST
+            MTL_OD 
         LEFT JOIN
-            MT ON OD_REQUEST.MT_CODE = MT.MT_CODE  
-        LEFT JOIN
-            MTL_OD ON OD_REQUEST.MT_CODE = MTL_OD.MT_CODE  
+            MT ON MTL_OD.MT_CODE = MT.MT_CODE 
         WHERE
-            OD_REQUEST.ORDER_REQUEST_CODE = #{orderId} 
+            MTL_OD.MTL_OD_CODE = #{orderId}  
     </select>
 
     <!-- 발주 요청 등록 -->
     <insert id="insertOrderRequest" parameterType="OrderRequestVO">
-        INSERT INTO OD_REQUEST
-        (ORDER_REQUEST_CODE, ORDER_DATE, MT_CODE, QUANTITY, CP_CODE, USER_ID, COMM)
+        INSERT INTO MTL_OD  
+        (MTL_OD_CODE, MTL_OD_DATE, MT_CODE, MTL_OD_QUANTITY, CP_CODE, USER_ID, COMM)
         VALUES
-        (ORDER_REQUEST_SEQ.NEXTVAL, SYSDATE, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
+        ('MTL' || TO_CHAR(SYSDATE, 'YYMMDD') || LPAD(MTL_OD_SEQ.NEXTVAL, 3, '0'), SYSDATE, #{mtCode}, #{quantity}, #{cpCode}, #{userId}, #{comm})
     </insert>
 
     <!-- 발주 요청 수정 (동적 SQL 적용) -->
     <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
-        UPDATE OD_REQUEST
+        UPDATE MTL_OD  
         <set>
             <if test="mtCode != null">MT_CODE = #{mtCode},</if>
-            <if test="quantity != null">QUANTITY = #{quantity},</if>
-            <if test="comm != null">COMM = #{comm},</if>
+            <if test="quantity != null">MTL_OD_QUANTITY = #{quantity},</if>
             <if test="cpCode != null">CP_CODE = #{cpCode},</if>
             <if test="userId != null">USER_ID = #{userId},</if>
         </set>
         WHERE
-            ORDER_REQUEST_CODE = #{orderRequestCode}
+            MTL_OD_CODE = #{orderRequestCode}  
     </update>
 
     <!-- 발주 요청 삭제 -->
     <delete id="deleteOrderRequest" parameterType="String">
-        DELETE FROM OD_REQUEST WHERE ORDER_REQUEST_CODE = #{orderRequestCode}
+        DELETE FROM MTL_OD WHERE MTL_OD_CODE = #{orderRequestCode} 
     </delete>
 
     <!-- 자재 상태 업데이트 -->
     <update id="updateOrderRequestStatus">
         UPDATE MTL_OD 
         SET MTL_OD_STATUS = #{status}
-        WHERE MTL_OD_CODE = #{orderRequestCode}
+        WHERE MTL_OD_CODE = #{orderRequestCode}  
     </update>
-
 
 </mapper>

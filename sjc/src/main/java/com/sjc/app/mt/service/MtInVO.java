@@ -17,4 +17,5 @@ private String mtCode; //자재 코드
 private String cpCode; // 업체 코드
 private String comm; //비고
 private String lotNo; //LOT번호
+private String mtName;// 자재이름
 }
