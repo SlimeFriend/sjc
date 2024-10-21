@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.StockMapper">
+
+	<!-- 전체 자재 목록 조회 -->
+	<select id="getAllMaterials" resultType="com.sjc.app.mt.service.MtVO">
+		SELECT
+			MT_CODE AS mtCode,
+			MT_NAME AS mtName,
+			MATERIAL_TYPE AS materialType,
+			SPECIFICATION AS specification,
+			UNIT AS unit,
+			UNIT_PRICE AS unitPrice,
+			SAFETY_STOCK AS safetyStock,
+			COMM AS comm,
+			STC_CODE AS stcCode,
+			CURRENT_STC AS currentStc
+		FROM MT
+	</select>
+
+	<!-- 자재 코드로 자재 정보 조회 -->
+	<select id="getMaterialByCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
+		SELECT
+			MT_CODE AS mtCode,
+			MT_NAME AS mtName,
+			SAFETY_STOCK AS safetyStock,
+			CURRENT_STC AS currentStc
+		FROM MT
+		WHERE MT_CODE = #{mtCode}
+	</select>
+
+	<!-- 안전재고 업데이트 -->
+	<update id="updateSafetyStock">
+		UPDATE MT
+		SET SAFETY_STOCK = SAFETY_STOCK + #{quantity}
+		WHERE MT_CODE = #{mtCode}
+	</update>
+
+	<!-- 현재 재고 업데이트 -->
+	<update id="updateCurrentStock">
+		UPDATE MT
+		SET CURRENT_STC = CURRENT_STC + #{quantity}
+		WHERE MT_CODE = #{mtCode}
+	</update>
+	
+	<!-- 자재 구분 업데이트 -->
+	<update id="updateMaterialType">
+		UPDATE MT
+		SET MATERIAL_TYPE = #{materialType}
+		WHERE MT_CODE = #{mtCode}
+	</update>
+
+</mapper>

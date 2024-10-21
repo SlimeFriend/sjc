@@ -1,95 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>입고 및 발주 자재 목록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>입고 목록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>입고 목록</h1>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>LOT번호</th>
-                        <th>발주코드</th>
-                        <th>자재코드</th>
-                        <th>자재명</th>
-                        <th>입고수량</th>
-                        <th>입고일</th>
-                        <th>유통기한</th>
-                        <th>작업</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 입고 목록이 없을 경우 표시 -->
-                    <tr th:if="${#lists.isEmpty(mtInList)}">
-                        <td colspan="8" class="text-center">입고된 자재가 없습니다.</td>
-                    </tr>
-                    <!-- 입고 목록이 있을 경우 표시 -->
-                    <tr th:each="mtIn : ${mtInList}">
-                        <td th:text="${mtIn.lotNo != null ? mtIn.lotNo : '-'}">LOT번호</td>
-                        <td th:text="${mtIn.mtlOdCode != null ? mtIn.mtlOdCode : '-'}">발주코드</td>
-                        <td th:text="${mtIn.mtCode != null ? mtIn.mtCode : '-'}">자재코드</td>
-                        <td th:text="${mtIn.mtName != null ? mtIn.mtName : '-'}">자재명</td>
-                        <td th:text="${mtIn.inquantity != null ? mtIn.inquantity : '-'}">입고수량</td>
-                        <td th:text="${mtIn.inputDate != null ? #dates.format(mtIn.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
-                        <td th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
-                        <td>
-                            <form th:action="@{/mtIn/delete}" method="post" style="display: inline;">
-                                <input type="hidden" name="inCode" th:value="${mtIn.inCode}">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h1>발주 자재 목록 (검사 완료)</h1>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>발주코드</th>
-                        <th>자재코드</th>
-                        <th>자재명</th>
-                        <th>입고수량</th>
-                        <th>입고일</th>
-                        <th>작업</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 검사 완료된 발주 자재 목록이 없을 경우 표시 -->
-                    <tr th:if="${#lists.isEmpty(completedMaterials)}">
-                        <td colspan="6" class="text-center">검사 완료된 발주 자재가 없습니다.</td>
-                    </tr>
-                    <!-- 검사 완료된 발주 자재 목록이 있을 경우 표시 -->
-                    <tr th:each="material : ${completedMaterials}">
-                        <td th:text="${material.mtlOdCode != null ? material.mtlOdCode : '-'}">발주코드</td>
-                        <td th:text="${material.mtCode != null ? material.mtCode : '-'}">자재코드</td>
-                        <td th:text="${material.mtName != null ? material.mtName : '-'}">자재명</td>
-                        <td th:text="${material.inquantity != null ? material.inquantity : '-'}">입고수량</td>
-                        <td th:text="${material.inputDate != null ? #dates.format(material.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
-                        <td>
-                            <form th:action="@{/mtIn}" method="post">
-                                <input type="hidden" name="mtlOdCode" th:value="${material.mtlOdCode}">
-                                <input type="hidden" name="mtCode" th:value="${material.mtCode}">
-                                <input type="hidden" name="cpCode" th:value="${material.cpCode}">
-                                <input type="hidden" name="inquantity" th:value="${material.inquantity}">
-                                <input type="hidden" name="inputDate" th:value="${material.inputDate != null ? #dates.format(material.inputDate, 'yyyy-MM-dd') : ''}">
-                                <input type="hidden" name="ed" value="">
-                                <input type="hidden" name="lotNo" value="">
-                                <button type="submit" class="btn btn-primary">입고 등록</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="main-container">
+		<div class="container">
+			<h1>입고 목록</h1>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>LOT번호</th>
+						<th>발주코드</th>
+						<th>자재코드</th>
+						<th>자재명</th>
+						<th>입고수량</th>
+						<th>입고일</th>
+						<th>유통기한</th>
+						<th>작업</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 입고 목록이 없을 경우 표시 -->
+					<tr th:if="${#lists.isEmpty(mtInList)}">
+						<td colspan="8" class="text-center">입고된 자재가 없습니다.</td>
+					</tr>
+					<!-- 입고 목록이 있을 경우 표시 -->
+					<tr th:each="mtIn : ${mtInList}">
+						<td th:text="${mtIn.lotNo != null ? mtIn.lotNo : '-'}">LOT번호</td>
+						<td th:text="${mtIn.mtlOdCode != null ? mtIn.mtlOdCode : '-'}">발주코드</td>
+						<td th:text="${mtIn.mtCode != null ? mtIn.mtCode : '-'}">자재코드</td>
+						<td th:text="${mtIn.mtName != null ? mtIn.mtName : '-'}">자재명</td>
+						<td th:text="${mtIn.inquantity != null ? mtIn.inquantity : '-'}">입고수량</td>
+						<td
+							th:text="${mtIn.inputDate != null ? #dates.format(mtIn.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
+						<td
+							th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
+						<td>
+							<form th:action="@{/mtIn/delete}" method="post"
+								style="display: inline;">
+								<input type="hidden" name="inCode" th:value="${mtIn.inCode}">
+								<button type="submit" class="btn btn-danger"
+									onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </body>
 </html>
