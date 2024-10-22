@@ -80,6 +80,11 @@ public class InfoUserController {
 		return "info/userListGrid";
 	}
 	
+	@GetMapping("infoUserList")
+	public String infoUserList() {
+		return "info/userList";
+	}
+	
 	
 //	// 단건조회 : Get => QueryString(커맨드 객체 or @RequestParam), userloyeeId
 //	@GetMapping("userInfo") // userInfo?userloyeeId=value
