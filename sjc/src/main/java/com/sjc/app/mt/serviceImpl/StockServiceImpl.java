@@ -51,4 +51,13 @@ public class StockServiceImpl implements StockService {
     public Integer getTotalQuantityByLotNo(String mtCode) {
         return stockMapper.getTotalQuantityByLotNo(mtCode); // 로트번호별 자재 수량 합계 조회
     }
+
+    // 로트번호별 자재 수량의 합계를 현재 재고에 반영하는 기능
+    @Override
+    public void updateStockWithLotQuantities(String mtCode) {
+        Integer totalQuantity = stockMapper.getTotalQuantityByLotNo(mtCode);
+        if (totalQuantity != null) {
+            stockMapper.updateCurrentStock(mtCode, totalQuantity); // 현재 재고 업데이트
+        }
+    }
 }

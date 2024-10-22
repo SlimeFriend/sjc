@@ -26,6 +26,8 @@ public class StockController {
         // 전체 자재 목록을 가져와 모델에 추가
         List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials);
+        model.addAttribute("lotDetails", null); // 로트 정보 초기화
+        model.addAttribute("totalQuantity", 0); // 총 수량 초기화
         return "mt/stockPage"; // 재고 페이지로 이동
     }
 
@@ -41,6 +43,8 @@ public class StockController {
         List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials); 
         model.addAttribute("message", "자재 구분이 성공적으로 업데이트되었습니다.");
+        model.addAttribute("lotDetails", null); // 로트 정보 초기화
+        model.addAttribute("totalQuantity", 0); // 총 수량 초기화
         return "mt/stockPage"; 
     }
 
@@ -59,18 +63,31 @@ public class StockController {
         List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials);
         model.addAttribute("message", "품질검사 완료된 자재의 수량이 성공적으로 현재 재고에 추가되었습니다.");
+        model.addAttribute("lotDetails", null); // 로트 정보 초기화
+        model.addAttribute("totalQuantity", 0); // 총 수량 초기화
         
         return "mt/stockPage";
     }
 
- // 자재 코드로 로트번호별 자재 수량을 조회하는 기능
+    // 로트번호별 자재 수량 조회
     @GetMapping("/stock/{mtCode}/lots")
     public String getMaterialsByLotNo(@PathVariable String mtCode, Model model) {
         List<MtInVO> lotDetails = stockService.getMaterialsByLotNo(mtCode);
         Integer totalQuantity = stockService.getTotalQuantityByLotNo(mtCode);
 
-        model.addAttribute("lotDetails", lotDetails);
-        model.addAttribute("totalQuantity", totalQuantity);
-        return "mt/lotDetailsPage"; 
+        // null이나 빈 리스트 처리
+        if (lotDetails.isEmpty() || totalQuantity == null) {
+            model.addAttribute("lotDetails", null);
+            model.addAttribute("totalQuantity", 0);
+        } else {
+            model.addAttribute("lotDetails", lotDetails);
+            model.addAttribute("totalQuantity", totalQuantity);
+        }
+
+        // 재고 목록을 가져와서 모델에 추가
+        List<MtVO> materials = stockService.getAllMaterials();
+        model.addAttribute("materials", materials);
+
+        return "mt/stockPage"; // 재고 페이지로 이동
     }
 }
