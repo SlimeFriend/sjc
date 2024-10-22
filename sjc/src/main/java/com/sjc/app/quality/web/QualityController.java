@@ -118,22 +118,42 @@ public class QualityController {
 //        return qualityService.updateIncoming(inspectionVOs);
 //    }	
     
-        @PostMapping("updateInspectionDone")
+    // 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
+    @PostMapping("updateInspectionDone")
     @ResponseBody
     public List<InspectionVO> updateinspectionDone(@RequestBody List<InspectionVO> inspectionVOs) {
     	return qualityService.inspectionDoneUpdate(inspectionVOs);
     }	
+    // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
+    // 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+    // 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
     @PostMapping("updateIncoming")
     @ResponseBody
     public List<InspectionVO> updateMtlOdDone(@RequestBody List<InspectionVO> inspectionVOs) {
-    	return qualityService.mtlOdDoneUpdate(inspectionVOs);
+    	return qualityService.mtlOdMtOdUpdate(inspectionVOs);
+
     }	
+//    @PostMapping("updateIncoming")
+//    @ResponseBody
+//    public List<InspectionVO> updateMtlOdDone(@RequestBody List<InspectionVO> inspectionVOs) {
+//    	return qualityService.mtlOdMtOdUpdate(inspectionVOs);
+//    }	
+    // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
     @PostMapping("updateMtlOdBack")
     @ResponseBody
     public List<InspectionVO> updateMtlOdBack(@RequestBody List<InspectionVO> inspectionVOs) {
     	return qualityService.mtlOdBackUpdate(inspectionVOs);
-    }	
+    }
     
+//    // 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+//    @PostMapping("updateIncoming")
+//    @ResponseBody
+//    public String insertMtIn(@RequestBody InspectionVO inspectionVOs) {
+//    	return qualityService.mtInInsert(inspectionVOs);
+//    	
+//    	
+//    }	
+//    
 
     
 }

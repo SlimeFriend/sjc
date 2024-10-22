@@ -5,6 +5,7 @@
     <!-- 품질검사 완료된 자재만 입고 목록에 포함 -->
     <select id="getCompletedMaterials" resultType="com.sjc.app.mt.service.MtInVO">
         SELECT
+
             MT_IN.IN_CODE AS inCode,
             MT_IN.MT_CODE AS mtCode,
             (SELECT MT_NAME FROM MT WHERE MT.MT_CODE = MT_IN.MT_CODE) AS mtName, 

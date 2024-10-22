@@ -105,6 +105,8 @@
 										<th>합격수</th>
 										<th>합격여부</th>
 										<th>자재발주코드</th>
+										<th>자재코드</th>
+										<th>직원번호</th>
 									</tr>
 								</thead>
 <tbody>
@@ -121,6 +123,8 @@
             <td>[[${done.numberOfPasses}]]</td>
             <td>[[${done.totalPass}]]</td>
             <td>[[${done.mtlOdCode}]]</td>
+            <td>[[${done.mtCode}]]</td>
+            <td>[[${done.userId}]]</td>
         </tr>
     </th:block>
 </tbody>
@@ -321,15 +325,17 @@
 
 			var item = {
 			//insDate : td.eq(1).text(),
-			//insCode : td.eq(2).text(),
+			insCode : td.eq(2).text(),
 			//insStatus : td.eq(3).text(),
-			//cpCode : td.eq(4).text(),
+			cpCode : td.eq(4).text(),
 			//mtName : td.eq(5).text(),
 			//specification : td.eq(6).text(),
 			//numberOfTests : td.eq(7).text(),
-			//numberOfPasses : td.eq(8).text(),
+			numberOfPasses : td.eq(8).text(),
 			//totalPass : td.eq(9).text(),
-			mtlOdCode : td.eq(10).text()
+			mtlOdCode : td.eq(10).text(),
+			mtCode : td.eq(11).text(),
+			userId : td.eq(12).text()
 			};
 			
 			console.log(item);
@@ -354,6 +360,17 @@
 			}
 		
 		})
+		
+		function getMtInData(){
+			let dataAry = data.serializeArray();
+			console.log(dataAry);
+			
+			let dataObj = {};
+			$.each(dataAry, function(idx, tag){
+				dataObj[tag.name] = tag.value;
+			});
+			return dataObj;
+		}
  	});
 		
 		

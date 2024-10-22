@@ -1,7 +1,6 @@
 package com.sjc.app.quality.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
 
@@ -32,12 +31,18 @@ public interface QualityService {
 	//public Map<String, Object> mtlOdDoneUpdate(InspectionVO inspectionVO);
 	//public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVO);
 	//public List<InspectionVO> mtlOdDoneUpdate(List<InspectionVO> inspectionVO);
+	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs);
-	public List<InspectionVO> mtlOdDoneUpdate(List<InspectionVO> inspectionVOs);
-
+	
+	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
+	public List<InspectionVO> mtlOdMtOdUpdate(List<InspectionVO> inspectionVOs);
+	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs);
+//	// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+//	public List<InspectionVO> mtInSelect(List<InspectionVO> inspectionVOs);
 
 
+	
 
 
 }
