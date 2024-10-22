@@ -57,11 +57,12 @@ public class EqController {
 		System.err.print(eqVO);
 		if (eid > -1) {
 			// 정상적으로 등록된 경우
-			url = "redirect:equipInfo?eno=" + eid;
+//			url = "redirect:equipInfo?eqCode=" + eid;
+			url = "redirect:eqList";
 			// redirect: 가 가능한 경우는 GetMapping 경우밖에 없다
 		} else {
 			// 등록되지 않은 경우
-			url = "redirect:eqList";
+			url = "redirect:eqInsert";
 		}
 		return url;
 	} // end
