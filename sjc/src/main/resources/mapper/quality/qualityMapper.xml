@@ -27,12 +27,13 @@
                , i.number_of_passes
                , i.total_pass
                , o.mtl_od_code
-		FROM copy_mtl_od o
+		FROM mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
-		    JOIN copy_mt m
+		    JOIN mt m
 		        ON o.mt_code = m.mt_code
 		WHERE i.ins_status = '검사 완료'
+		and     o.MTL_OD_STATUS not in ('반품', '품질검사 완료')
 	</select>
 <!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
@@ -79,6 +80,7 @@
 		        ON o.mt_code = m.mt_code
 		 WHERE
 		 	o.mtl_od_code = #{mtlOdCode}
+		 
 	</select>
 	
 	<select id="selectQualityTestInfo" resultType="InspectionVO">
@@ -104,25 +106,6 @@
                                 )
 	</select>
 
-	<!-- 입고검사완료페이지(임의로 만든거) - 값 입고처리 버튼 누르면 수정 -->
-	<update id="updateIncoming" parameterType="map">
-		UPDATE inspection i, copy_mt m
-		SET i.ins_status = #{insStatus},
-		o.cp_code = #{cpCode},
-		m.mt_name = #{mtName},
-		m.specification = #{specification},
-		i.number_of_tests = #{numberOfTests},
-		i.number_of_passes = #{numberOfPasses},
-		i.total_pass = #{totalPass}
-		FROM mtl_od o
-		JOIN inspection i
-		ON o.mtl_od_code = i.mtl_od_code
-		JOIN copy_mt m
-		ON o.mt_code = m.mt_code
-		WHERE i.ins_code = #{insCode}
-	</update>
-
-
 
 <!--   입고검사완료페이지 - 값 입고처리 버튼 누르면 ins(품질검사 상태) 완료로 넘기기 -->
 	<update id="updateInspectionDone" parameterType="InspectionVO">
@@ -132,13 +115,13 @@
 	</update>
 <!--  입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status)완료로 넘기기 -->
 	<update id="updateMtlOdDone" parameterType="InspectionVO">
-		UPDATE copy_mtl_od
+		UPDATE mtl_od
 		SET mtl_od_status = '품질검사 완료'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
 <!--  입고검사완료페이지 - 값 반품처리 버튼 누르면 자재발주상태(mtl_od/ status)반품으로 넘기기 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
-		UPDATE copy_mtl_od
+		UPDATE mtl_od
 		SET mtl_od_status = '반품'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
