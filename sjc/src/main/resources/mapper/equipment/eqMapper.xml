@@ -29,11 +29,15 @@
 
     <!-- 등록 -->
 <insert id="insertEqInfo" parameterType="EqVO">
-	<selectKey keyProperty="eqMdno"
+	<selectKey keyProperty="eqCode"
 			   resultType="Integer"
 			   order="BEFORE">
-		SELECT NVL(MAX(eqMdno), 1000) +  1
-        FROM   eq
+select
+    case
+        when (max(substr(eq_code, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('O' || to_char(max(substr(eq_code, 2, 13)) + 1))
+        else ('O' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
+    end    eq_code
+from    eq
     </selectKey>
   	INSERT INTO eq
   				(
