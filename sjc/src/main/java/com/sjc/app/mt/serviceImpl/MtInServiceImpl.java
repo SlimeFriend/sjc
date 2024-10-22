@@ -13,11 +13,7 @@ public class MtInServiceImpl implements MtInService {
     @Autowired
     private MtInMapper mtInMapper;
 
-    @Override
-    public List<MtInVO> getCompletedMaterials() {
-        return mtInMapper.getCompletedMaterials();
-    }
-
+  
     @Override
     public List<MtInVO> getMtInList() {
         return mtInMapper.getMtInList();

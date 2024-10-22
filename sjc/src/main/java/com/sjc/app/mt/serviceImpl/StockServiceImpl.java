@@ -26,10 +26,14 @@ public class StockServiceImpl implements StockService {
     public boolean moveSafetyStockToCurrent(String mtCode, Integer quantity) {
         // 현재 안전재고와 현재 재고 확인
         MtVO material = stockMapper.getMaterialByCode(mtCode);
+        
         if (material != null && material.getSafetyStock() != null && material.getSafetyStock() >= quantity) {
-            // 안전재고에서 해당 수량을 빼고 현재 재고에 더함
+        	//자재조건이 DB에 있는지 확인 없을 시 false  + 안전재고값이 있는지 확인 없을 시 false + 안전재고보다 현재수량이 같거나 많으면 false 모두 충족시키기 
+           
             stockMapper.updateSafetyStock(mtCode, -quantity); // 안전재고 감소
+            //mtCode에 있는 안전재고를 옮기려는 수량만큼 - 처리 
             stockMapper.updateCurrentStock(mtCode, quantity); // 현재 재고 증가
+            // mtCode에 있는 현재재고를 받으려는 수량만큼 + 처리
             return true;
         } else {
             return false; // 안전재고가 부족하거나 자재 정보가 없을 경우 실패

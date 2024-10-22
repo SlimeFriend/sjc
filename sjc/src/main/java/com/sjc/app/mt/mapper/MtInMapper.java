@@ -5,8 +5,7 @@ import com.sjc.app.mt.service.MtInVO;
 
 public interface MtInMapper {
 
-    // 검사 완료된 자재 목록 가져오기
-    List<MtInVO> getCompletedMaterials();
+
 
     // 입고 목록 조회
     List<MtInVO> getMtInList();
