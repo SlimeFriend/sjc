@@ -74,7 +74,7 @@
     const plan = document.getElementById('plan');
     const detailBody = document.getElementById('detail-body');  
     const sBtn = document.getElementById('sBtn');
-    var today = new Date();
+    let today = new Date();
     
    
     
@@ -163,8 +163,25 @@
     
     sBtn.addEventListener('click', (event) => {
     	
+    	let cb = document.getElementById("cbody");
     	
-    	
+    	fetch('insertR', {
+    	    method: 'post',
+    	    body: JSON.stringify({
+    	        
+    	        
+    	    })
+    	  })
+    	  .then(res => {
+    	    if (res.status === 200) {
+    	        alert("저장 완료");
+    	    } else if (res.status === 403) {
+    	        return res.json();
+    	    }
+    	  })
+    	  .then(res => {
+    	    console.log("에러 메시지 ->", res.message);
+    	  })	
 
     });
     	
