@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.mt.service.MtlOdVO;
-import com.sjc.app.quality.service.InsItemVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -130,7 +129,7 @@ public class QualityController {
     @PostMapping("updateIncoming")
     @ResponseBody
     public List<InspectionVO> updateMtlOdDone(@RequestBody List<InspectionVO> inspectionVOs) {
-    	return qualityService.mtlOdMtOdUpdate(inspectionVOs);
+    	return qualityService.mtlOdMtInUpdate(inspectionVOs);
 
     }	
 //    @PostMapping("updateIncoming")
@@ -155,5 +154,10 @@ public class QualityController {
 //    }	
 //    
 
+//    @PostMapping("insertMtIn")
+//	@ResponseBody
+//	public List<InspectionVO> insertMtIn(@RequestBody List<InspectionVO> list) {
+//		return qualityService.insertMtIn(list);
+//	}
     
 }
