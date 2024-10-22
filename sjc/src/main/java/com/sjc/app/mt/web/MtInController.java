@@ -17,27 +17,15 @@ public class MtInController {
     @Autowired
     private MtInService mtInService;
 
-    // 입고 목록 페이지로 이동
+    // 품질검사 완료된 입고 목록 페이지로 이동
     @GetMapping("/mtInList")
     public String getMtInList(Model model) {
-        // 입고 목록 가져오기
-        List<MtInVO> mtInList = mtInService.getMtInList();
+        // 품질검사 완료된 입고 목록 가져오기
+        List<MtInVO> mtInList = mtInService.getCompletedMtInList();
         model.addAttribute("mtInList", mtInList);
 
         return "mt/mtInList"; // 입고 목록만 표시
     }
 
-    // 입고 등록 처리
-    @PostMapping("/mtIn")
-    public String insertMtIn(MtInVO mtInVO) {
-        mtInService.insertMtIn(mtInVO);
-        return "redirect:/mtInList"; // 입고 등록 후 목록으로 이동
-    }
 
-    // 입고 삭제 처리
-    @PostMapping("/mtIn/delete")
-    public String deleteMtIn(@RequestParam("inCode") String inCode) {
-        mtInService.deleteMtIn(inCode);
-        return "redirect:/mtInList"; // 삭제 후 목록으로 이동
-    }
 }

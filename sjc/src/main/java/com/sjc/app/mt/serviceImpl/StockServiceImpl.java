@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sjc.app.mt.mapper.StockMapper;
+import com.sjc.app.mt.service.MtInVO;
 import com.sjc.app.mt.service.MtVO;
 import com.sjc.app.mt.service.StockService;
 
@@ -21,28 +22,33 @@ public class StockServiceImpl implements StockService {
         return stockMapper.getAllMaterials();
     }
 
-    // 안전재고에서 현재 재고로 수량을 이동하는 기능
-    @Override
-    public boolean moveSafetyStockToCurrent(String mtCode, Integer quantity) {
-        // 현재 안전재고와 현재 재고 확인
-        MtVO material = stockMapper.getMaterialByCode(mtCode);
-        
-        if (material != null && material.getSafetyStock() != null && material.getSafetyStock() >= quantity) {
-        	//자재조건이 DB에 있는지 확인 없을 시 false  + 안전재고값이 있는지 확인 없을 시 false + 안전재고보다 현재수량이 같거나 많으면 false 모두 충족시키기 
-           
-            stockMapper.updateSafetyStock(mtCode, -quantity); // 안전재고 감소
-            //mtCode에 있는 안전재고를 옮기려는 수량만큼 - 처리 
-            stockMapper.updateCurrentStock(mtCode, quantity); // 현재 재고 증가
-            // mtCode에 있는 현재재고를 받으려는 수량만큼 + 처리
-            return true;
-        } else {
-            return false; // 안전재고가 부족하거나 자재 정보가 없을 경우 실패
-        }
-    }
-
-    // 자재 구분 업데이트 기능 추가
+    // 자재 구분 업데이트 기능
     @Override
     public void updateMaterialType(String mtCode, String materialType) {
         stockMapper.updateMaterialType(mtCode, materialType); // 자재 구분 업데이트
+    }
+
+    // 입고 품질검사가 완료된 자재 목록 가져오기
+    @Override
+    public List<MtVO> getCompletedInspectionMaterials() {
+        return stockMapper.getCompletedInspectionMaterials(); // 입고 품질검사 완료 자재 목록 조회
+    }
+
+    // 현재 재고 업데이트 기능
+    @Override
+    public void updateCurrentStock(String mtCode, Integer quantity) {
+        stockMapper.updateCurrentStock(mtCode, quantity); // 현재 재고 업데이트
+    }
+
+    // 로트번호별 자재 수량을 가져오는 기능
+    @Override
+    public List<MtInVO> getMaterialsByLotNo(String mtCode) {
+        return stockMapper.getMaterialsByLotNo(mtCode); // 로트번호별 자재 수량 조회
+    }
+
+    // 로트번호별 자재 수량의 합계를 가져오는 기능
+    @Override
+    public Integer getTotalQuantityByLotNo(String mtCode) {
+        return stockMapper.getTotalQuantityByLotNo(mtCode); // 로트번호별 자재 수량 합계 조회
     }
 }

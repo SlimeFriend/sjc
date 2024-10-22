@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>로트번호별 자재 수량</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>로트번호별 자재 수량</h2>
+        
+        <!-- 자재 목록이 없을 경우 메시지 -->
+        <div th:if="${#lists.isEmpty(lotDetails)}" class="alert alert-warning text-center">
+            로트번호 정보가 없습니다.
+        </div>
+
+        <!-- 로트번호별 자재 수량 테이블 -->
+        <table class="table table-bordered" th:if="${!#lists.isEmpty(lotDetails)}">
+            <thead>
+                <tr>
+                    <th>로트번호</th>
+                    <th>입고 수량</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 로트번호별 자재 정보 -->
+                <tr th:each="lot : ${lotDetails}">
+                    <td th:text="${lot.lotNo}">로트번호</td>
+                   <td th:text="${lot.inquantity}">입고 수량</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 자재 총 입고 수량 합계 표시 -->
+        <div th:if="${totalQuantity != null}">
+            <h5 class="mt-4">총 입고 수량: <span th:text="${totalQuantity}">0</span></h5>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

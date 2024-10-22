@@ -74,11 +74,11 @@
 	<select id="selectMaterialsByPlanCode" parameterType="String"
 		resultType="com.sjc.app.mt.service.MtVO">
 	SELECT
-		p.PLAN_CODE,
+		
 		bd.MT_CODE,
-		pd.PRD_NAME,
-		pd.QUANTITY,
 		m.MT_NAME,
+	
+		sum(pd.QUANTITY) AS QUANTITY,
 		m.CURRENT_STC,
 		m.SAFETY_STOCK,
 		SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
@@ -95,15 +95,13 @@
 	WHERE
 		p.PLAN_CODE = #{planCode}
 	GROUP BY
-		p.PLAN_CODE,
-		bd.MT_CODE,
-		pd.PRD_NAME,
-		pd.QUANTITY,
+	
+		bd.MT_CODE,		
 		m.MT_NAME,
 		m.CURRENT_STC,
 		m.SAFETY_STOCK
 	ORDER BY
-		pd.PRD_NAME
+		m.MT_NAME
 	</select>
 
 </mapper>
