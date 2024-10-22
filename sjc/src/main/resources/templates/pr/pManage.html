@@ -17,6 +17,7 @@
         <table id="bl" class="table table-secondary table-hover">
             <thead>
                 <tr>
+                	<th>생산지시 상세코드</th>
                     <th>제품명</th>
                     <th>라인코드</th>
                     <th>목표량</th>
@@ -28,6 +29,7 @@
             <tbody id="plan">
                 <th:block th:each="list: ${list}">
                     <tr th:data-code="${list.prdCode}">
+                    	<td th:text="${list.pdetailCode}"></td>
                         <td th:text="${list.prdName}"></td>
                         <td th:text="${list.lineCode}"></td>
                         <td th:text="${list.want}"></td>
@@ -75,6 +77,9 @@
     const detailBody = document.getElementById('detail-body');  
     const sBtn = document.getElementById('sBtn');
     let today = new Date();
+    let prd;
+    let pd;
+    let line;
     
    
     
@@ -83,9 +88,10 @@
         pl.addEventListener('click', (event) => {
         	
         	
-            const prd = event.currentTarget.dataset.code;
-            let cnt = event.currentTarget.children[3].innerText;
-            let line = event.currentTarget.children[1].innerText;
+            prd = event.currentTarget.dataset.code;
+            let cnt = event.currentTarget.children[4].innerText;
+            pd = event.currentTarget.children[0].innerText;
+            line = event.currentTarget.children[2].innerText;
             
             
             
@@ -93,7 +99,8 @@
             
             console.log(cnt);
             console.log(prd);
-
+            
+			// 필요 자재 보여주는 기능
             fetch('/pNeed?prdCode=' + prd)
                 .then(function(resp) {
                     if (!resp.ok) {
@@ -119,74 +126,142 @@
                     console.error('Fetch error:', error);
                 });
             
-            
-            
-            fetch('/pPrc?lineCode=' + line)
-            	.then(function(resp){
-            		if (!resp.ok) {
-            			throw new Error('Network response was not ok');
+			
+            // 기존 생산 실적 조회
+            fetch('/searchR?pdetailCode=' + pd)
+            	.then(resp =>{
+            		if (!resp.ok){
+            			throw new Error('네트워크 반응 에러');
             		}
             		return resp.json();
             	})
-            	.then(function(resp){
-            		cbody.innerHTML = '';
-            		
-            		resp.forEach(item => {
-            			const row = document.createElement('tr');
-            			row.innerHTML = `
-            				<td>${item.no}</td>
-            				<td>${item.processName}</td>
-            				<td>${item.eqCode}</td>
-            				<td>대기</td>
-            				<td></td>
-            				<td></td>
-            				<td></td>
-            				<td></td>
-            				<td></td>
-            				<td>
-            					<select name="color">
-            						<option value="red">빨강</option>
-            						<option value="green">초록</option>
-            						<option value="blue">파랑</option>
-            						<option value="magenta">보라</option>
-            						<option value="cyan">하늘</option>
-            					</select>
-            				</td>
-            			`;
-            			cbody.appendChild(row);
+            	.then(data=>{
+            		if (data.length>0){
             			
-            			document.getElementById("cbody").children[0].children[6].innerHTML = cnt;
-            		});
+            			displayR(data);
+            			
+            		} else {
+            			cbody.innerHTML = '';
+            			insertR();
+            		}
             	})
-        });
+            	.catch(error => {
+            		console.error('에러 :', error);
+            	});
+        	});
+            
+           	
+            	
+            	
+            	
+            
     });
-    
-    sBtn.addEventListener('click', (event) => {
-    	
-    	let cb = document.getElementById("cbody");
-    	
-    	fetch('insertR', {
-    	    method: 'post',
-    	    body: JSON.stringify({
-    	        
-    	        
-    	    })
-    	  })
-    	  .then(res => {
-    	    if (res.status === 200) {
-    	        alert("저장 완료");
-    	    } else if (res.status === 403) {
-    	        return res.json();
-    	    }
-    	  })
-    	  .then(res => {
-    	    console.log("에러 메시지 ->", res.message);
-    	  })	
 
-    });
+ // 진행 공정에 생산 실적 표시하는 함수
+    function displayR(data) {
+        const cbody = document.getElementById('cbody');
+        cbody.innerHTML = ''; // 이전 내용 초기화
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            if(item.status == 'b1'){
+            row.innerHTML = `
+                <td>${item.no}</td>
+                <td>${item.processName}</td>
+                <td>${item.eqCode}</td>
+				<td>대기</td>
+                <td>${item.startTime}</td>
+                <td>${item.endTime}</td>
+                <td>${item.input}</td>
+                <td>${item.err}</td>
+                <td>${item.output}</td>
+                <td>${item.manager}</td>
+            `;}
+            else if(item.status == 'b2'){
+                row.innerHTML = `
+                    <td>${item.no}</td>
+                    <td>${item.processName}</td>
+                    <td>${item.eqCode}</td>
+    				<td>진행</td>
+                    <td>${item.startTime}</td>
+                    <td>${item.endTime}</td>
+                    <td>${item.input}</td>
+                    <td>${item.err}</td>
+                    <td>${item.output}</td>
+                    <td>${item.manager}</td>
+                `;}
+            else if(item.status == 'b3'){
+                row.innerHTML = `
+                    <td>${item.no}</td>
+                    <td>${item.processName}</td>
+                    <td>${item.eqCode}</td>
+    				<td>완료</td>
+                    <td>${item.startTime}</td>
+                    <td>${item.endTime}</td>
+                    <td>${item.input}</td>
+                    <td>${item.err}</td>
+                    <td>${item.output}</td>
+                    <td>${item.manager}</td>
+                `;}
+            
+            cbody.appendChild(row);
+        });
+    }
+ 
+ 	function insertR(){
+        fetch('/pPrc?lineCode=' + line)
+    	.then(resp =>{
+    		if (!resp.ok){
+    			throw new Error('네트워크 반응 에러');
+    		}
+    		return resp.json();
+    	})
+    	.then(resp=>{
+			resp.forEach(item => {
+				
+				fetch('/insertR', {
+	    	        method: 'POST',
+	    	        headers: {
+	    	            'Content-Type': 'application/json',
+	    	        },
+	    	        body: JSON.stringify({
+	    	        	prdCode : prd,
+	    	        	output : 0,
+	    	        	err : 0,
+	    	        	eqCode : item.eqCode,
+	    	        	processName : item.processName,
+	    	        	pdetailCode : pd,
+	    	        	ldetailCode : item.ldetailCode,
+	    	        	input : 0,
+	    	        	status : 'b1',
+	    	        	no : item.no
+	    	        	
+	    	        }),
+	    	        
+	    		})
+	    		.then(() =>{
+	    			return fetch('/searchR?pdetailCode=' + pd);
+	    		})
+	    		.then((resp) => {
+	    			if (!resp.ok) throw new Error('네트워크 에러');
+	    			return resp.json();
+	    		})
+	    		.then(data =>{
+	    			displayR(data);
+	    		})
+	    		.catch(error => {
+	    			console.error('에러:', error);
+	    			alert('생산 실적 추가 실패');
+	    		})
+	    		
+			});
+    		
     	
-    	
-    	
+		});
+ 	}
+ 	
+ 
+
+
     	
     	
     	

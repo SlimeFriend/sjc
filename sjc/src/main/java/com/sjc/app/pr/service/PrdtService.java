@@ -31,5 +31,8 @@ public interface PrdtService {
 	public List<PrcVO> pPrc(String lindCode);
 	
 	// 공정 실적(진행) 생성
-	public int insertR(PResultVO pvo);
+	public String insertR(PResultVO pvo);
+	
+	// 생산 실적 확인
+	public List<PResultVO> searchR(String pdetailCode);
 }

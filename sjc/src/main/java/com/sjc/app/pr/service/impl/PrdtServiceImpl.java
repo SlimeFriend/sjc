@@ -76,9 +76,19 @@ public class PrdtServiceImpl implements PrdtService {
 	}
 
 	@Override
-	public int insertR(PResultVO pvo) {
+	public String insertR(PResultVO pvo) {
+		if(prdtMapper.insertR(pvo) == 1) {
+			return "success";
+		}
+		else {
+			return "fail";
+		}
+	}
 
-		return 0;
+	@Override
+	public List<PResultVO> searchR(String pdetailCode) {
+		// TODO Auto-generated method stub
+		return prdtMapper.searchR(pdetailCode);
 	}
 
 }
