@@ -10,35 +10,40 @@
 <title>설비 비가동 관리</title>
 </head>
 
+<style>
+
+tbody > tr {
+	cursor: pointer;
+	
+}
+
+</style>
+
 <body>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-		<p style="font-size:300%">설비 비가동 관리</p>
+			<p style="font-size: 300%">설비 비가동 관리</p>
+
 			<div class="card-box pd-20 mb-30">
 				<div class="d-flex justify-content-between align-items-center mb-20">
-				<p style="font-size:200%">설비 비가동 목록</p>
+					<p style="font-size: 200%">설비 비가동 목록</p>
 				</div>
-				 <section>
-				<div>
-				 <p style="font-size:100%">
-				 <label style="font-size:120%;">구분</label> &nbsp;&nbsp;&nbsp;&nbsp;
-				  <input type="radio" id="all" name="section" value="all">
-				  <label>전체</label>&nbsp;&nbsp;
-				  <input type="radio" id="operating" name="section" value="op">
-				  <label>가동</label>&nbsp;&nbsp;
-				  <input type="radio" id="nOperating" name="section" value="nOp">
-				  <label>비가동</label>
-				</div>
-				 </section>
+				<section>
+					<div>
+						<p style="font-size: 100%">
+							<label style="font-size: 120%;">구분</label>
+							&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" id="all"
+								name="section" value="all"> <label>전체</label>&nbsp;&nbsp;
+							<input type="radio" id="operating" name="section" value="op">
+							<label>가동</label>&nbsp;&nbsp; <input type="radio" id="nOperating"
+								name="section" value="nOp"> <label>비가동</label>
+					</div>
+				</section>
 
-				<!-- 버튼을 우측 상단으로 이동 -->
 				<div style="text-align: right; margin-bottom: 10px;">
-					<!-- Button to Open the Modal -->
 
 				</div>
-				<!-- 
-				<table class="data-table table nowrap">
-				 -->
+				
 				<table class="table nowrap table-hover">
 					<thead>
 						<tr>
@@ -63,33 +68,30 @@
 						</th:block>
 					</tbody>
 				</table>
-				
+
 				<table class="table nowrap table-hover">
-				<div class="d-flex justify-content-between align-items-center mb-20">
-				<p style="font-size:200%">비가동 내역</p>
-				<div>
-				<button type="button" class="btn btn-success">Excel</button>
-				<div style="text-align: left; margin-bottom: 10px;">
-			
-				</div>
-				</div>
-				</div>
+					<div
+						class="d-flex justify-content-between align-items-center mb-20">
+						<p style="font-size: 200%">비가동 내역</p>
+						<div>
+							<button type="button" class="btn btn-success">Excel</button>
+							<div style="text-align: left; margin-bottom: 10px;"></div>
+						</div>
+					</div>
 					<thead>
-				<div>
-					<label for=date>해당일자</label> 
-					<input type="date" id="sdate" name="startDate">
-					~
-					<input type="date" id="edate" name="endDate">
-					
-				</div>
-				<div>
-					<label for=mdNm>설비명</label> 
-					<input type="text" id="eq" name="mdNm" placeholder="설비코드">
-					<input type="text" id="eq" name="mdNm" placeholder="설비코드">
-					<button>검색</button>
-					<button type="reset">초기화</button>
-					
-				</div>
+						<form>
+							<label for=date>해당일자</label> <input type="date" id="sdate"
+								name="startDate"> ~ <input type="date" id="edate"
+								name="endDate">
+							<div>
+								<label for=mdNm>설비명</label> <input type="text" id="eq"
+									name="mdNm" placeholder="설비코드"> <input type="text"
+									id="eq" name="mdNm" placeholder="설비코드">
+								<button>검색</button>
+								<button type="reset">초기화</button>
+
+							</div>
+						</form>
 						<tr>
 							<th class="table-plus datatable-nosort">No.</th>
 							<th>설비가동코드</th>
@@ -108,14 +110,15 @@
 								<td>[[${wait.eqCode}]]</td>
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.reason}]]</td>
-								<td>[[ ${ #dates.format(wait.startDate, "yyyy년 MM월 dd일" )} ]]</td>
+								<td>[[ ${ #dates.format(wait.startDate, "yyyy년 MM월 dd일" )}
+									]]</td>
 								<td>[[ ${ #dates.format(wait.endDate, "yyyy년 MM월 dd일" )} ]]</td>
 							</tr>
 						</th:block>
 					</tbody>
 				</table>
 			</div>
-						<!-- The Modal -->
+			<!-- The Modal -->
 			<div class="modal" id="nOpModal">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -128,34 +131,34 @@
 						<div class="modal-body">
 							<form id="NeqModal" action="">
 								<div class="mb-3">
-									<label for="eqCode" class="form-label">설비코드 :</label> 
-									<input type="text" id="eqC" value="" readonly>
+									<label for="eqCode" class="form-label">설비코드 :</label> <input
+										type="text" id="eqC" value="" readonly>
 								</div>
 								<div class="mb-3">
-									<label for="eqName" class="form-label">설비명 :</label> 
-									<input type="text" id="eqN" value="" readonly>
+									<label for="eqName" class="form-label">설비명 :</label> <input
+										type="text" id="eqN" value="" readonly>
 								</div>
 								<div class="mb-3">
-									<label for="eqName" class="form-label">비가동 기간 :</label> 
-									<input type="date"> ~ <input type="date">
+									<label for="eqName" class="form-label">비가동 기간 :</label> <input
+										type="date"> ~ <input type="date">
 								</div>
 								<div class="mb-3">
-									<label for="eqName" class="form-label">사유 :</label> 
-									<select name="reasonList">
-									<option value="temporary">상시점검
-									<option value="momentary">임시점검
-									<option value="broken">고장
-									<option value="replace">부품교체
+									<label for="eqName" class="form-label">사유 :</label> <select
+										name="reasonList">
+										<option value="temporary">상시점검
+										<option value="momentary">임시점검
+										<option value="broken">고장
+										<option value="replace">부품교체
 									</select>
 								</div>
 								<div class="mb-3">
-									<label for="eq" class="form-label">사용여부</label> 
-									<select name="useOrNot">
+									<label for="eq" class="form-label">사용여부</label> <select
+										name="useOrNot">
 										<option value="can" selected>가동
 										<option value="cannot">비가동
 									</select>
-									
-									
+
+
 								</div>
 							</form>
 						</div>
@@ -171,55 +174,55 @@
 		</div>
 	</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // tr 클릭 시 이벤트 설정
-        $('tbody > tr').on('click', function(event) {
-            let trTag = event.currentTarget; // tr 찾기
-            let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
-            let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
-            
-            // 모달의 input 필드에 값 설정
-            $('#eqC').val(eqCode);
-            $('#eqN').val(eqName);
-            
-            // 모달 창 표시
-            $('#nOpModal').modal('show');
-        });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 라디오 버튼 클릭 시 필터링 함수
-        $('input[name="section"]').on('change', function() {
-            let selectedValue = $('input[name="section"]:checked').val(); // 선택된 라디오 버튼의 값 가져오기
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// tr 클릭 시 이벤트 설정
+			$('tbody > tr').on('click', function(event) {
+				let trTag = event.currentTarget; // tr 찾기
+				let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
+				let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
 
-            // 테이블 행 필터링
-            $('tbody tr').each(function() {
-                let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼 값 가져오기
+				// 모달의 input 필드에 값 설정
+				$('#eqC').val(eqCode);
+				$('#eqN').val(eqName);
 
-                if (selectedValue === 'all') {
-                    // '전체' 선택 시 모든 행을 보여줌
-                    $(this).show();
-                } else if (selectedValue === 'op') {
-                    // '가동' 선택 시 'Y'인 행만 보여줌
-                    if (useStatus === 'Y') {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                } else if (selectedValue === 'nOp') {
-                    // '비가동' 선택 시 'N'인 행만 보여줌
-                    if (useStatus === 'N') {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                }
-            });
-        });
-    });
-</script>
+				// 모달 창 표시
+				$('#nOpModal').modal('show');
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// 라디오 버튼 클릭 시 필터링 함수
+			$('input[name="section"]').on('change', function() {
+				let selectedValue = $('input[name="section"]:checked').val(); // 선택된 라디오 버튼의 값 가져오기
+
+				// 테이블 행 필터링
+				$('tbody tr').each(function() {
+					let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼 값 가져오기
+
+					if (selectedValue === 'all') {
+						// '전체' 선택 시 모든 행을 보여줌
+						$(this).show();
+					} else if (selectedValue === 'op') {
+						// '가동' 선택 시 'Y'인 행만 보여줌
+						if (useStatus === 'Y') {
+							$(this).show();
+						} else {
+							$(this).hide();
+						}
+					} else if (selectedValue === 'nOp') {
+						// '비가동' 선택 시 'N'인 행만 보여줌
+						if (useStatus === 'N') {
+							$(this).show();
+						} else {
+							$(this).hide();
+						}
+					}
+				});
+			});
+		});
+	</script>
 
 
 
