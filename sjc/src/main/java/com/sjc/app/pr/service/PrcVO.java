@@ -7,4 +7,5 @@ public class PrcVO {
 	private String no;
 	private String processName;
 	private String eqCode;
+	private String ldetailCode;
 }
