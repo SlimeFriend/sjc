@@ -8,6 +8,7 @@ import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PrcVO;
 
 public interface PrdtMapper {
 	// 계획 전체조회
@@ -33,4 +34,10 @@ public interface PrdtMapper {
 	
 	// 관리 필요 자재
 	public List<NeedVO> pNeed(String prdCode);
+	
+	// 관리 공정
+	public List<PrcVO> pPrc(String lineCode);
+	
+	// 실적 생성
+	public int insertR(PResultVO pvo);
 }

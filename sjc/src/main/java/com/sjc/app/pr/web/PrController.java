@@ -16,6 +16,7 @@ import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 
 @Controller
@@ -117,6 +118,13 @@ public class PrController {
 	public List<NeedVO> pNeed(@RequestParam String prdCode) {
 		
 		return prdtService.pNeed(prdCode);
+	}
+	
+	@GetMapping("pPrc")
+	@ResponseBody
+	public List<PrcVO> pPrc(@RequestParam String lineCode) {
+		
+		return prdtService.pPrc(lineCode);
 	}
 	
 	

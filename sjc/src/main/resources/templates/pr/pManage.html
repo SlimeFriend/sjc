@@ -13,6 +13,7 @@
 <body>
     <div class="main-container">
         <h3>생산 관리</h3>
+        <button id="sBtn">생산 시작</button>
         <table id="bl" class="table table-secondary table-hover">
             <thead>
                 <tr>
@@ -52,10 +53,12 @@
         <table id="dtable" class="table table-secondary table-hover">
             <thead>
                 <tr>
-                	<th>공정순서</th>
+                	<th>순서</th>
 					<th>공정명</th>
                     <th>설비명</th>
                     <th>가동상태</th>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
                     <th>투입량</th>
                     <th>불량량</th>
                     <th>생산량</th>
@@ -70,15 +73,21 @@
     <script>
     const plan = document.getElementById('plan');
     const detailBody = document.getElementById('detail-body');  
-    const be = document.getElementsByName('btn');
+    const sBtn = document.getElementById('sBtn');
+    var today = new Date();
+    
+   
     
     // 지시 클릭 시 필요 자재와 공정 리스트 보여주는 기능
     Array.from(plan.children).forEach((pl) => {
         pl.addEventListener('click', (event) => {
+        	
+        	
             const prd = event.currentTarget.dataset.code;
             let cnt = event.currentTarget.children[3].innerText;
-            
             let line = event.currentTarget.children[1].innerText;
+            
+            
             
 
             
@@ -110,6 +119,8 @@
                     console.error('Fetch error:', error);
                 });
             
+            
+            
             fetch('/pPrc?lineCode=' + line)
             	.then(function(resp){
             		if (!resp.ok) {
@@ -121,17 +132,120 @@
             		cbody.innerHTML = '';
             		
             		resp.forEach(item => {
+            			const row = document.createElement('tr');
+            			row.innerHTML = `
+            				<td>${item.no}</td>
+            				<td>${item.processName}</td>
+            				<td>${item.eqCode}</td>
+            				<td>대기</td>
+            				<td></td>
+            				<td></td>
+            				<td></td>
+            				<td></td>
+            				<td></td>
+            				<td>
+            					<select name="color">
+            						<option value="red">빨강</option>
+            						<option value="green">초록</option>
+            						<option value="blue">파랑</option>
+            						<option value="magenta">보라</option>
+            						<option value="cyan">하늘</option>
+            					</select>
+            				</td>
+            			`;
+            			cbody.appendChild(row);
             			
-            		})
+            			document.getElementById("cbody").children[0].children[6].innerHTML = cnt;
+            		});
             	})
-
         });
     });
+    
+    sBtn.addEventListener('click', (event) => {
+    	
+    	
+    	
+
+    });
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+/*        let rows = Array.from(document.getElementById("cbody").children);
+        let currentIndex = 0; // 현재 진행 중인 행의 인덱스
+
+        function updateRow(row) {
+            let today = new Date();
+            row.children[3].innerText = '진행'; // 상태를 '진행'으로 설정
+            row.children[4].innerText = formatTime(today); // 시간 업데이트
+
+            let input = parseInt(row.children[6].innerText, 10); // 목표 지시량 가져오기
+
+            let pCount = 0; // 생산량 초기화
+            let dCount = 0; // 불량량 초기화
+
+            const intervalId = setInterval(() => {
+                const random = Math.floor(Math.random() * 100);
+                let remain = input - (pCount + dCount);
+
+
+                // 생산 및 불량량 업데이트
+                if (remain < 10) {
+                    if (random <= 10) {
+                        dCount += 1; // 불량량 증가
+                        pCount += Math.max(0, remain - 1); // 남은 수량을 생산량으로 설정
+                    } else {
+                        pCount += remain; // 남은 수량을 생산량으로 설정
+                    }
+                } else {
+                    if (random <= 10) {
+                        pCount += 9;
+                        dCount += 1; // 불량량 증가
+                    } else {
+                        pCount += 10; // 생산량 10 증가
+                    }
+                }
+
+                // 업데이트된 값 표시
+                row.children[7].innerText = dCount;     // 불량량 업데이트
+                row.children[8].innerText = pCount;     // 생산량 업데이트
+
+                // 생산량과 불량량의 합이 지시량에 도달하는지 확인
+                if (pCount + dCount === input) {
+                    clearInterval(intervalId); // 인터벌 중지
+                    let now = new Date();
+                    row.children[3].innerText = '종료';
+                    row.children[5].innerText = formatTime(now);
+                    currentIndex++;
+                    if (currentIndex < rows.length) {
+                        rows[currentIndex].children[6].innerText = pCount; // 다음 행의 지시량 업데이트
+                        updateRow(rows[currentIndex]); // 다음 행 업데이트
+                    }
+                }
+            }, 1000);
+            
+        }
+
+        // 행이 존재하면 첫 번째 행 업데이트 시작
+        if (rows.length > 0) {
+            updateRow(rows[currentIndex]);
+        }
+    });
+
+    // 시간 포맷팅 함수
+    function formatTime(date) {
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${hours} : ${minutes} : ${seconds}`;
+    }
+
+*/
+	
+
+    
     </script>
 </body>
-		
-			
-		
-
-	</div>
-</div>
