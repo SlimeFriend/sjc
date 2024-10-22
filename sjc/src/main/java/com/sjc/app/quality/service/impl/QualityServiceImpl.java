@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.mapper.QualityMapper;
-import com.sjc.app.quality.service.InsItemVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -134,7 +133,7 @@ public class QualityServiceImpl implements QualityService{
 	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
 	@Override
 	@Transactional 
-	public List<InspectionVO> mtlOdMtOdUpdate(List<InspectionVO> inspectionVOs) {
+	public List<InspectionVO> mtlOdMtInUpdate(List<InspectionVO> inspectionVOs) {
 		List<InspectionVO> list = new ArrayList<>();
 		for (InspectionVO inspectionVO : inspectionVOs) {
 			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
@@ -142,7 +141,7 @@ public class QualityServiceImpl implements QualityService{
 			// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
 			qualityMapper.selectMtIn(inspectionVO);
 			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
-			qualityMapper.insertMtIn(inspectionVO);
+			qualityMapper.insertMtInInfo(inspectionVO);
 			list.add(inspectionVO);
 			
 		}
@@ -173,4 +172,17 @@ public class QualityServiceImpl implements QualityService{
 //	}
 //		return list;
 //	}
+
+	
+	
+	
+	
+//	
+//	@Override
+//	@Transactional
+//	public List<InspectionVO> insertMtIn(List<InspectionVO> inspectionVOs) {
+//		return qualityMapper.insertMtIn(inspectionVOs);
+//			
+//	}
+
 }

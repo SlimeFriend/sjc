@@ -39,9 +39,11 @@ public interface QualityMapper {
 	// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
 	public void selectMtIn(InspectionVO inspectionVO);
 	// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
-	public void insertMtIn(InspectionVO inspectionVO);
+	public List<InspectionVO> insertMtIn(InspectionVO inspectionVOs);
 	// 
 	//public int updateMtlOdDone(@Param("mtlOdStatus")String mtlOdStatus, InspectionVO inspectionVO);
+
+	public void insertMtInInfo(InspectionVO inspectionVO);
 
 	
 

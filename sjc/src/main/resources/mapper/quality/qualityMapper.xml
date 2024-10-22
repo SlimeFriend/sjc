@@ -146,33 +146,39 @@
 		WHERE mtl_od_status = '입고품질검사완료'
 	</select>
 	<insert id="insertMtInInfo" parameterType="InspectionVO">
-			INSERT INTO mt_in (
-			                    input_date
-			                    , inquantity 
-			                    , ed 
-			                    , in_code 
-			                    , user_id 
-			                    , mtl_od_code 
-			                    , ins_code 
-			                    , mt_code 
-			                    , cp_code 
-			                    , comm 
-			                    , lot_no
-			                    )
-			VALUES            (
-			                    sysdate
-			                    , #{numberOfPasses}
-			                    , add_months(sysdate, 6)
-			                    , 'incode입력필요'
-			                    , #{userId}
-			                    , #{mtlOdCode}
-			                    , #{insCode}
-			                    , #{mtCode}
-			                    , #{cpCode}
-			                    , #{comm} --input으로
-			                    , 'lot_no입력필요'
-			                    )
-	</insert>
+    <selectKey keyProperty="inCode" order="BEFORE" resultType="string">
+        SELECT 'IN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0') 
+        FROM dual
+    </selectKey>
+
+    
+    INSERT INTO mt_in (
+        input_date,
+        inquantity, 
+        ed, 
+        in_code, 
+        user_id, 
+        mtl_od_code, 
+        ins_code, 
+        mt_code, 
+        cp_code, 
+        comm, 
+        lot_no
+    )
+    VALUES (
+        SYSDATE,
+        #{numberOfPasses},
+        ADD_MONTHS(SYSDATE, 6),
+        #{inCode},
+        #{userId},
+        #{mtlOdCode},
+        #{insCode},
+        #{mtCode},
+        #{cpCode},
+        #{comm},
+        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0')
+    )
+</insert>
 	
 
 
