@@ -36,7 +36,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     // 발주 요청 수정 (동적 SQL 사용으로 불필요한 null 체크 제거)
     @Override
     public void updateOrderRequest(OrderRequestVO orderRequest) {
-        orderRequestMapper.updateOrderRequest(orderRequest); // MyBatis에서 동적 SQL로 처리
+        orderRequestMapper.updateOrderRequest(orderRequest); 
     }
 
     // 발주 요청 삭제

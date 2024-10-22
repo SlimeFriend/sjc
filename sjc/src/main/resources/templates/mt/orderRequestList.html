@@ -90,7 +90,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status == '검사완료'}">
+					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status == '품질검사완료'}">
 						<td th:text="${orderRequest.orderRequestCode}">발주 코드</td>
 						<td th:text="${orderRequest.mtCode}">자재 코드</td>
 						<td th:text="${orderRequest.mtName}">자재명</td>
