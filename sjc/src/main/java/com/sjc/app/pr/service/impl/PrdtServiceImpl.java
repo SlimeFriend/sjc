@@ -12,6 +12,7 @@ import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 
 @Service
@@ -66,6 +67,18 @@ public class PrdtServiceImpl implements PrdtService {
 	@Override
 	public List<NeedVO> pNeed(String prdCode) {
 		return prdtMapper.pNeed(prdCode);
+	}
+
+	@Override
+	public List<PrcVO> pPrc(String lindCode) {
+		// TODO Auto-generated method stub
+		return prdtMapper.pPrc(lindCode);
+	}
+
+	@Override
+	public int insertR(PResultVO pvo) {
+
+		return 0;
 	}
 
 }

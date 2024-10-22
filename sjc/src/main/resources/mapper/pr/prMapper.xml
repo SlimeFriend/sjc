@@ -119,4 +119,20 @@ on d.mt_code = m.mt_code
 where p.prd_code = #{prdCode}
 </select>
 
+<!-- 생산 관리 공정 -->
+<select id="pPrc" parameterType="String" resultType="PrcVO">
+	select  f.no,
+        p.process_name,
+        d.eq_code
+	from line l 
+	join ldetail d
+	on l.line_code = d.line_code
+	join flow f     
+	on d.flow_code = f.flow_code
+	join process p
+	on f.process_code = p.process_code
+	where l.line_code = #{lineCode}
+	order by f.no
+</select>
+
 </mapper>

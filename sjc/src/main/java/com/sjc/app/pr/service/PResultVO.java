@@ -17,4 +17,5 @@ public class PResultVO {
 	private String pdetailCode;		// 생산지시상세 코드
 	private String ldetailCode;		// 라인상세정보 코드
 	private Integer input;			// 투입량
+	private String status;
 }		
