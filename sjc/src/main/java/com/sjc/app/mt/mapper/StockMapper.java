@@ -29,4 +29,7 @@ public interface StockMapper {
 
     // 로트번호별 자재 수량 합계 조회 (현재 재고로 반영)
     Integer getTotalQuantityByLotNo(@Param("mtCode") String mtCode);
+
+    // 로트번호별 자재 수량 합계를 현재 재고에 반영
+    void updateStockWithLotQuantities(@Param("mtCode") String mtCode, @Param("totalQuantity") Integer totalQuantity);
 }

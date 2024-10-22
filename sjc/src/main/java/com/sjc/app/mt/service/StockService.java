@@ -21,4 +21,7 @@ public interface StockService {
 
     // 로트번호별 자재 수량의 합계를 가져오는 메서드 (현재 재고에 반영)
     Integer getTotalQuantityByLotNo(String mtCode);
+    
+    // 로트번호별 자재 수량의 합계를 현재 재고에 반영하는 메서드
+    void updateStockWithLotQuantities(String mtCode);
 }

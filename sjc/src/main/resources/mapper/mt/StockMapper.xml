@@ -59,18 +59,22 @@
     <!-- 로트번호별 자재 수량 조회 -->
     <select id="getMaterialsByLotNo" parameterType="String" resultType="com.sjc.app.mt.service.MtInVO">
         SELECT 
-            LOT_NO AS lotNo,
-            INQUANTITY AS inQuantity
+            MT_IN.LOT_NO AS lotNo,
+            MT_IN.INQUANTITY AS inquantity,
+            MT_IN.INPUT_DATE AS inputDate,
+            MT.MT_NAME AS mtName  
         FROM MT_IN
-        WHERE MT_CODE = #{mtCode}
+        JOIN MT ON MT_IN.MT_CODE = MT.MT_CODE 
+        WHERE MT_IN.MT_CODE = #{mtCode}
     </select>
 
     <!-- 로트번호별 자재 수량 합계 조회 (현재 재고로 반영) -->
     <select id="getTotalQuantityByLotNo" parameterType="String" resultType="Integer">
         SELECT 
-            SUM(INQUANTITY)
+            SUM(INQUANTITY) AS totalQuantity
         FROM MT_IN
         WHERE MT_CODE = #{mtCode}
+        GROUP BY MT_CODE
     </select>
 
 </mapper>
