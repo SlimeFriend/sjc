@@ -135,4 +135,26 @@ where p.prd_code = #{prdCode}
 	order by f.no
 </select>
 
+<!-- 생산 실적 최초 생성 -->
+<insert id="insertR" parameterType="PResultVO">
+	insert into PRESULT(presult_code,
+						prd_code,
+						output,
+						err,
+						eq_name,
+						process_name,
+						pdetail_code,
+						ldetail_code,
+						input,
+						status)
+	values ('PR'||to_char(sysdate, 'yyMMdd')||pr_seq.nextVal,
+			#{prdCode},
+			0,
+			0,
+			#{eqName},
+			#{processName},
+			
+			)
+</insert>
+
 </mapper>
