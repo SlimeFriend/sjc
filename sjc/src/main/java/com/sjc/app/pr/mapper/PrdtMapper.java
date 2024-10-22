@@ -40,4 +40,7 @@ public interface PrdtMapper {
 	
 	// 실적 생성
 	public int insertR(PResultVO pvo);
+	
+	// 지시에 있는지 실적 조회
+	public List<PResultVO> searchR(String pdetailCode);
 }

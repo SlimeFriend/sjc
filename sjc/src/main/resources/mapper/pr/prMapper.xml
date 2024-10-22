@@ -65,14 +65,14 @@
 			output,
 			err,
 			process_date,
-			eq_name,
+			eq_code,
 			process_name,
 			manager,
 			pdetail_code,
 			ldetail_code,
 			input
 	from presult
-			
+	where status = 'b3'
 </select>
 
 <!-- 계획 조건부 조회 -->
@@ -123,7 +123,8 @@ where p.prd_code = #{prdCode}
 <select id="pPrc" parameterType="String" resultType="PrcVO">
 	select  f.no,
         p.process_name,
-        d.eq_code
+        d.eq_code,
+        d.ldetail_code
 	from line l 
 	join ldetail d
 	on l.line_code = d.line_code
@@ -141,20 +142,48 @@ where p.prd_code = #{prdCode}
 						prd_code,
 						output,
 						err,
-						eq_name,
+						eq_code,
 						process_name,
 						pdetail_code,
 						ldetail_code,
 						input,
-						status)
-	values ('PR'||to_char(sysdate, 'yyMMdd')||pr_seq.nextVal,
+						status,
+						no)
+	values ('PR'||to_char(sysdate, 'yyMMdd')||LPAD(pr_seq.nextVal,3,0),
 			#{prdCode},
-			0,
-			0,
-			#{eqName},
+			#{output},
+			#{err},
+			#{eqCode},
 			#{processName},
+			#{pdetailCode},
+			#{ldetailCode},
+			#{input},
+			#{status},
+			#{no}
 			
 			)
 </insert>
+
+<!-- 생산 실적(진행) 있는지 체크 -->
+<select id="searchR" parameterType="String" resultType="PResultVO">
+	select presult_code,
+			prd_code,
+			start_time,
+			end_time,
+			output,
+			err,
+			process_date,
+			eq_code,
+			process_name,
+			manager,
+			pdetail_code,
+			ldetail_code,
+			input,
+			status,
+			no
+	from presult
+	where pdetail_code = #{pdetailCode}
+	order by no
+</select>
 
 </mapper>
