@@ -12,8 +12,8 @@
                , user_id
                , mtl_od_status
 
-		FROM copy_mtl_od
-		WHERE mtl_od_status = '품질검사 대기'
+		FROM mtl_od
+		WHERE mtl_od_status = '입고품질검사대기'
 
 	</select>
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
@@ -27,13 +27,16 @@
                , i.number_of_passes
                , i.total_pass
                , o.mtl_od_code
+               , o.mt_code
+               , i.user_id
+               
 		FROM mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
 		    JOIN mt m
 		        ON o.mt_code = m.mt_code
-		WHERE i.ins_status = '검사 완료'
-		and     o.MTL_OD_STATUS not in ('반품', '품질검사 완료')
+		WHERE i.ins_status = '검사완료'
+		and     o.MTL_OD_STATUS not in ('반품', '입고품질검사완료')
 	</select>
 <!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
@@ -107,24 +110,70 @@
 	</select>
 
 
-<!--   입고검사완료페이지 - 값 입고처리 버튼 누르면 ins(품질검사 상태) 완료로 넘기기 -->
+<!--   // 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료 -->
 	<update id="updateInspectionDone" parameterType="InspectionVO">
 		UPDATE inspection
-		SET ins_status = '검사 완료'
+		SET ins_status = '검사완료'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
-<!--  입고검사완료페이지 - 값 입고처리 버튼 누르면 자재발주상태(mtl_od/ status)완료로 넘기기 -->
+<!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료 -->
 	<update id="updateMtlOdDone" parameterType="InspectionVO">
 		UPDATE mtl_od
-		SET mtl_od_status = '품질검사 완료'
+		SET mtl_od_status = '입고품질검사완료'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
-<!--  입고검사완료페이지 - 값 반품처리 버튼 누르면 자재발주상태(mtl_od/ status)반품으로 넘기기 -->
+<!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
 		UPDATE mtl_od
 		SET mtl_od_status = '반품'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
+	
+	
+	
+	
+	<!-- 자재입고테이블 -->
+	<select id="selectMtIn" resultType="InspectionVO">
+			SELECT i.number_of_passes
+		        , i.user_id
+		        , i.ins_code
+		        , o.mtl_od_code
+		        , o.mt_code
+		        , o.cp_code
+		FROM inspection i
+		JOIN mtl_od o
+		    on i.mtl_od_code = o.mtl_od_code
+		WHERE mtl_od_status = '입고품질검사완료'
+	</select>
+	<insert id="insertMtInInfo" parameterType="InspectionVO">
+			INSERT INTO mt_in (
+			                    input_date
+			                    , inquantity 
+			                    , ed 
+			                    , in_code 
+			                    , user_id 
+			                    , mtl_od_code 
+			                    , ins_code 
+			                    , mt_code 
+			                    , cp_code 
+			                    , comm 
+			                    , lot_no
+			                    )
+			VALUES            (
+			                    sysdate
+			                    , #{numberOfPasses}
+			                    , add_months(sysdate, 6)
+			                    , 'incode입력필요'
+			                    , #{userId}
+			                    , #{mtlOdCode}
+			                    , #{insCode}
+			                    , #{mtCode}
+			                    , #{cpCode}
+			                    , #{comm} --input으로
+			                    , 'lot_no입력필요'
+			                    )
+	</insert>
+	
 
 
 </mapper>

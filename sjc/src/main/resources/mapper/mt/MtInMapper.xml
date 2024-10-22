@@ -19,6 +19,7 @@
     <!-- 입고 목록 조회 -->
     <select id="getMtInList" resultType="com.sjc.app.mt.service.MtInVO">
         SELECT
+        	mtl_od_code,
             IN_CODE AS inCode,
             MT_CODE AS mtCode,
             (SELECT MT_NAME FROM MT WHERE MT.MT_CODE = MT_IN.MT_CODE) AS mtName, 

@@ -120,6 +120,7 @@ public class QualityServiceImpl implements QualityService{
 	 * return list; }
 	 */
 	
+	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	@Override
 	@Transactional 
 	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs) {
@@ -130,27 +131,46 @@ public class QualityServiceImpl implements QualityService{
 		}
 		return list;
 	}
-	
+	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
 	@Override
 	@Transactional 
-	public List<InspectionVO> mtlOdDoneUpdate(List<InspectionVO> inspectionVOs) {
+	public List<InspectionVO> mtlOdMtOdUpdate(List<InspectionVO> inspectionVOs) {
 		List<InspectionVO> list = new ArrayList<>();
 		for (InspectionVO inspectionVO : inspectionVOs) {
-		qualityMapper.updateMtlOdDone(inspectionVO);
-		list.add(inspectionVO);
-		
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
+			qualityMapper.updateMtlOdDone(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+			qualityMapper.selectMtIn(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
+			qualityMapper.insertMtIn(inspectionVO);
+			list.add(inspectionVO);
+			
+		}
+			return list;
+	
 	}
-		return list;
-
-}
+	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 	@Override
 	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs) {
 		List<InspectionVO> list = new ArrayList<>();
 		for (InspectionVO inspectionVO : inspectionVOs) {
-		qualityMapper.updateMtlOdBack(inspectionVO);
-		list.add(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
+			qualityMapper.updateMtlOdBack(inspectionVO);
+			
+			list.add(inspectionVO);
 		
-	}
+		}
 		return list;
 	}
+//	// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+//	@Override
+//	public List<InspectionVO> mtInSelect(List<InspectionVO> inspectionVOs) {
+//		List<InspectionVO> list = new ArrayList<>();
+//		for (InspectionVO inspectionVO : inspectionVOs) {
+//		qualityMapper.selectMtIn(inspectionVO);
+//		list.add(inspectionVO);
+//		
+//	}
+//		return list;
+//	}
 }
