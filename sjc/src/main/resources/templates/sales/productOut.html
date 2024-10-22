@@ -12,24 +12,48 @@
 			
 			<div class="pd-30 card-box mb-20">
 				<h4 class="h5 mb-20">주문내역</h4>
-				<div id="grid"></div>
+				<div id="gridOrder"></div>
+			</div>
+			
+			<!-- The Modal -->
+			<div class="modal" id="myModal">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">출고접수</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<div class="modal-body">
+							    <h5 class="h5">주문목록</h5>
+								<div id="gridOrderDetail"></div>
+								<div id="selectProductLot"></div>
+						</div>
+						<!-- Modal footer -->
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">등록</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+						</div>
+					</div>
+				</div>
 			</div>
 			
 			<div class="pd-30 card-box mb-20">
 				<h4 class="h5 mb-20">출고현황</h4>
-				<div id="grid"></div>
+				<div id=""></div>
 			</div>
 		</div>
 	</div>
 
-
-
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${productOut}]]*/[];
+			const gridData = /*[[${orderGrid}]]*/[];
+			const gridModalData = /*[[${ordDetail}]]*/[];
+			const productLotGridData = /*[[${ordDetail}]]*/[];
 
 			const grid = new tui.Grid({
-				el : document.getElementById('grid'),
+				el : document.getElementById('gridOrder'),
 				data : gridData,
 				scrollX : false,
 				scrollY : false,
@@ -51,7 +75,7 @@
 					align : 'center',
 				}, {
 					header : '진행상황',
-					name : '',
+					name : 'ordStatus',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
@@ -60,6 +84,130 @@
 					perPage : 10
 				}
 			});
+			
+			const gridModal = new tui.Grid({
+				el : document.getElementById('gridOrderDetail'),
+				data : gridModalData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ORDCODE',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'PRDNAME',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'PRDCODE',
+					align : 'center',
+				}, {
+					header : '주문량',
+					name : 'ORDQUANTITY',
+					align : 'center',
+				}, {
+					header : '미출고량',
+					name : 'ORDQUANTITY',
+					align : 'center',
+				},{
+					header : '출고량',
+					name : '',
+					align : 'center',
+					editor: 'text',
+				},],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 5
+				}
+			});
+			
+			const productLotGrid = new tui.Grid({
+				el : document.getElementById('selectProductLot'),
+				data : productLotGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '제품명',
+					name : 'PRD_NAME',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'PRD_CODE',
+					align : 'center',
+				}, {
+					header : 'LOT',
+					name : 'LOT',
+					align : 'center',
+				}, {
+					header : '제조일자',
+					name : 'MD',
+					align : 'center',
+				}, {
+					header : '유통기한',
+					name : 'ED',
+					align : 'center',
+				}, {
+					header : '수량',
+					name : 'STC_QUANTITY',
+					align : 'center',
+				}, {
+					header : '출고량',
+					name : 'OUT_QUANTITY',
+					align : 'center',
+					editor: 'text',
+				},
+				
+				],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			gridModal.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE');
+			    console.log(prdCodeValue);
+			    if(prdCodeValue) {
+			    	$.ajax({
+			    		url : '/getPrdLotDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({prdCode : prdCodeValue}),
+			    		success: function(response) {
+			    			productLotGrid.resetData(response); 
+			    			productLotGrid.refreshLayout();
+			    		},
+			    	});
+			    }
+			});
+			
+			grid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
+			    
+			    if(ordCodeValue) {
+			    	$.ajax({
+			    		url : '/getOrdDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({ordCode : ordCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			gridModal.resetData(response); 
+			    			$('#myModal').modal('show');
+			    			gridModal.refreshLayout();
+			    		},
+			    	});
+			    }
+			});
+			
+			
+			
 		});
 	</script>
 </div>
