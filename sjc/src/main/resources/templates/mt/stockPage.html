@@ -13,7 +13,7 @@
                     <th>자재 코드</th>
                     <th>자재명</th>
                     <th>자재 구분</th>
-                    <th>수량</th>
+                    <th>현재재고</th> <!-- "수량"을 "현재재고"로 변경 -->
                     <th>상세보기</th>
                 </tr>
             </thead>
@@ -22,7 +22,8 @@
                     <td th:text="${material.mtCode}"></td>
                     <td th:text="${material.mtName}"></td>
                     <td th:text="${material.materialType}"></td>
-                    <td th:text="${material.lotDetails != null && material.lotDetails.size() > 0 ? #lists.sum(material.lotDetails, 'inquantity') : '-'}"></td>
+                   <!-- totalQuantity 대신 currentStc를 사용하여 현재재고 표시 -->
+                    <td th:text="${material.currentStc != null ? material.currentStc : '-'}"></td>
                     <td>
                         <a th:href="@{/stock/{mtCode}/lots(mtCode=${material.mtCode})}" class="btn btn-info">상세보기</a>
                     </td>

@@ -16,8 +16,13 @@ public class MtInServiceImpl implements MtInService {
     // 품질검사 완료된 자재 목록 조회
     @Override
     public List<MtInVO> getCompletedMtInList() {
-        return mtInMapper.getCompletedMaterials(); // 매퍼의 품질검사 완료 자재 조회 메서드 호출
+        return mtInMapper.getCompletedMaterials(); 
     }
 
-
+    // 자재 입고 후 재고 업데이트
+    @Override
+    public void updateCurrentStockAfterReceiving(MtInVO materialIn) {
+       
+        mtInMapper.updateCurrentStockAfterReceiving(materialIn);
+    }
 }
