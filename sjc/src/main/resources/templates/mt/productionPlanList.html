@@ -67,7 +67,7 @@
                 <thead>
                     <tr>
                         <th>자재명</th>
-                        <th>제품명</th>
+                       
                         <th>요청수량</th>
                         <th>현재재고</th>
                         <th>안전재고</th>
@@ -80,8 +80,7 @@
                         <td colspan="7" class="text-center">등록된 자재가 없습니다.</td>
                     </tr>
                     <tr th:each="material : ${materials}">
-                        <td th:text="${material.mtName}">자재명</td>
-                        <td th:text="${material.prdName}">제품명</td>
+                        <td th:text="${material.mtName}">자재명</td>                   
                         <td th:text="${material.quantity}">요청수량</td>
                         <td th:text="${material.currentStc}" class="current-stc">현재재고</td>
                         <td th:text="${material.safetyStock}">안전재고</td>
@@ -89,7 +88,7 @@
                         <td th:text="${material.currentStc - material.totalRequired}"
                             th:classappend="${(material.currentStc - material.totalRequired) < 0} ? 'low-stock' : ''">
                             부족수량
-                        </td> <!-- 부족수량과 음수일 때 빨간색 -->
+                        </td> 
                     </tr>
                 </tbody>
             </table>
@@ -116,7 +115,7 @@
                             const shortage = material.currentStc - material.totalRequired; 
                             const row = `<tr>
                                 <td>${material.mtName}</td>
-                                <td>${material.prdName}</td>
+                             
                                 <td>${material.quantity}</td>
                                 <td class="current-stc">${material.currentStc}</td>
                                 <td>${material.safetyStock}</td>

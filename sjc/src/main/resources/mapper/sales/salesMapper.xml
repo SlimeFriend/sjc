@@ -16,6 +16,18 @@
 		unit_price
 		FROM prd
 	</select>
+	
+	<select id="selectProductDetail" parameterType="String" resultType="map">
+		SELECT p.prd_name,
+		       p.prd_code,
+		       pm.lot,
+		       pm.md,
+		       pm.ed,
+		       pm.stc_quantity
+		FROM   prd p JOIN prd_management pm
+		ON     p.prd_code = pm.prd_code
+		WHERE  p.prd_code = #{prdCode}
+	</select>
 
 	<!-- 주문 접수 -->
 	<insert id="insertOrder" parameterType="OrderVO">
@@ -101,7 +113,8 @@
 		SELECT o.ord_code,
 		c.cp_name,
 		o.ord_date,
-		o.dlv_req_date
+		o.dlv_req_date,
+		o.ord_status
 		FROM ord o join cp c
 		ON o.cp_code =
 		c.cp_code

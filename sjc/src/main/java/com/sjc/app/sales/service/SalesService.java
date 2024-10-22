@@ -7,7 +7,7 @@ public interface SalesService {
 	
 	// 주문접수
     public int insertOrder(OrderVO orderVO);
-    public int getOrdCode();
+    public String getOrdCode();
     public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
 	public List<OrderVO> order();
@@ -18,6 +18,7 @@ public interface SalesService {
 	public List<ProductVO> productManagement();
 	public List<ProductVO> productLot();
 	public List<ProductVO> productIn();
+	public List<Map<String, Object>> productDetail(String prdCode);
 	
 	public List<OrderVO> productOut();
 	public List<ProductVO> inoutHistory();

@@ -25,14 +25,14 @@ public class OrderRequestController {
     public String getAllOrderRequests(Model model) {
         List<OrderRequestVO> orderRequests = orderRequestService.getAllOrderRequests();
         model.addAttribute("orderRequests", orderRequests); // 모델에 발주 요청 목록 추가
-        return "mt/orderRequestList"; // 템플릿 이름 (발주 요청 목록)
+        return "mt/orderRequestList"; 
     }
 
     // 발주 요청 등록 폼 표시
     @GetMapping("/orderRequestNew")
     public String newOrderRequestForm(Model model) {
         model.addAttribute("orderRequest", new OrderRequestVO());
-        return "mt/orderRequestForm"; // 발주 요청 등록 폼 템플릿
+        return "mt/orderRequestForm"; 
     }
 
     // 특정 발주 요청 상세 조회
@@ -42,7 +42,7 @@ public class OrderRequestController {
         
         if (orderRequest == null) {
             // 상세 정보를 찾을 수 없으면 에러 페이지로 이동
-            return "error/404"; // 404 에러 페이지로 리다이렉트
+            return "error/404";
         }
         
         model.addAttribute("orderRequest", orderRequest); // 발주 요청 상세 추가

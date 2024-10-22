@@ -13,23 +13,11 @@ public class MtInServiceImpl implements MtInService {
     @Autowired
     private MtInMapper mtInMapper;
 
+    // 품질검사 완료된 자재 목록 조회
     @Override
-    public List<MtInVO> getCompletedMaterials() {
-        return mtInMapper.getCompletedMaterials();
+    public List<MtInVO> getCompletedMtInList() {
+        return mtInMapper.getCompletedMaterials(); // 매퍼의 품질검사 완료 자재 조회 메서드 호출
     }
 
-    @Override
-    public List<MtInVO> getMtInList() {
-        return mtInMapper.getMtInList();
-    }
 
-    @Override
-    public void insertMtIn(MtInVO mtInVO) {
-        mtInMapper.insertMtIn(mtInVO);
-    }
-
-    @Override
-    public void deleteMtIn(String inCode) {
-        mtInMapper.deleteMtIn(inCode);
-    }
 }

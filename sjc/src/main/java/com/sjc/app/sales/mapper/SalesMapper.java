@@ -29,6 +29,7 @@ public interface SalesMapper {
 	// 제품관리
 	public List<ProductVO> selectProductManagement();
 	public List<ProductVO> selectProductLot();
+	public List<Map<String, Object>> selectProductDetail(String prdCode);
 
 	// 제품입고
 	public List<ProductVO> selectProductIn();
@@ -41,5 +42,6 @@ public interface SalesMapper {
 	
 	// 업체 리스트
 	public List<OrderVO> selectCompany();
+
 
 }

@@ -5,15 +5,7 @@ import com.sjc.app.mt.service.MtInVO;
 
 public interface MtInMapper {
 
-    // 검사 완료된 자재 목록 가져오기
-    List<MtInVO> getCompletedMaterials();
+    // 품질검사 완료된 자재 목록 조회
+    List<MtInVO> getCompletedMaterials(); // 품질검사 완료된 자재만 조회
 
-    // 입고 목록 조회
-    List<MtInVO> getMtInList();
-
-    // 입고 등록
-    void insertMtIn(MtInVO mtInVO);
-
-    // 입고 삭제
-    void deleteMtIn(String inCode);
 }

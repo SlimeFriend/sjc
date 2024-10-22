@@ -41,7 +41,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="orderRequest : ${orderRequests}"
-						th:if="${orderRequest.status != '검사완료'}">
+						th:if="${orderRequest.status != '입고품질검사완료'}">
 						<td th:text="${orderRequest.orderRequestCode}" class="hidden">발주 코드</td>
 						<td th:text="${orderRequest.mtCode}">자재 코드</td>
 						<td th:text="${orderRequest.mtName}">자재명</td>
@@ -54,7 +54,7 @@
 							<form th:action="@{/orderRequest/updateStatus}" method="post">
 								<select class="form-control" name="status">
 									<option value="발주대기" th:selected="${orderRequest.status == '발주대기'}">발주대기</option>
-									<option value="품질검사대기" th:selected="${orderRequest.status == '품질검사대기'}">품질검사대기</option>
+									<option value="품질검사대기" th:selected="${orderRequest.status == '입고품질검사대기'}">입고품질검사대기</option>
 								</select>
 								<input type="hidden" name="orderRequestCode" th:value="${orderRequest.orderRequestCode}">
 								<button type="submit" class="btn btn-primary mt-2">상태 업데이트</button>
@@ -68,14 +68,14 @@
 							</form>
 						</td>
 					</tr>
-					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status != '검사완료'].size() == 0}">
+					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status != '입고품질검사완료'].size() == 0}">
 						<td colspan="9" class="text-center">등록된 발주 요청이 없습니다.</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<!-- 발주 이력 확인 공간 추가 -->
-			<h2>검사 완료된 발주 요청 목록</h2>
+			<h2>품질검사 완료된 발주 요청 목록</h2>
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -90,7 +90,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status == '검사완료'}">
+					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status == '입고품질검사완료'}">
 						<td th:text="${orderRequest.orderRequestCode}">발주 코드</td>
 						<td th:text="${orderRequest.mtCode}">자재 코드</td>
 						<td th:text="${orderRequest.mtName}">자재명</td>
@@ -98,9 +98,9 @@
 						<td th:text="${orderRequest.cpCode}">업체 코드</td>
 						<td th:text="${orderRequest.comm}">비고</td>
 						<td th:text="${#dates.format(orderRequest.orderDate, 'yyyy-MM-dd')}">발주일자</td>
-						<td th:text="${orderRequest.status}">검사완료</td>
+						<td th:text="${orderRequest.status}">입고품질검사완료</td>
 					</tr>
-					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status == '검사완료'].size() == 0}">
+					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status == '입고품질검사완료'].size() == 0}">
 						<td colspan="8" class="text-center">처리된 이력이 없습니다.</td>
 					</tr>
 				</tbody>

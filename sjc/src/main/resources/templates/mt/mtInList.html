@@ -44,12 +44,7 @@
 						<td
 							th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
 						<td>
-							<form th:action="@{/mtIn/delete}" method="post"
-								style="display: inline;">
-								<input type="hidden" name="inCode" th:value="${mtIn.inCode}">
-								<button type="submit" class="btn btn-danger"
-									onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-							</form>
+
 						</td>
 					</tr>
 				</tbody>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+</head>
+<body>
+<div class="main-container">
+    <h3>사용자 관리</h3>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">사용자번호</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputUserId" placeholder="사용자번호 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">아이디</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputLoginId" placeholder="아이디 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">권한</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputRoleName" placeholder="권한 입력">
+        </div>
+
+        <button class="btn btn-primary mr-3" id="searchBtn">검색</button>
+        <button class="btn btn-success mr-3" id="insertBtn">추가</button>
+        <button class="btn btn-secondary mr-3" id="saveBtn">저장</button>
+        
+    </div>
+    
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">이름</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputUserName" placeholder="이름 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">부서코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputDeptCode" placeholder="부서코드 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">부서명</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputDeptName" placeholder="부서명 입력">
+        </div>
+        
+        <button class="btn btn-danger mr-3" id="deleteBtn">삭제</button>
+        <button class="btn btn-warning mr-3" id="updateBtn">수정</button>
+        <button class="btn btn-info" id="copyBtn">복사</button>
+    </div>
+
+    <div id="grid"></div>
+    <div id="gridInsert" style="display:none"></div>
+    <!-- 
+    <div id="gridCopyLog"></div>
+    <div id="gridCopyDetail"></div>
+     -->
+    
+</div>
+
+<script th:src="@{/assets/js/info/userListGridApiInsert.js}"></script>
+
+</body>
+</html>

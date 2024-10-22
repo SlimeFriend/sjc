@@ -27,7 +27,7 @@ public class ProductionPlanController {
     public String getProductionPlans(Model model) {
         List<PlanVO> productionPlans = productionPlanService.getAllProductionPlans();
         model.addAttribute("productionPlans", productionPlans);
-        return "mt/productionPlanList";   // Thymeleaf 템플릿 이름
+        return "mt/productionPlanList";   
     }
 
     // 선택된 생산 계획에 따른 자재 목록을 반환하는 메서드

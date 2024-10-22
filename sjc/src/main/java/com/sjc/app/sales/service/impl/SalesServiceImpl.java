@@ -40,15 +40,20 @@ public class SalesServiceImpl implements SalesService {
 	
 	// 주문번호 시퀀스 값 가져오기
 	@Override
-	public int getOrdCode() {
-		int nextId = 0;
-		String sql = "SELECT ord_seq.NEXTVAL FROM dual";
+	public String getOrdCode() {
+		String nextId = "";
+		String sql = "select"
+				+ " case"
+				+ " when (max(substr(ord_code, 4, 8))) = to_char(sysdate, 'yyyyMMdd') then ('ORD' || to_char(max(substr(ord_code, 4, 12)) + 1))"
+				+ " else ('ORD' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 3, 0)) )"
+				+ " end ord_code"
+				+ " from ord";
 		try (Connection connection = dataSource.getConnection();
 	             PreparedStatement ps = connection.prepareStatement(sql);
 	             ResultSet rs = ps.executeQuery()) {
 	            
 	            if (rs.next()) {
-	                nextId = rs.getInt(1);  // 시퀀스 값 가져오기
+	                nextId = rs.getString(1);  // 시퀀스 값 가져오기
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -76,6 +81,11 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<Map<String, Object>> orderDetail(String ordCode) {
 	    return salesMapper.selectOrderDetail(ordCode);
+	}
+	
+	@Override
+	public List<Map<String, Object>> productDetail(String prdCode) {
+		return salesMapper.selectProductDetail(prdCode);
 	}
 
 	@Override
