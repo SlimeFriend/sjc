@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
-import com.sjc.app.sales.service.SalesDTO;
+import com.sjc.app.sales.service.outHistoryVO;
 
 public interface SalesMapper {
 
@@ -38,10 +38,12 @@ public interface SalesMapper {
 	public List<OrderVO> selectProductOut();
 	
 	// 입출고 내역
-	public List<ProductVO> selectInOutHistory();
+	public List<outHistoryVO> selectOutHistory();
 	
 	// 업체 리스트
 	public List<OrderVO> selectCompany();
-
+	
+	// 제품 출고 프로세스
+	public int productOutProcess(@Param("lot") String lot, @Param("outQuantity") int outQuantity);
 
 }

@@ -1,7 +1,5 @@
 package com.sjc.app.sales.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +15,7 @@ import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
+import com.sjc.app.sales.service.outHistoryVO;
 
 @Controller
 public class SalesController {
@@ -137,12 +136,26 @@ public class SalesController {
 		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
 		return prdDetail;
 	}
+	
+	// 제품출고 프로세스
+	@PostMapping("/prdOutProcess")
+	@ResponseBody
+	public String prdOutProcess(@RequestBody List<Map<String, Object>> requestData) {
+		for (Map<String, Object> data : requestData) {
+	        String lot = (String) data.get("lot"); // LOT 값
+	        int outQuantity = ((Number) data.get("outQuantity")).intValue(); // 출고량
+	        
+	        System.err.println("LOT: " + lot + ", Out Quantity: " + outQuantity);
+	        salesService.productOutProcess(lot, outQuantity);
+	    }
+	    return "출고 처리 성공"; // 적절한 응답 반환
+	}
 
 	// 입/출고 내역 페이지
 	@GetMapping("/inoutHistory")
 	public String inoutHistoryPage(Model model) {
-		List<ProductVO> list = salesService.inoutHistory();
-		model.addAttribute("inoutHistory", list);
+		List<outHistoryVO> list = salesService.outHistory();
+		model.addAttribute("outHistory", list);
 		return "sales/inoutHistory";
 	}
 	

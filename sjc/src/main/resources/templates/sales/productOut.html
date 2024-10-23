@@ -32,7 +32,7 @@
 						</div>
 						<!-- Modal footer -->
 						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-primary" data-dismiss="modal">등록</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" id="submitBtn">등록</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
 						</div>
 					</div>
@@ -85,6 +85,27 @@
 				}
 			});
 			
+			grid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
+			    
+			    if(ordCodeValue) {
+			    	$.ajax({
+			    		url : '/getOrdDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({ordCode : ordCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			gridModal.resetData(response); 
+			    			$('#myModal').modal('show');
+			    			gridModal.refreshLayout();
+			    		},
+			    	});
+			    }
+			});
+			
 			const gridModal = new tui.Grid({
 				el : document.getElementById('gridOrderDetail'),
 				data : gridModalData,
@@ -121,6 +142,24 @@
 					useClient : true,
 					perPage : 5
 				}
+			});
+			
+			gridModal.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE'); 
+			    console.log(prdCodeValue);
+			    if(prdCodeValue) {
+			    	$.ajax({
+			    		url : '/getPrdLotDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({prdCode : prdCodeValue}),
+			    		success: function(response) {
+			    			productLotGrid.resetData(response); 
+			    			productLotGrid.refreshLayout();
+			    		},
+			    	});
+			    }
 			});
 			
 			const productLotGrid = new tui.Grid({
@@ -160,52 +199,59 @@
 				},
 				
 				],
-				rowHeaders : [ 'rowNum' ],
+				rowHeaders : [ 'checkbox' ],
 				pageOptions : {
 					useClient : true,
 					perPage : 10
 				}
 			});
 			
-			gridModal.on('click', (ev) => {
-			    const rowKey = ev.rowKey;
-			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE');
-			    console.log(prdCodeValue);
-			    if(prdCodeValue) {
-			    	$.ajax({
-			    		url : '/getPrdLotDetail',
-			    		type : 'POST',
-			    		contentType : 'application/json',
-			    		data : JSON.stringify({prdCode : prdCodeValue}),
-			    		success: function(response) {
-			    			productLotGrid.resetData(response); 
-			    			productLotGrid.refreshLayout();
-			    		},
-			    	});
-			    }
-			});
+			let outValue = 0; // 출고량 값
+			let lotValue = 0; // LOT 값
 			
-			grid.on('click', (ev) => {
-			    const rowKey = ev.rowKey;
-			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
+			productLotGrid.on('editingFinish', (ev) => {
+		        const { value } = ev;
+		        const rowKey = ev.rowKey;
+		        lotValue = productLotGrid.getValue(rowKey, 'LOT'); 
+		        productLotGrid.setValue(value);
+		        outValue = value;
+		        
+		        totalOutValue = 0;
+		        const rowCount = productLotGrid.getRowCount();
+
+		        for (let i = 0; i < rowCount; i++) {
+		            const currentOutValue = productLotGrid.getValue(i, 'OUT_QUANTITY');
+		            totalOutValue += currentOutValue ? Number(currentOutValue) : 0;
+		        }
+		        console.log('Total Out Value:', totalOutValue);
+		    });
+			
+			document.getElementById('submitBtn').addEventListener('click', () => {
+				const checkedRows = productLotGrid.getCheckedRows();
 			    
-			    if(ordCodeValue) {
+			    const outData = checkedRows.map(row => ({
+			        lot: productLotGrid.getValue(row.rowKey, 'LOT'),  // LOT 값 가져오기
+			        outQuantity: Number(productLotGrid.getValue(row.rowKey, 'OUT_QUANTITY')) // 출고량 값 가져오기
+			    }));
+			    
+		        if(outData.length > 0) {
 			    	$.ajax({
-			    		url : '/getOrdDetail',
+			    		url : '/prdOutProcess',
 			    		type : 'POST',
 			    		contentType : 'application/json',
-			    		data : JSON.stringify({ordCode : ordCodeValue}),
-			    		success: function(response) {
-			    			console.log('Order details received:', response);
-			    			document.getElementById('gridOrderDetail').style.opacity = 1;
-			    			gridModal.resetData(response); 
-			    			$('#myModal').modal('show');
-			    			gridModal.refreshLayout();
-			    		},
+			    		data : JSON.stringify(outData),
+			    		 success: function(response) {
+			                 console.log('출고 처리 성공:', response);
+			             },
+			             error: function(xhr, status, error) {
+			                 console.error('출고 처리 실패:', error);
+			             }
 			    	});
+			    } else {
+			    	alert("출고량을 입력한 행이 없습니다.");
 			    }
 			});
-			
+
 			
 			
 		});

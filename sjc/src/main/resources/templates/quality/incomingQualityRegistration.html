@@ -319,7 +319,7 @@
 															</li>
 														</ul>
 														-->
-														<table>
+<!-- 														<table>
 															<thead>
 																<tr>
 																	<th>항목 이름 :ins_item.INS_ITEM_NAME</th>
@@ -333,14 +333,14 @@
 
 																	<tr>
 																		<td>
-																			<label for="insItemName"></label> 
+																			<label for="insItemName">[[${ttt.insItemName}]]</label> 
                             												<input type="text" id="insItemName" th:value="${ttt.insItemName}">
                             											</td>
 																		<td>
 																			<label for="insItemCiteria"></label> 
                             												<input type="text" id="insItemCiteria" th:value="${ttt.insItemCiteria}">
                             											</td>
-																		<td>
+ 																		<td>
 																			<label for="insValue"></label> 
                             												<input type="text" id="insValue" th:value="${ttt.insValue}">
                             											</td>
@@ -351,13 +351,21 @@
 																	</tr>
 																</th:block>
 															</tbody>
-														</table>
+														</table> -->
+														<th:block th:each="ttt : ${testList}">
+															
+															<td>
+																<label for="insItemName">항목 이름 :ins_item.INS_ITEM_NAME</label> 
+																<input type="text" id="insItemName" th:value="${ttt.insItemName}">
+															</td>
+															
+														</th:block>
 
 
 
 													</div>
 													<!-- Open Task End -->
-													<!-- Close Task start -->
+<!-- 													Close Task start
 													<div class="task-title row align-items-center">
 														<div class="col-md-12 col-sm-12">
 															<h5>Closed Tasks</h5>
@@ -403,7 +411,7 @@
 															</li>
 														</ul>
 													</div>
-													<!-- Close Task start -->
+													Close Task start -->
 													<!-- add task popup start -->
 													<div class="modal fade customscroll" id="task-add" tabindex="-1" role="dialog">
 														<div class="modal-dialog modal-dialog-centered" role="document">
