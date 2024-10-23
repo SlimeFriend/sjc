@@ -133,9 +133,8 @@
 					align : 'center',
 				},{
 					header : '출고량',
-					name : '',
+					name : 'totalOutQuantity',
 					align : 'center',
-					editor: 'text',
 				},],
 				rowHeaders : [ 'rowNum' ],
 				pageOptions : {
@@ -208,6 +207,7 @@
 			
 			let outValue = 0; // 출고량 값
 			let lotValue = 0; // LOT 값
+			let totalOutValue = 0;
 			
 			productLotGrid.on('editingFinish', (ev) => {
 		        const { value } = ev;
@@ -224,6 +224,8 @@
 		            totalOutValue += currentOutValue ? Number(currentOutValue) : 0;
 		        }
 		        console.log('Total Out Value:', totalOutValue);
+		        gridModal.setValue(totalOutValue, 'totalOutQuantity');
+		        gridModal.refreshLayout();
 		    });
 			
 			document.getElementById('submitBtn').addEventListener('click', () => {
@@ -252,8 +254,7 @@
 			    }
 			});
 
-			
-			
+
 		});
 	</script>
 </div>
