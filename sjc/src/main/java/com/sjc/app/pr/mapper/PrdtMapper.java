@@ -1,6 +1,7 @@
 package com.sjc.app.pr.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
@@ -43,4 +44,7 @@ public interface PrdtMapper {
 	
 	// 지시에 있는지 실적 조회
 	public List<PResultVO> searchR(String pdetailCode);
+	
+	// 공정 자재 가져오기
+	void outMt(String mc, int needs, int mng, String lcode);
 }

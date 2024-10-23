@@ -1,6 +1,7 @@
 package com.sjc.app.pr.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -148,7 +149,22 @@ public class PrController {
 		
 	
 	
-	// 생산 실적(진행) 화면 표출
+	// 생산 공정 자재 가져오기
+	@PostMapping("outMt")
+	public String outMt(@RequestBody Map<String, Object> params) {
+		
+		String mc = (String)params.get("mc");
+		int needs = (Integer)params.get("needs");
+		int mng = (Integer)params.get("mng");
+		String lcode = (String)params.get("lcode");
+		    
+		prdtService.outMt(mc,
+						needs,	
+						mng,
+						lcode);
+		
+		return "ok";
+	}
 	
 	
 	
