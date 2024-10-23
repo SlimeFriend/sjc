@@ -76,6 +76,7 @@
     const plan = document.getElementById('plan');
     const detailBody = document.getElementById('detail-body');  
     const sBtn = document.getElementById('sBtn');
+    const dby = document.getElementById('dbody');
     let today = new Date();
     let prd;
     let pd;
@@ -95,7 +96,6 @@
             
             
             
-
             
             console.log(cnt);
             console.log(prd);
@@ -265,17 +265,49 @@
  		if(line == null){
  			alert('선택해라');
  		} else{
- 			alert(line);
+ 			
+ 			Array.from(dby.children).forEach((pl) => {
+ 				
+			
+			
+ 			fetch('/outMt', {
+		        method: 'POST',
+ 		        headers: {
+ 		            'Content-Type': 'application/json',
+ 		        },
+ 		        body: JSON.stringify({
+ 		            mc: pl.dataset.mc,
+ 		            needs: parseInt(pl.children[1].innerText),
+ 		            mng: 1,
+ 		            lcode: line,
+ 		        }),
+ 		    })
+ 		    .then(response => {
+ 		        if (!response.ok) {
+ 		            throw new Error('Network response was not ok');
+ 		        }
+ 		        return response.json();
+ 		    })
+ 		    .then(data => {
+ 		        alert('자재 출고 완료: ' + data.message);
+ 		        // 필요 시, 테이블 업데이트 코드 추가
+ 		    })
+ 		    .catch(error => {
+ 		        console.error('에러 발생:', error);
+ 		        alert('출고 실패: ' + error.message);
+ 		    });
+ 		});
  		}
  	});
  
 
 
+
     	
     	
-    	
-    	
-/*        let rows = Array.from(document.getElementById("cbody").children);
+ 	
+ 	/*        
+ 		let rows = Array.from(document.getElementById("cbody").children);
         let currentIndex = 0; // 현재 진행 중인 행의 인덱스
 
         function updateRow(row) {
