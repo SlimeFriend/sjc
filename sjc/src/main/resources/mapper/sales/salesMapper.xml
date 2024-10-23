@@ -26,7 +26,7 @@
 		       pm.stc_quantity
 		FROM   prd p JOIN prd_management pm
 		ON     p.prd_code = pm.prd_code
-		WHERE  p.prd_code = #{prdCode}
+		WHERE  p.prd_code = #{prdCode} AND pm.stc_quantity > 0
 	</select>
 
 	<!-- 주문 접수 -->
@@ -83,16 +83,14 @@
 	</select>
 	
 	<select id="selectProductLot" resultType="ProductVO">
-		SELECT
-		p.prd_name,
-		p.prd_code,
-		pm.lot,
-		pm.md,
-		pm.ed,
-		pm.stc_quantity
-		FROM prd p
-		JOIN prd_management pm
-		ON p.prd_code = pm.prd_code
+		SELECT   p.prd_name,
+		         p.prd_code,
+				 pm.lot,
+				 pm.md,
+				 pm.ed,
+				 pm.stc_quantity
+		FROM     prd p JOIN prd_management pm
+		ON       p.prd_code = pm.prd_code
 	</select>
 
 	<!-- 제품입고 조회 -->
@@ -116,19 +114,28 @@
 		o.dlv_req_date,
 		o.ord_status
 		FROM ord o join cp c
-		ON o.cp_code =
-		c.cp_code
+		ON o.cp_code = c.cp_code
 	</select>
 
 	<!-- 제품 입출고 내역 -->
-	<select id="selectInOutHistory" resultType="ProductVO">
-		SELECT o.ord_code,
-		       c.cp_name,
-		       o.ord_date,
-		       o.dlv_req_date
-		FROM   ord o join cp c	
-		               ON o.cp_code = c.cp_code
+	<select id="selectOutHistory" resultType="outHistoryVO">
+		SELECT LOT,
+               PRD_CODE,
+       		   PRD_NAME,
+       		   OUT_QUANTITY,
+		       OUT_DATE,
+		       CP_NAME,
+		       CP_CODE,
+		       ORD_CODE
+	    FROM   prd_out_history
 	</select>
+	
+	<!-- 출고접수 프로세스 -->
+	<update id="productOutProcess">
+		UPDATE prd_management
+		SET    out_quantity = #{outQuantity}
+		WHERE  lot = #{lot}
+	</update>
 </mapper>
 
 	
