@@ -62,34 +62,34 @@
 				<div class="d-flex justify-content-between align-items-center mb-20">
 						<form th:action="@{/eqInsert}" name="insertForm" method="post" class="form-control">
 			<div>
-                <label for="mdNm">모델명(필수)</label>
-                <input type="text" id="mdNm" name="mdNm">
+                <label for="eqMdnm">모델명(필수)</label>
+                <input type="text" id="eqMdnm" name="eqMdnm">
             </div>
             <div>
-                <label for="eqCd">설비코드</label>
-                <input type="text" id="eqCd" name="eqCd">
+                <label for="eqCode">설비코드</label>
+                <input type="text" id="eqCode" name="eqCode">
             </div>
             <div>
-                <label for="mdNo">모델번호</label>
-                <input type="text" id="mdNo" name="mdNo">
+                <label for="eqMdno">모델번호</label>
+                <input type="text" id="eqMdno" name="eqMdno">
             </div>
             <div>
-                <label for="dept">담당부서</label>
-                <input type="text" id="dept" name="dept">
+                <label for="eqDep">담당부서</label>
+                <input type="text" id="eqDep" name="eqDep">
             </div>
             <div>
-                <label for="temp">가용온도</label>
-                <input type="text" id="temp" name="temp">
+                <label for="eqMin">가용온도</label>
+                <input type="text" id="eqMin" name="eqMin">
                 ~
-                <input type="text" id="temp" name="temp">
+                <input type="text" id="eqMax" name="eqMax">
             </div>
             <div>
-                <label for="per">점검주기</label>
-                <input type="text" id="per" name="per">
+                <label for="eqPeriod">점검주기</label>
+                <input type="text" id="eqPeriod" name="eqPeriod">
             </div>
             <div>
-                <label for="empNo">사원번호</label>
-                <input type="text" id="empNo" name="empNo">
+                <label for="employeeNo">사원번호</label>
+                <input type="text" id="employeeNo" name="employeeNo">
             </div>
             <div>
                 <label for="manager">담당자</label>
@@ -97,11 +97,11 @@
             </div>
             <div>
                 <label for="eqLocation">설비위치</label>
-                <input type="text" id="location" name="location">
+                <input type="text" id="eqLocation" name="eqLocation">
             </div>
             <div>
-                <label for="image">설비사진</label>
-                <input type="file" id="image" name="image">
+                <label for="eqImg">설비사진</label>
+                <input type="file" id="eqImg" name="eqImg">
             </div>
             
             <div class="button-group">
@@ -122,8 +122,8 @@
 			event.preventDefault();
 			
 			
-			let mdName = $('form [name="mdNm"]');
-			if(mdName.val() == ''){
+			let mdNm = $('form [name="mdNm"]');
+			if(mdNm.val() == ''){
 				alert('모델명이 입력되지 않았습니다.');
 				mdName.focus();
 				return;

@@ -30,7 +30,34 @@
     <!-- 등록 -->
 <insert id="insertEqInfo" parameterType="EqVO">
 	<selectKey keyProperty="eqCode"
-			   resultType="Integer"
+			   resultType="String"
+			   order="BEFORE">
+select
+    case
+        when (max(substr(eq_code, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('O' || to_char(max(substr(eq_code, 2, 13)) + 1))
+        else ('O' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
+    end    eq_code
+from    eq
+    </selectKey>
+  	INSERT INTO eq
+  				(
+	    	    eq_code
+  			  , eq_mdnm
+	     	  , eq_mdno
+	    	  , eq_period
+  				)
+  	VALUES (
+  			 #{eqCode}
+  			,#{eqMdnm}
+  			,#{eqMdno}
+  			,#{eqPeriod}
+  			
+  			)
+</insert>
+<!-- 
+<insert id="insertEqInfo" parameterType="EqVO">
+	<selectKey keyProperty="eqCode"
+			   resultType="String"
 			   order="BEFORE">
 select
     case
@@ -68,6 +95,7 @@ from    eq
   			
   			)
 </insert>
+ -->
 
     <!-- 단건조회 -->
 <select id="selectEqInfo" resultType="EqVO">

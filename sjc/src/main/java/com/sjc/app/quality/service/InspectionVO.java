@@ -46,6 +46,13 @@ public class InspectionVO {
 		private String cpCode;//업체 코드
 		private String mtlOdStatus;//발주상태
 		
+	// MtInVO
+		private Date inputDate; //입고일
+		private Integer inquantity; //입고수량
+		private Date ed; //유통기한
+		private String inCode; //입고코드
+		private String lotNo; //LOT번호
+		
 		
 	// InsItemVO
 		private String insItemCode;

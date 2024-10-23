@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,6 +17,7 @@ import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 
 @Controller
@@ -118,6 +120,36 @@ public class PrController {
 		
 		return prdtService.pNeed(prdCode);
 	}
+	
+	// 생산 관리 공정 흐름도
+	@GetMapping("pPrc")
+	@ResponseBody
+	public List<PrcVO> pPrc(@RequestParam String lineCode) {
+		
+		return prdtService.pPrc(lineCode);
+	}
+	
+	// 생산 실적(진행) 있는지 확인
+	@GetMapping("searchR")
+	@ResponseBody
+	public List<PResultVO> searchR(@RequestParam String pdetailCode) {
+		
+		return prdtService.searchR(pdetailCode);
+	}
+	
+	// 생산 실적 최초 생성
+	@PostMapping("insertR")
+	public String insertR(@RequestBody PResultVO pvo) {
+		
+		prdtService.insertR(pvo);
+		
+		return "a";
+	}
+		
+	
+	
+	// 생산 실적(진행) 화면 표출
+	
 	
 	
 }
