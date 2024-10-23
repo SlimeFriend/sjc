@@ -36,12 +36,12 @@
 						<td>[[${#dates.format(equip.eqCkDate, "yyyy년 MM월 dd일")}]]</td>
 					</tr>
 					<tr>
-						<th>가동여부</th>
-						<td>[[${equip.use}]]</td>
+						<th>점검주기</th>
+						<td>[[${equip.eqPeriod}]]</td>
 					</tr>
 					<tr>
-						<th>담당부서</th>
-						<td>[[${equip.eqDep}]]</td>
+						<th>가동여부</th>
+						<td>[[${equip.use}]]</td>
 					</tr>
 					<tr>
 						<th>담당자</th>
@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<th>기준온도</th>
-						<td>[[${equip.eqStandTemp}]]</td>
+						<td>27도</td>
 					</tr>
 					<tr>
 						<th>설치위치</th>
@@ -65,8 +65,8 @@
 					</tr>
 				</table>
 				<button class="btn btn-primary">수정</button>
-				<button class="btn btn-danger">삭제</button>
-				<button class="btn btn-dark" type="button" onclick="location.href='eqList'">목록으로</button>
+				<button class="btn btn-danger" type="button" th:onclick="|location.href='@{eqDelete(eqCode=${equip.eqCode})}'|">삭제</button>
+				<button class="btn btn-dark" type="button" th:onclick="|location.href='@{/eqList}'|">목록으로</button>
 			</div>
 		</div>
 	</div>

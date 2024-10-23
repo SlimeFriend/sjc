@@ -1,6 +1,7 @@
 package com.sjc.app.eq.service;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface EqService {
@@ -14,8 +15,10 @@ public interface EqService {
 	public int eqInsert(EqVO eqVO);
 	
 	// 수정
+	//public Map<String, Object> eqUpdate(EqVO eqVO);
 	
 	// 삭제
+	public int eqDelete(String eqCode);
 	
 	// 비가동 목록 중 일부 Eq쪽 조회
 	public List<EqVO> eqList2();

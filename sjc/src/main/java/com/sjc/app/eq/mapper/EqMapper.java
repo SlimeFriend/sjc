@@ -16,9 +16,10 @@ public interface EqMapper {
 	public int insertEqInfo(EqVO eqVO);
 	
 	// 수정
+	//public int updateEqInfo(EqVO eqVO);
 	
 	// 삭제
-	
+	public int deleteEqInfo(String eqCode);
 	
 	// 설비 가동 상태
 	public List<EqVO> selectEqAll2();
