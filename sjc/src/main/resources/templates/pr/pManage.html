@@ -115,6 +115,7 @@
                     // 받아온 데이터로 테이블 행 추가
                     resp.forEach(item => {
                         const row = document.createElement('tr');
+                        row.dataset.mc = item.mtCode;
                         row.innerHTML = `
                             <td>${item.mtName}</td>
                             <td>${item.quantityRequired * cnt}</td>
@@ -163,6 +164,7 @@
         cbody.innerHTML = ''; // 이전 내용 초기화
         data.forEach(item => {
             const row = document.createElement('tr');
+            row.dataset.rc = item.presultCode;
             if(item.status == 'b1'){
             row.innerHTML = `
                 <td>${item.no}</td>
@@ -259,6 +261,13 @@
 		});
  	}
  	
+ 	sBtn.addEventListener('click', function(){
+ 		if(line == null){
+ 			alert('선택해라');
+ 		} else{
+ 			alert(line);
+ 		}
+ 	});
  
 
 
