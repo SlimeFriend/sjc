@@ -26,5 +26,6 @@ public class MtVO {
 	private Integer quantity; // 제품수량
 	private String lotNo; //LOT번호
 	 private List<MtInVO> lotDetails;
+	 private Integer totalQuantity; // 수량 합계
 	
 }
