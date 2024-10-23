@@ -1,10 +1,8 @@
 package com.sjc.app.mt.serviceImpl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.sjc.app.mt.mapper.StockMapper;
 import com.sjc.app.mt.service.MtInVO;
 import com.sjc.app.mt.service.MtVO;
@@ -16,9 +14,10 @@ public class StockServiceImpl implements StockService {
     @Autowired
     private StockMapper stockMapper;
 
+    // 전체 자재 목록을 가져오는 메서드
     @Override
     public List<MtVO> getAllMaterials() {
-        List<MtVO> materials = stockMapper.getAllMaterials();
+        List<MtVO> materials = stockMapper.getAllMaterials(); // 전체 자재 목록 조회
 
         for (MtVO material : materials) {
             // 각 자재의 로트번호별 수량을 가져옴
@@ -45,7 +44,7 @@ public class StockServiceImpl implements StockService {
         return stockMapper.getCompletedInspectionMaterials(); // 입고 품질검사 완료 자재 목록 조회
     }
 
-    // 현재 재고 업데이트 기능
+    // 현재 재고 업데이트 기능 (재고 추가 또는 차감)
     @Override
     public void updateCurrentStock(String mtCode, Integer quantity) {
         stockMapper.updateCurrentStock(mtCode, quantity); // 현재 재고 업데이트
@@ -63,12 +62,38 @@ public class StockServiceImpl implements StockService {
         return stockMapper.getTotalQuantityByLotNo(mtCode); // 로트번호별 자재 수량 합계 조회
     }
 
-    // 로트번호별 자재 수량의 합계를 현재 재고에 반영하는 기능
+    // 특정 자재 코드를 기반으로 자재 정보 조회
     @Override
-    public void updateStockWithLotQuantities(String mtCode) {
-        Integer totalQuantity = stockMapper.getTotalQuantityByLotNo(mtCode);
-        if (totalQuantity != null) {
-            stockMapper.updateCurrentStock(mtCode, totalQuantity); // 현재 재고 업데이트
-        }
+    public MtVO selectMaterialByCode(String mtCode) {
+        return stockMapper.getMaterialByCode(mtCode); // 자재 코드로 자재 정보 조회
+    }
+
+    // 재고 조정 메서드 (로트 번호 수량 및 현재 재고 업데이트)
+    @Override
+    public void adjustStock(String mtCode, String lotNo, int newStock) {
+        // 로트 번호의 수량 업데이트
+        stockMapper.updateLotQuantity(mtCode, lotNo, newStock);
+        
+        // 자재의 현재 재고 업데이트
+        stockMapper.updateCurrentStock(mtCode, newStock);
+    }
+
+    // 로트 번호에 수량을 추가하고 현재 재고를 업데이트하는 메서드
+    @Override
+    public void addQuantityToLotAndUpdateStock(String mtCode, String lotNo, int quantity) {
+        stockMapper.updateLotQuantity(mtCode, lotNo, quantity);  // 로트 번호에 수량 추가
+        stockMapper.updateCurrentStock(mtCode, quantity);        // 현재 재고 업데이트
+    }
+
+    // 자재 코드에 따른 로트번호 목록을 반환하는 메서드
+    @Override
+    public List<String> getLotNumbersByMtCode(String mtCode) {
+        return stockMapper.findLotNumbersByMtCode(mtCode); // 자재 코드로 로트번호 목록 조회
+    }
+
+    // 자재 코드에 따른 로트별 상세 정보 조회
+    @Override
+    public List<MtInVO> getLotDetailsByMtCode(String mtCode) {
+        return stockMapper.getLotDetailsByMtCode(mtCode); // 자재 코드로 로트별 상세 정보 조회
     }
 }
