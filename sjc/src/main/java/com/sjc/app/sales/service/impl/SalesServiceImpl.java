@@ -16,6 +16,7 @@ import com.sjc.app.sales.mapper.SalesMapper;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.SalesService;
+import com.sjc.app.sales.service.outHistoryVO;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,12 @@ public class SalesServiceImpl implements SalesService {
 	        return nextId;
 	}
 	
+	// 출고 접수
+	@Override
+	public int productOutProcess(String lot, int outQuantity) {
+		return salesMapper.productOutProcess(lot, outQuantity);
+	}
+	
 	
 	@Override
 	public int insertOrderDetail(ProductVO productVO, String ordCode) {
@@ -104,8 +111,8 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public List<ProductVO> inoutHistory() {
-		return salesMapper.selectInOutHistory();
+	public List<outHistoryVO> outHistory() {
+		return salesMapper.selectOutHistory();
 	}
 
 	@Override
