@@ -76,10 +76,10 @@
 		       , o.mt_code
 		       , o.cp_code
 		       , m.mt_name
-		FROM copy_mtl_od o
+		FROM mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
-		    JOIN copy_mt m
+		    JOIN mt m
 		        ON o.mt_code = m.mt_code
 		 WHERE
 		 	o.mtl_od_code = #{mtlOdCode}
@@ -94,14 +94,14 @@
         FROM ins_detail d
         JOIN ins_item i
         ON d.ins_item_code = i.ins_item_code
-        WHERE i.ins_type_code = (SELECT ins_type_code
-                            	 FROM    ins_type
-                            	 WHERE   MATERIAL_TYPE = (
+        WHERE i.ins_type_code = (SELECT material_type_code
+                                 FROM mt
+                                 WHERE mt_code = (
                                                         SELECT MATERIAL_TYPE
-                                                        FROM    copy_mt
+                                                        FROM    mt
                                                         WHERE   mt_code = (
                                                                             SELECT  mt_code
-                                                                            FROM    copy_mtl_od
+                                                                            FROM    mtl_od
                                                                             WHERE   mtl_od_code = #{mtlOdCode}
                                                                             )
                                                         )
