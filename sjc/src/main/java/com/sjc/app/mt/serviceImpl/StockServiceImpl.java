@@ -16,10 +16,21 @@ public class StockServiceImpl implements StockService {
     @Autowired
     private StockMapper stockMapper;
 
-    // 전체 자재 목록 조회
     @Override
     public List<MtVO> getAllMaterials() {
-        return stockMapper.getAllMaterials();
+        List<MtVO> materials = stockMapper.getAllMaterials();
+
+        for (MtVO material : materials) {
+            // 각 자재의 로트번호별 수량을 가져옴
+            List<MtInVO> lotDetails = stockMapper.getMaterialsByLotNo(material.getMtCode());
+            material.setLotDetails(lotDetails);
+
+            // 로트번호별 수량을 합산하여 currentStc에 저장
+            int totalQuantity = lotDetails.stream().mapToInt(MtInVO::getInquantity).sum();
+            material.setCurrentStc(totalQuantity); // 현재 재고로 설정
+        }
+
+        return materials;
     }
 
     // 자재 구분 업데이트 기능
@@ -50,5 +61,14 @@ public class StockServiceImpl implements StockService {
     @Override
     public Integer getTotalQuantityByLotNo(String mtCode) {
         return stockMapper.getTotalQuantityByLotNo(mtCode); // 로트번호별 자재 수량 합계 조회
+    }
+
+    // 로트번호별 자재 수량의 합계를 현재 재고에 반영하는 기능
+    @Override
+    public void updateStockWithLotQuantities(String mtCode) {
+        Integer totalQuantity = stockMapper.getTotalQuantityByLotNo(mtCode);
+        if (totalQuantity != null) {
+            stockMapper.updateCurrentStock(mtCode, totalQuantity); // 현재 재고 업데이트
+        }
     }
 }

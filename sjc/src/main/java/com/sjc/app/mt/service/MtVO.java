@@ -1,6 +1,7 @@
 package com.sjc.app.mt.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -23,4 +24,8 @@ public class MtVO {
 	private String prdName; // 제품명
 	private Integer totalRequired; // 총소요량 추가
 	private Integer quantity; // 제품수량
+	private String lotNo; //LOT번호
+	 private List<MtInVO> lotDetails;
+	 private Integer totalQuantity; // 수량 합계
+	
 }

@@ -13,14 +13,14 @@
 				<h4 class="h5 mb-20">제품 선택</h4>
 				<div id="selectProduct"></div>
 			</div>
-			<div id="showProduct"></div>
+			<div id="selectProductLot" style="opacity : 0"></div>
 		</div>
 	</div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			const productGridData = /*[[${products}]]*/[];
-			const productLotgridData = /*[[${productManagement}]]*/[];
+			const productLotGridData = /*[[${productManagement}]]*/[];
 
 			const productGrid = new tui.Grid({
 				el : document.getElementById('selectProduct'),
@@ -62,38 +62,44 @@
 			    		type : 'POST',
 			    		contentType : 'application/json',
 			    		data : JSON.stringify({prdCode : prdCodeValue}),
-			    	})
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('selectProductLot').style.opacity = 1;
+			    			productLotGrid.resetData(response);
+			    		},
+			    		
+			    	});
 			    }
 			});
 
-			const productLotgrid = new tui.Grid({
-				el : document.getElementById('showProduct'),
-				data : productLotgridData,
+			const productLotGrid = new tui.Grid({
+				el : document.getElementById('selectProductLot'),
+				data : productLotGridData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
 					header : '제품명',
-					name : 'prdName',
+					name : 'PRD_NAME',
 					align : 'center',
 				}, {
 					header : '제품코드',
-					name : 'prdCode',
+					name : 'PRD_CODE',
 					align : 'center',
 				}, {
 					header : 'LOT',
-					name : 'lot',
+					name : 'LOT',
 					align : 'center',
 				}, {
 					header : '제조일자',
-					name : 'md',
+					name : 'MD',
 					align : 'center',
 				}, {
 					header : '유통기한',
-					name : 'ed',
+					name : 'ED',
 					align : 'center',
 				}, {
 					header : '수량',
-					name : 'stcQuantity',
+					name : 'STC_QUANTITY',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],

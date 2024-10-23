@@ -45,18 +45,14 @@ public class SalesController {
 	@PostMapping("/orderReception")
 	public String insertOrder(@RequestBody SalesDTO salesDTO) {
 		
-		int nextId = salesService.getOrdCode();
-		System.err.print(nextId);
-		String ordCode = "ORD" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + String.format("%03d", nextId);
+		String nextId = salesService.getOrdCode();
+
+		String ordCode = String.valueOf(nextId);
 		 
 	    OrderVO orderVO = salesDTO.getOrderVO();
 	    List<ProductVO> productVOList = salesDTO.getProductVO(); 
 	    
 	    orderVO.setOrdCode(ordCode);
-	    
-	    System.err.println(orderVO);
-	    System.err.println(productVOList);
-	    System.err.println(salesDTO);
 	    
 	    int orderResult = salesService.insertOrder(orderVO);
 	    
@@ -97,6 +93,17 @@ public class SalesController {
 		model.addAttribute("productManagement", productLotList);
 		return "sales/productManagement";
 	}
+	
+	// 제품관리 상세 페이지
+	@PostMapping("/getProductDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getProductDetail(@RequestBody Map<String, String> requestData) {
+		String prdCode = requestData.get("prdCode");
+		
+		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
+		
+		return prdDetail;
+	}
 
 	// 제품 입고 페이지
 	@GetMapping("/productIn")
@@ -110,8 +117,25 @@ public class SalesController {
 	@GetMapping("/productOut")
 	public String productOutPage(Model model) {
 		List<OrderVO> list = salesService.productOut();
-		model.addAttribute("productOut", list);
+		model.addAttribute("orderGrid", list);
 		return "sales/productOut";
+	}
+	
+	// 제품 출고 상세 페이지
+	@PostMapping("/getOrdDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getOrdDetail(@RequestBody Map<String, String> requestData) {
+	    String ordCode = requestData.get("ordCode");
+	    return salesService.orderDetail(ordCode);  // 서비스 계층에서 제품 상세 정보를 가져옴
+	}
+	
+	// 제품 출고 상세 페이지 LOT
+	@PostMapping("/getPrdLotDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getPrdLotDetail(@RequestBody Map<String, String> requestData) {
+		String prdCode = requestData.get("prdCode");
+		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
+		return prdDetail;
 	}
 
 	// 입/출고 내역 페이지
@@ -120,6 +144,12 @@ public class SalesController {
 		List<ProductVO> list = salesService.inoutHistory();
 		model.addAttribute("inoutHistory", list);
 		return "sales/inoutHistory";
+	}
+	
+	// 주문성공시 페이지
+	@GetMapping("/salesOrderHistory")
+	public String inoutHistoryPage() {
+		return "sales/orderHistory";
 	}
 
 }

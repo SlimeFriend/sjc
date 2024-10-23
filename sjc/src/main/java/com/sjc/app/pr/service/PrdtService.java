@@ -26,4 +26,13 @@ public interface PrdtService {
 	
 	// 관리 필요자재
 	public List<NeedVO> pNeed(String prdCode);
+	
+	// 관리 공정
+	public List<PrcVO> pPrc(String lindCode);
+	
+	// 공정 실적(진행) 생성
+	public String insertR(PResultVO pvo);
+	
+	// 생산 실적 확인
+	public List<PResultVO> searchR(String pdetailCode);
 }

@@ -6,67 +6,196 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-
 <title>설비 등록</title>
 </head>
+<style>
+    .form-container {
+        background-color: #fff;
+        padding: 10px;  /* 패딩 줄이기 */
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);  /* 그림자 감소 */
+        width: 250px;  /* 전체 크기 줄이기 */
+        margin: 10px auto;  /* 상하 여백 줄이기 */
+    }
 
+    .form-container div {
+        margin-bottom: 5px;  /* 필드 사이의 간격 줄이기 */
+    }
+
+    label {
+        display: block;
+        margin-bottom: 1px;  /* 레이블과 입력 필드 간격 줄이기 */
+        font-weight: bold;  /* 글자 굵기 조절 */
+        font-size: 12px;  /* 글자 크기 줄이기 */
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="file"] {
+        width: 20%;
+        padding: 3px;  /* 입력 필드 안쪽 여백 줄이기 */
+        margin-top: 3px;  /* 입력 필드와 레이블 사이 간격 줄이기 */
+        border-radius: 4px;  /* 모서리 둥글기 조절 */
+    }
+
+    button {
+        width: 10%;
+        padding: 8px;  /* 버튼 크기 줄이기 */
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 8px;  /* 버튼과 필드 간격 줄이기 */
+    }
+    #temp {
+    width: 9.2%;
+    }
+
+    .button-group {
+        display: flex;
+    }
+</style>
 <body>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<div class="card-box mb-30">
-				<p style="font-size: 300%">설비 등록</p>
+			<p style="font-size: 300%">설비 등록</p>
+			<div class="card-box pd-20 mb-30">
+				<p style="font-size: 200%">설비 등록</p>
+				<div class="d-flex justify-content-between align-items-center mb-20">
+						<form th:action="@{/eqInsert}" name="insertForm" method="post" class="form-control">
+			<div>
+                <label for="eqMdnm">모델명(필수)</label>
+                <input type="text" id="eqMdnm" name="eqMdnm">
+            </div>
+            <div>
+                <label for="eqCode">설비코드</label>
+                <input type="text" id="eqCode" name="eqCode">
+            </div>
+            <div>
+                <label for="eqMdno">모델번호</label>
+                <input type="text" id="eqMdno" name="eqMdno">
+            </div>
+            <div>
+                <label for="eqDep">담당부서</label>
+                <input type="text" id="eqDep" name="eqDep">
+            </div>
+            <div>
+                <label for="eqMin">가용온도</label>
+                <input type="text" id="eqMin" name="eqMin">
+                ~
+                <input type="text" id="eqMax" name="eqMax">
+            </div>
+            <div>
+                <label for="eqPeriod">점검주기</label>
+                <input type="text" id="eqPeriod" name="eqPeriod">
+            </div>
+            <div>
+                <label for="employeeNo">사원번호</label>
+                <input type="text" id="employeeNo" name="employeeNo">
+            </div>
+            <div>
+                <label for="manager">담당자</label>
+                <input type="text" id="manager" name="manager">
+            </div>
+            <div>
+                <label for="eqLocation">설비위치</label>
+                <input type="text" id="eqLocation" name="eqLocation">
+            </div>
+            <div>
+                <label for="eqImg">설비사진</label>
+                <input type="file" id="eqImg" name="eqImg">
+            </div>
+            
+            <div class="button-group">
+                <button type="reset">초기화</button>
+                <button type="submit">등록</button>
+            </div>
+							
+					</form>
+				</div>
 			</div>
-			<form th:action="@{/eqInsert}" name="insertForm" method="post"
-				class="form-control">
-				<div>
-					<label for=mdNm>모델명(필수)</label> 
-					<input type="text" id="mdNm" name="mdNm">
-				</div>
-				<div>
-					<label for="eqCd">설비코드</label> 
-					<input type="text" id="eqCd" name="eqCd">
-				</div>
-				<div>
-					<label for="mdNo">모델번호</label> 
-					<input type="text" id="mdNo" name="mdNo">
-				</div>
-				<div>
-					<label for="dept">담당부서</label> 
-					<input type="text" id="dept" name="dept">
-				</div>
-				<div>
-					<label for="temp">가용온도</label> 
-					<input type="text" id="temp" name="temp">
-				</div>
-				<div>
-					<label for="per">점검주기</label> 
-					<input type="text" id="per" name="per">
-				</div>
-				<div>
-					<label for="empNo">사원번호</label> 
-					<input type="text" id="empNo" name="empNo">
-				</div>
-				<div>
-					<label for="dept">담당자</label> 
-					<input type="text" id="dept" name="dept">
-				</div>
-				<div>
-					<label for="regdate">설비위치</label> 
-					<input type="date" id="regdate" name="regdate">
-				</div>
-				<div>
-					<label for="image">설비사진</label> 
-					<input type="file" id="image" name="image">
-				</div>
-				<div>
-					<button type="reset">초기화</button>
-				</div>
-				<div>
-					<button type="submit">등록</button>
-				</div>
-			</form>
 		</div>
 	</div>
+		<script>
+		//submit을 하기 전 제목, 작성자, 작성일자 확인
+		$(insertForm).on('submit',equipInsertHandler);
+		
+		function equipInsertHandler(event) {
+			event.preventDefault();
+			
+			
+			let mdNm = $('form [name="mdNm"]');
+			if(mdNm.val() == ''){
+				alert('모델명이 입력되지 않았습니다.');
+				mdName.focus();
+				return;
+			}
+			
+			
+			let eqCd = $('form [name="eqCd"]');
+			if(eqCd.val() == ''){
+				alert('설비코드가 입력되지 않았습니다.');
+				eqCd.focus();
+				return;
+			}
+			
+			let mdNo = $('form [name="mdNo"]');
+			if(mdNo.val() == ''){
+				alert('모델번호가 입력되지 않았습니다.');
+				mdNo.focus();
+				return;
+			}
+			
+			let dept = $('form [name="dept"]');
+			if(dept.val() == ''){
+				alert('담당부서가 입력되지 않았습니다.');
+				dept.focus();
+				return;
+			}
+			
+			let temp = $('form [name="temp"]');
+			if(temp.val() == ''){
+				alert('온도가 입력되지 않았습니다.');
+				temp.focus();
+				return;
+			}
+			
+			let per = $('form [name="per"]');
+			if(per.val() == '3'){
+				per.focus();
+				return;
+			}
+			
+			let empNo = $('form [name="empNo"]');
+			if(empNo.val() == ''){
+				alert('사원번호가 입력되지 않았습니다.');
+				empNo.focus();
+				return;
+			}
+			
+			let manager = $('form [name="manager"]');
+			if(manager.val() == ''){
+				alert('담당자가 입력되지 않았습니다.');
+				manager.focus();
+				return;
+			}
+			
+			let location = $('form [name="location"]');
+			if(location.val() == ''){
+				alert('위치가 입력되지 않았습니다.');
+				location.focus();
+				return;
+			}
+			
+			let image = $('form [name="image"]');
+			if(image.val() == ''){
+				alert('이미지가 입력되지 않았습니다.');
+				image.focus();
+				return;
+			}
+			
+			alert('게시글이 등록되었습니다.');
+			insertForm.submit();
+		}
+	</script>
 </body>
 
 </html>

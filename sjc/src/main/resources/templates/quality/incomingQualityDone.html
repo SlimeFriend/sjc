@@ -87,7 +87,7 @@
 
 
 
-						<button type="button" class="btn btn-primary" id="success1">입고처리</button>
+						<button type="button" class="btn btn-primary" id="success1" >입고처리</button>
 						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
 							<table
 								class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
@@ -105,6 +105,8 @@
 										<th>합격수</th>
 										<th>합격여부</th>
 										<th>자재발주코드</th>
+										<th>자재코드</th>
+										<th>직원번호</th>
 									</tr>
 								</thead>
 <tbody>
@@ -121,6 +123,9 @@
             <td>[[${done.numberOfPasses}]]</td>
             <td>[[${done.totalPass}]]</td>
             <td>[[${done.mtlOdCode}]]</td>
+            <td>[[${done.mtCode}]]</td>
+            <td>[[${done.userId}]]</td>
+            <td><input type="text" name="comm"></td>
         </tr>
     </th:block>
 </tbody>
@@ -312,37 +317,68 @@
  		console.log("버튼 클릭됨");
 
 		var checkbox = $("input[name=incomingQualityCheck]:checked");
-		var data = [];
+		let flag = true;
+  		let list = [];
+		//var data = [];
 
 		checkbox.each(function(i){
 
 			var tr = $(this).closest("tr")
 			var td = tr.children();
 
-			var item = {
+			/* var item = {
 			//insDate : td.eq(1).text(),
-			//insCode : td.eq(2).text(),
+			insCode : td.eq(2).text(),
 			//insStatus : td.eq(3).text(),
-			//cpCode : td.eq(4).text(),
+			cpCode : td.eq(4).text(),
 			//mtName : td.eq(5).text(),
 			//specification : td.eq(6).text(),
 			//numberOfTests : td.eq(7).text(),
-			//numberOfPasses : td.eq(8).text(),
+			numberOfPasses : td.eq(8).text(),
 			//totalPass : td.eq(9).text(),
-			mtlOdCode : td.eq(10).text()
+			mtlOdCode : td.eq(10).text(),
+			mtCode : td.eq(11).text(),
+			userId : td.eq(12).text()
 			};
 			
 			console.log(item);
 
-			data.push(item);
-
-		});
+			data.push(item); */
+			var obj = {};
+			
+			var insCode = td.eq(2).text();
+			var cpCode = td.eq(4).text();
+			var numberOfPasses = Number(td.eq(8).text());
+			var mtlOdCode = td.eq(10).text();
+			var mtCode = td.eq(11).text();
+			var userId = td.eq(12).text();
+			var comm = td.eq(13).find("input").val();
+			
+						
+			//객체에 담기
+			obj["insCode"] = insCode;  	     				// 급여 + 상여금
+			obj["cpCode"] = cpCode;               						// 급여년월 (현재년월)
+			obj["numberOfPasses"] = numberOfPasses;   	// 사번_이름
+			obj["mtlOdCode"] = mtlOdCode;      						// 은행계좌
+			obj["mtCode"] = mtCode;      						// 은행계좌
+			obj["userId"] = userId;      						// 은행계좌
+			obj["comm"] = comm;      						// 은행계좌
+			
+			//목록에 담기
+			list.push(obj);
+			});
 		
-		$.ajax({
+				//객체를 string으로 변환
+  		console.log(JSON.stringify(list));
+		if(flag == false) {
+			return;
+		}
+		
+				$.ajax({
 			url: 'updateIncoming',
 			method: 'POST',
 			contentType: 'application/json',
-			data: JSON.stringify(data),
+			data: JSON.stringify(list),
 			success: function(response){
 				console.log('입고성공', response);
 				
@@ -354,7 +390,112 @@
 			}
 		
 		})
+		 .fail(err => console.log(err))
+		});
+
+		
+
+		
+/*  		function makeData(){
+			let dataAry = data.serializeArray();
+			console.log(dataAry);
+			
+			let dataObj = {};
+			$.each(dataAry, function(idx, tag){
+				dataObj["insCode"] = insCode;  	     				// 급여 + 상여금
+				dataObj["cpCode"] = cpCode;               						// 급여년월 (현재년월)
+				dataObj["numberOfPasses"] = numberOfPasses;   	// 사번_이름
+				dataObj["mtlOdCode"] = mtlOdCode;      						// 은행계좌
+				dataObj["mtCode"] = mtCode;      						// 은행계좌
+				dataObj["userId"] = userId;      						// 은행계좌
+				dataObj["comm"] = comm;  
+			});
+			return dataObj;
+		}  */
+/* 		$.ajax({
+  			url : 'insertMtIn',
+  			method : 'post',
+  			contentType : 'application/json',
+  			data : JSON.stringify(list)
+  		}) */
+  		 /* .done(datas => {
+  			 if(datas.result) {
+  				 let successCnt = datas.total - datas.empList.length;
+  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
+  				 alert(msg);
+  			 }
+  		 }) */
+  		
+		
  	});
+		
+	
+		
+		
+		
+ 	/* function makeData(){
+  		let flag = true;
+  		let list = [];
+  		
+		//체크한 행만 전송할 데이터 만들기. 은행계좌가 입력된 경우만 포함함.
+  		$("input[name='incomingQualityCheck']:checked").each(function(i, checkbox){
+  			var tr = $(checkbox).parent().parent();
+			var td = $(tr).children();
+			var obj = {};
+			
+			var insCode = td.eq(2).text();
+			var cpCode = td.eq(4).text();
+			var numberOfPasses = Number(td.eq(8).text());
+			var mtlOdCode = td.eq(10).text();
+			var mtCode = td.eq(11).text();
+			var userId = td.eq(12).text();
+			var comm = td.eq(13).find("input").val();
+			
+						
+			//객체에 담기
+			obj["insCode"] = insCode;  	     				// 급여 + 상여금
+			obj["cpCode"] = cpCode;               						// 급여년월 (현재년월)
+			obj["numberOfPasses"] = numberOfPasses;   	// 사번_이름
+			obj["mtlOdCode"] = mtlOdCode;      						// 은행계좌
+			obj["mtCode"] = mtCode;      						// 은행계좌
+			obj["userId"] = userId;      						// 은행계좌
+			obj["comm"] = comm;      						// 은행계좌
+			
+			//목록에 담기
+			list.push(obj);
+  		});
+	
+		//객체를 string으로 변환
+  		console.log(JSON.stringify(list));
+		if(flag == false) {
+			return;
+		}
+  		//ajax 호출 
+  		$.ajax({
+  			url : 'insertMtIn',
+  			method : 'post',
+  			contentType : 'application/json',
+  			data : JSON.stringify(list)
+  		})
+  		 /* .done(datas => {
+  			 if(datas.result) {
+  				 let successCnt = datas.total - datas.empList.length;
+  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
+  				 alert(msg);
+  			 }
+  		 }) */
+  	/*	 .fail(err => console.log(err)) */
+  		
+
+  	/*}	*/
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -406,7 +547,18 @@
 		
 		})
  	});
-	}); 
+
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+
 	
 	
 	

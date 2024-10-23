@@ -19,7 +19,7 @@ layout:fragment="Content">
                     <th>생산지시상세 코드</th>
                     <th>공정명</th>
                     <th>공정 일자</th>
-                    <th>설비명</th>
+                    <th>설비코드</th>
                     <th>투입량</th>
                     <th>생산량</th>
                     <th>담당자</th>
@@ -31,7 +31,7 @@ layout:fragment="Content">
                         <td th:text="${list.pdetailCode}"></td>
                         <td th:text="${list.processName}"></td>
                         <td th:text="${list.processDate}"></td>
-                        <td>[[ ${list.eqName} ]]</td>
+                        <td>[[ ${list.eqCode} ]]</td>
                         <td>[[ ${list.input} ]]</td>
                         <td th:text="${list.output}"></td>
                         <td th:text="${list.manager}"></td>
