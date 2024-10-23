@@ -49,11 +49,13 @@
     </select>
 
     <select id="countUserList" resultType="int" parameterType="map">
-        SELECT COUNT(*) 
-        FROM user_role ur
-        JOIN sjc_user u ON ur.user_id = u.user_id
-        JOIN sjc_role r ON ur.role_id = r.role_id
-        JOIN department d ON d.dept_code = u.dept_code
+        SELECT 	COUNT(*) 
+        FROM 	user_role ur
+        JOIN 	sjc_user u 
+        ON 		ur.user_id = u.user_id
+        JOIN 	sjc_role r 
+        ON 		ur.role_id = r.role_id
+        JOIN 	department d ON d.dept_code = u.dept_code
         <where>
             <if test="userId != null and userId != ''">
                 AND u.user_id = #{userId}
@@ -132,6 +134,10 @@
     </select>
 
     <insert id="insertUser" parameterType="InfoUserVO">
+	<selectKey keyProperty="userId" order="BEFORE" resultType="String">
+		select NVL(max(user_id), 0) + 1
+		from sjc_user
+	</selectKey>
     INSERT INTO sjc_user (
         user_id,
         login_id,
