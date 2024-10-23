@@ -213,6 +213,9 @@
 	                        '</tr>'
 	                    );
 	                });
+
+	                // 현재 재고 필드 업데이트
+	                $('#currentStc').val(data.currentStock);  // 새로 가져온 현재 재고 값으로 업데이트
 	            },
 	            error: function(error) {
 	                console.log('테이블 갱신에 실패했습니다.');
@@ -220,7 +223,6 @@
 	        });
 	    }
 	});
-
 	</script>
 
 </body>
