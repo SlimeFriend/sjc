@@ -27,7 +27,7 @@ public class EqVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eqCkDate;		  // 점검일자
 	private String description;	  // 설명
-	private Integer employeeNo;	  // 사원번호
+	private Integer userId;	  	  // 사용자 번호
 	
 	// 조인 정보 받아온 속성
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
