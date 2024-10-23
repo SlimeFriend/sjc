@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const dataSource = {
 		api: {
 			readData: { 
-			url: '/usersApi',
+			url: '/usersApi',	
 			method: 'GET',
 	    	},
 		},
@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const gridInsert = new tui.Grid({
         el: document.getElementById('gridInsert'),
-		//data: dataSource,
         scrollX: false,
         scrollY: false,
         rowHeaders: ['rowNum'],
@@ -108,17 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
-                filter: {
-                    type: 'text',
-                    showApplyBtn: true,
-                    showClearBtn: true
-                },
-                ////^[a-z|A-Z]*$/
-                // [선택] 유효성 검증 옵션
                 validation: {
-                    required: true,
-                    dataType: 'string',
-                    regExp: /^[a-z|A-Z||0-9 ]*$/, //    [정규식] 영문 숫자에 대한 조합만 가능
+					required: true,
+        			unique: true,
+			        regExp: /^[a-zA-Z0-9]+$/
                 },                
       
             },
@@ -129,7 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
-      
+                validation: {
+					required: true,
+			        min: 1000,
+			        max: 10000        			
+                },                   
             },
             {
                 header: '이름',
@@ -138,6 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+                validation: {
+					required: true,
+			        regExp: /^[가-힣a-zA-Z]+$/
+                },                 
                                   
             },
             {
@@ -153,7 +153,10 @@ document.addEventListener('DOMContentLoaded', function() {
                       { text: 'ROLE_USER', value: 'ROLE_USER' },
                     ]
                   }
-                }
+                },
+	            validation: {
+	                required: true
+	            }                
             },
             {
                 header: '부서명',
@@ -172,7 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
                       { text: '전산', value: 'IT' },
                     ]
                   }
-                }
+                },
+	            validation: {
+	                required: true
+	            }                
               },
               {
 			    header: '연락처',
@@ -181,7 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			    sortingType: 'desc',
 			    sortable: true,
                 editor: 'text',
-			    
+                validation: {
+			        regExp: /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/
+                },                   
+                
 			  },
         ],
         pageOptions: {
@@ -217,6 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
         gridInsert.setValue(rowKey, columnName, value);
 	  	console.log('gridInsert editingFinish:', rowKey, columnName, value );
     });
+    
+	gridInsert.on('validateChange', (ev) => {
+	    console.log('검증 결과:', ev);
+	});    
 	
     document.getElementById('updateBtn').addEventListener('click', function() {
 	    //const modifiedRows = grid.getModifiedRows();
@@ -271,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     document.getElementById('saveBtn').addEventListener('click', function() {
+		gridInsert.validate();
 		
 	    const updatedRows = gridInsert.getModifiedRows().updatedRows;
 	    const modifiedRows = gridInsert.getModifiedRows().createdRows;
@@ -338,8 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
     }	
 	
-	
-	
+		
     document.getElementById('insertBtn').addEventListener('click', function() {
 		
 		document.getElementById('gridInsert').style.display="block";
@@ -562,6 +575,5 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    fetchCopyDetails();    
-    
+    fetchCopyDetails();
 });
