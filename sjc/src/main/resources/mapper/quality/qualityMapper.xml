@@ -176,7 +176,7 @@
         #{mtCode},
         #{cpCode},
         #{comm},
-        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0')
+        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.CURRVAL, 4, '0')
     )
 </insert>
 	
