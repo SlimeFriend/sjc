@@ -56,7 +56,7 @@ public class StockController {
     @PostMapping("/stock/addCompletedInspectionToCurrentStock")
     public String addCompletedInspectionToCurrentStock(RedirectAttributes redirectAttributes) {
         try {
-            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials(); // 품질검사 완료된 자재 목록 가져오기
+            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials(); 
             for (MtVO material : completedMaterials) {
                 stockService.updateCurrentStock(material.getMtCode(), material.getQuantity());
             }

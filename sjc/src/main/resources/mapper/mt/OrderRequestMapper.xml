@@ -2,92 +2,97 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.OrderRequestMapper">
 
-    <!-- 모든 발주 요청 목록 조회 -->
-    <select id="getAllOrderRequests" resultType="com.sjc.app.mt.service.OrderRequestVO">
+    <!-- 업체별 발주 요청 목록 조회 (MtlOdVO 사용) -->
+    <select id="getAllOrderRequestsByCpCode" parameterType="String" resultType="com.sjc.app.mt.service.MtlOdVO">
         SELECT
-            MTL_OD.MTL_OD_CODE AS orderRequestCode,  
+            MTL_OD.MTL_OD_CODE AS orderRequestCode,
             MTL_OD.MTL_OD_DATE AS orderDate,
-            MTL_OD.MT_CODE AS mtCode,
-            MT.MT_NAME AS mtName,
-            MTL_OD.MTL_OD_QUANTITY AS quantity,
-            MTL_OD.CP_CODE AS cpCode,
             MTL_OD.USER_ID AS userId,
             MTL_OD.MTL_OD_STATUS AS status,
-            MTL_OD.COMM AS comm,
-            MTL_OD.PRICE AS price
+            MTL_OD.CP_CODE AS cpCode,
+            CP.CP_NAME AS cpName
         FROM
-            MTL_OD  
+            MTL_OD
         LEFT JOIN
-            MT ON MTL_OD.MT_CODE = MT.MT_CODE  
+            CP ON MTL_OD.CP_CODE = CP.CP_CODE
+        WHERE
+            MTL_OD.CP_CODE = #{cpCode}
         ORDER BY
             MTL_OD.MTL_OD_CODE
     </select>
 
-    <!-- 특정 발주 요청 조회 -->
-    <select id="getOrderRequestById" parameterType="String" resultType="com.sjc.app.mt.service.OrderRequestVO">
+    <!-- CP_CODE로 업체 정보 조회 -->
+    <select id="getCpInfoByCpCode" parameterType="String" resultType="com.sjc.app.sales.service.CpVO">
         SELECT
-            MTL_OD.MTL_OD_CODE AS orderRequestCode,  
-            MTL_OD.MTL_OD_DATE AS orderDate,
-            MTL_OD.MT_CODE AS mtCode,
-            MT.MT_NAME AS mtName,
-            MTL_OD.MTL_OD_QUANTITY AS quantity,
-            MTL_OD.CP_CODE AS cpCode,
-            MTL_OD.USER_ID AS userId,
-            MTL_OD.MTL_OD_STATUS AS status,
-            MTL_OD.PRICE AS price
+            CP_CODE AS cpCode,
+            CP_NAME AS cpName,
+            BUSINESS_NO AS businessNo,
+            ADDRESS AS address,
+            COMM AS comm,
+            CP_TYPE AS cpType
         FROM
-            MTL_OD 
-        LEFT JOIN
-            MT ON MTL_OD.MT_CODE = MT.MT_CODE 
+            CP
         WHERE
-            MTL_OD.MTL_OD_CODE = #{orderId}  
+            CP_CODE = #{cpCode}
     </select>
 
-    <!-- 발주 요청 등록 -->
-    <insert id="insertOrderRequest" parameterType="OrderRequestVO">
-        INSERT INTO MTL_OD  
-        (MTL_OD_CODE, MTL_OD_DATE, MT_CODE, MTL_OD_QUANTITY, CP_CODE, USER_ID, COMM, DILIVERY_DATE, PRICE)
-        VALUES
-        (
-            'MTL' || TO_CHAR(SYSDATE, 'YYMMDD') || LPAD(MTL_OD_SEQ.NEXTVAL, 3, '0'),
-            SYSDATE,
-            #{mtCode},
-            #{quantity},
-            #{cpCode},
-            #{userId},
-            #{comm},
-            SYSDATE + 7,
-            (SELECT UNIT_PRICE FROM MT WHERE MT.MT_CODE = #{mtCode}) * #{quantity}
-        )
-    </insert>
+    <!-- 모든 업체 정보 조회 -->
+    <select id="getAllCpInfo" resultType="com.sjc.app.sales.service.CpVO">
+        SELECT
+            CP_CODE AS cpCode,
+            CP_NAME AS cpName,
+            BUSINESS_NO AS businessNo,
+            ADDRESS AS address,
+            COMM AS comm,
+            CP_TYPE AS cpType
+        FROM
+            CP
+    </select>
 
-    <!-- 발주 요청 수정 (PRICE 자동 계산 추가) -->
-    <update id="updateOrderRequest" parameterType="com.sjc.app.mt.service.OrderRequestVO">
-        UPDATE MTL_OD  
-        <set>
-            <if test="mtCode != null">MT_CODE = #{mtCode},</if>
-            <if test="quantity != null">MTL_OD_QUANTITY = #{quantity},</if>
-            <if test="cpCode != null">CP_CODE = #{cpCode},</if>
-            <if test="userId != null">USER_ID = #{userId},</if>
-            <!-- 자재 단가와 수량에 따른 PRICE 자동 계산 -->
-            <if test="mtCode != null and quantity != null">
-                PRICE = (SELECT UNIT_PRICE FROM MT WHERE MT.MT_CODE = #{mtCode}) * #{quantity},
-            </if>
-        </set>
-        WHERE
-            MTL_OD_CODE = #{orderRequestCode}  
+    <!-- 업체 코드에 속한 자재들의 상태를 '품질검사대기'로 일괄 변경 -->
+    <update id="updateOrderRequestStatusByCpCode" parameterType="String">
+        UPDATE MTL_OD
+        SET MTL_OD_STATUS = '품질검사대기'
+        WHERE CP_CODE = #{cpCode}
     </update>
 
-    <!-- 발주 요청 삭제 -->
-    <delete id="deleteOrderRequest" parameterType="String">
-        DELETE FROM MTL_OD WHERE MTL_OD_CODE = #{orderRequestCode} 
-    </delete>
+    <!-- 업체별 발주 상세 내역 조회 -->
+    <select id="getOrderRequestDetailsByCpCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
+        SELECT
+            MTL_OD_DETAIL.MTL_OD_DETAIL_CODE AS orderRequestDetailCode,
+            MTL_OD_DETAIL.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,
+            MTL_OD_DETAIL.QUANTITY AS quantity
+        FROM
+            MTL_OD_DETAIL
+        LEFT JOIN
+            MT ON MTL_OD_DETAIL.MT_CODE = MT.MT_CODE
+        LEFT JOIN
+            MTL_OD ON MTL_OD.MTL_OD_CODE = MTL_OD_DETAIL.MTL_OD_CODE
+        WHERE
+            MTL_OD.CP_CODE = #{cpCode}
+    </select>
 
-    <!-- 자재 상태 업데이트 -->
-    <update id="updateOrderRequestStatus">
-        UPDATE MTL_OD 
+    <!-- 특정 발주 요청에 대한 상세 정보 조회 -->
+    <select id="getOrderRequestDetailsByOrderRequestCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
+        SELECT
+            MTL_OD_DETAIL.MTL_OD_DETAIL_CODE AS orderRequestDetailCode,
+            MTL_OD_DETAIL.MT_CODE AS mtCode,
+            MT.MT_NAME AS mtName,
+            MTL_OD_DETAIL.QUANTITY AS quantity
+        FROM
+            MTL_OD_DETAIL
+        LEFT JOIN
+            MT ON MTL_OD_DETAIL.MT_CODE = MT.MT_CODE
+        WHERE
+            MTL_OD_DETAIL.MTL_OD_CODE = #{orderRequestCode}
+    </select>
+
+    <!-- 업체별 발주 상태 업데이트 -->
+    <update id="updateOrderRequestStatusForCpCode" parameterType="map">
+        UPDATE MTL_OD
         SET MTL_OD_STATUS = #{status}
-        WHERE MTL_OD_CODE = #{orderRequestCode}  
+        WHERE CP_CODE = #{cpCode}
     </update>
 
 </mapper>
