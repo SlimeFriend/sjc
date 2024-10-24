@@ -19,4 +19,5 @@ public class PResultVO {
 	private Integer input;			// 투입량
 	private String status;			// 상태
 	private Integer no;				// 순서
+	private String lineCode;
 }		

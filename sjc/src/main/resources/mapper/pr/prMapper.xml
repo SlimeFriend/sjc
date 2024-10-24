@@ -138,7 +138,7 @@ where p.prd_code = #{prdCode}
 
 <!-- 생산 실적 최초 생성 -->
 <insert id="insertR" parameterType="PResultVO">
-	insert into PRESULT(presult_code,
+      insert into PRESULT(presult_code,
 						prd_code,
 						output,
 						err,
@@ -149,19 +149,29 @@ where p.prd_code = #{prdCode}
 						input,
 						status,
 						no)
-	values ('PR'||to_char(sysdate, 'yyMMdd')||LPAD(pr_seq.nextVal,3,0),
-			#{prdCode},
-			#{output},
-			#{err},
-			#{eqCode},
-			#{processName},
-			#{pdetailCode},
-			#{ldetailCode},
-			#{input},
-			#{status},
-			#{no}
-			
-			)
+   
+     
+     select  CREATE_PSEQ(),
+     l.prd_code,  
+     0,
+     0,
+     d.eq_code,
+     p.process_name,
+      #{pdetailCode},          
+      d.ldetail_code,
+      0,
+      'b1',
+        f.no
+        
+	from line l 
+	join ldetail d
+	on l.line_code = d.line_code
+	join flow f     
+	on d.flow_code = f.flow_code
+	join process p
+	on f.process_code = p.process_code
+	where l.line_code = #{lineCode}
+	order by f.no
 </insert>
 
 <!-- 생산 실적(진행) 있는지 체크 -->
