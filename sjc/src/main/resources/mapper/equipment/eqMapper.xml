@@ -46,6 +46,7 @@ from    eq
 	     	  , eq_mdno
 	     	  , use
 	     	  , eq_type
+	     	  , eq_name
 	     	  , eq_min
 	     	  , eq_max
 	     	  , manager
@@ -59,6 +60,7 @@ from    eq
   			,#{eqMdno}
   			,#{use}
   			,#{eqType}
+  			,#{eqName}
   			,#{eqMin}
   			,#{eqMax}
   			,#{manager}
@@ -68,17 +70,17 @@ from    eq
   			)
 </insert>
 
-<!-- 	 수정
-<update id="updateBoardInfo" parameterType="EqVO">
+<!-- 수정 -->
+<update id="updateEqInfo" parameterType="EqVO">
 	UPDATE eq
 	SET
-		title = #{title}
-		 , contents = #{contents}
-		 , writer = #{writer}
-		 , image = #{image}
-		 , updatedate = sysdate
-	WHERE bno = #{bno}
-</update> -->
+		   eq_type = #{eqType}
+		 , eq_name = #{eqName}
+		 , eq_min = #{eqMin}
+		 , eq_max = #{eqMax}
+		 , use = #{use}
+	WHERE eq_code = #{eqCode}
+</update>
 
 <!-- 삭제 -->
 <delete id="deleteEqInfo" parameterType="String">

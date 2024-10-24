@@ -15,7 +15,7 @@ public interface EqService {
 	public int eqInsert(EqVO eqVO);
 	
 	// 수정
-	//public Map<String, Object> eqUpdate(EqVO eqVO);
+	public Map<String, Object> eqUpdate(EqVO eqVO);
 	
 	// 삭제
 	public int eqDelete(String eqCode);

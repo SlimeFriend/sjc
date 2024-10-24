@@ -59,7 +59,7 @@ public class EqController {
 
 		String url = null;
 		System.err.print(eqVO);
-		if (eid > -1) {
+		if (eid > 0) {
 			// 정상적으로 등록된 경우
 //			url = "redirect:equipInfo?eqCode=" + eid;
 			url = "redirect:eqList";
@@ -71,24 +71,24 @@ public class EqController {
 		return url;
 	} // end
 	
-	/*
-	 * // 수정 - 페이지 : URI - eqUpdate / PARAMETER - EqVO(QueryString) // RETURN -
-	 * equip/equipUpdate
-	 * 
-	 * @GetMapping("eqUpdate") public String eqUpdateForm(EqVO eqVO, Model model) {
-	 * EqVO findVO = eqService.eqInfo(eqVO);; model.addAttribute("equip", findVO);
-	 * return "equip/equipUpdate"; }// end eqUpdateForm
-	 * 
-	 * // 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과
-	 * 데이터(Map)
-	 * 
-	 * @PostMapping("eqUpdate")
-	 * 
-	 * @ResponseBody public Map<String, Object> eqUpdateAJAXJSON(@RequestBody EqVO
-	 * eqVO) { return eqService.eqUpdate(eqVO); }// end eqUpdateAJAXJSON
-	 * 
-	 * }// end class
-	 */	
+	
+	
+	  // 수정 - 페이지 : URI - eqUpdate / PARAMETER - EqVO(QueryString) // RETURN - equip/equipUpdate
+	  @GetMapping("eqUpdate") public String eqUpdateForm(EqVO eqVO, Model model) {
+		  EqVO findVO = eqService.eqInfo(eqVO);
+		  model.addAttribute("equip", findVO);
+		  return "equip/equipUpdate"; 
+	  }// end eqUpdateForm
+	  
+	  // 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과 데이터(Map)
+	  @PostMapping("eqUpdate")
+	  //@ResponseBody 
+	  public Map<String, Object> eqUpdateAJAXJSON(@RequestBody EqVO eqVO) {
+		  return eqService.eqUpdate(eqVO); 
+		  
+	  }// end eqUpdateAJAXJSON
+	 	  
+	 	
 	// 삭제 - 처리 : URI - eqDelete / PARAMETER - Integer
 	// RETURN - 전체조회 다시 호출
 	@GetMapping("eqDelete") // QueryString : @RequestParam
