@@ -68,16 +68,6 @@ public class StockServiceImpl implements StockService {
         return stockMapper.getMaterialByCode(mtCode); // 자재 코드로 자재 정보 조회
     }
 
-    // 재고 조정 메서드 (로트 번호 수량 및 현재 재고 업데이트)
-    @Override
-    public void adjustStock(String mtCode, String lotNo, int newStock) {
-        // 로트 번호의 수량 업데이트
-        stockMapper.updateLotQuantity(mtCode, lotNo, newStock);
-        
-        // 자재의 현재 재고 업데이트
-        stockMapper.updateCurrentStock(mtCode, newStock);
-    }
-
     // 로트 번호에 수량을 추가하고 현재 재고를 업데이트하는 메서드
     @Override
     public void addQuantityToLotAndUpdateStock(String mtCode, String lotNo, int quantity) {
@@ -89,11 +79,5 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<String> getLotNumbersByMtCode(String mtCode) {
         return stockMapper.findLotNumbersByMtCode(mtCode); // 자재 코드로 로트번호 목록 조회
-    }
-
-    // 자재 코드에 따른 로트별 상세 정보 조회
-    @Override
-    public List<MtInVO> getLotDetailsByMtCode(String mtCode) {
-        return stockMapper.getLotDetailsByMtCode(mtCode); // 자재 코드로 로트별 상세 정보 조회
     }
 }

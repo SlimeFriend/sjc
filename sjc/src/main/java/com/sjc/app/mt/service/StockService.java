@@ -25,15 +25,9 @@ public interface StockService {
     // 특정 자재 코드를 기반으로 자재 정보를 가져오는 메서드
     MtVO selectMaterialByCode(String mtCode);
 
-    // 재고 조정 메서드 (재고 추가 및 차감 처리)
-    void adjustStock(String mtCode, String lotNo, int newStock);
-
-    // 자재 코드에 따른 로트번호 목록을 가져오는 메서드 (로트번호 목록 조회)
-    List<String> getLotNumbersByMtCode(String mtCode);
-
     // 로트 번호에 수량을 추가하고 현재 재고를 업데이트하는 메서드
     void addQuantityToLotAndUpdateStock(String mtCode, String lotNo, int quantity);
 
-    // 추가: 로트 번호에 따른 자재 상세 정보 조회
-    List<MtInVO> getLotDetailsByMtCode(String mtCode);
+    // 자재 코드에 따른 로트번호 목록을 가져오는 메서드 (로트번호 목록 조회)
+    List<String> getLotNumbersByMtCode(String mtCode);
 }

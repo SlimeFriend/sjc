@@ -1,7 +1,6 @@
 package com.sjc.app.mt.web;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,8 @@ public class StockController {
     // 자재 구분 업데이트 기능
     @PostMapping("/stock/updateMaterialType")
     public String updateMaterialType(@RequestParam("mtCode") String mtCode,
-                                      @RequestParam("materialType") String materialType, 
-                                      RedirectAttributes redirectAttributes) {
+                                     @RequestParam("materialType") String materialType, 
+                                     RedirectAttributes redirectAttributes) {
         try {
             // 자재 구분 업데이트
             stockService.updateMaterialType(mtCode, materialType);
@@ -90,13 +89,6 @@ public class StockController {
     @ResponseBody
     public List<String> getLotNumbersByMtCode(@PathVariable("mtCode") String mtCode) {
         return stockService.getLotNumbersByMtCode(mtCode); // 자재 코드에 따른 로트번호 조회
-    }
-
-    // 새로운 API 추가: 자재 코드에 해당하는 로트별 상세 정보를 반환
-    @GetMapping("/api/stock/{mtCode}/lotDetails")
-    @ResponseBody
-    public List<MtInVO> getLotDetailsByMtCode(@PathVariable("mtCode") String mtCode) {
-        return stockService.getLotDetailsByMtCode(mtCode); // 자재 코드에 따른 로트별 상세 정보 조회
     }
 
     // 재고 조정 기능 (AJAX 처리)
