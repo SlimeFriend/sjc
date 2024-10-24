@@ -11,10 +11,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.sales.mapper.SalesMapper;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
+import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
 import com.sjc.app.sales.service.outHistoryVO;
 
@@ -34,13 +36,32 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	// 주문접수
+	@Transactional
 	@Override
-	public int insertOrder(OrderVO orderVO) {
-		return salesMapper.insertOrder(orderVO);
+	public int insertOrder(SalesDTO salesDTO) {
+		// 키 생성
+		String nextId = getOrdCode();
+		String ordCode = String.valueOf(nextId);
+		 
+		// 주문 마스터 등록
+	    OrderVO orderVO = salesDTO.getOrderVO();
+	    orderVO.setOrdCode(ordCode);
+	    int orderResult = salesMapper.insertOrder(orderVO);
+	    
+	    // 주문 디테일 등록
+	    List<ProductVO> productVOList = salesDTO.getProductVO(); 
+	    if(orderResult > 0) {
+	        productVOList.forEach(productVO -> {
+	        	salesMapper.insertOrderDetail(productVO, orderVO.getOrdCode());
+	        });
+	    }
+		
+		return 1;
+		
+		//return salesMapper.insertOrder(orderVO);
 	}
 	
 	// 주문번호 시퀀스 값 가져오기
-	@Override
 	public String getOrdCode() {
 		String nextId = "";
 		String sql = "select"
@@ -64,15 +85,8 @@ public class SalesServiceImpl implements SalesService {
 	
 	// 출고 접수
 	@Override
-	public int productOutProcess(String lot, int outQuantity) {
-		return salesMapper.productOutProcess(lot, outQuantity);
-	}
-	
-	
-	@Override
-	public int insertOrderDetail(ProductVO productVO, String ordCode) {
-		System.err.print(productVO);
-	    return salesMapper.insertOrderDetail(productVO, ordCode);
+	public int productOutProcess(Map<String, Object> data) {
+		return salesMapper.productOutProcess(data);
 	}
 	
 	@Override

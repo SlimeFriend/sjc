@@ -44,6 +44,6 @@ public interface SalesMapper {
 	public List<OrderVO> selectCompany();
 	
 	// 제품 출고 프로세스
-	public int productOutProcess(@Param("lot") String lot, @Param("outQuantity") int outQuantity);
+	public int productOutProcess(Map<String, Object> data);
 
 }

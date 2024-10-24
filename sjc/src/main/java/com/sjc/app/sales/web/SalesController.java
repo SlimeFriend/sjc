@@ -43,23 +43,7 @@ public class SalesController {
 	// 주문접수 프로세스
 	@PostMapping("/orderReception")
 	public String insertOrder(@RequestBody SalesDTO salesDTO) {
-		
-		String nextId = salesService.getOrdCode();
-
-		String ordCode = String.valueOf(nextId);
-		 
-	    OrderVO orderVO = salesDTO.getOrderVO();
-	    List<ProductVO> productVOList = salesDTO.getProductVO(); 
-	    
-	    orderVO.setOrdCode(ordCode);
-	    
-	    int orderResult = salesService.insertOrder(orderVO);
-	    
-	    if(orderResult > 0) {
-	        productVOList.forEach(productVO -> {
-	            salesService.insertOrderDetail(productVO, orderVO.getOrdCode());
-	        });
-	    }
+		int orderResult = salesService.insertOrder(salesDTO);
 	    return "redirect:/main";
 	}
 	
@@ -142,11 +126,8 @@ public class SalesController {
 	@ResponseBody
 	public String prdOutProcess(@RequestBody List<Map<String, Object>> requestData) {
 		for (Map<String, Object> data : requestData) {
-	        String lot = (String) data.get("lot"); // LOT 값
-	        int outQuantity = ((Number) data.get("outQuantity")).intValue(); // 출고량
-	        
-	        System.err.println("LOT: " + lot + ", Out Quantity: " + outQuantity);
-	        salesService.productOutProcess(lot, outQuantity);
+	    
+	        salesService.productOutProcess(data);
 	    }
 	    return "출고 처리 성공"; // 적절한 응답 반환
 	}

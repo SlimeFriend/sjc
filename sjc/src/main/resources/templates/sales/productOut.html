@@ -33,7 +33,7 @@
 						<!-- Modal footer -->
 						<div class="modal-footer justify-content-center">
 							<button type="button" class="btn btn-primary" data-dismiss="modal" id="submitBtn">등록</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">취소</button>
 						</div>
 					</div>
 				</div>
@@ -51,6 +51,14 @@
 			const gridData = /*[[${orderGrid}]]*/[];
 			const gridModalData = /*[[${ordDetail}]]*/[];
 			const productLotGridData = /*[[${ordDetail}]]*/[];
+			
+			let outValue = 0; // 출고량 값
+			let lotValue = 0; // LOT 값
+			
+			let outLotData = [];
+			let outPrdData = [];
+			
+			let selectProductLot = document.getElementById('selectProductLot');
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -85,26 +93,6 @@
 				}
 			});
 			
-			grid.on('click', (ev) => {
-			    const rowKey = ev.rowKey;
-			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
-			    
-			    if(ordCodeValue) {
-			    	$.ajax({
-			    		url : '/getOrdDetail',
-			    		type : 'POST',
-			    		contentType : 'application/json',
-			    		data : JSON.stringify({ordCode : ordCodeValue}),
-			    		success: function(response) {
-			    			console.log('Order details received:', response);
-			    			document.getElementById('gridOrderDetail').style.opacity = 1;
-			    			gridModal.resetData(response); 
-			    			$('#myModal').modal('show');
-			    			gridModal.refreshLayout();
-			    		},
-			    	});
-			    }
-			});
 			
 			const gridModal = new tui.Grid({
 				el : document.getElementById('gridOrderDetail'),
@@ -143,9 +131,13 @@
 				}
 			});
 			
+			let totalOutQuantity = 0;
+			
 			gridModal.on('click', (ev) => {
+				productLotGrid.refreshLayout();
 			    const rowKey = ev.rowKey;
-			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE'); 
+			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE');
+			    totalOutQuantity = 0;
 			    console.log(prdCodeValue);
 			    if(prdCodeValue) {
 			    	$.ajax({
@@ -154,6 +146,7 @@
 			    		contentType : 'application/json',
 			    		data : JSON.stringify({prdCode : prdCodeValue}),
 			    		success: function(response) {
+			    			selectProductLot.style.display = 'block';
 			    			productLotGrid.resetData(response); 
 			    			productLotGrid.refreshLayout();
 			    		},
@@ -198,60 +191,104 @@
 				},
 				
 				],
-				rowHeaders : [ 'checkbox' ],
+				rowHeaders : [ 'rowNum' ],
 				pageOptions : {
 					useClient : true,
 					perPage : 10
 				}
 			});
 			
-			let outValue = 0; // 출고량 값
-			let lotValue = 0; // LOT 값
-			let totalOutValue = 0;
 			
-			productLotGrid.on('editingFinish', (ev) => {
-		        const { value } = ev;
-		        const rowKey = ev.rowKey;
-		        lotValue = productLotGrid.getValue(rowKey, 'LOT'); 
-		        productLotGrid.setValue(value);
-		        outValue = value;
-		        
-		        totalOutValue = 0;
-		        const rowCount = productLotGrid.getRowCount();
-
-		        for (let i = 0; i < rowCount; i++) {
-		            const currentOutValue = productLotGrid.getValue(i, 'OUT_QUANTITY');
-		            totalOutValue += currentOutValue ? Number(currentOutValue) : 0;
-		        }
-		        console.log('Total Out Value:', totalOutValue);
-		        gridModal.setValue(totalOutValue, 'totalOutQuantity');
-		        gridModal.refreshLayout();
-		    });
-			
-			document.getElementById('submitBtn').addEventListener('click', () => {
-				const checkedRows = productLotGrid.getCheckedRows();
+			grid.on('click', (ev) => {
+				let outLotData = [];
+			    const rowKey = ev.rowKey;
+			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
+			    selectProductLot.style.display = 'none';
+			    productLotGrid.refreshLayout();
 			    
-			    const outData = checkedRows.map(row => ({
-			        lot: productLotGrid.getValue(row.rowKey, 'LOT'),  // LOT 값 가져오기
-			        outQuantity: Number(productLotGrid.getValue(row.rowKey, 'OUT_QUANTITY')) // 출고량 값 가져오기
-			    }));
-			    
-		        if(outData.length > 0) {
+			    if(ordCodeValue) {
 			    	$.ajax({
-			    		url : '/prdOutProcess',
+			    		url : '/getOrdDetail',
 			    		type : 'POST',
 			    		contentType : 'application/json',
-			    		data : JSON.stringify(outData),
-			    		 success: function(response) {
-			                 console.log('출고 처리 성공:', response);
-			             },
-			             error: function(xhr, status, error) {
-			                 console.error('출고 처리 실패:', error);
-			             }
+			    		data : JSON.stringify({ordCode : ordCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			gridModal.resetData(response); 
+			    			$('#myModal').modal('show');
+			    			gridModal.refreshLayout();
+			    		},
 			    	});
-			    } else {
-			    	alert("출고량을 입력한 행이 없습니다.");
 			    }
+			});
+
+			productLotGrid.on('editingFinish', (ev) => {
+			    const { value } = ev; // 입력된 출고량
+			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+			    const lotValue = productLotGrid.getValue(rowKey, 'LOT'); // LOT 값 가져오기
+			    const productName = productLotGrid.getValue(rowKey, 'PRD_NAME'); // 제품명 가져오기
+
+			    // 출고량을 해당 행에 설정
+			    productLotGrid.setValue(rowKey, 'OUT_QUANTITY', value);
+
+			    // 현재 그리드의 모든 행을 반복하면서
+			    const rowCount = productLotGrid.getRowCount();
+			    for (let i = 0; i < rowCount; i++) {
+			        const currentLot = productLotGrid.getValue(i, 'LOT'); // 현재 행의 LOT 값
+			        const currentOutQuantity = productLotGrid.getValue(i, 'OUT_QUANTITY'); // 현재 행의 출고량
+
+			        // 만약 출고량이 입력되어 있다면 outData에 추가, 중복 체크
+			        if (currentOutQuantity && !outLotData.some(item => item.lot === currentLot)) {
+			        	outLotData.push({
+			                lot: currentLot,
+			                outQuantity: Number(currentOutQuantity)
+			            });
+			            totalOutQuantity += Number(currentOutQuantity);
+			        }
+			    }
+
+			    const orderRowCount = gridModal.getRowCount(); // 주문 목록의 행 수
+			    for (let j = 0; j < orderRowCount; j++) {
+			    	const orderProductName = gridModal.getValue(j, 'PRDNAME'); // 주문 목록에서 제품명 가져오기
+			        // 제품명이 sjcon과 일치하는지 확인
+			        if (productName === orderProductName) {
+			            // 주문 목록의 출고량 업데이트
+			            gridModal.setValue(j, 'totalOutQuantity', Number(totalOutQuantity)); // 출고량 업데이트
+			            break; // 일치하는 첫 번째 제품을 찾으면 루프 종료
+			        }
+			    }
+			});
+			
+			document.getElementById('submitBtn').addEventListener('click', () => {
+			    
+				const rowCount = productLotGrid.getRowCount();
+			    
+			    for (let i = 0; i < rowCount; i++) {
+			        productLotGrid.setValue(i, 'OUT_QUANTITY', ""); // 각 행의 출고량을 0으로 설정
+			    }
+
+			    // outLotData 초기화
+			    console.log(outLotData);
+			    outLotData = [];
+			    
+			    // 그리드 레이아웃 새로고침
+			    productLotGrid.refreshLayout();
+			});
+			
+			document.getElementById('cancelBtn').addEventListener('click', () => {
+				const rowCount = productLotGrid.getRowCount();
+				
+				for (let i = 0; i < rowCount; i++) {
+			        productLotGrid.setValue(i, 'OUT_QUANTITY', ""); // 각 행의 출고량을 0으로 설정
+			    }
+				
+			    totalOutQuantity = 0; 
+			    
+			    outLotData = [];
+			    
+			 	// 그리드 레이아웃 새로고침
+			    productLotGrid.refreshLayout();
 			});
 
 
