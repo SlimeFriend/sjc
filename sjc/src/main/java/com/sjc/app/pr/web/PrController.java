@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,13 @@ import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 
+/**
+ * 개발자 조수호     
+ * 생산 관리 
+ */
 @Controller
 public class PrController {
+	
 	private PrdtService prdtService;
 	
 	@Autowired
@@ -139,33 +145,28 @@ public class PrController {
 	}
 	
 	// 생산 실적 최초 생성
-	@PostMapping("insertR")
-	public String insertR(@RequestBody PResultVO pvo) {
+	@GetMapping("insertR")
+	@ResponseBody
+	public List<PResultVO> insertR(PResultVO pvo) {
 		
 		prdtService.insertR(pvo);
 		
-		return "a";
+		return prdtService.searchR(pvo.getPdetailCode());
 	}
 		
 	
 	
 	// 생산 공정 자재 가져오기
 	@PostMapping("outMt")
-	public String outMt(@RequestBody Map<String, Object> params) {
+	public String outMt(@RequestBody Map<String, Object> request) {
 		
-		String mc = (String)params.get("mc");
-		int needs = (Integer)params.get("needs");
-		int mng = (Integer)params.get("mng");
-		String lcode = (String)params.get("lcode");
-		    
-		prdtService.outMt(mc,
-						needs,	
-						mng,
-						lcode);
+		 String prdCode = (String)request.get("prdCode");
+	     int account = (Integer)request.get("account");
 		
-		return "ok";
+		
+		
+	     return "dtd";
 	}
-	
-	
+
 	
 }

@@ -143,7 +143,7 @@
             			
             		} else {
             			cbody.innerHTML = '';
-            			insertR();
+            			insertR(pd);
             		}
             	})
             	.catch(error => {
@@ -209,94 +209,38 @@
         });
     }
  
- 	function insertR(){
-        fetch('/pPrc?lineCode=' + line)
+ 	function insertR(pd){
+        fetch(`/insertR?lineCode=${line}&pdetailCode=${pd}`)
     	.then(resp =>{
     		if (!resp.ok){
     			throw new Error('네트워크 반응 에러');
     		}
     		return resp.json();
     	})
-    	.then(resp=>{
-			resp.forEach(item => {
-				
-				fetch('/insertR', {
-	    	        method: 'POST',
-	    	        headers: {
-	    	            'Content-Type': 'application/json',
-	    	        },
-	    	        body: JSON.stringify({
-	    	        	prdCode : prd,
-	    	        	output : 0,
-	    	        	err : 0,
-	    	        	eqCode : item.eqCode,
-	    	        	processName : item.processName,
-	    	        	pdetailCode : pd,
-	    	        	ldetailCode : item.ldetailCode,
-	    	        	input : 0,
-	    	        	status : 'b1',
-	    	        	no : item.no
-	    	        	
-	    	        }),
-	    	        
-	    		})
-	    		.then(() =>{
-	    			return fetch('/searchR?pdetailCode=' + pd);
-	    		})
-	    		.then((resp) => {
-	    			if (!resp.ok) throw new Error('네트워크 에러');
-	    			return resp.json();
-	    		})
-	    		.then(data =>{
-	    			displayR(data);
-	    		})
-	    		.catch(error => {
-	    			console.error('에러:', error);
-	    			alert('생산 실적 추가 실패');
-	    		})
+    	.then(data=>{
+			console.log(data);
+			
+			displayR(data)
 	    		
 			});
-    		
-    	
-		});
+
  	}
  	
  	sBtn.addEventListener('click', function(){
  		if(line == null){
  			alert('선택해라');
  		} else{
- 			
- 			Array.from(dby.children).forEach((pl) => {
- 				
-			
-			
+ 							
  			fetch('/outMt', {
-		        method: 'POST',
- 		        headers: {
- 		            'Content-Type': 'application/json',
- 		        },
- 		        body: JSON.stringify({
- 		            mc: pl.dataset.mc,
- 		            needs: parseInt(pl.children[1].innerText),
- 		            mng: 1,
- 		            lcode: line,
- 		        }),
- 		    })
- 		    .then(response => {
- 		        if (!response.ok) {
- 		            throw new Error('Network response was not ok');
- 		        }
- 		        return response.json();
- 		    })
- 		    .then(data => {
- 		        alert('자재 출고 완료: ' + data.message);
- 		        // 필요 시, 테이블 업데이트 코드 추가
- 		    })
- 		    .catch(error => {
- 		        console.error('에러 발생:', error);
- 		        alert('출고 실패: ' + error.message);
- 		    });
- 		});
+ 				  method: "POST",
+ 				  body: JSON.stringify({
+ 				    prdCd : prd,
+ 				    accounts : cnt
+ 				  }),
+ 				})
+ 			.then((response) => response.json())
+ 			.then((result) => console.log(result));		
+ 	
  		}
  	});
  
