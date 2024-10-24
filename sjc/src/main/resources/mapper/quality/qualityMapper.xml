@@ -12,8 +12,9 @@
                , user_id
                , mtl_od_status
 
-		FROM mtl_od
+		FROM mtl_od_detail
 		WHERE mtl_od_status = '입고품질검사대기'
+		AND cp_code = #{cpCode}
 
 	</select>
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
