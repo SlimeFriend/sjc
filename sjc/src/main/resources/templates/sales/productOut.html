@@ -54,6 +54,7 @@
 			
 			let outValue = 0; // 출고량 값
 			let lotValue = 0; // LOT 값
+			let totalOutQuantity = 0;
 			
 			let outLotData = [];
 			let outPrdData = [];
@@ -131,7 +132,6 @@
 				}
 			});
 			
-			let totalOutQuantity = 0;
 			
 			gridModal.on('click', (ev) => {
 				productLotGrid.refreshLayout();
@@ -231,12 +231,18 @@
 
 			    // 출고량을 해당 행에 설정
 			    productLotGrid.setValue(rowKey, 'OUT_QUANTITY', value);
+			    
+			    totalOutQuantity = 0;
 
 			    // 현재 그리드의 모든 행을 반복하면서
 			    const rowCount = productLotGrid.getRowCount();
 			    for (let i = 0; i < rowCount; i++) {
 			        const currentLot = productLotGrid.getValue(i, 'LOT'); // 현재 행의 LOT 값
 			        const currentOutQuantity = productLotGrid.getValue(i, 'OUT_QUANTITY'); // 현재 행의 출고량
+			        	
+			        if(currentOutQuantity) {
+			        	totalOutQuantity += Number(currentOutQuantity);
+			        }
 
 			        // 만약 출고량이 입력되어 있다면 outData에 추가, 중복 체크
 			        if (currentOutQuantity && !outLotData.some(item => item.lot === currentLot)) {
@@ -244,7 +250,6 @@
 			                lot: currentLot,
 			                outQuantity: Number(currentOutQuantity)
 			            });
-			            totalOutQuantity += Number(currentOutQuantity);
 			        }
 			    }
 
@@ -262,18 +267,61 @@
 			
 			document.getElementById('submitBtn').addEventListener('click', () => {
 			    
-				const rowCount = productLotGrid.getRowCount();
-			    
-			    for (let i = 0; i < rowCount; i++) {
+				const lotRowCount = productLotGrid.getRowCount();
+							    
+			    for (let i = 0; i < lotRowCount; i++) {
 			        productLotGrid.setValue(i, 'OUT_QUANTITY', ""); // 각 행의 출고량을 0으로 설정
 			    }
+			    
+			    const modalRowCount = gridModal.getRowCount();
+			    
+			    for(let i = 0; i < modalRowCount; i++) {
+			    	
+			    	let ordCode = gridModal.getValue(i, 'ORDCODE');
+			    	let prdCode = gridModal.getValue(i, 'PRDCODE');
+			    	let totalQuantity = gridModal.getValue(i, 'totalOutQuantity');
+			    	
+			    	if(totalQuantity) {
+				    	outPrdData.push({
+				    		ordCode : ordCode,
+			                prdCode : prdCode,
+			                totalOutQuantity : totalQuantity
+			            });
+			    	}
+			    	
+			    	
+			    }
+			    
+			    $.ajax({
+		    		url: '/prdOutProcess',
+		    		type: 'POST',
+		    		contentType: 'application/json',
+		    		data: JSON.stringify(outLotData),
+					success: function(response) {
+		    			console.log('Success', response);
+		    		}
+		    	});
+		    	
+		    	$.ajax({
+		    		url: '/prdOutProcess',
+		    		type: 'POST',
+		    		contentType: 'application/json',
+		    		data: JSON.stringify(outPrdData),
+		    		success: function(response) {
+		    			console.log('Success', response);
+		    		}
+		    	});
 
 			    // outLotData 초기화
 			    console.log(outLotData);
+			    console.log(outPrdData);
+			    
 			    outLotData = [];
+			    outPrdData = [];
 			    
 			    // 그리드 레이아웃 새로고침
 			    productLotGrid.refreshLayout();
+			    
 			});
 			
 			document.getElementById('cancelBtn').addEventListener('click', () => {
@@ -286,7 +334,7 @@
 			    totalOutQuantity = 0; 
 			    
 			    outLotData = [];
-			    
+			    outPrdData = [];
 			 	// 그리드 레이아웃 새로고침
 			    productLotGrid.refreshLayout();
 			});

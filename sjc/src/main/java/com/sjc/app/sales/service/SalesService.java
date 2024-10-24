@@ -16,6 +16,9 @@ public interface SalesService {
 	// 출고접수 프로세스
 	public int productOutProcess(Map<String, Object> data);
 	
+	// 입고접수 프로세스
+	public List<ProductVO> productIn();
+	
 	// 출고내역
 	public List<outHistoryVO> outHistory();
 	
@@ -24,7 +27,7 @@ public interface SalesService {
 	public List<ProductVO> productList();
 	public List<ProductVO> productManagement();
 	public List<ProductVO> productLot();
-	public List<ProductVO> productIn();
+	
 	public List<Map<String, Object>> productDetail(String prdCode);
 	
 	public List<OrderVO> productOut();

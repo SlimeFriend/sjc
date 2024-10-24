@@ -17,6 +17,12 @@ public interface SalesMapper {
 	// 주문내역
 	public List<OrderVO> selectOrder();
 	
+	// 주문코드 불러오기
+	public String getOrdCode();
+	
+	// 주문코드 불러오기
+	public String getLot();
+	
 	// 주문상세
 	public int insertOrderDetail(@Param("productVO") ProductVO productVO, @Param("ordCode") String ordCode);
 	
