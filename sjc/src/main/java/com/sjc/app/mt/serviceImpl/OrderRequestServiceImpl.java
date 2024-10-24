@@ -1,16 +1,13 @@
 package com.sjc.app.mt.serviceImpl;
 
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.sjc.app.mt.mapper.OrderRequestMapper;
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.mt.service.MtVO;
 import com.sjc.app.mt.service.OrderRequestService;
-import com.sjc.app.sales.service.CpVO;  // CpVO 클래스 import
+import com.sjc.app.sales.service.CpVO;
 
 @Service
 public class OrderRequestServiceImpl implements OrderRequestService {
@@ -21,6 +18,11 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     @Override
     public List<MtlOdVO> getAllOrderRequestsByCpCode(String cpCode) {
         return orderRequestMapper.getAllOrderRequestsByCpCode(cpCode);
+    }
+
+    @Override
+    public List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode) {
+        return orderRequestMapper.getGroupedOrderRequestsByCpCode(cpCode);
     }
 
     @Override
@@ -44,38 +46,23 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void updateOrderRequestStatusByCpCode(String cpCode) {
-        orderRequestMapper.updateOrderRequestStatusByCpCode(cpCode);
-    }
-
-    @Override
-    public void updateOrderRequestStatusForCpCode(String cpCode, String status) {
-        orderRequestMapper.updateOrderRequestStatusForCpCode(cpCode, status);
-    }
-
-    @Override
-    public List<MtVO> getOrderRequestDetailsByCpCode(String cpCode) {
-        return orderRequestMapper.getOrderRequestDetailsByCpCode(cpCode);
-    }
-
-    @Override
-    public CpVO getCpInfoByCpCode(String cpCode) {
-        return orderRequestMapper.getCpInfoByCpCode(cpCode);
-    }
-
-    @Override
     public List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode) {
         return orderRequestMapper.getOrderRequestDetailsByOrderRequestCode(orderRequestCode);
     }
 
     @Override
-    public void saveOrderRequest(String cpCode, Map<String, String> orderData) {
-        // 발주 요청 저장 처리 로직 (필요한 경우 구현)
-        // 예를 들어, 주문 데이터 파싱 후 Mapper 호출
+    public List<CpVO> getAllCpInfo() {
+        return orderRequestMapper.getAllCpInfo();
     }
 
     @Override
-    public List<CpVO> getAllCpInfo() {
-        return orderRequestMapper.getAllCpInfo(); // 모든 업체 정보 조회
+    public List<MtVO> getItemsByCpCode(String cpCode) {
+        return orderRequestMapper.getItemsByCpCode(cpCode);
+    }
+
+    // CP 코드에 따른 발주 상세내역 가져오기 추가
+    @Override
+    public List<MtVO> getOrderRequestDetailsByCpCode(String cpCode) {
+        return orderRequestMapper.getOrderRequestDetailsByCpCode(cpCode);
     }
 }
