@@ -46,8 +46,7 @@ public class InfoUserServiceImpl implements InfoUserService {
     @Transactional
     public List<InfoUserVO> modifyUsers(List<InfoUserVO> InfoUserVOs) {
     	
-    	
-        List<InfoUserVO> savedUsers = new ArrayList<>();
+        //List<InfoUserVO> savedUsers = new ArrayList<>();
 
         for (InfoUserVO userVO : InfoUserVOs) {
             try {
@@ -64,15 +63,16 @@ public class InfoUserServiceImpl implements InfoUserService {
                     userMapper.insertUserRole(userVO);
                 }
 
-                InfoUserVO savedInfoUserVO = userMapper.getUserById(userVO.getUserId());
-                savedUsers.add(savedInfoUserVO);
+//                InfoUserVO savedInfoUserVO = userMapper.getUserById(userVO.getUserId());
+//                savedUsers.add(savedInfoUserVO);
 
             } catch (Exception e) {
                 log.error("error : " , e);
             }
         }
 
-        return savedUsers;
+//        return savedUsers;
+        return InfoUserVOs;
     }
     
     @Override
