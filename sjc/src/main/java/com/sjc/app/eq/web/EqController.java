@@ -1,11 +1,15 @@
 package com.sjc.app.eq.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.eq.service.EqChckVO;
 import com.sjc.app.eq.service.EqService;
@@ -66,6 +70,32 @@ public class EqController {
 		}
 		return url;
 	} // end
+	
+	/*
+	 * // 수정 - 페이지 : URI - eqUpdate / PARAMETER - EqVO(QueryString) // RETURN -
+	 * equip/equipUpdate
+	 * 
+	 * @GetMapping("eqUpdate") public String eqUpdateForm(EqVO eqVO, Model model) {
+	 * EqVO findVO = eqService.eqInfo(eqVO);; model.addAttribute("equip", findVO);
+	 * return "equip/equipUpdate"; }// end eqUpdateForm
+	 * 
+	 * // 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과
+	 * 데이터(Map)
+	 * 
+	 * @PostMapping("eqUpdate")
+	 * 
+	 * @ResponseBody public Map<String, Object> eqUpdateAJAXJSON(@RequestBody EqVO
+	 * eqVO) { return eqService.eqUpdate(eqVO); }// end eqUpdateAJAXJSON
+	 * 
+	 * }// end class
+	 */	
+	// 삭제 - 처리 : URI - eqDelete / PARAMETER - Integer
+	// RETURN - 전체조회 다시 호출
+	@GetMapping("eqDelete") // QueryString : @RequestParam
+	public String eqDelete(@RequestParam String eqCode) {
+		eqService.eqDelete(eqCode);
+		return "redirect:eqList"; //redirect 걸리는 건 경로를 다시 요청, 페이지 요청아님!!
+	}
 	
 
 	

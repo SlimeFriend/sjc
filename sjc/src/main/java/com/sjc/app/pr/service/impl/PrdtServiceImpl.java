@@ -1,6 +1,7 @@
 package com.sjc.app.pr.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,12 @@ public class PrdtServiceImpl implements PrdtService {
 	public List<PResultVO> searchR(String pdetailCode) {
 		// TODO Auto-generated method stub
 		return prdtMapper.searchR(pdetailCode);
+	}
+
+	@Override
+	public void outMt(String mc, int needs, int mng, String lcode) {
+		prdtMapper.outMt(mc, needs, mng, lcode);
+		
 	}
 
 }

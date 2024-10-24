@@ -22,7 +22,7 @@
 	    , eq_name
 	    , eq_ckdate
 	    , description
-	    , employee_no
+	    , user_id
 	FROM eq
 	ORDER BY eq_code
 </select>
@@ -34,8 +34,8 @@
 			   order="BEFORE">
 select
     case
-        when (max(substr(eq_code, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('O' || to_char(max(substr(eq_code, 2, 13)) + 1))
-        else ('O' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
+        when (max(substr(eq_code, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('E' || to_char(max(substr(eq_code, 2, 13)) + 1))
+        else ('E' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
     end    eq_code
 from    eq
     </selectKey>
@@ -44,16 +44,48 @@ from    eq
 	    	    eq_code
   			  , eq_mdnm
 	     	  , eq_mdno
-	    	  , eq_period
+	     	  , use
+	     	  , eq_type
+	     	  , eq_min
+	     	  , eq_max
+	     	  , manager
+	     	  , eq_location
+	     	  , eq_img
+	     	  , line_code
   				)
   	VALUES (
   			 #{eqCode}
   			,#{eqMdnm}
   			,#{eqMdno}
-  			,#{eqPeriod}
-  			
+  			,#{use}
+  			,#{eqType}
+  			,#{eqMin}
+  			,#{eqMax}
+  			,#{manager}
+  			,#{eqLocation}
+  			,#{eqImg}
+  			,#{lineCode}
   			)
 </insert>
+
+<!-- 	 수정
+<update id="updateBoardInfo" parameterType="EqVO">
+	UPDATE eq
+	SET
+		title = #{title}
+		 , contents = #{contents}
+		 , writer = #{writer}
+		 , image = #{image}
+		 , updatedate = sysdate
+	WHERE bno = #{bno}
+</update> -->
+
+<!-- 삭제 -->
+<delete id="deleteEqInfo" parameterType="String">
+	DELETE from eq
+	WHERE eq_code = #{eqCode}
+</delete>
+
 <!-- 
 <insert id="insertEqInfo" parameterType="EqVO">
 	<selectKey keyProperty="eqCode"
@@ -105,6 +137,7 @@ from    eq
 	    , use
 	    , eq_dep
 	    , manager
+	    , eq_period
 	    , eq_img
 	    , eq_code
 	    , eq_standtemp

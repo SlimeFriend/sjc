@@ -1,6 +1,7 @@
 package com.sjc.app.pr.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PrdtService {
 	// 전체 계획 조회
@@ -35,4 +36,7 @@ public interface PrdtService {
 	
 	// 생산 실적 확인
 	public List<PResultVO> searchR(String pdetailCode);
+	
+	// 공정 자재 출고
+	void outMt(String mc, int needs, int mng, String lcode);
 }

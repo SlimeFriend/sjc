@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	const dataSource = {
 		api: {
 			readData: { 
-			url: '/usersApi',
+			url: '/usersApi',	
 			method: 'GET',
 	    	},
 		},
+	    hideLoadingBar: true,
+	  	initialRequest: true
 	}
 	
     const grid = new tui.Grid({
@@ -84,11 +86,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const gridInsert = new tui.Grid({
         el: document.getElementById('gridInsert'),
-		//data: dataSource,
         scrollX: false,
         scrollY: false,
         rowHeaders: ['rowNum'],
         columns: [
+			/*
             {
                 header: '사용자번호',
                 name: 'userId',
@@ -97,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true,                
                 editor: 'text',
             },
+            */
             {
                 header: '아이디',
                 name: 'loginId',
@@ -104,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+                validation: {
+					required: true,
+        			unique: true,
+			        regExp: /^[a-zA-Z0-9]+$/
+                },                
       
             },
             {
@@ -113,7 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
-      
+                validation: {
+					required: true,
+			        min: 1000,
+			        max: 10000        			
+                },                   
             },
             {
                 header: '이름',
@@ -122,6 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+                validation: {
+					required: true,
+			        regExp: /^[가-힣a-zA-Z]+$/
+                },                 
                                   
             },
             {
@@ -130,14 +146,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 formatter: 'listItemText',
                 editor: {
-                  type: 'select',
+                  type: 'radio',
                   options: {
                     listItems: [
                       { text: 'ROLE_ADMIN', value: 'ROLE_ADMIN' },
                       { text: 'ROLE_USER', value: 'ROLE_USER' },
                     ]
                   }
-                }                  
+                },
+	            validation: {
+	                required: true
+	            }                
             },
             {
                 header: '부서명',
@@ -156,7 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
                       { text: '전산', value: 'IT' },
                     ]
                   }
-                }
+                },
+	            validation: {
+	                required: true
+	            }                
               },
               {
 			    header: '연락처',
@@ -165,7 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			    sortingType: 'desc',
 			    sortable: true,
                 editor: 'text',
-			    
+                validation: {
+			        regExp: /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/
+                },                   
+                
 			  },
         ],
         pageOptions: {
@@ -174,11 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    
-    
     tui.Grid.applyTheme('striped');
-    tui.GridInsert.applyTheme('striped');
-
 
     document.getElementById('searchBtn').addEventListener('click', function() {
 		
@@ -205,6 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
         gridInsert.setValue(rowKey, columnName, value);
 	  	console.log('gridInsert editingFinish:', rowKey, columnName, value );
     });
+    
+	gridInsert.on('validateChange', (ev) => {
+	    console.log('검증 결과:', ev);
+	});    
 	
     document.getElementById('updateBtn').addEventListener('click', function() {
 	    //const modifiedRows = grid.getModifiedRows();
@@ -259,20 +284,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     document.getElementById('saveBtn').addEventListener('click', function() {
+		gridInsert.validate();
 		
-	    //const modifiedRows = gridInsert.getModifiedRows().updatedRows;
+	    const updatedRows = gridInsert.getModifiedRows().updatedRows;
 	    const modifiedRows = gridInsert.getModifiedRows().createdRows;
 	    
-	    if (modifiedRows.length === 0) {
+	    console.log("createdRows > " +gridInsert.getModifiedRows().createdRows);
+	    console.log(gridInsert.getModifiedRows().createdRows);
+	    modifiedRows.forEach(object => {
+			console.log(object);
+		
+			if	(object == null || object == ""){
+		        alert('데이터 입력하세요.');
+		        return false;
+			}
+			
+		});
+	    
+	    if (modifiedRows.length == 0) {
 	        alert('등록된 데이터가 없습니다.');
-	        return;
+	        return false;
 	    }
 	
 		if (confirm("등록 하시겠습니까??")){
 			saveUsers(modifiedRows);
 		}else{
-			return;
+			return false;
 		}
+		
 	});
 	
 	
@@ -294,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				  if (rowKey !== undefined) {
 				    gridInsert.addRowClassName(rowKey, 'bg-warning');
 				    gridInsert.restore();
-		    		document.getElementById('gridInsert').style.display="block";
+		    		document.getElementById('gridInsert').style.display="none";
 				  }
 		  		});
 	        }
@@ -313,13 +352,21 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
     }	
 	
-	
-	
+		
     document.getElementById('insertBtn').addEventListener('click', function() {
-
+		
 		document.getElementById('gridInsert').style.display="block";
 		gridInsert.refreshLayout();
-		gridInsert.appendRow();
+		//gridInsert.appendRow();
+		gridInsert.appendRow({
+			 userId : '1000'
+			,password : 1234
+			,userName : '신규 사용자'
+			,roleName : 'ROLE_USER'
+			,deptCode : 'IT'
+			,phone	  : '010-'
+
+		});
     });
     
     function insertUser(user) {
@@ -528,6 +575,5 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    fetchCopyDetails();    
-    
+    fetchCopyDetails();
 });

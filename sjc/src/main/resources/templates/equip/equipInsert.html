@@ -45,8 +45,17 @@
         cursor: pointer;
         margin-top: 8px;  /* 버튼과 필드 간격 줄이기 */
     }
-    #temp {
+    
+    #eqMin {
+    
     width: 9.2%;
+    
+    }
+    
+    #eqMax {
+    
+    width: 9.2%;
+    
     }
 
     .button-group {
@@ -65,31 +74,39 @@
                 <label for="eqMdnm">모델명(필수)</label>
                 <input type="text" id="eqMdnm" name="eqMdnm">
             </div>
-            <div>
-                <label for="eqCode">설비코드</label>
-                <input type="text" id="eqCode" name="eqCode">
-            </div>
+<!-- 			<div>
+                <label for="eqCode" >설비코드</label>
+                <input type="hidden" id="eqCode" name="eqCode">
+            </div> -->
             <div>
                 <label for="eqMdno">모델번호</label>
                 <input type="text" id="eqMdno" name="eqMdno">
             </div>
+			<div>
+				<label for="use">사용여부</label>
+				<input type="radio" name="use" value="Y">가동
+				<input type="radio" name="use" value="N">비가동
+			</div>            
             <div>
-                <label for="eqDep">담당부서</label>
-                <input type="text" id="eqDep" name="eqDep">
+            	<label for="eqType">설비구분</label>
+            	<select id="eqType" name="eqType">
+            		<optgroup label="배합기" value="배합기">배합기</optgroup>
+            		<option name="eqName"  value="바 배합기">바 배합기</option>
+            		<option value="콘 배합기">콘 배합기</option>
+            		<option value="냉각기">냉각기</option>
+            		<option value="포장기">포장기</option>
+            	</select>
             </div>
             <div>
-                <label for="eqMin">가용온도</label>
-                <input type="text" id="eqMin" name="eqMin">
+            
+            	<label for="eqPeriod">점검주기</label>
+            	<input type="text" id="eqPeriod" placeholder="3개월" readonly>
+            </div>
+            <div>
+                <label for="eqTemp">가용온도</label>
+                <input type="text" id="eqMin" name="eqMin" placeholder="최저">
                 ~
-                <input type="text" id="eqMax" name="eqMax">
-            </div>
-            <div>
-                <label for="eqPeriod">점검주기</label>
-                <input type="text" id="eqPeriod" name="eqPeriod">
-            </div>
-            <div>
-                <label for="employeeNo">사원번호</label>
-                <input type="text" id="employeeNo" name="employeeNo">
+                <input type="text" id="eqMax" name="eqMax" placeholder="최고">
             </div>
             <div>
                 <label for="manager">담당자</label>
@@ -98,6 +115,15 @@
             <div>
                 <label for="eqLocation">설비위치</label>
                 <input type="text" id="eqLocation" name="eqLocation">
+            </div>
+            <div>
+            	<label for="lineCode">라인코드</label>
+            	<select id="lineCode" name="lineCode">
+            	<option value="Line_1">Line_1</option>
+            	<option value="Line_2">Line_2</option>
+            	<option value="Line_3">Line_3</option>
+            	<option value="Line_4">Line_4</option>
+            	</select>
             </div>
             <div>
                 <label for="eqImg">설비사진</label>
@@ -122,75 +148,50 @@
 			event.preventDefault();
 			
 			
-			let mdNm = $('form [name="mdNm"]');
-			if(mdNm.val() == ''){
+			let eqMdnm = $('form [name="eqMdnm"]');
+			if(eqMdnm.val() == ''){
 				alert('모델명이 입력되지 않았습니다.');
-				mdName.focus();
+				eqMdnm.focus();
 				return;
 			}
 			
-			
-			let eqCd = $('form [name="eqCd"]');
-			if(eqCd.val() == ''){
-				alert('설비코드가 입력되지 않았습니다.');
-				eqCd.focus();
-				return;
-			}
-			
-			let mdNo = $('form [name="mdNo"]');
-			if(mdNo.val() == ''){
+			let eqMdno = $('form [name="eqMdno"]');
+			if(eqMdno.val() == ''){
 				alert('모델번호가 입력되지 않았습니다.');
-				mdNo.focus();
+				eqMdno.focus();
 				return;
 			}
 			
-			let dept = $('form [name="dept"]');
-			if(dept.val() == ''){
-				alert('담당부서가 입력되지 않았습니다.');
-				dept.focus();
+			let use = $('form [name="use"]');
+			if(use.val() == ''){
+				alert('사용여부를 선택하시오.');
+				use.focus();
 				return;
 			}
 			
-			let temp = $('form [name="temp"]');
-			if(temp.val() == ''){
+			let eqTemp = $('form [name="eqTemp"]');
+			if(eqTemp.val() == ''){
 				alert('온도가 입력되지 않았습니다.');
-				temp.focus();
+				eqTemp.focus();
 				return;
 			}
 			
-			let per = $('form [name="per"]');
-			if(per.val() == '3'){
-				per.focus();
-				return;
-			}
-			
-			let empNo = $('form [name="empNo"]');
-			if(empNo.val() == ''){
-				alert('사원번호가 입력되지 않았습니다.');
-				empNo.focus();
-				return;
-			}
 			
 			let manager = $('form [name="manager"]');
 			if(manager.val() == ''){
-				alert('담당자가 입력되지 않았습니다.');
+				alert('담당자를 입력하시오.');
 				manager.focus();
 				return;
 			}
 			
-			let location = $('form [name="location"]');
-			if(location.val() == ''){
+			
+			let eqLocation = $('form [name="eqLocation"]');
+			if(eqLocation.val() == ''){
 				alert('위치가 입력되지 않았습니다.');
-				location.focus();
+				eqLocation.focus();
 				return;
 			}
 			
-			let image = $('form [name="image"]');
-			if(image.val() == ''){
-				alert('이미지가 입력되지 않았습니다.');
-				image.focus();
-				return;
-			}
 			
 			alert('게시글이 등록되었습니다.');
 			insertForm.submit();
