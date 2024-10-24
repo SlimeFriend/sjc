@@ -30,12 +30,6 @@ public interface StockMapper {
     // 로트번호별 자재 수량 합계 조회
     Integer getTotalQuantityByLotNo(@Param("mtCode") String mtCode);
 
-    // 재고 추가
-    void increaseStock(@Param("mtCode") String mtCode, @Param("newStock") Integer newStock);
-
-    // 재고 차감
-    void decreaseStock(@Param("mtCode") String mtCode, @Param("stockDecrease") Integer stockDecrease);
-
     // 자재 코드에 따른 로트번호 목록 조회
     List<String> findLotNumbersByMtCode(@Param("mtCode") String mtCode);
 
@@ -45,7 +39,4 @@ public interface StockMapper {
     // 로트 번호 수량 추가 및 현재 재고 업데이트
     void addQuantityToLotAndUpdateStock(@Param("mtCode") String mtCode, @Param("lotNo") String lotNo, @Param("quantity") Integer quantity);
 
-    // 새로운 메서드 추가
-    // 로트 번호에 따른 자재 상세 정보 조회
-    List<MtInVO> getLotDetailsByMtCode(@Param("mtCode") String mtCode);
 }

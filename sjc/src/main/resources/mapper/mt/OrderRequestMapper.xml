@@ -43,7 +43,7 @@
             MTL_OD.MTL_OD_CODE = #{orderId}  
     </select>
 
-    <!-- 발주 요청 등록 (PRICE 계산 추가) -->
+    <!-- 발주 요청 등록 -->
     <insert id="insertOrderRequest" parameterType="OrderRequestVO">
         INSERT INTO MTL_OD  
         (MTL_OD_CODE, MTL_OD_DATE, MT_CODE, MTL_OD_QUANTITY, CP_CODE, USER_ID, COMM, DILIVERY_DATE, PRICE)
