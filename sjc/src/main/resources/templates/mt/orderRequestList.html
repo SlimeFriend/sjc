@@ -1,108 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>발주 요청 목록</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
-.hidden {
-	display: none;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>발주 요청 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-	<div class="main-container">
-		<div class="container">
-			<h1>발주 요청 목록</h1>
-			<div class="text-right mb-3">
-				<a class="btn btn-primary" th:href="@{/orderRequestNew}">발주 요청 등록</a>
-			</div>
+<div class="main-container">
+    <div class="container">
+        <h1>발주 요청 목록</h1>
+        <div class="text-right mb-3">
+            <a class="btn btn-primary" th:href="@{/orderRequestNew}">발주 요청 등록</a>
+        </div>
 
-			<!-- 발주 요청 목록 테이블 -->
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="hidden">발주 코드</th>
-						<th>업체 명</th>
-						<th>발주 일자</th>
-						
-						<th>상태</th>
-						<th>총 금액</th>
-						<th>담당자</th>
-						<th>작업</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status != '입고품질검사완료'}">
-						<td th:text="${orderRequest.mtlOdCode != null ? orderRequest.mtlOdCode : '-'}" class="hidden">발주 코드</td>
-						<td th:text="${orderRequest.cpName != null ? orderRequest.cpName : '-'}">업체 명</td>
-						<td th:text="${#dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd') != null ? #dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd') : '-'}">발주일자</td>
-						
-						<td th:text="${orderRequest.mtlOdStatus != null ? orderRequest.mtlOdStatus : '-'}">상태</td>
-						<td th:text="${orderRequest.totalAmount != null ? orderRequest.totalAmount : '-'}">총 금액</td>
-						<td th:text="${orderRequest.userId != null ? orderRequest.userId : '-'}">담당자</td>
-						<td>
-							<button class="btn btn-info" onclick="showOrderDetails('${orderRequest.mtlOdCode}')">상세보기</button>
-						</td>
-					</tr>
-					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[mtlOdStatus != '입고품질검사완료'].size() == 0}">
-						<td colspan="9" class="text-center">등록된 발주 요청이 없습니다.</td>
-					</tr>
-				</tbody>
-			</table>
+        <!-- 발주 요청 목록 테이블 -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>업체 코드</th>
+                    <th>발주 일자</th>
+                    <th>상태</th>
+                    <th>총 금액</th>
+                    <th>담당자</th>
+                    <th>작업</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="orderRequest, iterStat : ${orderRequests}" 
+                    th:if="${iterStat.first || orderRequest.cpCode != orderRequests[iterStat.index - 1].cpCode}">
+                    <td th:text="${orderRequest.cpCode}"></td>
+                    <td th:text="${#dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${orderRequest.mtlOdStatus}"></td>
+                    <td th:text="${orderRequest.totalAmount != null ? orderRequest.totalAmount : '-'}"></td>
+                    <td th:text="${orderRequest.userId}"></td>
+                    <td>
+                        <button class="btn btn-info" 
+                                th:data-cp-code="${orderRequest.cpCode}"
+                                th:data-order-code="${orderRequest.mtlOdCode}" 
+                                onclick="showOrderDetails(this.dataset.orderCode, this.dataset.cpCode)">상세보기</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-			<!-- 발주 요청 목록 상세 테이블 -->
-			<h2>발주 상세내역</h2>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>발주 상세 코드</th>
-						<th>자재 코드</th>
-						<th>규격</th>
-						<th>단가</th>
-						<th>수량</th>
-						<th>비고</th>
-						<th>발주일자</th>
-					</tr>
-				</thead>
-				<tbody id="orderDetailsBody">
-					
-				</tbody>
-			</table>
-		</div>
-	</div>
+        <!-- 발주 요청 상세 테이블 -->
+        <h2>발주 상세내역</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>발주 상세 코드</th>
+                    <th>자재 코드</th>
+                    <th>규격</th>
+                    <th>단가</th>
+                    <th>수량</th>
+                    <th>비고</th>
+                    <th>발주일자</th>
+                </tr>
+            </thead>
+            <tbody id="orderDetailsBody"></tbody>
+        </table>
+    </div>
+</div>
 
-	<!-- JavaScript로 AJAX 요청 및 테이블 업데이트 -->
-	<script type="text/javascript">
-		function showOrderDetails(orderRequestCode) {
-			// AJAX 요청으로 발주 상세 정보를 가져옴
-			fetch('/orderRequestDetails?orderRequestCode=' + orderRequestCode)
-				.then(response => response.json())
-				.then(data => {
-					let tbody = document.getElementById("orderDetailsBody");
-					tbody.innerHTML = "";  
+<script type="text/javascript">
+function showOrderDetails(cpCode) {
+    const encodedCode = encodeURIComponent(cpCode);
+    fetch('/orderRequestDetails?cpCode=' + encodedCode)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            let tbody = document.getElementById("orderDetailsBody");
+            tbody.innerHTML = "";  
 
-					// 새로운 행을 테이블에 추가
-					data.forEach(detail => {
-						let row = `<tr>
-										<td>${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}</td>
-										<td>${detail.mtCode != null ? detail.mtCode : '-'}</td>
-										<td>${detail.specification != null ? detail.specification : '-'}</td>
-										<td>${detail.unitPrice != null ? detail.unitPrice : '-'}</td>
-										<td>${detail.quantity != null ? detail.quantity : '-'}</td>
-										<td>${detail.comm != null ? detail.comm : '-'}</td>
-										<td>${new Date(detail.mtlOdDate).toLocaleDateString() != 'Invalid Date' ? new Date(detail.mtlOdDate).toLocaleDateString() : '-'}</td>
-								   </tr>`;
-						tbody.innerHTML += row;
-					});
-				})
-				.catch(error => console.error('Error:', error));
-		}
-	</script>
+            if (data.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='7'>상세 내역이 없습니다.</td></tr>";
+            } else {
+                data.forEach(detail => {
+                    let row = `<tr>
+                                    <td>${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}</td>
+                                    <td>${detail.mtCode != null ? detail.mtCode : '-'}</td>
+                                    <td>${detail.specification != null ? detail.specification : '-'}</td>
+                                    <td>${detail.unitPrice != null ? detail.unitPrice : '-'}</td>
+                                    <td>${detail.quantity != null ? detail.quantity : '-'}</td>
+                                    <td>${detail.comm != null ? detail.comm : '-'}</td>
+                                    <td>${detail.mtlOdDate != null ? detail.mtlOdDate : '-'}</td>
+                               </tr>`;
+                    tbody.innerHTML += row;
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>
+
 </body>
 </html>

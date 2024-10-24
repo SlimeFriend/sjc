@@ -25,6 +25,11 @@ private String mtlOdDeatilCode; // 자재발주상세코드
 private Integer quantity; // 자재수량
 private String cpCode;//업체 코드
 
+private long totalAmount;
+
+
+
+
 }
 
 
