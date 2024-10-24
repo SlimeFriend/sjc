@@ -1,53 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 등록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>발주 요청 등록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+.hidden {
+	display: none;
+}
+</style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="container mt-4">
-            <h1 class="mb-4">발주 요청 등록</h1>
-            <form th:action="@{/orderRequest}" method="post">
-                <!-- 자재 코드 -->
-                <div class="form-group">
-                    <label for="mtCode">자재 코드</label>
-                    <input type="text" id="mtCode" name="mtCode" class="form-control" th:value="${orderRequest.mtCode}" required>
-                </div>
-                
-                <!-- 수량 -->
-                <div class="form-group">
-                    <label for="quantity">수량</label>
-                    <input type="number" id="quantity" name="quantity" class="form-control" th:value="${orderRequest.quantity}" required>
-                </div>
-                
-                <!-- 업체 코드 -->
-                <div class="form-group">
-                    <label for="cpCode">업체 코드</label>
-                    <input type="text" id="cpCode" name="cpCode" class="form-control" th:value="${orderRequest.cpCode}">
-                </div>
+	<div class="main-container">
+		<div class="container">
+			<h1>발주 요청 등록</h1>
 
-                <!-- 사용자 ID -->
-                <div class="form-group">
-                    <label for="userId">사용자 ID</label>
-                    <input type="text" id="userId" name="userId" class="form-control" th:value="${orderRequest.userId}">
-                </div>
+			<!-- 업체 선택 -->
+			<div class="form-group">
+				<label for="cpCode">업체 선택</label> <select name="cpCode"
+					class="form-control">
+					<option value="">업체를 선택하세요</option>
+					<option th:each="cp : ${cpInfoList}" th:value="${cp.cpCode}"
+						th:text="${cp.cpName}">업체명</option>
+				</select>
+			</div>
 
-                <!-- 비고 -->
-                <div class="form-group">
-                    <label for="comm">비고</label>
-                    <textarea id="comm" name="comm" class="form-control" th:text="${orderRequest.comm}"></textarea>
-                </div>
-                
-                <!-- 제출 버튼 -->
-                <button type="submit" class="btn btn-primary">등록</button>
-            </form>
-        </div>
-    </div>
+			<!-- 품목 목록 (업체 선택 시 동적으로 로딩) -->
+			<h2>발주 품목 선택</h2>
+			<form th:action="@{/orderRequestForm}" method="post">
+				<input type="hidden" name="cpCode" id="selectedCpCode">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>품목명</th>
+							<th>규격</th>
+							<th>단가</th>
+							<th>발주 수량 입력</th>
+						</tr>
+					</thead>
+					<tbody id="itemList">
+						<!-- 품목들이 선택된 업체에 따라 동적으로 표시됨 -->
+					</tbody>
+				</table>
+
+				<!-- 발주 요청 제출 버튼 -->
+				<button type="submit" class="btn btn-primary">발주 요청 제출</button>
+			</form>
+		</div>
+	</div>
+
+	<script>
+    // 업체 선택 시 해당 업체의 발주 가능한 품목들을 불러오는 함수
+    function loadItemsForCpCode(cpCode) {
+        // 선택된 업체 코드를 숨겨진 필드에 설정
+        document.getElementById("selectedCpCode").value = cpCode;
+
+        if (cpCode === "") {
+            document.getElementById("itemList").innerHTML = ""; // 업체 선택 안 하면 초기화
+            return;
+        }
+
+        // AJAX를 사용하여 서버에서 해당 업체의 품목 목록을 받아옴
+        fetch(`/getItemsForCpCode?cpCode=` + cpCode)
+            .then(response => response.json())
+            .then(data => {
+                let itemList = document.getElementById("itemList");
+                itemList.innerHTML = ""; // 기존 품목 목록 초기화
+
+                // 서버에서 받은 품목들을 테이블에 추가
+                data.forEach(item => {
+                    let row = `<tr>
+                        <td>${item.mtName}</td>
+                        <td>${item.specification}</td>
+                        <td>${item.unitPrice}</td>
+                        <td><input type="number" name="items[${item.mtCode}]" min="1" class="form-control"></td>
+                    </tr>`;
+                    itemList.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error loading items:', error));
+    }
+</script>
 </body>
 </html>

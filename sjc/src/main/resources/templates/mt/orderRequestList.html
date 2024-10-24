@@ -20,7 +20,7 @@
 		<div class="container">
 			<h1>발주 요청 목록</h1>
 			<div class="text-right mb-3">
-				<a class="btn btn-primary" th:href="@{/orderRequestNew}">새 발주 요청 등록</a>
+				<a class="btn btn-primary" th:href="@{/orderRequestNew}">발주 요청 등록</a>
 			</div>
 
 			<!-- 발주 요청 목록 테이블 -->
@@ -28,84 +28,81 @@
 				<thead>
 					<tr>
 						<th class="hidden">발주 코드</th>
-						<th>자재 코드</th>
-						<th>자재명</th>
-						<th>수량</th>
-						<th>업체 코드</th>
-						<th>비고</th>
-						<th>발주일자</th>
-						<th>자재 상태</th>
-						<th>자재 상태변경</th>
+						<th>업체 명</th>
+						<th>발주 일자</th>
+						
+						<th>상태</th>
+						<th>총 금액</th>
+						<th>담당자</th>
 						<th>작업</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="orderRequest : ${orderRequests}"
-						th:if="${orderRequest.status != '입고품질검사완료'}">
-						<td th:text="${orderRequest.orderRequestCode}" class="hidden">발주 코드</td>
-						<td th:text="${orderRequest.mtCode}">자재 코드</td>
-						<td th:text="${orderRequest.mtName}">자재명</td>
-						<td th:text="${orderRequest.quantity}">수량</td>
-						<td th:text="${orderRequest.cpCode}">업체 코드</td>
-						<td th:text="${orderRequest.comm}">비고</td>
-						<td th:text="${#dates.format(orderRequest.orderDate, 'yyyy-MM-dd')}">발주일자</td>
-						<td th:text="${orderRequest.status}">자재 상태</td>
+					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status != '입고품질검사완료'}">
+						<td th:text="${orderRequest.mtlOdCode != null ? orderRequest.mtlOdCode : '-'}" class="hidden">발주 코드</td>
+						<td th:text="${orderRequest.cpName != null ? orderRequest.cpName : '-'}">업체 명</td>
+						<td th:text="${#dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd') != null ? #dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd') : '-'}">발주일자</td>
+						
+						<td th:text="${orderRequest.mtlOdStatus != null ? orderRequest.mtlOdStatus : '-'}">상태</td>
+						<td th:text="${orderRequest.totalAmount != null ? orderRequest.totalAmount : '-'}">총 금액</td>
+						<td th:text="${orderRequest.userId != null ? orderRequest.userId : '-'}">담당자</td>
 						<td>
-							<form th:action="@{/orderRequest/updateStatus}" method="post">
-								<select class="form-control" name="status">
-									<option value="발주대기" th:selected="${orderRequest.status == '발주대기'}">발주대기</option>
-									<option value="품질검사대기" th:selected="${orderRequest.status == '입고품질검사대기'}">입고품질검사대기</option>
-								</select>
-								<input type="hidden" name="orderRequestCode" th:value="${orderRequest.orderRequestCode}">
-								<button type="submit" class="btn btn-primary mt-2">상태 업데이트</button>
-							</form>
-						</td>
-						<td>
-							<a th:href="@{/orderRequest/{orderRequestCode}(orderRequestCode=${orderRequest.orderRequestCode})}" class="btn btn-info">상세보기</a>
-
-							<form th:action="@{/orderRequest/{orderRequestCode}/delete(orderRequestCode=${orderRequest.orderRequestCode})}" method="post" style="display: inline;">
-								<button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-							</form>
+							<button class="btn btn-info" onclick="showOrderDetails('${orderRequest.mtlOdCode}')">상세보기</button>
 						</td>
 					</tr>
-					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status != '입고품질검사완료'].size() == 0}">
+					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[mtlOdStatus != '입고품질검사완료'].size() == 0}">
 						<td colspan="9" class="text-center">등록된 발주 요청이 없습니다.</td>
 					</tr>
 				</tbody>
 			</table>
 
-			<!-- 발주 이력 확인 공간 추가 -->
-			<h2>품질검사 완료된 발주 요청 목록</h2>
+			<!-- 발주 요청 목록 상세 테이블 -->
+			<h2>발주 상세내역</h2>
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>발주 코드</th>
+						<th>발주 상세 코드</th>
 						<th>자재 코드</th>
-						<th>자재명</th>
+						<th>규격</th>
+						<th>단가</th>
 						<th>수량</th>
-						<th>업체 코드</th>
 						<th>비고</th>
 						<th>발주일자</th>
-						<th>자재 상태</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr th:each="orderRequest : ${orderRequests}" th:if="${orderRequest.status == '입고품질검사완료'}">
-						<td th:text="${orderRequest.orderRequestCode}">발주 코드</td>
-						<td th:text="${orderRequest.mtCode}">자재 코드</td>
-						<td th:text="${orderRequest.mtName}">자재명</td>
-						<td th:text="${orderRequest.quantity}">수량</td>
-						<td th:text="${orderRequest.cpCode}">업체 코드</td>
-						<td th:text="${orderRequest.comm}">비고</td>
-						<td th:text="${#dates.format(orderRequest.orderDate, 'yyyy-MM-dd')}">발주일자</td>
-						<td th:text="${orderRequest.status}">입고품질검사완료</td>
-					</tr>
-					<tr th:if="${#lists.isEmpty(orderRequests) or orderRequests.?[status == '입고품질검사완료'].size() == 0}">
-						<td colspan="8" class="text-center">처리된 이력이 없습니다.</td>
-					</tr>
+				<tbody id="orderDetailsBody">
+					
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<!-- JavaScript로 AJAX 요청 및 테이블 업데이트 -->
+	<script type="text/javascript">
+		function showOrderDetails(orderRequestCode) {
+			// AJAX 요청으로 발주 상세 정보를 가져옴
+			fetch('/orderRequestDetails?orderRequestCode=' + orderRequestCode)
+				.then(response => response.json())
+				.then(data => {
+					let tbody = document.getElementById("orderDetailsBody");
+					tbody.innerHTML = "";  
+
+					// 새로운 행을 테이블에 추가
+					data.forEach(detail => {
+						let row = `<tr>
+										<td>${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}</td>
+										<td>${detail.mtCode != null ? detail.mtCode : '-'}</td>
+										<td>${detail.specification != null ? detail.specification : '-'}</td>
+										<td>${detail.unitPrice != null ? detail.unitPrice : '-'}</td>
+										<td>${detail.quantity != null ? detail.quantity : '-'}</td>
+										<td>${detail.comm != null ? detail.comm : '-'}</td>
+										<td>${new Date(detail.mtlOdDate).toLocaleDateString() != 'Invalid Date' ? new Date(detail.mtlOdDate).toLocaleDateString() : '-'}</td>
+								   </tr>`;
+						tbody.innerHTML += row;
+					});
+				})
+				.catch(error => console.error('Error:', error));
+		}
+	</script>
 </body>
 </html>
