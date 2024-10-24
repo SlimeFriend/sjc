@@ -42,8 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+	            filter: {
+	                type: 'text',
+	                showApplyBtn: true,
+	                showClearBtn: true
+	            },                
                                   
             },
+            
             {
                 header: '권한',
                 name: 'roleName',
@@ -68,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
                       { text: '전산', value: 'IT' },
                     ]
                   }
-                }
+                },
+
               },
               {
 			    header: '연락처',
@@ -225,6 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const { rowKey, columnName, value } = event;
         gridInsert.setValue(rowKey, columnName, value);
 	  	console.log('gridInsert editingFinish:', rowKey, columnName, value );
+	  	
     });
     
 	gridInsert.on('validateChange', (ev) => {
@@ -262,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				];
 				
 				modifiedRowKeys.forEach(rowKey => {
+					
 				  if (rowKey !== undefined) {
 				    grid.addRowClassName(rowKey, 'bg-warning');
 				  }
@@ -284,16 +293,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     document.getElementById('saveBtn').addEventListener('click', function() {
-		gridInsert.validate();
+		
+    	grid.setValue(0,'userId', 90909090);		
+		
+		//console.log(gridInsert.validate());
 		
 	    const updatedRows = gridInsert.getModifiedRows().updatedRows;
+	    
 	    const modifiedRows = gridInsert.getModifiedRows().createdRows;
 	    
-	    console.log("createdRows > " +gridInsert.getModifiedRows().createdRows);
-	    console.log(gridInsert.getModifiedRows().createdRows);
+
+	    
 	    modifiedRows.forEach(object => {
-			console.log(object);
-		
 			if	(object == null || object == ""){
 		        alert('데이터 입력하세요.');
 		        return false;
@@ -303,6 +314,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	    
 	    if (modifiedRows.length == 0) {
 	        alert('등록된 데이터가 없습니다.');
+	        return false;
+	    }
+	    
+	    if(gridInsert.validate() == 0){
+			// do nothing
+		}else if (gridInsert.validate()[0].errors.length > 0) {
+	        alert('형식에 맞게 입력하세요.');
 	        return false;
 	    }
 	
@@ -364,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			,userName : '신규 사용자'
 			,roleName : 'ROLE_USER'
 			,deptCode : 'IT'
-			,phone	  : '010-'
+			,phone	  : ''
 
 		});
     });
@@ -576,4 +594,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     fetchCopyDetails();
+    
+
 });

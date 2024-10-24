@@ -13,6 +13,9 @@ public class SampleController {
 	@GetMapping("main")
 	public void main() {}
 	
+	@GetMapping("error")
+	public void error() {}
+	
 	@GetMapping("all")
 	public void all() {}
 	
