@@ -5,16 +5,16 @@
 	<!-- 업체 리스트 조회 -->
 	<select id="selectCompany" resultType="OrderVO">
 		SELECT cp_code,
-		cp_name
-		FROM cp
+		       cp_name
+		FROM   cp
 	</select>
 
 	<!-- 제품조회 -->
 	<select id="selectProduct" resultType="ProductVO">
 		SELECT prd_name,
-		prd_code,
-		unit_price
-		FROM prd
+		       prd_code,
+		       unit_price
+		FROM   prd
 	</select>
 	
 	<select id="selectProductDetail" parameterType="String" resultType="map">
@@ -24,9 +24,12 @@
 		       pm.md,
 		       pm.ed,
 		       pm.stc_quantity
+		       
 		FROM   prd p JOIN prd_management pm
-		ON     p.prd_code = pm.prd_code
-		WHERE  p.prd_code = #{prdCode} AND pm.stc_quantity > 0
+		               ON p.prd_code = pm.prd_code
+		               
+		WHERE  p.prd_code = #{prdCode} 
+		  AND  pm.stc_quantity > 0
 	</select>
 
 	<!-- 주문 접수 -->
@@ -45,7 +48,8 @@
 	
 	<insert id="insertOrderDetail" parameterType="map">
 	    INSERT INTO ORD_DETAIL (ord_detail_code, ord_code, prd_code, prd_name, ord_quantity, price)
-	    VALUES ('ORDDETAIL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
+	    VALUES ('ORDDETAIL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, 
+	    #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
 
 	<!-- 주문내역 조회 -->
@@ -56,6 +60,7 @@
 		       o.dlv_req_date,
 		       o.ord_status,
 		       o.comm
+		       
 		FROM ord o LEFT JOIN cp c
 		ON o.cp_code = c.cp_code
 	</select>
@@ -133,7 +138,7 @@
 	<!-- 출고접수 프로세스 -->
 	<update id="productOutProcess">
 		UPDATE prd_management
-		SET    out_quantity = #{outQuantity}
+		SET    out_quantity = out_quantity + #{outQuantity}
 		WHERE  lot = #{lot}
 	</update>
 </mapper>

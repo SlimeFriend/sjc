@@ -6,15 +6,15 @@ import java.util.Map;
 public interface SalesService {
 	
 	// 주문접수
-    public int insertOrder(OrderVO orderVO);
-    public String getOrdCode();
-    public int insertOrderDetail(ProductVO productVO, String ordCode);
+    public int insertOrder(SalesDTO salesDTO);
+    //public String getOrdCode();
+    //public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
 	public List<OrderVO> order();
 	public List<Map<String, Object>> orderDetail(String ordCode);
     
 	// 출고접수 프로세스
-	public int productOutProcess(String lot, int outQuantity);
+	public int productOutProcess(Map<String, Object> data);
 	
 	// 출고내역
 	public List<outHistoryVO> outHistory();
