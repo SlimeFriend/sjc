@@ -16,7 +16,7 @@ public interface EqMapper {
 	public int insertEqInfo(EqVO eqVO);
 	
 	// 수정
-	//public int updateEqInfo(EqVO eqVO);
+	public int updateEqInfo(EqVO eqVO);
 	
 	// 삭제
 	public int deleteEqInfo(String eqCode);

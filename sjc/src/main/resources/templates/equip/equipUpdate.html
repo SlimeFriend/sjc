@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+
+<title>설비 목록</title>
+</head>
+<style>
+tbody>tr {
+	cursor: pointer;
+}
+</style>
+
+<body>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<p style="font-size: 300%">설비 목록</p>
+			<div class="card-box pd-20 mb-30">
+				<div class="d-flex justify-content-between align-items-center mb-20">
+					<p style="font-size: 200%">설비 목록</p>
+					<button type="button" class="btn btn-primary" data-toggle="modal"
+						data-target="#myModal">설비 수정</button>
+				</div>
+
+
+				<!-- 버튼을 우측 상단으로 이동 -->
+				<div style="text-align: right; margin-bottom: 10px;">
+					<!-- Button to Open the Modal -->
+
+				</div>
+				<!-- 
+				<table class="data-table table nowrap">
+				 -->
+				<table class="table nowrap table-hover">
+					<thead>
+						<tr>
+							<th class="table-plus datatable-nosort">No.</th>
+							<th>설비코드</th>
+							<th>설비구분</th>
+							<th>설비명</th>
+							<th>최저온도</th>
+							<th>최고온도</th>
+							<th>사용여부</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="wait, sts : ${equips}">
+							<tr>
+								<td>[[${sts.count}]]</td>
+								<td>[[${wait.eqCode}]]</td>
+								<td>[[${wait.eqType}]]</td>
+								<td>[[${wait.eqName}]]</td>
+								<td>[[${wait.eqMin}]]</td>
+								<td>[[${wait.eqMax}]]</td>
+								<td>[[${wait.use}]]</td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+			<!-- The Modal -->
+			<div class="modal" id="myModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">설비 목록 수정</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<form th:action="@{/equipUpdate}" name="eqUpdate" method="post" class="form-control" th:object="${eq}">
+							<div class="modal-body">
+							<label for="eqCode">설비코드</label> 
+							<input type="text" id="eqCode" th:field="*{eqCode}" readonly>
+							</div>
+							<div>
+								<label for="title">제목</label> <input type="text" id="title"
+									th:field="*{title}">
+							</div>
+							<div>
+								<label for="contents">내용</label>
+								<textarea id="contents" th:field="*{contents}"></textarea>
+							</div>
+							<div>
+								<label for="writer">작성자</label> <input type="text" id="writer"
+									th:field="*{writer}">
+							</div>
+							<div>
+								<label for="image">이미지등록</label> <input type="text" id="image"
+									th:field="*{image}">
+							</div>
+							<div>
+								<button type="button" id="updateBtn">저장</button>
+							</div>
+							</div>
+						</form>
+						
+						<!-- <form id="eqProject" action="">
+							<div class="mb-3">
+								<label for="eqCode" class="form-label">설비코드</label> <input
+									type="text">
+							</div>
+							<div class="mb-3">
+								<label for="eqType" class="form-label">설비구분</label> <input
+									type="text">
+							</div>
+							<div class="mb-3">
+								<label for="eqName" class="form-label">설비명</label> <input
+									type="text">
+							</div>
+							<div class="mb-3">
+								<label for="eqMin" class="form-label">최저온도</label> <input
+									type="text">
+							</div>
+							<div class="mb-3">
+								<label for="eqMax" class="form-label">최고온도</label> <input
+									type="text">
+							</div>
+							<div class="mb-3">
+								<label for="eqUseOrNot" class="form-label">사용여부</label> <select
+									name="useOrNot">
+									<option value="can" selected>가동
+									<option value="cannot">비가동
+								</select>
+							</div>
+						</form>
+					</div> -->
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-dismiss="modal">수정</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			//제이쿼리 객체 생성
+			$('tbody > tr').on('click', function(event) {
+				let trTag = event.currentTarget; //tr 찾기
+				let eqCode = $(trTag).children().eq(1).text(); // 정보 가져오기
+				let url = `/eqInfo?eqCode=${eqCode}`;
+				location.href = url; //페이지로 이동해주세요!
+			});
+		});
+	</script>
+</body>
+</html>

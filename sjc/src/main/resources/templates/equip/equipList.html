@@ -4,129 +4,152 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>설비 목록</title>
 
-<title>설비 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        tbody > tr {
+            cursor: pointer;
+        }
+    </style>
 </head>
-<style>
-
-tbody > tr {
-	cursor: pointer;
-	
-}
-
-</style>
 
 <body>
-	<div class="main-container">
-		<div class="pd-ltr-20">
-	<p style="font-size: 300%">설비 목록</p>
-			<div class="card-box pd-20 mb-30">
-				<div class="d-flex justify-content-between align-items-center mb-20">
-					<p style="font-size: 200%">설비 목록</p>
-					<button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#myModal">설비 수정</button>
-				</div>
+    <div class="main-container">
+        <div class="pd-ltr-20">
+            <p style="font-size: 300%">설비 목록</p>
+            <div class="card-box pd-20 mb-30">
+                <div class="d-flex justify-content-between align-items-center mb-20">
+                    <p style="font-size: 200%">설비 목록</p>
+                    <button type="button" class="btn btn-primary" id="modifyBtn" data-toggle="modal" data-target="#myModal">
+                        설비 수정
+                    </button>
+                </div>
 
+                <table class="table nowrap table-hover">
+                    <thead>
+                        <tr>
+                            <th>선택</th>
+                            <th class="table-plus datatable-nosort">No.</th>
+                            <th>설비코드</th>
+                            <th>설비구분</th>
+                            <th>설비명</th>
+                            <th>최저온도</th>
+                            <th>최고온도</th>
+                            <th>사용여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:each="wait, sts : ${equips}">
+                            <tr>
+                                <td><input type="checkbox" class="eqCheckbox"></td>
+                                <td>[[${sts.count}]]</td>
+                                <td>[[${wait.eqCode}]]</td>
+                                <td>[[${wait.eqType}]]</td>
+                                <td>[[${wait.eqName}]]</td>
+                                <td>[[${wait.eqMin}]]</td>
+                                <td>[[${wait.eqMax}]]</td>
+                                <td>[[${wait.use}]]</td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </div>
 
-				<!-- 버튼을 우측 상단으로 이동 -->
-				<div style="text-align: right; margin-bottom: 10px;">
-					<!-- Button to Open the Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">설비 목록 수정</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="eqUpdate" id="eqProject">
+                                <div class="mb-3">
+                                    <label for="eqCode" class="form-label">설비코드</label>
+                                    <input type="text" id="eqCode" name="eqCode" value="eqCode" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eqType" class="form-label">설비구분</label>
+                                    <input type="text" id="eqType" name="eqType" value="eqType">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eqMin" class="form-label">최저온도</label>
+                                    <input type="text" id="eqMin" name="eqMin" value="eqMin">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eqMax" class="form-label">최고온도</label>
+                                    <input type="text" id="eqMax" name="eqMax" value="eqMax">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="use" class="form-label">사용여부</label>
+                                    <input type="radio" id="use" name="use" value="Y">가동
+                                    <input type="radio" id="use" name="use" value="N">비가동
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" data-dismiss="modal">수정</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-				</div>
-				<!-- 
-				<table class="data-table table nowrap">
-				 -->
-				<table class="table nowrap table-hover">
-					<thead>
-						<tr>
-							<th class="table-plus datatable-nosort">No.</th>
-							<th>설비코드</th>
-							<th>설비구분</th>
-							<th>설비명</th>
-							<th>최저온도</th>
-							<th>최고온도</th>
-							<th>사용여부</th>
-						</tr>
-					</thead>
-					<tbody>
-						<th:block th:each="wait, sts : ${equips}">
-							<tr>
-								<td>[[${sts.count}]]</td>
-								<td>[[${wait.eqCode}]]</td>
-								<td>[[${wait.eqType}]]</td>
-								<td>[[${wait.eqName}]]</td>
-								<td>[[${wait.eqMin}]]</td>
-								<td>[[${wait.eqMax}]]</td>
-								<td>[[${wait.use}]]</td>
-							</tr>
-						</th:block>
-					</tbody>
-				</table>
-			</div>
-			<!-- The Modal -->
-			<div class="modal" id="myModal">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<!-- Modal Header -->
-						<div class="modal-header">
-							<h4 class="modal-title">설비 목록 수정</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<!-- Modal body -->
-						<div class="modal-body">
-							<form id="eqProject" action="">
-								<div class="mb-3">
-									<label for="eqCode" class="form-label">설비코드</label> 
-									<input type="text">
-								</div>
-								<div class="mb-3">
-									<label for="eqType" class="form-label">설비구분</label> 
-									<input type="text">
-								</div>
-								<div class="mb-3">
-									<label for="eqName" class="form-label">설비명</label> 
-									<input type="text">
-								</div>
-								<div class="mb-3">
-									<label for="eqMin" class="form-label">최저온도</label> 
-									<input type="text">
-								</div>
-								<div class="mb-3">
-									<label for="eqMax" class="form-label">최고온도</label> 
-									<input type="text">
-								</div>
-								<div class="mb-3">
-									<label for="eqUseOrNot" class="form-label">사용여부</label> 
-									<select name="useOrNot">
-										<option value="can" selected>가동
-										<option value="cannot">비가동
-									</select>
-								</div>
-							</form>
-						</div>
-						<!-- Modal footer -->
-						<div class="modal-footer">
-							<button type="button" class="btn btn-success"
-								data-dismiss="modal">수정</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			//제이쿼리 객체 생성
-			$('tbody > tr').on('click', function(event) {
-				let trTag = event.currentTarget; //tr 찾기
-				let eqCode = $(trTag).children().eq(1).text(); // 정보 가져오기
-				let url = `/eqInfo?eqCode=${eqCode}`;
-				location.href = url; //페이지로 이동해주세요!
-			});
-		});
-	</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // 체크박스 클릭 시 이벤트 전파 막기
+            $('.eqCheckbox').on('click', function (event) {
+                event.stopPropagation();
+            });
+
+            // '설비 수정' 버튼 클릭 시 체크된 행의 데이터 가져오기
+            $('#modifyBtn').on('click', function () {
+                const checkedRow = $('input.eqCheckbox:checked').closest('tr');
+
+                if (checkedRow.length === 0) {
+                    alert('수정할 설비를 선택하세요.');
+                    event.stopPropagation();
+                    return;
+                }
+
+                const eqCode = checkedRow.find('td').eq(2).text();
+                const eqType = checkedRow.find('td').eq(3).text();
+                const eqName = checkedRow.find('td').eq(4).text();
+                const eqMin = checkedRow.find('td').eq(5).text();
+                const eqMax = checkedRow.find('td').eq(6).text();
+                const use = checkedRow.find('td').eq(7).text();
+
+                // 모달 폼에 데이터 채우기
+                $('#eqCode').val(eqCode);
+                $('#eqType').val(eqType);
+                $('#eqName').val(eqName);
+                $('#eqMin').val(eqMin);
+                $('#eqMax').val(eqMax);
+                $('#use').val(use);
+            });
+
+            // <tr> 클릭 시 상세 페이지로 이동
+            $('tbody > tr').on('click', function (event) {
+                if (!$(event.target).is('.eqCheckbox')) {
+                    const eqCode = $(this).find('td').eq(2).text();
+                    const url = `/eqInfo?eqCode=${eqCode}`;
+                    location.href = url;
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

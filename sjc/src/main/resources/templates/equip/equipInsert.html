@@ -9,58 +9,52 @@
 <title>설비 등록</title>
 </head>
 <style>
-    .form-container {
-        background-color: #fff;
-        padding: 10px;  /* 패딩 줄이기 */
-        border-radius: 8px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);  /* 그림자 감소 */
-        width: 250px;  /* 전체 크기 줄이기 */
-        margin: 10px auto;  /* 상하 여백 줄이기 */
-    }
+.form-container {
+	background-color: #fff;
+	padding: 10px; /* 패딩 줄이기 */
+	border-radius: 8px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 그림자 감소 */
+	width: 250px; /* 전체 크기 줄이기 */
+	margin: 10px auto; /* 상하 여백 줄이기 */
+}
 
-    .form-container div {
-        margin-bottom: 5px;  /* 필드 사이의 간격 줄이기 */
-    }
+.form-container div {
+	margin-bottom: 5px; /* 필드 사이의 간격 줄이기 */
+}
 
-    label {
-        display: block;
-        margin-bottom: 1px;  /* 레이블과 입력 필드 간격 줄이기 */
-        font-weight: bold;  /* 글자 굵기 조절 */
-        font-size: 12px;  /* 글자 크기 줄이기 */
-    }
+label {
+	display: block;
+	margin-bottom: 1px; /* 레이블과 입력 필드 간격 줄이기 */
+	font-weight: bold; /* 글자 굵기 조절 */
+	font-size: 12px; /* 글자 크기 줄이기 */
+}
 
-    input[type="text"],
-    input[type="date"],
-    input[type="file"] {
-        width: 20%;
-        padding: 3px;  /* 입력 필드 안쪽 여백 줄이기 */
-        margin-top: 3px;  /* 입력 필드와 레이블 사이 간격 줄이기 */
-        border-radius: 4px;  /* 모서리 둥글기 조절 */
-    }
+input[type="text"], input[type="date"], input[type="file"] {
+	width: 20%;
+	padding: 3px; /* 입력 필드 안쪽 여백 줄이기 */
+	margin-top: 3px; /* 입력 필드와 레이블 사이 간격 줄이기 */
+	border-radius: 4px; /* 모서리 둥글기 조절 */
+}
 
-    button {
-        width: 10%;
-        padding: 8px;  /* 버튼 크기 줄이기 */
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 8px;  /* 버튼과 필드 간격 줄이기 */
-    }
-    
-    #eqMin {
-    
-    width: 9.2%;
-    
-    }
-    
-    #eqMax {
-    
-    width: 9.2%;
-    
-    }
+button {
+	width: 10%;
+	padding: 8px; /* 버튼 크기 줄이기 */
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 8px; /* 버튼과 필드 간격 줄이기 */
+}
 
-    .button-group {
-        display: flex;
-    }
+#eqMin {
+	width: 9.2%;
+}
+
+#eqMax {
+	width: 9.2%;
+}
+
+.button-group {
+	display: flex;
+}
 </style>
 <body>
 	<div class="main-container">
@@ -69,133 +63,127 @@
 			<div class="card-box pd-20 mb-30">
 				<p style="font-size: 200%">설비 등록</p>
 				<div class="d-flex justify-content-between align-items-center mb-20">
-						<form th:action="@{/eqInsert}" name="insertForm" method="post" class="form-control">
-			<div>
-                <label for="eqMdnm">모델명(필수)</label>
-                <input type="text" id="eqMdnm" name="eqMdnm">
-            </div>
-<!-- 			<div>
+					<form th:action="@{/eqInsert}" name="insertForm" method="post"
+						class="form-control">
+						<div>
+							<label for="eqMdnm">모델명(필수)</label> <input type="text"
+								id="eqMdnm" name="eqMdnm">
+						</div>
+						<!-- 			<div>
                 <label for="eqCode" >설비코드</label>
                 <input type="hidden" id="eqCode" name="eqCode">
             </div> -->
-            <div>
-                <label for="eqMdno">모델번호</label>
-                <input type="text" id="eqMdno" name="eqMdno">
-            </div>
-			<div>
-				<label for="use">사용여부</label>
-				<input type="radio" name="use" value="Y">가동
-				<input type="radio" name="use" value="N">비가동
-			</div>            
-            <div>
-            	<label for="eqType">설비구분</label>
-            	<select id="eqType" name="eqType">
-            		<optgroup label="배합기" value="배합기">배합기</optgroup>
-            		<option name="eqName"  value="바 배합기">바 배합기</option>
-            		<option value="콘 배합기">콘 배합기</option>
-            		<option value="냉각기">냉각기</option>
-            		<option value="포장기">포장기</option>
-            	</select>
-            </div>
-            <div>
-            
-            	<label for="eqPeriod">점검주기</label>
-            	<input type="text" id="eqPeriod" placeholder="3개월" readonly>
-            </div>
-            <div>
-                <label for="eqTemp">가용온도</label>
-                <input type="text" id="eqMin" name="eqMin" placeholder="최저">
-                ~
-                <input type="text" id="eqMax" name="eqMax" placeholder="최고">
-            </div>
-            <div>
-                <label for="manager">담당자</label>
-                <input type="text" id="manager" name="manager">
-            </div>
-            <div>
-                <label for="eqLocation">설비위치</label>
-                <input type="text" id="eqLocation" name="eqLocation">
-            </div>
-            <div>
-            	<label for="lineCode">라인코드</label>
-            	<select id="lineCode" name="lineCode">
-            	<option value="Line_1">Line_1</option>
-            	<option value="Line_2">Line_2</option>
-            	<option value="Line_3">Line_3</option>
-            	<option value="Line_4">Line_4</option>
-            	</select>
-            </div>
-            <div>
-                <label for="eqImg">설비사진</label>
-                <input type="file" id="eqImg" name="eqImg">
-            </div>
-            
-            <div class="button-group">
-                <button type="reset">초기화</button>
-                <button type="submit">등록</button>
-            </div>
-							
+						<div>
+							<label for="eqMdno">모델번호</label> <input type="text" id="eqMdno"
+								name="eqMdno">
+						</div>
+						<div>
+							<label for="use">사용여부</label> <input type="radio" name="use"
+								value="Y">가동 <input type="radio" name="use" value="N">비가동
+						</div>
+						<div>
+							<label for="eqType">설비구분</label> 
+							<select id="eqName" name="eqName">
+								<option value="">선택</option>
+								<optgroup id="" label="배합기" data-type='d1'>
+								<option value="바 배합기">바 배합기</option>
+								<option value="콘 배합기">콘 배합기</option>
+								</optgroup>
+								<optgroup label="성형기" data-type='d2'>
+								<option value="바 성형기">바 성형기</option>
+								<option value="콘 성형기">콘 성형기</option>
+								</optgroup>
+								<optgroup label="냉각기" data-type='d3'>
+								<option value="바 냉각기">바 냉각기</option>
+								<option value="콘 냉각기">콘 냉각기</option>
+								</optgroup>
+								<optgroup label="포장기" data-type='d4'>
+								<option value="바 포장기">바 포장기</option>
+								<option value="콘 포장기">콘 포장기</option>
+								</optgroup>
+							</select>
+							<input type="hidden" name="eqType">
+						</div>
+						<div>
+
+							<label for="eqPeriod">점검주기</label> <input type="text"
+								id="eqPeriod" placeholder="3개월" readonly>
+						</div>
+						<div>
+							<label for="eqTemp">가용온도</label> <input type="text" id="eqMin"
+								name="eqMin" placeholder="최저"> ~ <input type="text"
+								id="eqMax" name="eqMax" placeholder="최고">
+						</div>
+						<div>
+							<label for="manager">담당자</label> <input type="text" id="manager"
+								name="manager">
+						</div>
+						<div>
+							<label for="eqLocation">설비위치</label> <input type="text"
+								id="eqLocation" name="eqLocation">
+						</div>
+						<div>
+							<label for="lineCode">라인코드</label> <select id="lineCode"
+								name="lineCode">
+								<option value="Line_1">Line_1</option>
+								<option value="Line_2">Line_2</option>
+								<option value="Line_3">Line_3</option>
+								<option value="Line_4">Line_4</option>
+							</select>
+						</div>
+						<div>
+							<label for="eqImg">설비사진</label> <input type="file" id="eqImg"
+								name="eqImg">
+						</div>
+
+						<div class="button-group">
+							<button type="reset">초기화</button>
+							<button type="submit">등록</button>
+						</div>
+
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-		<script>
-		//submit을 하기 전 제목, 작성자, 작성일자 확인
-		$(insertForm).on('submit',equipInsertHandler);
-		
+	<script>
+		$('[name=insertForm]').on('submit', equipInsertHandler);
+
 		function equipInsertHandler(event) {
 			event.preventDefault();
-			
-			
+
 			let eqMdnm = $('form [name="eqMdnm"]');
-			if(eqMdnm.val() == ''){
+			if (eqMdnm.val() == '') {
 				alert('모델명이 입력되지 않았습니다.');
 				eqMdnm.focus();
 				return;
 			}
-			
+
 			let eqMdno = $('form [name="eqMdno"]');
-			if(eqMdno.val() == ''){
+			if (eqMdno.val() == '') {
 				alert('모델번호가 입력되지 않았습니다.');
 				eqMdno.focus();
 				return;
 			}
 			
-			let use = $('form [name="use"]');
-			if(use.val() == ''){
-				alert('사용여부를 선택하시오.');
-				use.focus();
+			let eqType = $('form [name="eqType"]');
+			if (eqType.val() == '') {
+				alert('설비구분이 선택되지 않았습니다.');
+				eqType.focus();
 				return;
 			}
-			
-			let eqTemp = $('form [name="eqTemp"]');
-			if(eqTemp.val() == ''){
-				alert('온도가 입력되지 않았습니다.');
-				eqTemp.focus();
-				return;
-			}
-			
-			
-			let manager = $('form [name="manager"]');
-			if(manager.val() == ''){
-				alert('담당자를 입력하시오.');
-				manager.focus();
-				return;
-			}
-			
-			
-			let eqLocation = $('form [name="eqLocation"]');
-			if(eqLocation.val() == ''){
-				alert('위치가 입력되지 않았습니다.');
-				eqLocation.focus();
-				return;
-			}
-			
-			
-			alert('게시글이 등록되었습니다.');
+
+			alert('설비가 등록되었습니다.');
 			insertForm.submit();
+			
 		}
+		
+		let sel = document.querySelector("#eqName");
+		sel.addEventListener('change', function(){
+			let name = sel.selectedOptions[0].parentElement.label
+			document.querySelector('[name="eqType"]').value = name;
+		})
+		
 	</script>
 </body>
 
