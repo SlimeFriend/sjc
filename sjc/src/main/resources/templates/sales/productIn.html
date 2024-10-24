@@ -20,11 +20,11 @@
 
 		<script th:inline="javascript">
 			document.addEventListener('DOMContentLoaded', function() {
-				const gridData = /*[[${productIn}]]*/[];
+				const inGridData = /*[[${productIn}]]*/[];
 
 				const grid = new tui.Grid({
 					el : document.getElementById('grid'),
-					data : gridData,
+					data : inGridData,
 					scrollX : false,
 					scrollY : false,
 					columns : [ {

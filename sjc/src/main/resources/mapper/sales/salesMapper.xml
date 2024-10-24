@@ -46,11 +46,34 @@
                  #{comm})
 	</insert>
 	
+	<!-- 주문 상세 -->
 	<insert id="insertOrderDetail" parameterType="map">
 	    INSERT INTO ORD_DETAIL (ord_detail_code, ord_code, prd_code, prd_name, ord_quantity, price)
 	    VALUES ('ORDDETAIL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, 
 	    #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
+	
+	<select id="getOrdCode" resultType="String">
+		SELECT 
+		    CASE
+		        WHEN (MAX(SUBSTR(ord_code, 4, 8)) = TO_CHAR(SYSDATE, 'yyyyMMdd')) THEN 
+		            ('ORD' || TO_CHAR(MAX(SUBSTR(ord_code, 4, 12)) + 1))
+		        ELSE 
+		            ('ORD' || TO_CHAR(SYSDATE, 'yyyyMMdd') || TO_CHAR(LPAD(1, 3, '0')))
+		    END AS ord_code
+		FROM ord
+	</select>
+	
+		<select id="getLot" resultType="String">
+		SELECT 
+		    CASE
+		        WHEN (MAX(SUBSTR(lot, 4, 8)) = TO_CHAR(SYSDATE, 'yyyyMMdd')) THEN 
+		            ('LOT' || TO_CHAR(MAX(SUBSTR(lot, 4, 12)) + 1))
+		        ELSE 
+		            ('LOT' || TO_CHAR(SYSDATE, 'yyyyMMdd') || TO_CHAR(LPAD(1, 3, '0')))
+		    END AS lot
+		FROM prd_management
+	</select>
 
 	<!-- 주문내역 조회 -->
 	<select id="selectOrder" resultType="OrderVO">
@@ -141,6 +164,7 @@
 		SET    out_quantity = out_quantity + #{outQuantity}
 		WHERE  lot = #{lot}
 	</update>
+	
 </mapper>
 
 	

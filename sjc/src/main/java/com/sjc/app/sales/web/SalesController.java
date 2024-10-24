@@ -125,10 +125,6 @@ public class SalesController {
 	@PostMapping("/prdOutProcess")
 	@ResponseBody
 	public String prdOutProcess(@RequestBody List<Map<String, Object>> requestData) {
-		for (Map<String, Object> data : requestData) {
-	    
-	        salesService.productOutProcess(data);
-	    }
 	    return "출고 처리 성공"; // 적절한 응답 반환
 	}
 

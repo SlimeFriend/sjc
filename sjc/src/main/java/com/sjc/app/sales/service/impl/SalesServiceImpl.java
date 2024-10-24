@@ -40,7 +40,7 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public int insertOrder(SalesDTO salesDTO) {
 		// 키 생성
-		String nextId = getOrdCode();
+		String nextId = salesMapper.getOrdCode();
 		String ordCode = String.valueOf(nextId);
 		 
 		// 주문 마스터 등록
@@ -61,32 +61,17 @@ public class SalesServiceImpl implements SalesService {
 		//return salesMapper.insertOrder(orderVO);
 	}
 	
-	// 주문번호 시퀀스 값 가져오기
-	public String getOrdCode() {
-		String nextId = "";
-		String sql = "select"
-				+ " case"
-				+ " when (max(substr(ord_code, 4, 8))) = to_char(sysdate, 'yyyyMMdd') then ('ORD' || to_char(max(substr(ord_code, 4, 12)) + 1))"
-				+ " else ('ORD' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 3, 0)) )"
-				+ " end ord_code"
-				+ " from ord";
-		try (Connection connection = dataSource.getConnection();
-	             PreparedStatement ps = connection.prepareStatement(sql);
-	             ResultSet rs = ps.executeQuery()) {
-	            
-	            if (rs.next()) {
-	                nextId = rs.getString(1);  // 시퀀스 값 가져오기
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	        return nextId;
-	}
-	
 	// 출고 접수
 	@Override
 	public int productOutProcess(Map<String, Object> data) {
 		return salesMapper.productOutProcess(data);
+	}
+	
+	// 입고 접수
+	@Override
+	public List<ProductVO> productIn() {
+		String lot = salesMapper.getLot();
+		return salesMapper.selectProductIn();
 	}
 	
 	@Override
@@ -112,11 +97,6 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<ProductVO> productLot() {
 		return salesMapper.selectProductLot();
-	}
-
-	@Override
-	public List<ProductVO> productIn() {
-		return salesMapper.selectProductIn();
 	}
 
 	@Override
