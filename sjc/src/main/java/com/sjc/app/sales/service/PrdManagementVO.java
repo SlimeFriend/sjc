@@ -13,6 +13,7 @@ public class PrdManagementVO {
 	private Integer inQuantity;
 	private Integer outQuantity;
 	private Integer stcQuantity;
+	private Integer remainQuantity;
 	private Date inDate;
 	private String inOutType;
 }
