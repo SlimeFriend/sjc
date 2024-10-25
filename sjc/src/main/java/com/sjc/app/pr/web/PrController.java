@@ -160,8 +160,11 @@ public class PrController {
 	@PostMapping("outMt")
 	public String outMt(@RequestBody Map<String, Object> request) {
 		
-		 String prdCode = (String)request.get("prdCode");
-	     int account = (Integer)request.get("account");
+		 String prdCd = (String)request.get("prdCd");
+	     int accounts = (Integer)request.get("accounts");
+	     String vLineCode = (String)request.get("vLineCode");
+	     
+	     prdtService.outMt(prdCd, accounts, vLineCode);
 		
 		
 		

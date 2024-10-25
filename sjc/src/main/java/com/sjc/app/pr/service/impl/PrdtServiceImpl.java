@@ -93,8 +93,9 @@ public class PrdtServiceImpl implements PrdtService {
 	}
 
 	@Override
-	public void outMt(String mc, int needs, int mng, String lcode) {
-		prdtMapper.outMt(mc, needs, mng, lcode);
+	public String outMt(String prdCd, int accounts, String vLineCode) {
+		
+		return prdtMapper.outMt(prdCd, accounts, vLineCode);
 		
 	}
 

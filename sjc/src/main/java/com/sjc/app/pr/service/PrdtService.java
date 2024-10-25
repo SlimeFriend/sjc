@@ -38,5 +38,5 @@ public interface PrdtService {
 	public List<PResultVO> searchR(String pdetailCode);
 	
 	// 공정 자재 출고
-	void outMt(String mc, int needs, int mng, String lcode);
+	public String outMt(String prdCd, int accounts, String vLineCode);
 }

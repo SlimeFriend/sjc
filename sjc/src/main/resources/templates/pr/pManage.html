@@ -81,6 +81,7 @@
     let prd;
     let pd;
     let line;
+    let cnt;
     
    
     
@@ -90,11 +91,9 @@
         	
         	
             prd = event.currentTarget.dataset.code;
-            let cnt = event.currentTarget.children[4].innerText;
+            cnt = event.currentTarget.children[4].innerText;
             pd = event.currentTarget.children[0].innerText;
             line = event.currentTarget.children[2].innerText;
-            
-            
             
             
             console.log(cnt);
@@ -233,13 +232,17 @@
  							
  			fetch('/outMt', {
  				  method: "POST",
+ 				  headers: {
+ 	                'Content-Type': 'application/json',
+ 	            	},
  				  body: JSON.stringify({
  				    prdCd : prd,
- 				    accounts : cnt
+ 				    accounts : parseInt(cnt),
+ 				    vLineCode : line
  				  }),
  				})
  			.then((response) => response.json())
- 			.then((result) => console.log(result));		
+ 			.then((result) => alert(result));		
  	
  		}
  	});
