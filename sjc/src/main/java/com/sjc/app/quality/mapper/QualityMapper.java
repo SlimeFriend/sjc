@@ -8,6 +8,26 @@ import com.sjc.app.quality.service.InspectionVO;
 
 
 public interface QualityMapper {
+	// 발주목록전체
+	public List<InspectionVO> selectMtlOd();
+	
+	// 발주목록상세 테이블
+	public List<Map<String, Object>> selectMtlOdDetail(String mtlOdCode);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 조회 - 입고검사대기 조회페이지
 	public List<MtlOdVO> selectQualityWaitInfo();
 	

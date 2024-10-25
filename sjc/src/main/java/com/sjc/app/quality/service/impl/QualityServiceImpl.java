@@ -1,6 +1,7 @@
 package com.sjc.app.quality.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,35 @@ public class QualityServiceImpl implements QualityService{
 	public QualityServiceImpl (QualityMapper qualityMapper) {
 		this.qualityMapper = qualityMapper;
 	}
+	
+	// 발주목록전체
+	@Override
+	public List<InspectionVO> mtlOdList() {
+		return qualityMapper.selectMtlOd();
+	}
+	
+	// 발주목록상세 테이블
+	@Override
+	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode) {
+		return qualityMapper.selectMtlOdDetail(mtlOdCode);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 조회 - 입고검사대기 조회페이지
 	@Override
 	public List<MtlOdVO> incomingWaitInfo() {

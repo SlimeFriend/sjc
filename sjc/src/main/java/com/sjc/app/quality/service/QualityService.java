@@ -1,11 +1,23 @@
 package com.sjc.app.quality.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
 
 
 public interface QualityService {
+	// 발주목록전체
+	public List<InspectionVO> mtlOdList();
+	// 발주목록상세 테이블
+	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode);
+	
+	
+	
+	
+	
+	
+	
 	// 조회 - 입고검사대기 조회페이지
 	public List<MtlOdVO> incomingWaitInfo();
 	
