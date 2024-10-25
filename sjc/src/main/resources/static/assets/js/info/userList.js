@@ -294,15 +294,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('saveBtn').addEventListener('click', function() {
 		
-    	grid.setValue(0,'userId', 90909090);		
-		
 		//console.log(gridInsert.validate());
+		//console.log(grid.getData());
 		
 	    const updatedRows = gridInsert.getModifiedRows().updatedRows;
 	    
 	    const modifiedRows = gridInsert.getModifiedRows().createdRows;
-	    
-
 	    
 	    modifiedRows.forEach(object => {
 			if	(object == null || object == ""){

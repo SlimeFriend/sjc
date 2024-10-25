@@ -15,9 +15,16 @@ public class InfoBomController {
 		this.infoBomService = infoBomService;
 	}
 
+
 	@GetMapping("infoBomListGridFetch")
 	public String infoBomListGridFetch() {
 		return "info/bomListGridFetch";
 	}
+	
+	@GetMapping("infoBomList")
+	public String infoBomList() {
+		return "info/bomList";
+	}
 
+	
 }
