@@ -10,6 +10,8 @@ public interface OrderRequestService {
     List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode);
 
     MtlOdVO getOrderRequestById(String orderRequestCode);
+    
+
 
     void insertOrderRequest(MtlOdVO order);
 
@@ -19,10 +21,12 @@ public interface OrderRequestService {
 
     List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
 
-    // CP 코드에 따른 발주 상세내역 가져오기 추가
     List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);
 
     List<CpVO> getAllCpInfo();
 
     List<MtVO> getItemsByCpCode(String cpCode);
+
+    // 발주 요청과 상세 데이터를 함께 삽입하는 메서드
+    void insertOrderRequestWithDetails(MtlOdVO order, List<MtVO> items);
 }

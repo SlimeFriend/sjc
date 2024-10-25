@@ -1,81 +1,95 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}" 
-      layout:fragment="Content">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 등록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>발주 요청 등록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+.hidden {
+	display: none;
+}
+
+
+</style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>발주 요청 등록</h1>
+	<div class="main-container">
+		<div class="container">
+			<h1>발주 요청 등록</h1>
 
-            <!-- 업체 선택 -->
-            <div class="form-group">
-                <label for="cpCode">업체 선택</label>
-                <select name="cpCode" class="form-control" onchange="loadItemsForCpCode(this.value)">
-                    <option value="">업체를 선택하세요</option>
-                    <option th:each="cp : ${cpInfoList}" th:value="${cp.cpCode}" th:text="${cp.cpCode}">업체명</option>
-                </select>
-            </div>
+			<!-- 업체 선택 -->
+			<div class="form-group">
+				<label for="cpCode">업체 선택</label> <select name="cpCode"
+					class="form-control" onchange="loadItemsForCpCode(this.value)">
+					<option value="">업체를 선택하세요</option>
+					<option th:each="cp : ${cpInfoList}" th:value="${cp.cpCode}"
+						th:text="${cp.cpCode}">업체명</option>
+				</select>
+			</div>
 
-            <!-- 품목 목록 (업체 선택 시 동적으로 로딩) -->
-            <h2>발주 품목 선택</h2>
-            <form th:action="@{/orderRequestForm}" method="post">
-                <input type="hidden" name="cpCode" id="selectedCpCode">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>품목명</th>
-                            <th>규격</th>
-                            <th>단가</th>
-                            <th>발주 수량 입력</th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemList"></tbody>
-                </table>
+			<!-- 품목 목록 (업체 선택 시 동적으로 로딩) -->
+			<h2>발주 품목 선택</h2>
+			<form th:action="@{/orderRequestForm}" method="post">
+				<input type="hidden" name="cpCode" id="selectedCpCode">
 
-                <!-- 발주 요청 제출 버튼 -->
-                <button type="submit" class="btn btn-primary">발주 요청 제출</button>
-            </form>
-        </div>
-    </div>
+				<!-- userId 입력 필드 -->
+				<div class="form-group">
+					<label for="userId">담당자 ID</label> <input type="text" name="userId"
+						id="userId" class="form-control" placeholder="담당자 ID를 입력하세요"
+						required>
+				</div>
 
-    <script>
-        function loadItemsForCpCode(cpCode) {
-            document.getElementById("selectedCpCode").value = cpCode;
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>품목명</th>
+							<th>규격</th>
+							<th>단가</th>
+							<th>발주 수량 입력</th>
+						</tr>
+					</thead>
+					<tbody id="itemList"></tbody>
+				</table>
 
-            if (cpCode === "") {
-                document.getElementById("itemList").innerHTML = ""; 
-                return;
-            }
+				<button type="submit" class="btn btn-primary">발주 요청 제출</button>
+			</form>
+		</div>
+	</div>
 
-            fetch(`/getItemsForCpCode?cpCode=` + cpCode)
-                .then(response => response.json())
-                .then(data => {
-                    let itemList = document.getElementById("itemList");
-                    itemList.innerHTML = "";
+	<script>
+	function loadItemsForCpCode(cpCode) {
+	    if (!cpCode) {
+	        document.getElementById("itemList").innerHTML = "<tr><td colspan='4'>업체를 선택하세요.</td></tr>";
+	        return;
+	    }
 
-                    data.forEach(item => {
-                        let row = `<tr>
-                            <td>${item.mtName}</td>
-                            <td>${item.specification}</td>
-                            <td>${item.unitPrice}</td>
-                            <td><input type="number" name="items[${item.mtCode}]" min="1" class="form-control"></td>
-                        </tr>`;
-                        itemList.innerHTML += row;
-                    });
-                })
-                .catch(error => console.error('Error loading items:', error));
-        }
-    </script>
+	    fetch('/getItemsForCpCode?cpCode=' + cpCode)
+	        .then(response => response.json())
+	        .then(data => {
+	            let itemList = document.getElementById("itemList");
+	            itemList.innerHTML = ''; // 기존 데이터를 초기화
+
+	            if (data.length === 0) {
+	                itemList.innerHTML = "<tr><td colspan='4'>발주 가능한 자재 정보가 없습니다.</td></tr>";
+	            } else {
+	                data.forEach(item => {
+	                    let row = `<tr>
+	                                <td>${item.mtName}</td>
+	                                <td>${item.specification}</td>
+	                                <td>${item.unitPrice}</td>
+	                                <td><input type="number" name="quantity_${item.mtCode}" class="form-control" placeholder="수량 입력"></td>
+	                               </tr>`;
+	                    itemList.innerHTML += row;
+	                });
+	            }
+	        })
+	        .catch(error => console.error('Error:', error));
+	}
+
+</script>
 </body>
 </html>

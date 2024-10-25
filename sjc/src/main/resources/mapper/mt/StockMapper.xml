@@ -104,11 +104,8 @@
         SET INQUANTITY = INQUANTITY + #{quantity}
         WHERE LOT_NO = #{lotNo}
         AND MT_CODE = #{mtCode};
-
-        <!-- 현재 재고 업데이트 -->
-        UPDATE MT
-        SET CURRENT_STC = CURRENT_STC + #{quantity}
-        WHERE MT_CODE = #{mtCode};
+        
+        
     </update>
 
 </mapper>
