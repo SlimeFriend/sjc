@@ -197,10 +197,9 @@ where p.prd_code = #{prdCode}
 </select>
 
 <!-- 공정 자재 가져오기 프로시져 호출 -->
-<select id="outMt">
-     CALL outMt(#{mc, mode=IN},
-     			 #{needs, mode=IN},
-     			  #{mng, mode=IN},
-     			   #{lcode, mode=IN})
+<select id="outMt" resultType="String">
+     CALL outMt(#{prdCd, mode=IN},
+     			 #{accounts, mode=IN},
+     			   #{vLineCode, mode=IN})
 </select>
 </mapper>
