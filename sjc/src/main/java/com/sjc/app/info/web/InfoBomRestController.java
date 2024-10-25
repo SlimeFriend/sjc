@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
-import com.sjc.app.info.service.InfoCopyDetailVO;
 
 import lombok.RequiredArgsConstructor;
 

@@ -19,19 +19,19 @@
 	</select>
 	
 	<select id="selectBomDetailAllList" resultType="BomVO" parameterType="BomVO">
-		select	BOM_CODE  
-				,REG_DATE
-		        ,DESCRIPTION
+		select	B_DETAIL_CODE
+				,QUANTITY_REQUIRED
 		        ,COMM
-		        ,MANAGER
-		        ,PRD_CODE
-		from    BOM
+				,BOM_CODE  
+		        ,MT_CODE
+		        ,NO
+		from    B_DETAIL
 	    <where>
-	        <if test="bomCode != null and bomCode != ''">
-	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
+	        <if test="bDetailCode != null and bDetailCode != ''">
+	            AND UPPER(b_detail_code) LIKE UPPER('%' || #{bDetailCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY BOM_CODE
+	    ORDER BY B_DETAIL_CODE
 	</select>
 	
 	<insert id="insertBom" parameterType="String">
@@ -39,32 +39,48 @@
 	    VALUES (f_code_pk('bom','b'))
 	</insert>
 	
+
+	<insert id="insertBomDetail" parameterType="String">
+	    INSERT INTO b_detail (
+	    	B_DETAIL_CODE
+	    	,BOM_CODE 
+	    	,MT_CODE 
+	    )VALUES(
+	    	f_code_pk('b_detail','bd')
+			,(
+				SELECT  bom_code
+				FROM    (
+				    SELECT 	*
+				    FROM 	bom
+				    ORDER BY bom_code desc
+				)
+				WHERE   ROWNUM = 1
+       		)
+       		,#{mtCode}
+	    )
+	</insert>	
+	<!-- mutating 에러로 단건 처리로 변경함.
 	<insert id="insertBomDetail" parameterType="list">
 	    INSERT INTO b_detail (
-	    	B_DETAIL_CODE,
-	    	BOM_CODE, 
-	    	QUANTITY_REQUIRED, 
-	    	COMM, 
-	    	MT_CODE, 
-	    	NO, 
+	    	B_DETAIL_CODE
+	    	,BOM_CODE 
+	    	,MT_CODE 
 	    )
 	    <foreach collection="list" item="bom" index="index" separator="UNION ALL">
-	        SELECT	f_code_pk('b_detail','bd'),
-	        		(
-						SELECT  b_detail_code
+	        SELECT	f_code_pk('b_detail','bd')
+	        		,(
+						SELECT  bom_code
 						FROM    (
 						    SELECT 	*
-						    FROM 	b_detail
-						    ORDER BY b_detail_code desc
+						    FROM 	bom
+						    ORDER BY bom_code desc
 						)
 						WHERE   ROWNUM = 1
-	        		),
-	        		#{bom.quantityRequired},
-	        		#{bom.comm},
-	        		#{bom.mtCode},
-	        		#{user.no},
+	        		)
+	        		,#{bom.mtCode}
 	        FROM 	dual
 	    </foreach>
 	</insert>	
+	 -->
 	
 </mapper>
