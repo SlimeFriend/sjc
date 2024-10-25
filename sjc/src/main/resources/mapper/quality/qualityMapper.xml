@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
+	<select id="selectMtlOd" resultType="InspectionVO">
+		SELECT o.mtl_od_code mtl_od_code
+		, o.cp_code	cp_code
+		, c.cp_name cp_name
+		, o.mtl_od_quantity mtl_od_quantity
+		, o.mtl_od_date mtl_od_date
+		, o.dilivery_date dilivery_date
+		, o.price price
+		, o.user_id user_id
+		, o.mtl_od_status mtl_od_status
+		, o.comm comm
+		FROM copy_mtl_od o
+		JOIN cp c
+		ON o.cp_code = c.cp_code
+		<where>
+			o.mtl_od_status ='입고품질검사대기'
+			<if test="cpCode != null and cpCode != ''">
+				AND c.cp_code = #{cpCode}
+			</if>
+			<if test="cpName != null and userId != ''">
+				AND c.cp_name = #{cpName}
+			</if>
+		</where>
+	</select>
+	<!-- 
+	<select id="selectMtlOdDetail" parameterType="String" resultType="map">
+	    SELECT d.mtl_od_code  AS "mtlOdCode"
+	        , d.mtl_od_detail_code AS "mtlOdDetailCode"
+	        , d.mt_code AS "mtCode"
+	        , d.quantity AS "mtlOdDetailQuantity"
+	        , m.mt_name AS "mtName"
+	        , m.material_type AS "materialType"
+	        , m.specification AS "specification"
+	        , m.unit AS "unit"
+	        , m.unit_price AS "unitPrice"
+		FROM copy_mtl_od_detail d
+		JOIN copy_mt m
+		ON d.mt_code = m.mt_code
+		WHERE d.mtl_od_code = #{mtlOdCode}
+	</select>
+	 -->
+	<select id="selectMtlOdDetail" parameterType="String" resultType="map">
+	    SELECT d.mtl_od_code
+	        , d.mtl_od_detail_code
+	        , d.mt_code
+	        , d.quantity
+	        , m.mt_name
+	        , m.material_type
+	        , m.specification
+	        , m.unit
+	        , m.unit_price
+		FROM copy_mtl_od_detail d
+		JOIN copy_mt m
+		ON d.mt_code = m.mt_code
+		WHERE d.mtl_od_code = #{mtlOdCode}
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<select id="selectQualityWaitInfo" resultType="MtlOdVO">
 		SELECT mtl_od_code
                , mtl_od_quantity

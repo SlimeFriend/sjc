@@ -1,0 +1,194 @@
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+	<!-- 페이징 필요하신분 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<h2 class="h2 mb-20">입고품질검사 대기 목록</h2>
+			<div class="pd-30 card-box mb-20">
+				<form>
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="text" placeholder="업체명">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<button class="btn btn-dark">조회</button>
+							<button class="btn btn-dark">초기화</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="gridOrder"></div>
+			<div id="gridOrderDetail" style="opacity : 0"></div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const gridData = /*[[${mtlList}]]*/[];
+			const gridModalData = /*[[${mtlOdDetail}]]*/[];
+
+			const grid = new tui.Grid({
+				el : document.getElementById('gridOrder'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '발주코드',
+					name : 'mtlOdCode',
+					align : 'center',
+				}, {
+					header : '업체코드',
+					name : 'cpCode',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '총 발주 수량',
+					name : 'mtlOdQuantity',
+					align : 'center',
+				}, {
+					header : '발주날짜',
+					name : 'mtlOdDate',
+					align : 'center',
+				}, {
+					header : '납기일',
+					name : 'diliveryDate',
+					align : 'center',
+				}, {
+					header : '총 금액',
+					name : 'price',
+					align : 'center',
+				}, {
+					header : '사용자ID',
+					name : 'userId',
+					align : 'center',
+				}, {
+					header : '발주상태',
+					name : 'mtlOdStatus',
+					align : 'center',
+				}, {
+					header : '비고',
+					name : 'mtlOdComm',
+					align : 'center',
+				},  ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+
+			grid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const mtlOdCodeValue = grid.getValue(rowKey, 'mtlOdCode');
+			    
+			    if(mtlOdCodeValue) {
+			    	$.ajax({
+			    		url : '/getIncomingQualityWaitDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({mtlOdCode : mtlOdCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			gridmodal.resetData(response); 
+			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
+			    	});
+			    }
+			    
+			});
+			
+			
+			const gridmodal = new tui.Grid({
+				el : document.getElementById('gridOrderDetail'),
+				data : gridModalData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '발주코드',
+					name : 'mtlOdCode',
+					align : 'center',
+				}, {
+					header : '발주상세코드',
+					name : 'mtlOdDetailCode',
+					align : 'center',
+				}, {
+					header : '자재코드',
+					name : 'mtCode',
+					align : 'center',
+				}, {
+					header : '개별발주수량',
+					name : 'mtlOdDetailQuantity',
+					align : 'center',
+				}, {
+					header : '자재이름',
+					name : 'mtName',
+					align : 'center',
+				}, {
+					header : '자재구분',
+					name : 'materialType',
+					align : 'center',
+				}, {
+					header : '규격',
+					name : 'specification',
+					align : 'center',
+				}, {
+					header : '단위',
+					name : 'unit',
+					align : 'center',
+				}, {
+					header : '단가',
+					name : 'unitPrice',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 5
+				}
+			});
+			
+			
+			
+		});
+	</script>
+</div>

@@ -1,6 +1,7 @@
 package com.sjc.app.quality.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,40 @@ public class QualityController {
     public QualityController(QualityService qualityService) {
     	this.qualityService = qualityService;
     }
+    
+    // 발주목록전체
+    @GetMapping("incomingQualityWaitHistory")
+    public String incomingQualityWaitHistory(Model model) {
+    	List<InspectionVO> list = qualityService.mtlOdList();
+    	model.addAttribute("mtlList", list);
+    	return "quality/incomingQualityWaitHistory";
+    }
+    
+    
+    // 발주목록상세 테이블
+    @PostMapping("getIncomingQualityWaitDetail")
+    @ResponseBody
+    public List<Map<String, Object>> getIncomingQualityWaitDetail(@RequestBody Map<String, String> requestData) {
+    	String mtlOdCode = requestData.get("mtlOdCode");
+    	
+    	List<Map<String, Object>> mtlOdDetail = qualityService.MtlOdDetail(mtlOdCode);
+    	
+    	return mtlOdDetail;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 	// 조회 - 입고검사대기 조회페이지
     @GetMapping("incomingQualityWaitInfo")

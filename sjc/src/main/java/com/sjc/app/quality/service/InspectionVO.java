@@ -28,13 +28,13 @@ public class InspectionVO {
 		private String unit; //단위
 		private int unitPrice; //단가
 		private int safetyStock; //안전재고
-		private String comm; //비고
+		private String mtComm; //비고
 		private String stcCode; //재고코드
 		private Date updateDate; //재고변동일
 		private int currentStc; //현재재고
 		private int leadtime; // 리드타임
 
-		private int quantityRequired; //현재수량 
+		private int mtQuantity; //현재수량 
 		private String prdName; //제품명
 		
 		
@@ -45,6 +45,7 @@ public class InspectionVO {
 		private int price;//금액
 		private String cpCode;//업체 코드
 		private String mtlOdStatus;//발주상태
+		private String mtlOdComm;//발주비고
 		
 	// MtInVO
 		private Date inputDate; //입고일
@@ -52,6 +53,10 @@ public class InspectionVO {
 		private Date ed; //유통기한
 		private String inCode; //입고코드
 		private String lotNo; //LOT번호
+		
+	// MtlOdDetailVO
+		private String mtlOdDetailCode;
+		private int mtlOdDetailQuantity;
 		
 		
 	// InsItemVO
