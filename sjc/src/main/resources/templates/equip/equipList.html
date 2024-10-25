@@ -115,10 +115,11 @@ tbody>tr {
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="submit" class="btn btn-success"
-								data-dismiss="modal">수정</button>
+							<button type="button" class="btn btn-success" id="saveChanges">수정</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
 						</div>
+
+
 					</div>
 				</div>
 			</div>
@@ -131,47 +132,99 @@ tbody>tr {
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
-		$(document).ready(function() {
-			// 체크박스 클릭 시 이벤트 전파 막기
-			$('.eqCheckbox').on('click', function(event) {
-				event.stopPropagation();
-			});
+	$(document).ready(function () {
+	    // 체크박스 클릭 시 이벤트 전파 막기
+	    $('.eqCheckbox').on('click', function (event) {
+	        event.stopPropagation(); // 이벤트 전파 중지
+	    });
 
-			// '설비 수정' 버튼 클릭 시 체크된 행의 데이터 가져오기
-			$('#modifyBtn').on('click', function() {
-				const checkedRow = $('input.eqCheckbox:checked').closest('tr');
+	    // 첫 번째 <td> (체크박스) 클릭 시 체크박스 선택/해제 처리
+	    $('tbody > tr').on('click', 'td:first-child', function (event) {
+	        const checkbox = $(this).find('.eqCheckbox');
+	        checkbox.prop('checked', !checkbox.prop('checked')); // 체크 상태 반전
+	        event.stopPropagation(); // 클릭 이벤트 전파 중지
+	    });
 
-				if (checkedRow.length === 0) {
-					alert('수정할 설비를 선택하세요.');
-					event.stopPropagation();
-					return;
-				}
+	    // 나머지 <td> 클릭 시 상세 페이지로 이동
+	    $('tbody > tr').on('click', function (event) {
+	        if ($(event.target).closest('td').index() !== 0) {
+	            const eqCode = $(this).find('td').eq(2).text(); // 설비코드 추출
+	            const url = `/eqInfo?eqCode=${eqCode}`; // 상세 페이지 URL 생성
+	            location.href = url; // 상세 페이지로 이동
+	        }
+	    });
 
-				const eqCode = checkedRow.find('td').eq(2).text();
-				const eqType = checkedRow.find('td').eq(3).text();
-				const eqName = checkedRow.find('td').eq(4).text();
-				const eqMin = checkedRow.find('td').eq(5).text();
-				const eqMax = checkedRow.find('td').eq(6).text();
-				const use = checkedRow.find('td').eq(7).text();
+	    // '설비 수정' 버튼 클릭 시 체크된 행의 데이터 가져오기
+	    $('#modifyBtn').on('click', function (event) {
+	        const checkedRows = $('input.eqCheckbox:checked').closest('tr');
 
-				// 모달 폼에 데이터 채우기
-				$('#eqCode').val(eqCode);
-				$('#eqType').val(eqType);
-				$('#eqName').val(eqName);
-				$('#eqMin').val(eqMin);
-				$('#eqMax').val(eqMax);
-				$('#use').val(use);
-			});
+	        if (checkedRows.length === 0) {
+	            alert('수정할 설비를 선택하세요.');
+	            return;
+	        }
 
-			// <tr> 클릭 시 상세 페이지로 이동
-			$('tbody > tr').on('click', function(event) {
-				if (!$(event.target).is('.eqCheckbox')) {
-					const eqCode = $(this).find('td').eq(2).text();
-					const url = `/eqInfo?eqCode=${eqCode}`;
-					location.href = url;
-				}
-			});
-		});
+	        if (checkedRows.length > 1) {
+	            alert('하나의 설비만 수정할 수 있습니다.');
+	            return;
+	        }
+
+	        // 체크된 한 개의 행 데이터 추출
+	        const checkedRow = checkedRows.eq(0);
+	        const eqCode = checkedRow.find('td').eq(2).text();
+	        const eqType = checkedRow.find('td').eq(3).text();
+	        const eqName = checkedRow.find('td').eq(4).text();
+	        const eqMin = checkedRow.find('td').eq(5).text();
+	        const eqMax = checkedRow.find('td').eq(6).text();
+	        const use = checkedRow.find('td').eq(7).text();
+
+	        // 모달 폼에 데이터 채우기
+	        $('#eqCode').val(eqCode);
+	        $('#eqType').val(eqType);
+	        $('#eqName').val(eqName);
+	        $('#eqMin').val(eqMin);
+	        $('#eqMax').val(eqMax);
+	        $('input[name="use"][value="' + use + '"]').prop('checked', true);
+
+	        // 모달 창 표시
+	        $('#myModal').modal('show');
+	    });
+
+	    // 모달 창에서 수정 처리
+	    $('#saveChanges').on('click', function (event) {
+	        event.preventDefault(); // 기본 폼 제출 방지
+
+	        const eqData = {
+	            eqCode: $('#eqCode').val(),
+	            eqType: $('#eqType').val(),
+	            eqName: $('#eqName').val(),
+	            eqMin: $('#eqMin').val(),
+	            eqMax: $('#eqMax').val(),
+	            use: $('input[name="use"]:checked').val()
+	        };
+
+	        $.ajax({
+	            type: 'POST',
+	            url: '/eqUpdate',
+	            contentType: 'application/json',
+	            data: JSON.stringify(eqData),
+	            success: function (response) {
+	                if (response.result) {
+	                    alert('수정이 완료되었습니다.');
+	                    location.reload(); // 페이지 새로고침
+	                } else {
+	                    alert('수정에 실패했습니다.');
+	                }
+	            },
+	            error: function () {
+	                alert('서버 오류가 발생했습니다.');
+	            }
+	        });
+
+	        // 모달 창 닫기
+	        $('#myModal').modal('hide');
+	    });
+	});
+
 	</script>
 </body>
 
