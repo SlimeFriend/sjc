@@ -103,10 +103,10 @@ public class InfoUserServiceImpl implements InfoUserService {
     @Override
     @Transactional
     public List<String> copyUsers(List<String> userIds) {
-        List<InfoUserVO> usersToCopy = userMapper.getUsersByIds(userIds);
+        List<InfoUserVO> infoUserVO = userMapper.getUsersByIds(userIds);
 
         userMapper.insertCopyLog();
-        userMapper.insertCopyDetail(usersToCopy);
+        userMapper.insertCopyDetail(infoUserVO);
 
         return userIds;
     }

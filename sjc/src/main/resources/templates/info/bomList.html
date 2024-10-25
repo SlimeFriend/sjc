@@ -11,22 +11,31 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+   
 </head>
 <body>
-	
-
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">자재 목록</h2>
+			<h2 class="h2 mb-20">자재 - BOM</h2>
 
 			<div class="pd-20 card-box mb-20">
 		        <button class="btn btn-primary mb-3 mr-3" id="registerBtn">BOM 추가</button>
-		        <button class="btn btn-success mb-3 mr-3" id="insertBtn">BOM 목록</button>
-		        <button class="btn btn-secondary mb-3 mr-3" id="saveBtn">BOM 상세</button>
+		        <h2 class="h5 mb-20">자재목록</h2>
+		        
 				<div id="grid"></div>
-				<div id="gridBom"></div>
-				<div id="gridBomDetail"></div>
 			</div>
+			
+	        <div style="display: flex; width: 100%; gap: 20px;">
+	            <div class="pd-20 card-box mb-20" style="width: 50%;">
+		        	<h2 class="h5 mb-20">BOM 목록</h2>
+	                <div id="gridBom"></div>
+	            </div>
+	            <div class="pd-20 card-box mb-20" style="width: 50%;">
+		        	<h2 class="h5 mb-20">BOM 상세목록</h2>
+	                <div id="gridBomDetail"></div>
+	            </div>
+	        </div>
+	        
 		</div>
 	</div>
 

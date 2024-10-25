@@ -5,8 +5,6 @@
 	
 
 document.addEventListener('DOMContentLoaded', function() {
-	
-	const gridData = /*[[${prds}]]*/[];
 
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
@@ -123,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     const gridBom = new tui.Grid({
-        el: document.getElementById('grid'),
+        el: document.getElementById('gridBom'),
         scrollX: false,
         scrollY: false,
         columns: [
@@ -162,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
+            /*
             {
                 header: '메모',
                 name: 'comm',
@@ -197,19 +196,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-                       
-                        
-        ]
+            */
+        ],
+        rowHeaders: ['checkbox', 'rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 4
+        }        
     });
     
     const gridBomDetail = new tui.Grid({
-        el: document.getElementById('grid'),
+        el: document.getElementById('gridBomDetail'),
         scrollX: false,
         scrollY: false,
         columns: [
             {
                 header: 'BOM상세코드',
-                name: 'bDetailCode',
+                name: 'bdetailCode', //bDetailCode
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
@@ -221,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
+            /*
             {
                 header: '제품코드',
                 name: 'prdCode',
@@ -228,6 +232,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
+            */
+            {
+                header: '자재코드',
+                name: 'mtCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            /*
             {
                 header: '설명',
                 name: 'description',
@@ -256,16 +269,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
+            */
+		   
+            /*
             {
                 header: '소요수량',
                 name: 'quantityRequired',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
-            {
-                header: '자재코드',
-                name: 'mtCode',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
@@ -277,10 +286,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-
-                       
-                        
-        ]
+            */
+        ],
+        rowHeaders: ['checkbox', 'rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 4
+        }        
     });
 
 
@@ -305,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (selectedRows.length > 0) {
         	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
-        		//registerBoms(selectedRows.map(row => row.userId));
         		registerBoms(selectedRows.map(row => row.mtCode));
         	}else{
         		return false;
@@ -315,13 +326,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function registerBoms(mtCode) {
+    function registerBoms(mtCodes) {
         fetch('/registerBoms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(userIds),
+            body: JSON.stringify(mtCodes),
         })
         .then(response => response.json())
         .then(result => {
@@ -367,6 +378,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchBomDetails();
 
-
+	window.addEventListener('resize', function() {
+	    gridBom.refreshLayout();
+	    gridBomDetail.refreshLayout();
+	});
 		 
 });		 

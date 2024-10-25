@@ -1,9 +1,11 @@
 package com.sjc.app.info.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoBomMapper;
 import com.sjc.app.info.service.BomVO;
@@ -26,9 +28,22 @@ public class InfoBomServiceImpl implements InfoBomService {
 	}
 	
 	@Override
+    @Transactional
 	public List<String> registerBoms(List<String> mtCodes) {
+		
+        List<BomVO> BomVOs = new ArrayList<>();
+        
+        for(String mtCode : mtCodes) {
+        	BomVO bomVO = new BomVO();
+        	bomVO.setMtCode(mtCode);
+        	BomVOs.add(bomVO);
+        }
+        
 		infoBomMapper.insertBom();
-		infoBomMapper.insertBomDetail(mtCodes);
+				
+        for(String mtCode : mtCodes) {
+            infoBomMapper.insertBomDetail(mtCode);  // 단건 처리로 변경
+        }
 
 		return mtCodes;
 	}
