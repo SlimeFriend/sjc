@@ -49,7 +49,16 @@ public interface SalesMapper {
 	// 업체 리스트
 	public List<OrderVO> selectCompany();
 	
+	
 	// 제품 출고 프로세스
-	public int productOutProcess(Map<String, Object> data);
+	
+	// 미출고량 계산
+	public int getRemain(List<Map<String, Object>> outRemainData);
+	
+	// 출고내역 등록
+	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName);
+	
+	int prdLotOutProcess(@Param("outQuantity") int outQuantity, @Param("lot") String lot);
 
+	
 }

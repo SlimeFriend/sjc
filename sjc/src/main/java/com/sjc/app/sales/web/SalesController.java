@@ -1,5 +1,6 @@
 package com.sjc.app.sales.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,10 +123,29 @@ public class SalesController {
 	}
 	
 	// 제품출고 프로세스
-	@PostMapping("/prdOutProcess")
+	@PostMapping("/getPrdOutInfo")
 	@ResponseBody
-	public String prdOutProcess(@RequestBody List<Map<String, Object>> requestData) {
-	    return "출고 처리 성공"; // 적절한 응답 반환
+	public int prdOutProcess(@RequestBody Map<String, List<Map<String, Object>>> requestData) {
+		
+	    List<Map<String, Object>> outLotData = requestData.get("outLotData");
+	    List<Map<String, Object>> outPrdData = requestData.get("outPrdData");
+	    List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
+	    
+	    Map<String, Object> combinedData = new HashMap<>();
+	    combinedData.put("outLotData", outLotData);
+	    combinedData.put("outPrdData", outPrdData);
+	    combinedData.put("outRemainData", outRemainData);
+	    
+	    int result = salesService.productOutProcess(combinedData);
+	    
+	    return result; // 적절한 응답 반환
+	}
+	
+	@PostMapping("/remainInfo")
+	@ResponseBody
+	public int remainProcess(@RequestBody Map<String, List<Map<String, Object>>> requestData) {
+		List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
+		return salesService.remainProcess(outRemainData);
 	}
 
 	// 입/출고 내역 페이지

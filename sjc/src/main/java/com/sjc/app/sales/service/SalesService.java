@@ -5,16 +5,15 @@ import java.util.Map;
 
 public interface SalesService {
 	
-	// 주문접수
+	// 주문접수 프로세스
     public int insertOrder(SalesDTO salesDTO);
-    //public String getOrdCode();
-    //public int insertOrderDetail(ProductVO productVO, String ordCode);
 	
 	public List<OrderVO> order();
 	public List<Map<String, Object>> orderDetail(String ordCode);
     
 	// 출고접수 프로세스
 	public int productOutProcess(Map<String, Object> data);
+	public int remainProcess(List<Map<String, Object>> outRemainData);
 	
 	// 입고접수 프로세스
 	public List<ProductVO> productIn();
@@ -34,5 +33,6 @@ public interface SalesService {
 	
 	// 업체
 	public List<OrderVO> companyList();
+
 
 }

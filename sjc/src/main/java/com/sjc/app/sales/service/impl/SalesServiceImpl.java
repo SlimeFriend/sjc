@@ -35,7 +35,7 @@ public class SalesServiceImpl implements SalesService {
 		this.dataSource = dataSource;
 	}
 	
-	// 주문접수
+	// 주문접수 프로세스
 	@Transactional
 	@Override
 	public int insertOrder(SalesDTO salesDTO) {
@@ -61,10 +61,46 @@ public class SalesServiceImpl implements SalesService {
 		//return salesMapper.insertOrder(orderVO);
 	}
 	
-	// 출고 접수
+	
+	// 출고접수 프로세스
+	@Transactional
 	@Override
 	public int productOutProcess(Map<String, Object> data) {
-		return salesMapper.productOutProcess(data);
+		
+		int totalRowsAffected = 0;
+		
+		// LOT별 제품 출고 프로세스
+		List<Map<String, Object>> outLotData = (List<Map<String, Object>>) data.get("outLotData");
+		for(Map<String, Object> lot : outLotData) {
+			String prdCode = (String) lot.get("prdCode");
+			String ordCode = (String) lot.get("ordCode");
+			String lotNumber = (String) lot.get("lot");
+			String cpName = (String) lot.get("cpName");
+			int outQuantity = (Integer) lot.get("outQuantity");
+			
+			totalRowsAffected += salesMapper.insertOutHistory(ordCode, prdCode, lotNumber, outQuantity, cpName);
+			totalRowsAffected += salesMapper.prdLotOutProcess(outQuantity, lotNumber);
+		}
+		
+		/*
+		 * // Prd별 제품 출고 프로세스 List<Map<String, Object>> outPrdData = (List<Map<String,
+		 * Object>>) data.get("outPrdData"); for(Map<String, Object> prd : outPrdData) {
+		 * String prdCode = (String) prd.get("prdCode"); String ordCode = (String)
+		 * prd.get("ordCode"); int totalOutQuantity = (Integer)
+		 * prd.get("totalOutQuantity");
+		 * 
+		 * totalRowsAffected += salesMapper.prdOutProcess(ordCode, prdCode,
+		 * totalOutQuantity); }
+		 */
+	    
+		return totalRowsAffected;
+	}
+	
+	// 미출고량 계산 프로세스
+	@Override
+	public int remainProcess(List<Map<String, Object>> outRemainData) {
+		System.err.print(outRemainData);
+		return salesMapper.getRemain(outRemainData);
 	}
 	
 	// 입고 접수
