@@ -26,8 +26,21 @@ public class InfoBomServiceImpl implements InfoBomService {
 	}
 	
 	@Override
-	public List<BomVO> bomList(BomVO bomVO) {
-		return infoBomMapper.selectBomAllList(bomVO);
-	}
+	public List<String> registerBoms(List<String> mtCodes) {
+		infoBomMapper.insertBom();
+		infoBomMapper.insertBomDetail(mtCodes);
 
+		return mtCodes;
+	}
+	
+	@Override
+	public List<BomVO> bomList() {
+		return infoBomMapper.selectBomAllList();
+	}
+	
+	@Override
+	public List<BomVO> bomDetailList() {
+		return infoBomMapper.selectBomDetailAllList();
+	}
+	
 }

@@ -14,7 +14,7 @@
 		        ,STC_CODE
 		        ,UPDATE_DATE
 		        ,CURRENT_STC
-		        ,LEADTIME
+		        --,LEADTIME
 		from    MT
 	    <where>
 	        <if test="mtCode != null and mtCode != ''">

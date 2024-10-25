@@ -17,4 +17,54 @@
 	    </where>
 	    ORDER BY BOM_CODE
 	</select>
+	
+	<select id="selectBomDetailAllList" resultType="BomVO" parameterType="BomVO">
+		select	BOM_CODE  
+				,REG_DATE
+		        ,DESCRIPTION
+		        ,COMM
+		        ,MANAGER
+		        ,PRD_CODE
+		from    BOM
+	    <where>
+	        <if test="bomCode != null and bomCode != ''">
+	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
+	        </if>
+	    </where>
+	    ORDER BY BOM_CODE
+	</select>
+	
+	<insert id="insertBom" parameterType="String">
+	    INSERT INTO bom (bom_code)
+	    VALUES (f_code_pk('bom','b'))
+	</insert>
+	
+	<insert id="insertBomDetail" parameterType="list">
+	    INSERT INTO b_detail (
+	    	B_DETAIL_CODE,
+	    	BOM_CODE, 
+	    	QUANTITY_REQUIRED, 
+	    	COMM, 
+	    	MT_CODE, 
+	    	NO, 
+	    )
+	    <foreach collection="list" item="bom" index="index" separator="UNION ALL">
+	        SELECT	f_code_pk('b_detail','bd'),
+	        		(
+						SELECT  b_detail_code
+						FROM    (
+						    SELECT 	*
+						    FROM 	b_detail
+						    ORDER BY b_detail_code desc
+						)
+						WHERE   ROWNUM = 1
+	        		),
+	        		#{bom.quantityRequired},
+	        		#{bom.comm},
+	        		#{bom.mtCode},
+	        		#{user.no},
+	        FROM 	dual
+	    </foreach>
+	</insert>	
+	
 </mapper>
