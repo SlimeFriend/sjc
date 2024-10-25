@@ -1,6 +1,8 @@
 package com.sjc.app.mt.serviceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sjc.app.mt.mapper.OrderRequestMapper;
@@ -35,6 +37,25 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         orderRequestMapper.insertOrderRequest(order);
     }
 
+    // 추가된 발주 요청 및 상세 데이터 삽입 메서드
+    @Override
+    public void insertOrderRequestWithDetails(MtlOdVO orderRequest, List<MtVO> items) {
+        // 발주 요청 데이터 삽입
+        orderRequestMapper.insertOrderRequest(orderRequest);
+
+        // 발주 상세 데이터 삽입
+        for (MtVO item : items) {
+            MtlOdVO detail = new MtlOdVO();
+            detail.setMtlOdCode(orderRequest.getMtlOdCode());
+            detail.setMtCode(item.getMtCode());
+            detail.setQuantity(item.getQuantity());
+            detail.setUnitPrice(item.getUnitPrice());
+            detail.setTotalAmount(item.getQuantity() * item.getUnitPrice());
+            orderRequestMapper.insertOrderRequestDetail(detail);
+        }
+    
+}
+
     @Override
     public void updateOrderRequest(MtlOdVO order) {
         orderRequestMapper.updateOrderRequest(order);
@@ -65,4 +86,8 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     public List<MtVO> getOrderRequestDetailsByCpCode(String cpCode) {
         return orderRequestMapper.getOrderRequestDetailsByCpCode(cpCode);
     }
+    
+    
+    
+
 }

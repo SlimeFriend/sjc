@@ -1,65 +1,89 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Content">
+
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 상세</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>발주 상세내역</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
+
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>발주 요청 상세</h1>
-            <form th:action="@{/orderRequest/{orderRequestCode}/update(orderRequestCode=${orderRequest.orderRequestCode})}" method="post">
-                <input type="hidden" name="_method" value="PUT">
-                
-                <!-- 자재 코드 -->
-                <div class="form-group">
-                    <label for="mtCode">자재 코드</label>
-                    <input type="text" class="form-control" id="mtCode" name="mtCode" th:value="${orderRequest.mtCode}" required>
-                </div>
 
-                <!-- 자재명 -->
-                <div class="form-group">
-                    <label for="mtName">자재명</label>
-                    <input type="text" class="form-control" id="mtName" name="mtName" th:value="${orderRequest.mtName}" readonly>
-                </div>
+<h1>발주 상세내역</h1>
 
-                <!-- 수량 -->
-                <div class="form-group">
-                    <label for="quantity">수량</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" th:value="${orderRequest.quantity}" required>
-                </div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>자재 발주 상세 코드</th>
+            <th>자재 코드</th>
+            <th>자재 명</th>
+            <th>규격</th>
+            <th>단가</th>
+            <th>수량</th>
+            <th>주문 금액</th> <!-- 새로운 열 추가 -->
+            <th>발주 일자</th>
+            <th>비고</th>
+        </tr>
+    </thead>
+   
+    <tbody id="orderDetailsBody">
+        <tr th:each="detail : ${orderDetails}">
+            <td th:text="${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}"></td>
+            <td th:text="${detail.mtCode != null ? detail.mtCode : '-'}"></td>
+            <td th:text="${detail.mtName != null ? detail.mtName : '-'}"></td>
+            <td th:text="${detail.specification != null ? detail.specification : '-'}"></td>
+            <td th:text="${detail.unitPrice != null ? detail.unitPrice : '-'}"></td>
+            <td th:text="${detail.quantity != null ? detail.quantity : '-'}"></td>
+            
+            <!-- 주문 금액 계산 -->
+            <td th:text="${detail.unitPrice != null && detail.quantity != null ? detail.unitPrice * detail.quantity : '-'}"></td>
+            
+            <td th:text="${detail.mtlOdDate != null ? #dates.format(detail.mtlOdDate, 'yyyy-MM-dd') : '-'}"></td>
+            <td th:text="${detail.comm != null ? detail.comm : '-'}"></td>
+        </tr>
+    </tbody>
+</table>
 
-                <!-- 업체 코드 -->
-                <div class="form-group">
-                    <label for="cpCode">업체 코드</label>
-                    <input type="text" class="form-control" id="cpCode" name="cpCode" th:value="${orderRequest.cpCode}" required>
-                </div>
+<a href="/orderRequestList" class="btn btn-primary">발주 목록으로 돌아가기</a>
+<script>
+function loadOrderDetails(cpCode) {
+    $.ajax({
+        url: '/orderRequestDetails',
+        method: 'GET',
+        data: { cpCode: cpCode },
+        success: function(data) {
+            let detailsTable = $('#order-details-table tbody');
+            detailsTable.empty();
+            if (data.length > 0) {
+                data.forEach(function(detail) {
+                    const orderAmount = detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-';
+                    detailsTable.append(`
+                        <tr>
+                            <td>${detail.mtlOdDetailCode || '-'}</td>
+                            <td>${detail.mtCode || '-'}</td>
+                            <td>${detail.mtName || '-'}</td>
+                            <td>${detail.specification || '-'}</td>
+                            <td>${detail.unitPrice || '-'}</td>
+                            <td>${detail.quantity || '-'}</td>
+                            <td>${orderAmount}</td> 
+                            <td>${detail.mtlOdDate ? new Date(detail.mtlOdDate).toLocaleString() : '-'}</td>
+                            <td>${detail.comm || '-'}</td>
+                        </tr>
+                    `);
+                });
+            } else {
+                detailsTable.append('<tr><td colspan="8">발주 상세 내역이 없습니다.</td></tr>'); // colspan 수정
+            }
+        },
+        error: function() {
+            alert('발주 상세 내역을 가져오는 중 오류가 발생했습니다.');
+        }
+    });
+}
 
-                <!-- 사용자 ID -->
-                <div class="form-group">
-                    <label for="userId">담당자 ID</label>
-                    <input type="text" class="form-control" id="userId" name="userId" th:value="${orderRequest.userId}" required>
-                </div>
-
-                <!-- 비고 -->
-                <div class="form-group">
-                    <label for="comm">비고</label>
-                    <textarea class="form-control" id="comm" name="comm" th:text="${orderRequest.comm}"></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">수정</button>
-            </form>
-
-            <form th:action="@{/orderRequest/{orderRequestCode}/delete(orderRequestCode=${orderRequest.orderRequestCode})}" method="post" style="display: inline;">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-            </form>
-        </div>
-    </div>
+</script>
 </body>
+
 </html>
