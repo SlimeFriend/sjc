@@ -1,9 +1,6 @@
 /**
  * bomList.js
  */
-
-	
-
 document.addEventListener('DOMContentLoaded', function() {
 
     const grid = new tui.Grid({
@@ -325,8 +322,20 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('registerBtn').addEventListener('click', function() {
         const selectedRows = grid.getCheckedRows();
         
-        if (selectedRows.length > 0) {
-			
+		const rowKeys = selectedRows.map(row => row.rowKey);
+		
+		if (selectedRows.length > 0) {
+		    const validation = grid.validate();
+		    
+		    const invalidRows = validation.filter(result => 
+		        rowKeys.includes(result.rowKey)
+		    );
+		
+		    if (invalidRows.length > 0) {
+		        alert('입력값을 확인하세요.');
+		        return false;
+		    }
+						
 			const description = document.querySelector('textarea[name="description"]').value;
 			if (!description || description.trim() === '') {
 			    alert('설명을 입력하세요.');
@@ -341,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
         	}
         	
         } else {
-            alert('등록할 자재를 선택해주세요.');
+            alert('자재를 선택하세요.');
         }
     });
 
@@ -349,7 +358,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function registerBoms(selectedRows) {
 		
-		console.log();
 		document.querySelector('textarea[name="description"]').value
 		
 		const editedRows = selectedRows.map(row => ({
@@ -370,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    .then(response => {
 	        if (response.ok) {
 				
-				
+				document.querySelector('textarea[name="description"]').value = '';
 			    fetchMtList();
 			    fetchBoms();
 			    fetchBomDetails();
@@ -438,11 +446,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	*/
 	/*
 	grid.on('check', (ev) => {
-	    grid.addRowClassName(ev.rowKey, 'bg-light');  // 체크된 행만 스타일 적용
+	    grid.addRowClassName(ev.rowKey, 'bg-light');
 	});
 	
 	grid.on('uncheck', (ev) => {
-	    grid.removeRowClassName(ev.rowKey, 'bg-light');  // 체크 해제된 행 스타일 제거
+	    grid.removeRowClassName(ev.rowKey, 'bg-light');
 	});
 	*/
 	
