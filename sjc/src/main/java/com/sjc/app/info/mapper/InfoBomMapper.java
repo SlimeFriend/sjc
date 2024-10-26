@@ -10,6 +10,6 @@ public interface InfoBomMapper {
     //void insertBomDetail(List<BomVO> BomVOs);	
     void insertBomDetail(BomVO bomVO);	
     public List<BomVO> selectBomAllList();
-    public List<BomVO> selectBomDetailAllList();
+    public List<BomVO> selectBomDetailAllList(BomVO bomVO);
     
 }

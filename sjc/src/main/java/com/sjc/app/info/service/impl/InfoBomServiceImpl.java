@@ -70,8 +70,8 @@ public class InfoBomServiceImpl implements InfoBomService {
 	}
 	
 	@Override
-	public List<BomVO> bomDetailList() {
-		return infoBomMapper.selectBomDetailAllList();
+	public List<BomVO> bomDetailList(BomVO bomVO) {
+		return infoBomMapper.selectBomDetailAllList(bomVO);
 	}
 	
 }

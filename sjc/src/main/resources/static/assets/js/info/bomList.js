@@ -149,22 +149,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: '설명',
                 name: 'description',
                 align: 'center',
-                //sortingType: 'desc',
-                //sortable: true                
+                sortingType: 'desc',
+                sortable: true                
             },
             {
                 header: '등록일',
                 name: 'regDate',
                 align: 'center',
-                //sortingType: 'desc',
-                //sortable: true                
+                sortingType: 'desc',
+                sortable: true                
             },
             {
                 header: '담당자',
                 name: 'manager',
                 align: 'center',
-                //sortingType: 'desc',
-                //sortable: true                
+                sortingType: 'desc',
+                sortable: true                
             },
             /*            
             {
@@ -245,6 +245,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: '자재코드',
                 name: 'mtCode',
                 align: 'center',
+                sortingType: 'asc',
+                sortable: true                 
              
             },
             /*
@@ -294,6 +296,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
             */
+        ],
+        rowHeaders: ['checkbox', 'rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 4
+        }        
+    });
+    
+    const gridBomDetailModal = new tui.Grid({
+        el: document.getElementById('gridBomDetailModal'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: 'BOM상세코드',
+                name: 'bdetailCode', //bDetailCode
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },			
+            {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '자재코드',
+                name: 'mtCode',
+                align: 'center',
+                sortingType: 'asc',
+                sortable: true                
+             
+            },
+            {
+                header: '필요수량',
+                name: 'quantityRequired',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
         ],
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
@@ -454,4 +498,29 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	*/
 	
+	gridBom.on('click', (ev) => {
+	    const rowKey = ev.rowKey;
+	    
+		const bomCode = gridBom.getValue(rowKey, 'bomCode');
+		
+		if(bomCode){
+	        const params = new URLSearchParams({
+			    bomCode: bomCode,
+			}); 
+	        
+	        const url = `/bomDetails?${params.toString()}`;
+		
+	        fetch(url)
+	        .then(response => response.json())
+	        .then(result => {
+	            gridBomDetailModal.resetData(result);
+	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
+	            $('#BomDetailModal').modal('show');
+	            gridBomDetailModal.refreshLayout();            
+	        })
+	        .catch(error => {
+	            console.error(error);
+	        });
+		}
+    });
 });		 
