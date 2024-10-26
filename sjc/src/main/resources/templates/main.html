@@ -36,16 +36,16 @@
 
             <input class="form-control" type="text"
                 th:value="${#authentication.principal.authorities[0]}" />
-
+			<!-- userId -->
             <input class="form-control" type="text"
                 th:value="${#authentication.principal.authorities[1]}" />
-
+			<!-- userName -->
             <input class="form-control" type="text"
                 th:value="${#authentication.principal.authorities[2]}" />
-                			
+			<!-- deptCode -->                			
             <input class="form-control" type="text"
                 th:value="${#authentication.principal.authorities[3]}" />
-                			
+			<!-- deptName -->                			
             <input class="form-control" type="text"
                 th:value="${#authentication.principal.authorities[4]}" />			
 		</th:block>

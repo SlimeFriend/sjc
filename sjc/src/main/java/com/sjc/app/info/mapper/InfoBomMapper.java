@@ -5,7 +5,8 @@ import java.util.List;
 import com.sjc.app.info.service.BomVO;
 
 public interface InfoBomMapper {
-    Long insertBom();
+    //Long insertBom();
+    int insertBom(BomVO bomVO);
     //void insertBomDetail(List<BomVO> BomVOs);	
     void insertBomDetail(BomVO bomVO);	
     public List<BomVO> selectBomAllList();
