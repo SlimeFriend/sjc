@@ -5,6 +5,6 @@ import java.util.List;
 public interface InfoBomService {
     public List<BomVO> registerBoms(List<BomVO> bomVOs);
     public List<BomVO> bomList();
-    public List<BomVO> bomDetailList();	
+    public List<BomVO> bomDetailList(BomVO bomVO);	
 	
 }

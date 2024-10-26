@@ -27,8 +27,8 @@
 		        ,NO
 		from    B_DETAIL
 	    <where>
-	        <if test="bDetailCode != null and bDetailCode != ''">
-	            AND UPPER(b_detail_code) LIKE UPPER('%' || #{bDetailCode} || '%')
+	        <if test="bomCode != null and bomCode != ''">
+	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
 	    ORDER BY B_DETAIL_CODE DESC, MT_CODE ASC

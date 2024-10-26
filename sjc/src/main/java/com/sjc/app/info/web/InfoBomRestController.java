@@ -30,7 +30,7 @@ public class InfoBomRestController {
     
 	
 	@GetMapping("bomDetails")
-	public List<BomVO> bomDetails(){
-		return bomService.bomDetailList();
+	public List<BomVO> bomDetails(BomVO bomVO){
+		return bomService.bomDetailList(bomVO);
 	}    
 }
