@@ -129,36 +129,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: 'BOM코드',
                 name: 'bomCode',
                 align: 'center',
-                sortingType: 'desc',
+                sortingType: 'asc',
                 sortable: true                
             },
             {
                 header: '제품코드',
                 name: 'prdCode',
                 align: 'center',
-                sortingType: 'desc',
-                sortable: true                
+                //sortingType: 'desc',
+                //sortable: true                
             },
             {
                 header: '설명',
                 name: 'description',
                 align: 'center',
-                sortingType: 'desc',
-                sortable: true                
+                //sortingType: 'desc',
+                //sortable: true                
             },
             {
                 header: '등록일',
                 name: 'regDate',
                 align: 'center',
-                sortingType: 'desc',
-                sortable: true                
+                //sortingType: 'desc',
+                //sortable: true                
             },
             {
                 header: '담당자',
                 name: 'manager',
                 align: 'center',
-                sortingType: 'desc',
-                sortable: true                
+                //sortingType: 'desc',
+                //sortable: true                
             },
             /*
             {
@@ -237,8 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: '자재코드',
                 name: 'mtCode',
                 align: 'center',
-                sortingType: 'desc',
-                sortable: true                
+             
             },
             /*
             {
@@ -317,7 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (selectedRows.length > 0) {
         	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
-        		registerBoms(selectedRows.map(row => row.mtCode));
+        		//registerBoms(selectedRows.map(row => row.mtCode));
+        		registerBoms(selectedRows);
         	}else{
         		return false;
         	}
@@ -326,18 +326,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function registerBoms(mtCodes) {
+    function registerBoms(selectedRows) {
         fetch('/registerBoms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(mtCodes),
+            body: JSON.stringify(selectedRows),
         })
-        .then(response => response.json())
+	    .then(response => {
+	        if (response.ok) {
+				
+				
+			    fetchBoms();
+			    fetchBomDetails();
+			    
+			    grid.uncheckAll();
+		    	gridBom.addRowClassName(0, 'bg-success');
+			    selectedRows.forEach((row , index) => {
+					gridBomDetail.addRowClassName(index, 'bg-success');
+				});
+	        }
+	        
+	        return response.json();
+	    })
         .then(result => {
-            fetchBoms();
-            fetchBomDetails();
+
             console.error('result:', result);
         })
         .catch(error => {
@@ -353,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 gridBom.resetData(result);
-                gridBom.refreshLayout();
+                //gridBom.refreshLayout();
             })
             .catch(error => {
                 console.error(error);
@@ -369,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 gridBomDetail.resetData(result);
-                gridBomDetail.refreshLayout();
+                //gridBomDetail.refreshLayout();
                 
             })
             .catch(error => {
@@ -378,9 +392,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchBomDetails();
 
+	gridBom.on('afterChange', (ev) => {
+	  const changes = ev.changes;  // 변경된 셀들의 정보
+	  const rowKey = changes[0].rowKey;  // 변경된 행의 rowKey
+	  const updatedRow = gridBom.getRow(rowKey);  // 해당 행의 전체 데이터
+	  
+	  console.log('변경된 행 데이터:', updatedRow);
+	  gridBom.addRowClassName(rowKey, 'bg-warning');
+	});
+
+/*
 	window.addEventListener('resize', function() {
 	    gridBom.refreshLayout();
 	    gridBomDetail.refreshLayout();
 	});
-		 
+	*/	 
 });		 
