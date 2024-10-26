@@ -1,6 +1,5 @@
 package com.sjc.app.info.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sjc.app.info.mapper.InfoBomMapper;
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
+import com.sjc.app.info.service.InfoUserVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -29,8 +29,10 @@ public class InfoBomServiceImpl implements InfoBomService {
 	
 	@Override
     @Transactional
-	public List<String> registerBoms(List<String> mtCodes) {
+//	public List<String> registerBoms(List<String> mtCodes) {
+	public List<BomVO> registerBoms(List<BomVO> bomVOs) {
 		
+		/*
         List<BomVO> BomVOs = new ArrayList<>();
         
         for(String mtCode : mtCodes) {
@@ -46,6 +48,16 @@ public class InfoBomServiceImpl implements InfoBomService {
         }
 
 		return mtCodes;
+		*/
+		
+		infoBomMapper.insertBom();
+        for (BomVO bomVO : bomVOs) {
+        	infoBomMapper.insertBomDetail(bomVO);  // 단건 처리로 변경
+        }
+
+        return bomVOs;		
+		
+		
 	}
 	
 	@Override

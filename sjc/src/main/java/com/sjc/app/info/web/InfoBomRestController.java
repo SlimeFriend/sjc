@@ -19,8 +19,8 @@ public class InfoBomRestController {
 	private final InfoBomService bomService;
 
 	@PutMapping("registerBoms")
-	public List<String> registerBoms(@RequestBody List<String> mtCodes) {
-		return bomService.registerBoms(mtCodes);
+	public List<BomVO> registerBoms(@RequestBody List<BomVO> bomVOs) {
+		return bomService.registerBoms(bomVOs);
 	}
 	
 	@GetMapping("boms")

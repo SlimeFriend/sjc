@@ -15,7 +15,7 @@
 	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY BOM_CODE
+	    ORDER BY BOM_CODE DESC
 	</select>
 	
 	<select id="selectBomDetailAllList" resultType="BomVO" parameterType="BomVO">
@@ -31,7 +31,7 @@
 	            AND UPPER(b_detail_code) LIKE UPPER('%' || #{bDetailCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY B_DETAIL_CODE
+	    ORDER BY B_DETAIL_CODE DESC, MT_CODE ASC
 	</select>
 	
 	<insert id="insertBom" parameterType="String">
@@ -40,7 +40,7 @@
 	</insert>
 	
 
-	<insert id="insertBomDetail" parameterType="String">
+	<insert id="insertBomDetail" parameterType="BomVO">
 	    INSERT INTO b_detail (
 	    	B_DETAIL_CODE
 	    	,BOM_CODE 
