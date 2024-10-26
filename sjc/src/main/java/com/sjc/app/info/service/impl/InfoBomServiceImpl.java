@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sjc.app.info.mapper.InfoBomMapper;
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
-import com.sjc.app.info.service.InfoUserVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -50,7 +49,12 @@ public class InfoBomServiceImpl implements InfoBomService {
 		return mtCodes;
 		*/
 		
-		infoBomMapper.insertBom();
+		
+		//infoBomMapper.insertBom(); // comm 추가 이전 버전.
+		if (!bomVOs.isEmpty()) { 
+		    infoBomMapper.insertBom(bomVOs.get(0)); 
+		}
+		
         for (BomVO bomVO : bomVOs) {
         	infoBomMapper.insertBomDetail(bomVO);  // 단건 처리로 변경
         }

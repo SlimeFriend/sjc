@@ -18,13 +18,43 @@
 		<div class="pd-ltr-20">
 			<h2 class="h2 mb-20">자재 - BOM</h2>
 
-			<div class="pd-20 card-box mb-20">
-		        <button class="btn btn-primary mb-3 mr-3" id="registerBtn">BOM 추가</button>
-		        <h2 class="h5 mb-20">자재목록</h2>
-		        
-				<div id="grid"></div>
-			</div>
 			
+	        <div style="display: flex; width: 100%; gap: 20px;">
+	            <div class="pd-20 card-box mb-20" style="width: 50%;">
+			        <h2 class="h5 mb-20">자재목록</h2>
+					<div id="grid"></div>
+	            </div>
+	            <div class="pd-20 card-box mb-20" style="width: 50%;">
+
+					<h2 class="h5 mb-20">BOM 정보 생성</h2>
+					
+					<form>
+					    <div class="row">
+					        <div class="col-md-6">
+					            <div class="form-group">
+					                <label>담당자</label>
+					                <input class="form-control" type="text" name="manager" placeholder="담당자" th:value="${#authentication.principal.authorities[2]}" readonly>
+					            </div>
+					        </div>
+					        <div class="col-md-6">
+					            <div class="form-group">
+					                <label>등록일자</label>
+					                <input class="form-control" type="date" name="regDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
+					            </div>
+					        </div>
+					    </div>
+					</form>	
+					    
+						<div class="form-group">
+							<label>설명</label>
+							<textarea class="form-control" name="description" style="height: 100px;"></textarea>				
+			        		<button class="btn btn-primary mt-3 float-right" id="registerBtn">BOM 추가</button>					    
+			        	</div>
+	
+			        
+	            </div>
+	        </div>
+	        
 	        <div style="display: flex; width: 100%; gap: 20px;">
 	            <div class="pd-20 card-box mb-20" style="width: 50%;">
 		        	<h2 class="h5 mb-20">BOM 목록</h2>

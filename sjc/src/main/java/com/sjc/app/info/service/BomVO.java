@@ -1,6 +1,10 @@
 package com.sjc.app.info.service;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -9,7 +13,18 @@ public class BomVO {
 	private String bomCode;		//BOM코드
 	private String prdCode;		//제품코드
 	private String description;	//설명
-	private Date regDate;		//등록일자
+	
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	private Date regDate;		//등록일자
+	
+//	@JsonFormat(pattern = "yyyy-MM-dd")
+//	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//	private LocalDateTime regDate;
+	
+//	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate regDate;
+	
 	private String manager;		//담당자
 	private String comm;		//비고
 	

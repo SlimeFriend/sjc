@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            /*
             {
                 header: '안전재고',
                 name: 'safetyStock',
@@ -60,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
+            /*
             {
                 header: '비고',
                 name: 'comm',
@@ -67,6 +70,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
+		   
+		   /*
             {
                 header: '재고코드',
                 name: 'stcCode',
@@ -88,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
             /*
             {
                 header: '리드타임',
@@ -98,12 +105,20 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
             {
-                header: '현재수량',
+                header: '필요수량',
                 name: 'quantityRequired',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                editor: 'text',
+				validation: {
+				    required: true,
+				    regExp: /^\d{1,3}$/,
+				    min: 1,
+				    max: 1000
+				}
             },
+            /*
             {
                 header: '제품명',
                 name: 'prdName',
@@ -111,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
         ],
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
@@ -133,13 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
             {
-                header: '제품코드',
-                name: 'prdCode',
-                align: 'center',
-                //sortingType: 'desc',
-                //sortable: true                
-            },
-            {
                 header: '설명',
                 name: 'description',
                 align: 'center',
@@ -160,7 +169,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 //sortingType: 'desc',
                 //sortable: true                
             },
-            /*
+            /*            
+            {
+                header: 'BOM상세코드',
+                name: 'bDetailCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+
             {
                 header: '메모',
                 name: 'comm',
@@ -189,14 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-            {
-                header: 'BOM상세코드',
-                name: 'bDetailCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
             */
+
         ],
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
@@ -270,14 +281,14 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
 		   
-            /*
             {
-                header: '소요수량',
+                header: '필요수량',
                 name: 'quantityRequired',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
             },
+            /*
             {
                 header: '순서',
                 name: 'no',
@@ -315,33 +326,57 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedRows = grid.getCheckedRows();
         
         if (selectedRows.length > 0) {
+			
+			const description = document.querySelector('textarea[name="description"]').value;
+			if (!description || description.trim() === '') {
+			    alert('설명을 입력하세요.');
+			    return false;
+			}			
+			
         	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
         		//registerBoms(selectedRows.map(row => row.mtCode));
         		registerBoms(selectedRows);
         	}else{
         		return false;
         	}
+        	
         } else {
             alert('등록할 자재를 선택해주세요.');
         }
     });
 
+
+
     function registerBoms(selectedRows) {
+		
+		console.log();
+		document.querySelector('textarea[name="description"]').value
+		
+		const editedRows = selectedRows.map(row => ({
+		    ...row,
+		    description: document.querySelector('textarea[name="description"]').value,
+		    regDate: document.querySelector('input[type="date"][name="regDate"]').value,
+		    manager: document.querySelector('input[type="text"][name="manager"]').value,
+		}));
+
+		
         fetch('/registerBoms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(selectedRows),
+            body: JSON.stringify(editedRows),
         })
 	    .then(response => {
 	        if (response.ok) {
 				
 				
+			    fetchMtList();
 			    fetchBoms();
 			    fetchBomDetails();
 			    
-			    grid.uncheckAll();
+			    //grid.uncheckAll();
+
 		    	gridBom.addRowClassName(0, 'bg-success');
 			    selectedRows.forEach((row , index) => {
 					gridBomDetail.addRowClassName(index, 'bg-success');
@@ -392,19 +427,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchBomDetails();
 
-	gridBom.on('afterChange', (ev) => {
-	  const changes = ev.changes;  // 변경된 셀들의 정보
-	  const rowKey = changes[0].rowKey;  // 변경된 행의 rowKey
-	  const updatedRow = gridBom.getRow(rowKey);  // 해당 행의 전체 데이터
-	  
-	  console.log('변경된 행 데이터:', updatedRow);
-	  gridBom.addRowClassName(rowKey, 'bg-warning');
+	/*
+	gridBom.on('onGridUpdated', (ev) => {
+	    gridBom.getData().map(row => {
+	        //gridBom.addRowClassName(row.rowKey,'bg-warning');
+	        gridBom.addCellClassName(row.rowKey, 'manager', 'bg-warning');
+	        
+	    });
 	});
-
-/*
-	window.addEventListener('resize', function() {
-	    gridBom.refreshLayout();
-	    gridBomDetail.refreshLayout();
+	*/
+	/*
+	grid.on('check', (ev) => {
+	    grid.addRowClassName(ev.rowKey, 'bg-light');  // 체크된 행만 스타일 적용
 	});
-	*/	 
+	
+	grid.on('uncheck', (ev) => {
+	    grid.removeRowClassName(ev.rowKey, 'bg-light');  // 체크 해제된 행 스타일 제거
+	});
+	*/
+	
 });		 

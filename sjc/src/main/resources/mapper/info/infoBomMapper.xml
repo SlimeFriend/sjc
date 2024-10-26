@@ -34,9 +34,20 @@
 	    ORDER BY B_DETAIL_CODE DESC, MT_CODE ASC
 	</select>
 	
-	<insert id="insertBom" parameterType="String">
-	    INSERT INTO bom (bom_code)
-	    VALUES (f_code_pk('bom','b'))
+	<insert id="insertBom" parameterType="BomVO">
+	    INSERT INTO bom (
+	    	bom_code
+	    	,description
+	    	,reg_date
+	    	,manager
+    	)
+	    VALUES (
+	    	f_code_pk('bom','b')
+	    	,#{description}
+	    	,#{regDate}
+	    	,#{manager}
+	    	
+	    )
 	</insert>
 	
 
@@ -45,6 +56,7 @@
 	    	B_DETAIL_CODE
 	    	,BOM_CODE 
 	    	,MT_CODE 
+	    	,QUANTITY_REQUIRED
 	    )VALUES(
 	    	f_code_pk('b_detail','bd')
 			,(
@@ -57,6 +69,7 @@
 				WHERE   ROWNUM = 1
        		)
        		,#{mtCode}
+	    	,#{quantityRequired}
 	    )
 	</insert>	
 	<!-- mutating 에러로 단건 처리로 변경함.
