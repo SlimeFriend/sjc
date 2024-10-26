@@ -2,7 +2,9 @@
  * bomList.js
  */
 document.addEventListener('DOMContentLoaded', function() {
-
+    
+    tui.Grid.applyTheme('striped');
+    
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -348,6 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+
     function fetchMtList(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/mts?${params.toString()}`;
@@ -523,4 +527,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	        });
 		}
     });
+
+
 });		 

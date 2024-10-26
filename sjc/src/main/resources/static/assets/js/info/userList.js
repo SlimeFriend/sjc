@@ -234,11 +234,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	  	console.log('gridInsert editingFinish:', rowKey, columnName, value );
 	  	
     });
-    
+	/*    
 	gridInsert.on('validateChange', (ev) => {
 	    console.log('검증 결과:', ev);
 	});    
-	
+	*/
     document.getElementById('updateBtn').addEventListener('click', function() {
 	    //const modifiedRows = grid.getModifiedRows();
 	    const modifiedRows = grid.getModifiedRows().updatedRows;
@@ -348,7 +348,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				  if (rowKey !== undefined) {
 				    gridInsert.addRowClassName(rowKey, 'bg-warning');
 				    gridInsert.restore();
-		    		document.getElementById('gridInsert').style.display="none";
+		    		//document.getElementById('gridInsert').style.display="none";
+		    		document.getElementById('gridInsertWrapper').style.display="none";
 				  }
 		  		});
 	        }
@@ -370,7 +371,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		
     document.getElementById('insertBtn').addEventListener('click', function() {
 		
-		document.getElementById('gridInsert').style.display="block";
+		//document.getElementById('gridInsert').style.display="block";
+		document.getElementById('gridInsertWrapper').style.display="block";
 		gridInsert.refreshLayout();
 		//gridInsert.appendRow();
 		gridInsert.appendRow({
@@ -379,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			,userName : '신규 사용자'
 			,roleName : 'ROLE_USER'
 			,deptCode : 'IT'
-			,phone	  : ''
+			,phone	  : '010-'
 
 		});
     });
