@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 4
+            perPage: 5
         }
     });
 
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 4
+            perPage: 5
         }        
     });
     
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 4
+            perPage: 5
         }        
     });
     
@@ -344,12 +344,58 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 4
+            perPage: 5
         }        
     });
 
 
-
+    const gridPrd = new tui.Grid({
+        el: document.getElementById('gridPrd'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '제품코드',
+                name: 'prdCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '제품명',
+                name: 'prdName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '설명',
+                name: 'descripition',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+        ],
+        rowHeaders: ['rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 5
+        }
+    });
 
 
     function fetchMtList(search = {}) {
@@ -482,6 +528,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     fetchBomDetails();
+
+    function fetchPrds(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/prds?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                gridPrd.resetData(result);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    fetchPrds();
 
 	/*
 	gridBom.on('onGridUpdated', (ev) => {
