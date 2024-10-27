@@ -46,5 +46,6 @@ public interface PrdtMapper {
 	public List<PResultVO> searchR(String pdetailCode);
 	
 	// 공정 자재 가져오기
-	public String outMt(String prdCd, int accounts, String vLineCode);
+//	public String outMt(String prdCd, int accounts, String vLineCode, String res);
+	void outMt(Map<String, Object> params);
 }
