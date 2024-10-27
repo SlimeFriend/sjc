@@ -14,7 +14,12 @@ public interface QualityMapper {
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> selectMtlOdDetail(String mtlOdCode);
 	
+	// 입고품질검사 상세목록 /
+	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);
 	
+	
+	//검사기준목록
+	public List<InspectionVO> selectTest();
 	
 	
 	

@@ -33,7 +33,17 @@ public class QualityServiceImpl implements QualityService{
 		return qualityMapper.selectMtlOdDetail(mtlOdCode);
 	}
 	
+	// 입고품질검사 상세목록 /
+	@Override
+	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode) {
+		return qualityMapper.selectIncomingTest(mtlOdDetailCode);
+	}
 	
+	//검사기준목록
+	@Override
+	public List<InspectionVO> testList() {
+		return qualityMapper.selectTest();
+	}
 	
 	
 	
@@ -200,6 +210,8 @@ public class QualityServiceImpl implements QualityService{
 //	}
 //		return list;
 //	}
+
+
 
 	
 	
