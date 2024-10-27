@@ -7,12 +7,12 @@
 
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-<title>생산 관리</title>
+<title>생산 공정</title>
 </head>
 
 <body>
     <div class="main-container">
-        <h3>생산 관리</h3>
+        <h3>생산 공정</h3>
         <button id="sBtn">생산 시작</button>
         <table id="bl" class="table table-secondary table-hover">
             <thead>
@@ -225,11 +225,16 @@
 
  	}
  	
+ 	// 생산 시작 버튼 클릭 시 이벤트 지정
  	sBtn.addEventListener('click', function(){
+ 		// 미선택시 선택 요구
  		if(line == null){
  			alert('선택해라');
+ 			
+ 			
+ 		// 선택한 지시가 있을 경우	
  		} else{
- 							
+ 			// 선택 시 해당 공정에 맞는 자재 가져오기
  			fetch('/outMt', {
  				  method: "POST",
  				  headers: {
@@ -241,11 +246,33 @@
  				    vLineCode : line
  				  }),
  				})
- 			.then((response) => response.json())
- 			.then((result) => alert(result));		
+ 				.then(response => response.text())
+ 	            .then(data => {
+ 	                alert(data); // 결과 출력 알림
+ 	                
+ 	                
+ 	                // 자재 충족 시 생산시작
+ 	                if(data == '생산을 시작합니다.'){
+ 	                	
+ 	                	
+ 	                   Pstart();
+					
+ 	                // 자재 부족 시 아무것도 x
+ 	                } else{
+ 	                	
+ 	                }
+ 	            })
+ 	            .catch(error => {
+ 	                console.error('Error:', error);
+ 	            });
  	
  		}
  	});
+ 	
+ 	
+ 	function Pstart(){
+ 		
+ 	}
  
 
 

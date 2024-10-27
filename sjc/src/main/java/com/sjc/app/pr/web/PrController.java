@@ -156,20 +156,29 @@ public class PrController {
 		
 	
 	
-	// 생산 공정 자재 가져오기
-	@PostMapping("outMt")
-	public String outMt(@RequestBody Map<String, Object> request) {
-		
-		 String prdCd = (String)request.get("prdCd");
-	     int accounts = (Integer)request.get("accounts");
-	     String vLineCode = (String)request.get("vLineCode");
-	     
-	     prdtService.outMt(prdCd, accounts, vLineCode);
-		
-		
-		
-	     return "dtd";
-	}
+//	// 생산 공정 자재 가져오기
+//	@PostMapping("outMt")
+//	@ResponseBody
+//	public String outMt(@RequestBody Map<String, Object> request) {
+//		
+//		 String prdCd = (String)request.get("prdCd");
+//	     int accounts = (Integer)request.get("accounts");
+//	     String vLineCode = (String)request.get("vLineCode");
+//	     
+//	     
+//		
+//	     System.out.println(prdtService.outMt(prdCd, accounts, vLineCode));
+//		
+//	     return prdtService.outMt(prdCd, accounts, vLineCode);
+//	     
+//	}
+	
+    @PostMapping("outMt")
+    public ResponseEntity<String> outMt(@RequestBody Map<String, Object> params) {
+        prdtService.outMt(params);
+        String res = (String) params.get("res"); // OUT 파라미터 값 가져오기
+        return ResponseEntity.ok(res); // 클라이언트에게 응답
+    }
 
 	
 }

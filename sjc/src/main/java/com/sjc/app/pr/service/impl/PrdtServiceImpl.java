@@ -92,11 +92,18 @@ public class PrdtServiceImpl implements PrdtService {
 		return prdtMapper.searchR(pdetailCode);
 	}
 
-	@Override
-	public String outMt(String prdCd, int accounts, String vLineCode) {
-		
-		return prdtMapper.outMt(prdCd, accounts, vLineCode);
-		
-	}
+//	@Override
+//	public String outMt(String prdCd, int accounts, String vLineCode) {
+//		String res = "";
+//		
+//		prdtMapper.outMt(prdCd, accounts, vLineCode, res);
+//		
+//		return res;
+//		
+//	}
+    @Override
+    public void outMt(Map<String, Object> params) {
+        prdtMapper.outMt(params);
+    }
 
 }
