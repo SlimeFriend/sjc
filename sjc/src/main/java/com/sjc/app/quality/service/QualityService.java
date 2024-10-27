@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.sales.service.SalesDTO;
 
 
 public interface QualityService {
@@ -11,7 +12,11 @@ public interface QualityService {
 	public List<InspectionVO> mtlOdList();
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode);
+	// 입고품질검사 상세목록 /
+	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode);
 	
+	//검사기준목록
+	public List<InspectionVO> testList();
 	
 	
 	

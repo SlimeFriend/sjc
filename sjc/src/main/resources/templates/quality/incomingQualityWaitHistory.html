@@ -53,32 +53,62 @@
 			</div>
 			<div id="gridOrder"></div>
 			<div id="gridOrderDetail" style="opacity : 0"></div>
-			
-						<!-- The Modal -->
+
+			<!-- The Modal -->
 			<div class="modal" id="myModal">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content">
+						<div class="pd-ltr-20">
+							<h2 class="h2 mb-20">검사등록</h2>
+
+							<div class="pd-20 card-box mb-20">
+								<button class="btn btn-primary mb-3 mr-3" id="registerBtn">BOM
+									추가</button>
+								<button type="button" class="btn btn-danger"
+									data-dismiss="modal" id="cancelBtn">취소</button>
+								<h2 class="h5 mb-20">검사대상 목록</h2>
+								<div id="modalOrderDetail"></div>
+							</div>
+
+							<div style="display: flex; width: 100%; gap: 20px;">
+								<div class="pd-20 card-box mb-20" style="width: 50%;">
+									<h2 class="h5 mb-20">검사상세등록</h2>
+									<div id="gridBom"></div>
+								</div>
+								<div class="pd-20 card-box mb-20" style="width: 50%;">
+									<h2 class="h5 mb-20">BOM 상세목록</h2>
+									<div id="gridBomDetail"></div>
+								</div>
+							</div>
+
+						</div>
+
+
+
+
+
+
 						<!-- Modal Header -->
-						<div class="modal-header">
-							<h4 class="modal-title">출고접수</h4>
+						<!-- <div class="modal-header">
+							<h4 class="modal-title">검사 등록</h4>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
+						</div> -->
 						<!-- Modal body -->
-						<div class="modal-body">
-							    <h5 class="h5">주문목록</h5>
-								<div id="gridOrderDetail"></div>
+						<!-- <div class="modal-body">
+							    <h5 class="h5">검사대상 목록</h5>
 								<div id="selectProductLot"></div>
-						</div>
+						</div> -->
 						<!-- Modal footer -->
-						<div class="modal-footer justify-content-center">
+						<!-- <div class="modal-footer justify-content-center">
 							<button type="button" class="btn btn-primary" data-dismiss="modal" id="submitBtn">등록</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">취소</button>
-						</div>
+							
+						</div> -->
 					</div>
 				</div>
+
 			</div>
-			
-			
+
+
 		</div>
 	</div>
 
@@ -86,7 +116,8 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${mtlList}]]*/[];
 			const gridDetailData = /*[[${mtlOdDetail}]]*/[];
-			//const gridModalData = /*[[${ordDetail}]]*/[];
+			const gridModalData = /*[[${mtlOdDetailCodeDetail}]]*/[];
+			const gridBomData = /*[[${tests}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -154,7 +185,7 @@
 			    		success: function(response) {
 			    			console.log('Order details received:', response);
 			    			document.getElementById('gridOrderDetail').style.opacity = 1;
-			    			gridmodal.resetData(response); 
+			    			griddetail.resetData(response); 
 			    		},
 			    		error: function(xhr, status, error) {
 			    			console.error('error during request', error);
@@ -214,31 +245,130 @@
 				}
 			});
 			
-			grid.on('click', (ev) => {
+			let mtlOdDetailCodeValue = "";
+		    let remainData = [];
+		    
+			
+			griddetail.on('click', (ev) => {
 				let outLotData = [];
 			    const rowKey = ev.rowKey;
-			    const mtlOdDetailCodeValue = grid.getValue(rowKey, 'mtlOdDetailCode');
-			    selectProductLot.style.display = 'none';
-			    productLotGrid.refreshLayout();
+			    const mtlOdDetailCodeValue = griddetail.getValue(rowKey, 'mtlOdDetailCode');
+			    //selectProductLot.style.display = 'none';
+			    griddetail.refreshLayout();
+			    
 			    
 			    if(mtlOdDetailCodeValue) {
 			    	$.ajax({
-			    		url : '/getOrdDetail',
+			    		url : '/incomingTestReception',
 			    		type : 'POST',
 			    		contentType : 'application/json',
 			    		data : JSON.stringify({mtlOdDetailCode : mtlOdDetailCodeValue}),
 			    		success: function(response) {
 			    			console.log('Order details received:', response);
-			    			document.getElementById('gridOrderDetail').style.opacity = 1;
-			    			gridModal.resetData(response); 
-			    			$('#myModal').modal('show');
-			    			gridModal.refreshLayout();
+			                gridmodal.resetData(response); 
+			                console.log(griddetail.getData()); // 현재 그리드의 데이터 출력
+			                document.getElementById('modalOrderDetail').style.opacity = 1;
+			                $('#myModal').modal('show');
+			                gridmodal.refreshLayout(); 
 			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
 			    	});
 			    }
 			});
 			
+			const gridmodal = new tui.Grid({
+				el : document.getElementById('modalOrderDetail'),
+				data : gridModalData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '발주코드',
+					name : 'mtlOdCode',
+					align : 'center',
+				}, {
+					header : '발주상세코드',
+					name : 'mtlOdDetailCode',
+					align : 'center',
+				}, {
+					header : '자재코드',
+					name : 'mtCode',
+					align : 'center',
+				}, {
+					header : '개별발주수량',
+					name : 'mtlOdDetailQuantity',
+					align : 'center',
+				}, {
+					header : '자재이름',
+					name : 'mtName',
+					align : 'center',
+				}, {
+					header : '자재구분',
+					name : 'materialType',
+					align : 'center',
+				}, {
+					header : '규격',
+					name : 'specification',
+					align : 'center',
+				}, {
+					header : '단위',
+					name : 'unit',
+					align : 'center',
+				}, {
+					header : '단가',
+					name : 'unitPrice',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			
+			
+			
+			const gridBom = new tui.Grid({
+				el : document.getElementById('grid'),
+				data : gridBomData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '검사명',
+					name : 'insItemName',
+					align : 'center',
+				}, {
+					header : '검사기준',
+					name : 'insItemCiteria',
+					align : 'center',
+				}, {
+					header : '검사코드',
+					name : 'insItemCode',
+					align : 'center',
+				}, {
+					header : '검사값',
+					name : 'insValue',
+					align : 'center',
+					editor: 'text',
+				}, {
+					header : '검사결과',
+					name : 'insResult',
+					align : 'center',
+					editor: 'text',
+				}, ],
+				rowHeaders : [ 'checkbox' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+
+			
 			
 		});
+		
+
 	</script>
 </div>

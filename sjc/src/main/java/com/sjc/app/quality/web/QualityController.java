@@ -45,10 +45,26 @@ public class QualityController {
     	return mtlOdDetail;
     }
     
+    // 입고품질검사 상세목록 /
+    @PostMapping("incomingTestReception")
+    @ResponseBody
+    public List<Map<String, Object>> incomingTestReceptionPage(@RequestBody Map<String, String> requestData) {
+    	String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
+    	
+    	List<Map<String, Object>> mtlOdDetailCodeDetail =  qualityService.incomingTestList(mtlOdDetailCode);
+    	return mtlOdDetailCodeDetail;
+    }
     
     
-    
-    
+    //검사기준목록
+    @GetMapping("/testReception")
+    public String testReceptionPage(Model model) {
+    	List<InspectionVO> testList = qualityService.testList();
+    	
+    	model.addAttribute("tests", testList);
+    	
+    	return "quality/testReception";
+    }
     
     
     

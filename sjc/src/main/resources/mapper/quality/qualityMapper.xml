@@ -13,7 +13,7 @@
 		, o.mtl_od_status mtl_od_status
 		, o.comm comm
 		FROM copy_mtl_od o
-		JOIN cp c
+		JOIN copy_cp c
 		ON o.cp_code = c.cp_code
 		<where>
 			o.mtl_od_status ='입고품질검사대기'
@@ -57,6 +57,92 @@
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_code = #{mtlOdCode}
 	</select>
+ 	<!-- 입고품질검사 상세목록 -->
+<!--	<select id="selectIncomingTest" resultType="InspectionVO">
+		SELECT i.ins_item_code
+		        , i.ins_item_name
+		        , i.ins_item_citeria
+		FROM ins_item i
+		JOIN ins_map m
+		ON m.ins_item_code = i.ins_item_code
+		WHERE m.mt_code = #{mtCode}
+	</select> -->
+	<!-- 입고품질검사 상세목록 -->
+	<select id="selectIncomingTest" parameterType="String" resultType="map">
+		SELECT d.mtl_od_code  AS "mtlOdCode"
+	        , d.mtl_od_detail_code AS "mtlOdDetailCode"
+	        , d.mt_code AS "mtCode"
+	        , d.quantity AS "mtlOdDetailQuantity"
+	        , m.mt_name AS "mtName"
+	        , m.material_type AS "materialType"
+	        , m.specification AS "specification"
+	        , m.unit AS "unit"
+	        , m.unit_price AS "unitPrice"
+		FROM copy_mtl_od_detail d
+		JOIN copy_mt m
+		ON d.mt_code = m.mt_code
+		WHERE d.mtl_od_detail_code = #{mtlOdDetailCode}
+	</select>
+	
+	
+	
+	<select id="selectTest" resultType="InspectionVO">
+		SELECT i.ins_item_name
+		        , i.ins_item_citeria
+		        , i.ins_item_code
+		FROM ins_item i
+		JOIN ins_map m
+		ON m.ins_item_code = i.ins_item_code
+		WHERE m.mt_code = #{mtCode}
+	</select>
+	
+	
+	<insert id="insertTestInfo" parameterType="InspectionVO">
+		<selectKey keyProperty="insDetailCode" order="BEFORE" resultType="string">
+		        SELECT 'INSD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_DETAIL_SEQ.NEXTVAL, 4, '0') 
+		 </selectKey>
+		INSERT INTO ins_detail ( ins_detail_code
+								, ins_value
+								, ins_result
+								, ins_code)
+	</insert>
+
+
+	<insert id="insertInspectionInfo" parameterType="InspectionVO">
+		    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
+		        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
+		    </selectKey>
+		    INSERT INTO inspection (ins_code
+			                        , ins_date
+			                        , ins_status
+			                        , mtl_od_detail_code
+			                        )
+		    VALUES 					( #{insCode}
+		        					, SYSDATE
+		        					, #{insStatus}
+		        					, #{mtlOdDetailCode}
+		        					)
+	</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
