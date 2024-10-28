@@ -19,4 +19,5 @@ public class ProductVO {
 	private Integer unitPrice;
 	private Integer ordQuantity;
 	private Integer price;
+	private String bomCode;
 }

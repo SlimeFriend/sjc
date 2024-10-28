@@ -53,7 +53,7 @@ public interface SalesMapper {
 	// 제품 출고 프로세스
 	
 	// 미출고량 계산
-	public int getRemain(List<Map<String, Object>> outRemainData);
+	public int selectRemainData(List<Map<String, Object>> outRemainData);
 	
 	// 출고내역 등록
 	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName);
