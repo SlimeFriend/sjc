@@ -85,6 +85,72 @@
 	</select>
 	
 	
+	<insert id="insertInspection" parameterType="InspectionVO">
+	    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
+	        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
+	        FROM dual
+	    </selectKey>
+	
+	    
+	    INSERT INTO inspection (
+		        ins_code
+		        , ins_date
+		        , ins_status
+		        , user_id
+		        , user_name
+		        , number_of_tests
+		        , number_of_passes
+		        , number_of_failed
+		        , number_of_total_pass
+		        , total_pass
+		        , mtl_od_detail_code
+		    )
+		    VALUES ( 
+		    		#{insCode}
+		        	, SYSDATE
+		        	, '검사중'
+		        	, #{userId}
+		        	, #{userName}
+		        	, #{numberOfTests}
+		        	, #{numberOfPasses}
+		        	, #{numberOfFailed}
+		        	, #{numberOfTotalPass}
+		        	, #{totalPass}
+		        	, #{mtlOdDetailCode}
+		    )
+	</insert>
+	
+<select id="selectInspection" resultType="InspectionVO">
+		SELECT i.ins_code
+		        , i.ins_date
+		        , i.ins_status
+		        , i.user_id
+		        , i.user_name
+		        , i.number_of_tests
+		        , i.number_of_passes
+		        , i.number_of_failed
+		        , i.number_of_total_pass
+		        , i.total_pass
+		        , i.mtl_od_detail_code
+                , m.mt_code
+                , m.mt_name
+		 FROM inspection i
+         JOIN mt m
+         ON m.mt_code = ( SELECT mt_code
+                         FROM mtl_od_detail
+                         WHERE mtl_od_detail_code = #{mtlOdDetailCode})
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	<select id="selectTest" resultType="InspectionVO">
 		SELECT i.ins_item_name
