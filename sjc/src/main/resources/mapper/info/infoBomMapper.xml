@@ -34,6 +34,27 @@
 	    ORDER BY B_DETAIL_CODE DESC, MT_CODE ASC
 	</select>
 	
+	<!-- 
+	<selectKey keyProperty="bomCode" order="BEFORE" resultType="String">
+		select 	f_code_pk('bom','b')
+		from	dual
+	</selectKey>
+	
+	<insert id="insertBom" parameterType="BomVO">
+	    INSERT INTO bom (
+	    	bom_code
+	    	,description
+	    	,reg_date
+	    	,manager
+    	)
+	    VALUES (
+	    	#{bomCode}
+	    	,#{description}
+	    	,#{regDate}
+	    	,#{manager}
+	    )
+	</insert>
+	 -->
 	<insert id="insertBom" parameterType="BomVO">
 	    INSERT INTO bom (
 	    	bom_code

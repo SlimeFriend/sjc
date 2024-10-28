@@ -6,4 +6,5 @@ import com.sjc.app.sales.service.ProductVO;
 
 public interface InfoPrdMapper {
 	public List<ProductVO> selectPrdAllList(ProductVO prductVO);
+    int insertProduct(ProductVO productVO);
 }

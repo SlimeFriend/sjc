@@ -18,6 +18,11 @@ public class InfoBomRestController {
 	
 	private final InfoBomService bomService;
 
+	@PutMapping("registerPrdBoms")
+	public List<BomVO> registerPrdBoms(@RequestBody List<BomVO> bomVOs) {
+		return bomService.registerPrdBoms(bomVOs);
+	}
+	
 	@PutMapping("registerBoms")
 	public List<BomVO> registerBoms(@RequestBody List<BomVO> bomVOs) {
 		return bomService.registerBoms(bomVOs);

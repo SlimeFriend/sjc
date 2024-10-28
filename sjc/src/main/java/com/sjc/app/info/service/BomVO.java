@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sjc.app.sales.service.ProductVO;
 
 import lombok.Data;
 
 @Data
-public class BomVO {
+public class BomVO extends ProductVO{
 	private String bomCode;		//BOM코드
 	private String prdCode;		//제품코드
 	private String description;	//설명
