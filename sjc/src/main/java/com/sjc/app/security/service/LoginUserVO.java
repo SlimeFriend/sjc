@@ -26,6 +26,7 @@ public class LoginUserVO implements UserDetails{
 		auths.add(new SimpleGrantedAuthority(userVO.getUserName()));
 		auths.add(new SimpleGrantedAuthority(userVO.getDeptCode()));
 		auths.add(new SimpleGrantedAuthority(userVO.getDeptName()));
+		auths.add(new SimpleGrantedAuthority(userVO.getLoginId()));
 		return auths;
 	}
 
