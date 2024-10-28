@@ -35,4 +35,10 @@ public class BomVO extends ProductVO{
 	private String mtCode;				//자재코드
 	private String no;					//순서
 	
+	//MtVO
+	private String mtName; 			//자재이름
+	private String materialType; 	// 자재구분
+	private String specification; 	// 규격
+	private String unit; 			// 단위
+	
 }

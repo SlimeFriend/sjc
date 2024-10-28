@@ -22,20 +22,27 @@
 					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
 				        <h2 class="h5 mb-0">제품목록</h2>
 						<div>
+							<!-- 
 							<button type="button" class="btn btn-success" id="openBomBtn">BOM 생성</button>
-							<button type="button" class="btn btn-primary" id="openPrdBtn">제품 등록</button>
+							 -->
+							<button type="button" class="btn btn-success" id="openPrdBtn">등록</button>
+							<button type="button" class="btn btn-warning" id="">수정</button>
+							<button type="button" class="btn btn-danger" id="">삭제</button>
 						</div>
 					</div>	            
 					<div id="gridPrd"></div>
 	            </div>
 	            <div class="pd-20 card-box mb-20" style="width: 50%;">
 					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				        <h2 class="h5 mb-0">자재목록</h2>
+				        <h2 class="h5 mb-0">BOM목록</h2>
+				        
 						<div>
-							<button type="button" class="btn btn-primary" id="registerBtn">BOM 등록</button>
+							<button type="button" class="btn btn-success" id="">등록</button>
+							<button type="button" class="btn btn-warning" id="">수정</button>
+							<button type="button" class="btn btn-danger" id="">삭제</button>
 						</div>
 					</div>	            
-					<div id="grid"></div>
+					<div id="gridBom"></div>
 	            </div>
 	            
 	            <!-- 
@@ -65,15 +72,12 @@
 		        	</div>
 	            </div>
 	             -->
-	            
-
-	            
 	        </div>
 	        
-	        <div style="display: flex; width: 100%; gap: 20px;">
+	        <div style="display: flex; width: 100%; gap: 20px; display: none;">
 	            <div class="pd-20 card-box mb-20" style="width: 50%;">
 		        	<h2 class="h5 mb-20">BOM 목록</h2>
-	                <div id="gridBom"></div>
+	                <div id="grid"></div>
 	            </div>
 	            <div class="pd-20 card-box mb-20" style="width: 50%;">
 		        	<h2 class="h5 mb-20">BOM 상세목록</h2>
@@ -208,4 +212,4 @@
 		</div>
 	</div>
 
-	<script th:src="@{/assets/js/info/prdMtBomList.js}"></script>
+	<script th:src="@{/assets/js/info/prdBomList.js}"></script>

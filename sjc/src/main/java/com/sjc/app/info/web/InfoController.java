@@ -13,4 +13,9 @@ public class InfoController {
 		return "info/prdMtBomList";
 	}
 	
+	@GetMapping("infoPrdBomList")
+	public String infoPrdBomList() {
+		return "info/prdBomList";
+	}
+	
 }

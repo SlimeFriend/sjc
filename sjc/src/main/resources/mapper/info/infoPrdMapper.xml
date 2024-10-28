@@ -27,11 +27,15 @@
 	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY prd_code
+	    ORDER BY bom_code desc
 	</select>
 	
 	
 	<insert id="insertProduct" parameterType="ProductVO">
+		<selectKey keyProperty="bomCode" order="BEFORE" resultType="String">
+			select 	f_code_pk('bom','b') bom_code
+			from	dual
+		</selectKey>	
 	    INSERT INTO prd (
 	    	 prd_code
 	    	,comm

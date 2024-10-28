@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 14
         }        
     });
     
@@ -337,6 +337,41 @@ document.addEventListener('DOMContentLoaded', function() {
              
             },
             {
+                header: '자재이름',
+                name: 'mtName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '자재구분',
+                name: 'materialType',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '규격',
+                name: 'specification',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단위',
+                name: 'unit',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },            
+            {
                 header: '필요수량',
                 name: 'quantityRequired',
                 align: 'center',
@@ -403,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 14
         }
     });
 
@@ -423,42 +458,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchMtList();
 
-    document.getElementById('registerBtn').addEventListener('click', function() {
-        const selectedRows = grid.getCheckedRows();
-        
-		const rowKeys = selectedRows.map(row => row.rowKey);
-		
-		if (selectedRows.length > 0) {
-		    const validation = grid.validate();
-		    
-		    const invalidRows = validation.filter(result => 
-		        rowKeys.includes(result.rowKey)
-		    );
-		
-		    if (invalidRows.length > 0) {
-		        alert('입력값을 확인하세요.');
-		        return false;
-		    }
-			/*						
-			const description = document.querySelector('textarea[name="description"]').value;
-			if (!description || description.trim() === '') {
-			    alert('설명을 입력하세요.');
-			    return false;
-			}
-			*/			
-			
-        	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
-        		//registerBoms(selectedRows.map(row => row.mtCode));
-        		registerBoms(selectedRows);
-        	}else{
-        		return false;
-        	}
-        	
-        } else {
-            alert('자재를 선택하세요.');
-        }
-    });
-    
     document.getElementById('mtModalRegisterBtn').addEventListener('click', function() {
         const selectedRows = gridMtModal.getCheckedRows();
         
