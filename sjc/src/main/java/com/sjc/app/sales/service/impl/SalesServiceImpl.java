@@ -100,7 +100,7 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public int remainProcess(List<Map<String, Object>> outRemainData) {
 		System.err.print(outRemainData);
-		return salesMapper.getRemain(outRemainData);
+		return salesMapper.selectRemainData(outRemainData);
 	}
 	
 	// 입고 접수

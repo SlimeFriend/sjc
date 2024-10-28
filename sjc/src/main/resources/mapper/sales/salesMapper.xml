@@ -161,7 +161,7 @@
 	<!-- 출고접수 프로세스 -->
 	
 	<!-- 미출고량 계산 -->
-	<select id="getRemain" resultType="map">
+	<select id="selectRemainData" resultType="map">
 		WITH r AS (SELECT ord_code,
                   prd_code,
                   SUM(out_quantity) remain_Quantity

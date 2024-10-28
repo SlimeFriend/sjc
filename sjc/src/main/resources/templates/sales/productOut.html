@@ -246,15 +246,18 @@
 			                    ordCode: item.ORDCODE,
 			                    prdCode: item.PRDCODE
 			                }));
+			                
+			                const requestData = {
+			                	outRemainData: remainData
+			                };
 
 			                $.ajax({
 			                    url: '/remainInfo',
 			                    type: 'POST',
 			                    contentType: 'application/json',
-			                    data: JSON.stringify(remainData), // 잔여 데이터 전송
+			                    data: JSON.stringify(requestData),
 			                    success: function(response) {
 			                        console.log('Grid modal received:', response);
-			                        // 추가적인 처리...
 			                    },
 			                    error: function(xhr, status, error) {
 			                        console.error('Error fetching remain info:', error);

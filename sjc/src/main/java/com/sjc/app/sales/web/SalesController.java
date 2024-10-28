@@ -145,6 +145,7 @@ public class SalesController {
 	@ResponseBody
 	public int remainProcess(@RequestBody Map<String, List<Map<String, Object>>> requestData) {
 		List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
+		System.err.print(outRemainData);
 		return salesService.remainProcess(outRemainData);
 	}
 
