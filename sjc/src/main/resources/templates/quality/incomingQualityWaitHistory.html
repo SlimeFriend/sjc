@@ -54,7 +54,7 @@
 			<div id="gridOrder"></div>
 			<div id="gridOrderDetail" style="opacity : 0"></div>
 
-			<!-- The Modal -->
+			
 			<div class="modal" id="myModal">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content">
@@ -86,23 +86,6 @@
 
 
 
-
-
-						<!-- Modal Header -->
-						<!-- <div class="modal-header">
-							<h4 class="modal-title">검사 등록</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div> -->
-						<!-- Modal body -->
-						<!-- <div class="modal-body">
-							    <h5 class="h5">검사대상 목록</h5>
-								<div id="selectProductLot"></div>
-						</div> -->
-						<!-- Modal footer -->
-						<!-- <div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-primary" data-dismiss="modal" id="submitBtn">등록</button>
-							
-						</div> -->
 					</div>
 				</div>
 
@@ -116,8 +99,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${mtlList}]]*/[];
 			const gridDetailData = /*[[${mtlOdDetail}]]*/[];
-			const gridModalData = /*[[${mtlOdDetailCodeDetail}]]*/[];
-			const gridBomData = /*[[${tests}]]*/[];
+			const gridModalData = /*[[${insertResult}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -244,80 +226,54 @@
 					perPage : 5
 				}
 			});
-			
-			let mtlOdDetailCodeValue = "";
-		    let remainData = [];
-		    
-			
-			griddetail.on('click', (ev) => {
-				let outLotData = [];
-			    const rowKey = ev.rowKey;
-			    const mtlOdDetailCodeValue = griddetail.getValue(rowKey, 'mtlOdDetailCode');
-			    //selectProductLot.style.display = 'none';
-			    griddetail.refreshLayout();
-			    
-			    
-			    if(mtlOdDetailCodeValue) {
-			    	$.ajax({
-			    		url : '/incomingTestReception',
-			    		type : 'POST',
-			    		contentType : 'application/json',
-			    		data : JSON.stringify({mtlOdDetailCode : mtlOdDetailCodeValue}),
-			    		success: function(response) {
-			    			console.log('Order details received:', response);
-			                gridmodal.resetData(response); 
-			                console.log(griddetail.getData()); // 현재 그리드의 데이터 출력
-			                document.getElementById('modalOrderDetail').style.opacity = 1;
-			                $('#myModal').modal('show');
-			                gridmodal.refreshLayout(); 
-			    		},
-			    		error: function(xhr, status, error) {
-			    			console.error('error during request', error);
-			    		}
-			    	});
-			    }
-			});
-			
 			const gridmodal = new tui.Grid({
 				el : document.getElementById('modalOrderDetail'),
 				data : gridModalData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
-					header : '발주코드',
-					name : 'mtlOdCode',
-					align : 'center',
-				}, {
 					header : '발주상세코드',
 					name : 'mtlOdDetailCode',
 					align : 'center',
 				}, {
-					header : '자재코드',
-					name : 'mtCode',
+					header : '품질검사코드',
+					name : 'insCode',
 					align : 'center',
 				}, {
-					header : '개별발주수량',
-					name : 'mtlOdDetailQuantity',
+					header : '품질검사일자',
+					name : 'insDate',
+					align : 'center',
+				},  {
+					header : '사용자번호',
+					name : 'userId',
 					align : 'center',
 				}, {
-					header : '자재이름',
-					name : 'mtName',
+					header : '사용자이름',
+					name : 'userName',
 					align : 'center',
 				}, {
-					header : '자재구분',
-					name : 'materialType',
+					header : '품질검사상태',
+					name : 'insStatus',
 					align : 'center',
 				}, {
-					header : '규격',
-					name : 'specification',
+					header : '검사수',
+					name : 'numberOfTests',
 					align : 'center',
 				}, {
-					header : '단위',
-					name : 'unit',
+					header : '합격수',
+					name : 'numberOfPasses',
 					align : 'center',
 				}, {
-					header : '단가',
-					name : 'unitPrice',
+					header : '불합격수',
+					name : 'numberOfFailed',
+					align : 'center',
+				}, {
+					header : '총합격수',
+					name : 'numberOfTotalPass',
+					align : 'center',
+				}, {
+					header : '총합격여부',
+					name : 'totalPass',
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
@@ -326,44 +282,43 @@
 					perPage : 10
 				}
 			});
+			let mtlOdDetailCodeValue = "";
+			let mtName = "";
+		    let remainData = [];
+		    
+			
+		    griddetail.on('click', (ev) => {
+		        const rowKey = ev.rowKey;
+		        const mtlOdDetailCodeValue = griddetail.getValue(rowKey, 'mtlOdDetailCode');
+				console.log(mtlOdDetailCodeValue);
+		        if (mtlOdDetailCodeValue) {
+		            $.ajax({
+		                url: '/incomingTestReception',
+		                type: 'POST',
+		                contentType: 'application/json',
+		                data: JSON.stringify({ mtlOdDetailCode: mtlOdDetailCodeValue }),
+		                success: function(response) {
+		                	console.log('Response:', response);
+						    //gridmodal.resetData(response);
+						    document.getElementById('modalOrderDetail').style.opacity = 1;
+						    $('#myModal').modal('show'); // 모달 열기
+						    gridmodal.refreshLayout(); 
+		                },
+		                error: function(xhr, status, error) {
+		                    console.error('Error during request', error);
+		                    alert('데이터를 가져오는 데 오류가 발생했습니다.');
+		                }
+		            });
+		        }
+		    });
+
 			
 			
 			
 			
-			const gridBom = new tui.Grid({
-				el : document.getElementById('grid'),
-				data : gridBomData,
-				scrollX : false,
-				scrollY : false,
-				columns : [ {
-					header : '검사명',
-					name : 'insItemName',
-					align : 'center',
-				}, {
-					header : '검사기준',
-					name : 'insItemCiteria',
-					align : 'center',
-				}, {
-					header : '검사코드',
-					name : 'insItemCode',
-					align : 'center',
-				}, {
-					header : '검사값',
-					name : 'insValue',
-					align : 'center',
-					editor: 'text',
-				}, {
-					header : '검사결과',
-					name : 'insResult',
-					align : 'center',
-					editor: 'text',
-				}, ],
-				rowHeaders : [ 'checkbox' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 10
-				}
-			});
+			
+			
+
 
 			
 			

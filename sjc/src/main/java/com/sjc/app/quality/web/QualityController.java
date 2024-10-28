@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,28 +46,54 @@ public class QualityController {
     	
     	return mtlOdDetail;
     }
+//    // 품질검사상세페이지
+//	@PostMapping("/incomingTestReception")
+//	@ResponseBody
+//	public List<Map<String, Object>> getInspectionDetail(@RequestBody Map<String, String> requestData) {
+//		String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
+//		
+//		List<Map<String, Object>> insDetail = qualityService.inspectionDetail(mtlOdDetailCode);
+//		
+//		return insDetail;
+//	}
     
-    // 입고품질검사 상세목록 /
-    @PostMapping("incomingTestReception")
-    @ResponseBody
-    public List<Map<String, Object>> incomingTestReceptionPage(@RequestBody Map<String, String> requestData) {
-    	String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
-    	
-    	List<Map<String, Object>> mtlOdDetailCodeDetail =  qualityService.incomingTestList(mtlOdDetailCode);
-    	return mtlOdDetailCodeDetail;
-    }
-    
-    
-    //검사기준목록
-    @GetMapping("/testReception")
+        //검사기준목록
+    @GetMapping("/incomingTestReception")
     public String testReceptionPage(Model model) {
     	List<InspectionVO> testList = qualityService.testList();
+    	List<InspectionVO> inspectionList = qualityService.inspectionList();
     	
     	model.addAttribute("tests", testList);
+    	model.addAttribute("inspectionList", inspectionList);
+    	model.addAttribute("InspectionVO", new InspectionVO());
     	
-    	return "quality/testReception";
+    	return "quality/incomingTestReception";
     }
     
+    // 품질검사상세페이지.
+    @PostMapping("/incomingTestReception")
+    @ResponseBody
+    public String insertInspection(@RequestBody InspectionVO inspectionVO) {
+        int insertResult = qualityService.insertInspection(inspectionVO);
+        
+        return "redirect:/main";
+    }
+    
+    
+    
+    
+//    // 입고품질검사 상세목록 /
+//    @PostMapping("incomingTestReception")
+//    @ResponseBody
+//    public List<Map<String, Object>> incomingTestReceptionPage(@RequestBody Map<String, String> requestData) {
+//    	String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
+//    	
+//    	List<Map<String, Object>> mtlOdDetailCodeDetail =  qualityService.incomingTestList(mtlOdDetailCode);
+//    	return mtlOdDetailCodeDetail;
+//    }
+    
+    
+
     
     
     

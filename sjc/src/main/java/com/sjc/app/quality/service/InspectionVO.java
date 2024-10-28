@@ -16,6 +16,7 @@ public class InspectionVO {
 	private int numberOfTests;// 검사수
 	private int numberOfPasses;// 합격수
 	private int numberOfFailed;// 불합격수
+	private int numberOfTotalPass;// 총합격수
 	private String totalPass; // 총합격여부
 
 	

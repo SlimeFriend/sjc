@@ -32,6 +32,18 @@ public class QualityServiceImpl implements QualityService{
 	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode) {
 		return qualityMapper.selectMtlOdDetail(mtlOdCode);
 	}
+//	// 품질검사상세페이지.
+//	@Override
+//	public List<Map<String, Object>> inspectionDetail(String mtlOdDetailCode) {
+//		return qualityMapper.selectInspectionDetail(mtlOdDetailCode);
+//	}
+	
+	// 품질검사상세페이지.
+	@Transactional
+	@Override
+	public int insertInspection(InspectionVO inspectionVO) {
+		return qualityMapper.insertInspection(inspectionVO);
+	}
 	
 	// 입고품질검사 상세목록 /
 	@Override
@@ -43,6 +55,11 @@ public class QualityServiceImpl implements QualityService{
 	@Override
 	public List<InspectionVO> testList() {
 		return qualityMapper.selectTest();
+	}
+	//검사목록
+	@Override
+	public List<InspectionVO> inspectionList() {
+		return qualityMapper.selectInspection();
 	}
 	
 	
@@ -210,6 +227,7 @@ public class QualityServiceImpl implements QualityService{
 //	}
 //		return list;
 //	}
+
 
 
 

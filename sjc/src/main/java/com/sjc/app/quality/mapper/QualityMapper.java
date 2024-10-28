@@ -13,6 +13,12 @@ public interface QualityMapper {
 	
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> selectMtlOdDetail(String mtlOdCode);
+	// 품질검사상세페이지
+//	public List<Map<String, Object>> selectInspectionDetail(String mtlOdDetailCode);
+	// 품질검사상세페이지
+	public int insertInspection(InspectionVO inspectionVO);
+	
+	
 	
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);
@@ -20,6 +26,7 @@ public interface QualityMapper {
 	
 	//검사기준목록
 	public List<InspectionVO> selectTest();
+	public List<InspectionVO> selectInspection();
 	
 	
 	
@@ -69,6 +76,7 @@ public interface QualityMapper {
 	//public int updateMtlOdDone(@Param("mtlOdStatus")String mtlOdStatus, InspectionVO inspectionVO);
 
 	public void insertMtInInfo(InspectionVO inspectionVO);
+
 
 	
 
