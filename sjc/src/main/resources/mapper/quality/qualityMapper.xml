@@ -132,13 +132,8 @@
 		        , i.number_of_total_pass
 		        , i.total_pass
 		        , i.mtl_od_detail_code
-                , m.mt_code
-                , m.mt_name
 		 FROM inspection i
-         JOIN mt m
-         ON m.mt_code = ( SELECT mt_code
-                         FROM mtl_od_detail
-                         WHERE mtl_od_detail_code = #{mtlOdDetailCode})
+         WHERE i.ins_code = #{insCode}
 	</select>
 	
 	

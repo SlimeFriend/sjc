@@ -68,6 +68,7 @@
 									data-dismiss="modal" id="cancelBtn">취소</button>
 								<h2 class="h5 mb-20">검사대상 목록</h2>
 								<div id="modalOrderDetail"></div>
+								<div id="modalInspectionDetail"></div>
 							</div>
 
 							<div style="display: flex; width: 100%; gap: 20px;">
@@ -99,7 +100,8 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${mtlList}]]*/[];
 			const gridDetailData = /*[[${mtlOdDetail}]]*/[];
-			const gridModalData = /*[[${insertResult}]]*/[];
+			const gridModalDetailData = /*[[${inspectionList}]]*/[];
+			const gridModalInspectionData = /*[[${inspectionList}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -226,9 +228,42 @@
 					perPage : 5
 				}
 			});
-			const gridmodal = new tui.Grid({
-				el : document.getElementById('modalOrderDetail'),
-				data : gridModalData,
+			
+			let mtlOdDetailCodeValue = "";
+			let mtName = "";
+		    let remainData = [];
+		    
+			
+		    griddetail.on('click', (ev) => {
+		        const rowKey = ev.rowKey;
+		        const mtlOdDetailCodeValue = griddetail.getValue(rowKey, 'mtlOdDetailCode');
+				console.log(mtlOdDetailCodeValue);
+		        if (mtlOdDetailCodeValue) {
+		            $.ajax({
+		                url: '/incomingTestReception',
+		                type: 'POST',
+		                contentType: 'application/json',
+		                data: JSON.stringify({ mtlOdDetailCode: mtlOdDetailCodeValue }),
+		                success: function(response) {
+		                	console.log('Response:', response);
+		                	gridOrderModal.resetData(response);
+						    document.getElementById('gridOrderDetail').style.opacity = 1;
+						    $('#myModal').modal('show'); // 모달 열기
+						    gridOrderModal.refreshLayout(); 
+		                },
+		                error: function(xhr, status, error) {
+		                    console.error('Error during request', error);
+		                    alert('데이터를 가져오는 데 오류가 발생했습니다.');
+		                }
+		            });
+		        }
+		    });
+		    
+		    
+
+			const gridOrderModal = new tui.Grid({
+				el : document.getElementById('modalInspectionDetail'),
+				data : gridModalDetailData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
@@ -282,37 +317,6 @@
 					perPage : 10
 				}
 			});
-			let mtlOdDetailCodeValue = "";
-			let mtName = "";
-		    let remainData = [];
-		    
-			
-		    griddetail.on('click', (ev) => {
-		        const rowKey = ev.rowKey;
-		        const mtlOdDetailCodeValue = griddetail.getValue(rowKey, 'mtlOdDetailCode');
-				console.log(mtlOdDetailCodeValue);
-		        if (mtlOdDetailCodeValue) {
-		            $.ajax({
-		                url: '/incomingTestReception',
-		                type: 'POST',
-		                contentType: 'application/json',
-		                data: JSON.stringify({ mtlOdDetailCode: mtlOdDetailCodeValue }),
-		                success: function(response) {
-		                	console.log('Response:', response);
-						    //gridmodal.resetData(response);
-						    document.getElementById('modalOrderDetail').style.opacity = 1;
-						    $('#myModal').modal('show'); // 모달 열기
-						    gridmodal.refreshLayout(); 
-		                },
-		                error: function(xhr, status, error) {
-		                    console.error('Error during request', error);
-		                    alert('데이터를 가져오는 데 오류가 발생했습니다.');
-		                }
-		            });
-		        }
-		    });
-
-			
 			
 			
 			

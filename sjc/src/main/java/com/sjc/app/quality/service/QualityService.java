@@ -15,13 +15,13 @@ public interface QualityService {
 //	public List<Map<String, Object>> inspectionDetail(String mtlOdDetailCode);
 	// 품질검사상세페이지.
 	public int insertInspection(InspectionVO inspectionVO);
+	//검사목록
+	public List<InspectionVO> inspectionList(InspectionVO inspectionVO);
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode);
 	
 	//검사기준목록
 	public List<InspectionVO> testList();
-	//검사목록
-	public List<InspectionVO> inspectionList();
 	
 	
 	

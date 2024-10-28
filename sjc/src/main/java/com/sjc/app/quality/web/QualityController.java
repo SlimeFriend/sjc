@@ -58,25 +58,27 @@ public class QualityController {
 //	}
     
         //검사기준목록
-    @GetMapping("/incomingTestReception")
-    public String testReceptionPage(Model model) {
-    	List<InspectionVO> testList = qualityService.testList();
-    	List<InspectionVO> inspectionList = qualityService.inspectionList();
-    	
-    	model.addAttribute("tests", testList);
-    	model.addAttribute("inspectionList", inspectionList);
-    	model.addAttribute("InspectionVO", new InspectionVO());
-    	
-    	return "quality/incomingTestReception";
-    }
-    
+//    @GetMapping("/incomingTestReception")
+//    public String testReceptionPage(Model model) {
+//    	
+//    	List<InspectionVO> testList = qualityService.testList();
+//    	List<InspectionVO> inspectionList = qualityService.inspectionList();
+//    	
+//    	model.addAttribute("tests", testList);
+//    	model.addAttribute("inspectionList", inspectionList);
+//    	model.addAttribute("InspectionVO", new InspectionVO());
+//    	
+//    	return "quality/incomingQualityWaitHistory";
+//    }
+//    
     // 품질검사상세페이지.
     @PostMapping("/incomingTestReception")
     @ResponseBody
-    public String insertInspection(@RequestBody InspectionVO inspectionVO) {
-        int insertResult = qualityService.insertInspection(inspectionVO);
-        
-        return "redirect:/main";
+    public List<InspectionVO> insertInspection(@RequestBody InspectionVO inspectionVO) {
+        qualityService.insertInspection(inspectionVO);
+    	List<InspectionVO> inspectionList = qualityService.inspectionList(inspectionVO);
+
+        return inspectionList;
     }
     
     
