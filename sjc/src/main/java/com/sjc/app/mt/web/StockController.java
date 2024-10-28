@@ -81,9 +81,11 @@ public class StockController {
         List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials);
 
-        return "mt/stockPage"; // 재고 페이지로 이동
+        return "mt/stockPage :: stockDeatil"; 
     }
 
+    
+    
     // 자재 코드에 해당하는 로트번호를 반환하는 API (Ajax 요청 처리용)
     @GetMapping("/api/stock/{mtCode}/lotNumbers")
     @ResponseBody

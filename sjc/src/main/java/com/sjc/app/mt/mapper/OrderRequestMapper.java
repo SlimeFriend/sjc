@@ -10,25 +10,25 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OrderRequestMapper {
 
-    List<MtlOdVO> getAllOrderRequestsByCpCode(String cpCode);
+	List<MtlOdVO> getAllOrderRequestsByCpCode(String cpCode);
 
-    List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode);
+	List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode);
 
-    MtlOdVO getOrderRequestById(String orderRequestCode);
+	MtlOdVO getOrderRequestById(String orderRequestCode);
 
-    void insertOrderRequest(MtlOdVO order);
+	void insertOrderRequest(MtlOdVO order);
 
-    void insertOrderRequestDetail(MtlOdVO detail);
+	void insertOrderRequestDetail(MtlOdVO detail);
 
-    void updateOrderRequest(MtlOdVO order);
+	void updateOrderRequest(MtlOdVO order);
 
-    void deleteOrderRequest(String orderRequestCode);
+	void deleteOrderRequest(String orderRequestCode);
 
-    List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
+	List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
 
-    List<CpVO> getAllCpInfo();
+	List<CpVO> getAllCpInfo();
 
-    List<MtVO> getItemsByCpCode(String cpCode);
+	List<MtVO> getItemsByCpCode(String cpCode);
 
-    List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);
+	List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);
 }

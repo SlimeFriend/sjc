@@ -46,23 +46,24 @@
 						<td
 							th:text="${#dates.format(orderRequest.mtlOdDate, 'yyyy-MM-dd')}"></td>
 						<td th:text="${orderRequest.mtlOdStatus}"></td>
-						  <td th:text="${orderRequest.totalAmount != null ? orderRequest.totalAmount : '-'}"></td> 
+						<td
+							th:text="${orderRequest.totalAmount != null ? orderRequest.totalAmount : '-'}"></td>
 
 						<td th:text="${orderRequest.userId}"></td>
 						<td><select class="form-control"
 							th:id="|statusSelect_${orderRequest.cpCode}|">
 								<option th:selected="${orderRequest.mtlOdStatus == '발주대기'}"
 									value="발주대기">발주대기</option>
-								<option th:selected="${orderRequest.mtlOdStatus == '품질검사대기'}"
-									value="품질검사대기">품질검사대기</option>
+								<option th:selected="${orderRequest.mtlOdStatus == '입고품질검사대기'}"
+									value="품질검사대기">입고품질검사대기</option>
 						</select>
 							<button class="btn btn-secondary"
 								th:onclick="updateStatus([[${orderRequest.cpCode}]])">변경하기</button>
 						</td>
 						<td>
 							<button class="btn btn-info"
-								th:data-cp-code="${orderRequest.cpCode}"
-								th:onclick="showOrderDetails(this.dataset.cpCode)">상세보기</button>
+								th:data-cpcode="${orderRequest.cpCode}"
+								th:onclick="showOrderDetails(this.dataset.cpcode)">상세보기</button>
 						</td>
 						<td>
 							<button class="btn btn-danger btn-sm"
@@ -72,7 +73,7 @@
 				</tbody>
 			</table>
 
-			<!-- 발주 요청 상세 테이블 -->
+			
 			<h2>발주 상세내역</h2>
 			<table class="table table-striped">
 				<thead>

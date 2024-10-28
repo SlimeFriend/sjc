@@ -24,15 +24,14 @@
 						<th>입고수량</th>
 						<th>입고일</th>
 						<th>유통기한</th>
-						
 					</tr>
 				</thead>
 				<tbody>
-					<!-- 입고 목록이 없을 경우 표시 -->
+					
 					<tr th:if="${#lists.isEmpty(mtInList)}">
-						<td colspan="8" class="text-center">입고된 자재가 없습니다.</td>
+						<td colspan="7" class="text-center">입고된 자재가 없습니다.</td>
 					</tr>
-					<!-- 입고 목록이 있을 경우 표시 -->
+					
 					<tr th:each="mtIn : ${mtInList}">
 						<td th:text="${mtIn.lotNo != null ? mtIn.lotNo : '-'}">LOT번호</td>
 						<td th:text="${mtIn.mtlOdCode != null ? mtIn.mtlOdCode : '-'}">발주코드</td>
@@ -43,9 +42,6 @@
 							th:text="${mtIn.inputDate != null ? #dates.format(mtIn.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
 						<td
 							th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
-						<td>
-
-						</td>
 					</tr>
 				</tbody>
 			</table>
