@@ -81,7 +81,7 @@ public class EqController {
 	  
 	  // 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과 데이터(Map)
 	  @PostMapping("eqUpdate")
-	  //@ResponseBody 
+	  @ResponseBody 
 	  public Map<String, Object> eqUpdateAJAXJSON(@RequestBody EqVO eqVO) {
 		  return eqService.eqUpdate(eqVO); 
 		  
