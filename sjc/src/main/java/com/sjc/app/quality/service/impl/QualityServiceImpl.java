@@ -58,8 +58,8 @@ public class QualityServiceImpl implements QualityService{
 	}
 	//검사목록
 	@Override
-	public List<InspectionVO> inspectionList() {
-		return qualityMapper.selectInspection();
+	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
+		return qualityMapper.selectInspection(inspectionVO);
 	}
 	
 	

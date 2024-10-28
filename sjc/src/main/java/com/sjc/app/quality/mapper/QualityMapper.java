@@ -17,6 +17,7 @@ public interface QualityMapper {
 //	public List<Map<String, Object>> selectInspectionDetail(String mtlOdDetailCode);
 	// 품질검사상세페이지
 	public int insertInspection(InspectionVO inspectionVO);
+	public List<InspectionVO> selectInspection(InspectionVO inspectionVO);
 	
 	
 	
@@ -26,7 +27,6 @@ public interface QualityMapper {
 	
 	//검사기준목록
 	public List<InspectionVO> selectTest();
-	public List<InspectionVO> selectInspection();
 	
 	
 	
