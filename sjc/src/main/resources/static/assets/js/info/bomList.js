@@ -369,6 +369,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
             {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
                 header: '단가',
                 name: 'unitPrice',
                 align: 'center',
