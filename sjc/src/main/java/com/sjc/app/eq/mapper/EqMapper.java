@@ -20,7 +20,7 @@ public interface EqMapper {
 	
 	// 삭제
 	public int deleteEqInfo(String eqCode);
-	
+
 	// 설비 가동 상태
 	public List<EqVO> selectEqAll2();
 	

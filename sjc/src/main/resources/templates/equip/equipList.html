@@ -30,7 +30,7 @@ tbody>tr {
 						data-toggle="modal" data-target="#myModal">설비 수정</button>
 				</div>
 
-				<table class="table nowrap table-hover">
+				<table class="table nowrap table-hover table-striped">
 					<thead>
 						<tr>
 							<th>선택</th>
@@ -126,10 +126,8 @@ tbody>tr {
 		</div>
 	</div>
 
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
 	$(document).ready(function () {
@@ -171,7 +169,7 @@ tbody>tr {
 	        // 체크된 한 개의 행 데이터 추출
 	        const checkedRow = checkedRows.eq(0);
 	        const eqCode = checkedRow.find('td').eq(2).text();
-	        const eqType = checkedRow.find('td').eq(3).text();
+	        const eqType = checkedRow.find('td').eq(3).text(); // 설비 구분 값
 	        const eqName = checkedRow.find('td').eq(4).text();
 	        const eqMin = checkedRow.find('td').eq(5).text();
 	        const eqMax = checkedRow.find('td').eq(6).text();
@@ -179,14 +177,28 @@ tbody>tr {
 
 	        // 모달 폼에 데이터 채우기
 	        $('#eqCode').val(eqCode);
-	        $('#eqType').val(eqType);
 	        $('#eqName').val(eqName);
 	        $('#eqMin').val(eqMin);
 	        $('#eqMax').val(eqMax);
 	        $('input[name="use"][value="' + use + '"]').prop('checked', true);
 
+	        // 설비 구분 select 옵션 설정
+	        setEqType(); // 초기 설비 구분 값 설정
+
 	        // 모달 창 표시
 	        $('#myModal').modal('show');
+	    });
+
+	    // 선택된 옵션에 따라 설비 구분 값 설정
+	    function setEqType() {
+	        const selectedOption = $('#eqName').find(':selected'); // 선택된 <option>
+	        const eqType = selectedOption.closest('optgroup').attr('label'); // 부모 <optgroup>의 label
+	        $('[name="eqType"]').val(eqType); // Hidden input에 값 설정
+	    }
+
+	    // 설비 구분 값이 변경될 때마다 업데이트
+	    $('#eqName').on('change', function () {
+	        setEqType();
 	    });
 
 	    // 모달 창에서 수정 처리
@@ -195,7 +207,7 @@ tbody>tr {
 
 	        const eqData = {
 	            eqCode: $('#eqCode').val(),
-	            eqType: $('#eqType').val(),
+	            eqType: $('[name="eqType"]').val(), // Hidden input에서 값 가져오기
 	            eqName: $('#eqName').val(),
 	            eqMin: $('#eqMin').val(),
 	            eqMax: $('#eqMax').val(),
