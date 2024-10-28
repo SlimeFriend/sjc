@@ -70,7 +70,7 @@ from    eq
   			)
 </insert>
 
-<!-- 수정 -->
+<!-- 설비목록 수정 -->
 <update id="updateEqInfo" parameterType="EqVO">
 	UPDATE eq
 	SET
@@ -81,6 +81,22 @@ from    eq
 		 , use = #{use}
 	WHERE eq_code = #{eqCode}
 </update>
+
+<!-- 설비상세 수정 -->
+<!-- <update id="updateEqInfo" parameterType="EqVO">
+	UPDATE eq
+	SET	 
+		   eq_type = #{eqType}
+		 , eq_name = #{eqName}
+		 , eq_mdnm = #{eqMdnm}
+		 , eq_mdno = #{eqMdno}
+		 , eq_period = #{eqPeriod}
+		 , manager = #{manager}
+		 , eq_loaction = #{eqLocation}
+		 , line_code = #{lineCode}
+		 , use = #{use}
+	WHERE eq_code = #{eqCode}
+</update> -->
 
 <!-- 삭제 -->
 <delete id="deleteEqInfo" parameterType="String">
