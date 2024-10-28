@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoBomMapper;
+import com.sjc.app.info.mapper.InfoPrdMapper;
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
 
@@ -20,10 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 public class InfoBomServiceImpl implements InfoBomService {
 	//private MeterRegistry registry;
 	private InfoBomMapper infoBomMapper;
+	private InfoPrdMapper infoPrdMapper;
 	
 	@Autowired
-	InfoBomServiceImpl(InfoBomMapper infoBomMapper, MeterRegistry registry){
+	InfoBomServiceImpl(InfoBomMapper infoBomMapper, InfoPrdMapper infoPrdMapper, MeterRegistry registry){
 		this.infoBomMapper = infoBomMapper;
+		this.infoPrdMapper = infoPrdMapper;
 	}
 	
 	@Override
@@ -65,6 +68,24 @@ public class InfoBomServiceImpl implements InfoBomService {
 	}
 	
 	@Override
+	@Transactional
+	public List<BomVO> registerPrdBoms(List<BomVO> bomVOs) {
+		// 제품 추가
+		
+		
+		if (!bomVOs.isEmpty()) { 
+		    infoBomMapper.insertBom(bomVOs.get(0));
+		    infoPrdMapper.insertProduct(bomVOs.get(0));
+		}
+		
+        for (BomVO bomVO : bomVOs) {
+        	infoBomMapper.insertBomDetail(bomVO);  // 단건 처리로 변경
+        }
+
+        return bomVOs;	
+	}
+	
+	@Override
 	public List<BomVO> bomList() {
 		return infoBomMapper.selectBomAllList();
 	}
@@ -73,5 +94,6 @@ public class InfoBomServiceImpl implements InfoBomService {
 	public List<BomVO> bomDetailList(BomVO bomVO) {
 		return infoBomMapper.selectBomDetailAllList(bomVO);
 	}
+
 	
 }

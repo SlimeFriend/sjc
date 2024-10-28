@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}));
 
 		
-        fetch('/registerPrdBom', {
+        fetch('/registerPrdBoms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        if (response.ok) {
 				
 				document.querySelector('textarea[name="description"]').value = '';
-			    fetchMtList();
+			    fetchPrds();
 			    fetchBoms();
 			    fetchBomDetails();
 			    

@@ -29,4 +29,24 @@
 	    </where>
 	    ORDER BY prd_code
 	</select>
+	
+	
+	<insert id="insertProduct" parameterType="ProductVO">
+	    INSERT INTO prd (
+	    	 prd_code
+	    	,comm
+	    	,prd_name
+	    	,description
+	    	,unit_price
+	    	,bom_code
+    	)
+	    VALUES (
+	    	 #{prdCode}
+	    	,#{comm}
+	    	,#{prdName}
+	    	,#{description}
+	    	,#{unitPrice}
+	    	,#{bomCode}
+	    )
+	</insert>	
 </mapper>
