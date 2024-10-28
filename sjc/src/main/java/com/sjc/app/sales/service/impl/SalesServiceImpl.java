@@ -61,6 +61,11 @@ public class SalesServiceImpl implements SalesService {
 		//return salesMapper.insertOrder(orderVO);
 	}
 	
+	// 출고 화면
+	@Override
+	public List<OrderVO> getOrdersByStatus(String status) {
+		return salesMapper.selectOrdersByStatus(status);
+	}
 	
 	// 출고접수 프로세스
 	@Transactional
@@ -69,11 +74,13 @@ public class SalesServiceImpl implements SalesService {
 		
 		int totalRowsAffected = 0;
 		
+		String ordCode = null;
+		
 		// LOT별 제품 출고 프로세스
 		List<Map<String, Object>> outLotData = (List<Map<String, Object>>) data.get("outLotData");
 		for(Map<String, Object> lot : outLotData) {
 			String prdCode = (String) lot.get("prdCode");
-			String ordCode = (String) lot.get("ordCode");
+			ordCode = (String) lot.get("ordCode");
 			String lotNumber = (String) lot.get("lot");
 			String cpName = (String) lot.get("cpName");
 			int outQuantity = (Integer) lot.get("outQuantity");
@@ -81,6 +88,8 @@ public class SalesServiceImpl implements SalesService {
 			totalRowsAffected += salesMapper.insertOutHistory(ordCode, prdCode, lotNumber, outQuantity, cpName);
 			totalRowsAffected += salesMapper.prdLotOutProcess(outQuantity, lotNumber);
 		}
+		
+		salesMapper.updateOrdFinish(ordCode);
 		
 		/*
 		 * // Prd별 제품 출고 프로세스 List<Map<String, Object>> outPrdData = (List<Map<String,
@@ -96,11 +105,22 @@ public class SalesServiceImpl implements SalesService {
 		return totalRowsAffected;
 	}
 	
+	
+	
 	// 미출고량 계산 프로세스
 	@Override
 	public int remainProcess(List<Map<String, Object>> outRemainData) {
-		System.err.print(outRemainData);
-		return salesMapper.selectRemainData(outRemainData);
+		int totalRowsAffected = 0;
+		
+		for(Map<String, Object> item : outRemainData) {
+			String ordCode = (String) item.get("ordCode");
+			String prdCode = (String) item.get("prdCode");
+			
+			System.err.println(ordCode + " " + prdCode);
+			
+			int remainQuantity = salesMapper.selectRemainData(ordCode, prdCode);
+		}
+		return totalRowsAffected;
 	}
 	
 	// 입고 접수
@@ -133,11 +153,6 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<ProductVO> productLot() {
 		return salesMapper.selectProductLot();
-	}
-
-	@Override
-	public List<OrderVO> productOut() {
-		return salesMapper.selectProductOut();
 	}
 
 	@Override
