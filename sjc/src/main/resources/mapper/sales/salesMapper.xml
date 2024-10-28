@@ -110,6 +110,19 @@
 		GROUP BY p.prd_name, p.prd_code, p.unit_price
 	</select>
 	
+	<select id="selectOrdersByStatus" resultType="OrderVO">
+    	SELECT o.ord_code,
+		       c.cp_name,
+		       o.ord_date,
+		       o.dlv_req_date,
+		       o.ord_status,
+		       o.comm
+		       
+		FROM   ord o LEFT JOIN cp c
+		ON     o.cp_code = c.cp_code
+    	WHERE ord_status = #{status}
+	</select>
+	
 	<select id="selectProductLot" resultType="ProductVO">
 		SELECT   p.prd_name,
 		         p.prd_code,
@@ -140,7 +153,7 @@
 			   o.ord_date,
 			   o.dlv_req_date,
 			   o.ord_status
-		FROM   ord o join cp c
+		FROM   ord o JOIN cp c
 		               ON o.cp_code = c.cp_code
 	</select>
 
@@ -161,7 +174,7 @@
 	<!-- 출고접수 프로세스 -->
 	
 	<!-- 미출고량 계산 -->
-	<select id="selectRemainData" resultType="map">
+	<select id="selectRemainData" parameterType="map" resultType="int">
 		WITH r AS (SELECT ord_code,
                   prd_code,
                   SUM(out_quantity) remain_Quantity
@@ -179,6 +192,12 @@
 	    JOIN   r ON (r.ord_code = od.ord_code AND r.prd_code = od.prd_code)
 	    WHERE  o.ord_code = #{ordCode} AND r.prd_code = #{prdCode}
 	</select>
+	
+	<update id="updateOrdFinish">
+		UPDATE ord
+		SET ord_status = '출고완료'
+		WHERE ord_code = #{ordCode}
+	</update>
 	
 	<!-- LOT출고접수 프로세스 -->
 	<insert id="insertOutHistory">

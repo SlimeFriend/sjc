@@ -41,7 +41,7 @@
 			
 			<div class="pd-30 card-box mb-20">
 				<h4 class="h5 mb-20">출고현황</h4>
-				<div id=""></div>
+				<div id="outGrid"></div>
 			</div>
 		</div>
 	</div>
@@ -51,6 +51,7 @@
 			const gridData = /*[[${orderGrid}]]*/[];
 			const gridModalData = /*[[${ordDetail}]]*/[];
 			const productLotGridData = /*[[${ordDetail}]]*/[];
+			const outGridData = /*[[${outGrid}]]*/[];
 			
 			let outValue = 0; // 출고량 값
 			let lotValue = 0; // LOT 값
@@ -180,7 +181,7 @@
 					name : 'ED',
 					align : 'center',
 				}, {
-					header : '수량',
+					header : '재고',
 					name : 'STC_QUANTITY',
 					align : 'center',
 				}, {
@@ -198,7 +199,41 @@
 				}
 			});
 			
+			const outGrid = new tui.Grid({
+				el : document.getElementById('outGrid'),
+				data : outGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '주문일자',
+					name : 'ordDate',
+					align : 'center',
+				}, {
+					header : '납기일자',
+					name : 'dlvReqDate',
+					align : 'center',
+				}, {
+					header : '진행상황',
+					name : 'ordStatus',
+					align : 'center',
+				},],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
 		    let ordCodeValue = "";
+		    let prdCodeValue = "";
 		    let cpName = "";
 		    let remainData = [];
 		    
@@ -250,7 +285,9 @@
 			                const requestData = {
 			                	outRemainData: remainData
 			                };
-
+			                
+			                console.log(requestData);
+			                
 			                $.ajax({
 			                    url: '/remainInfo',
 			                    type: 'POST',
@@ -291,38 +328,57 @@
 
 			    // 현재 그리드의 모든 행을 반복하면서
 			    const rowCount = productLotGrid.getRowCount();
+			    const modalRowCount = gridModal.getRowCount();
+			    
 			    for (let i = 0; i < rowCount; i++) {
 			        const currentLot = productLotGrid.getValue(i, 'LOT'); // 현재 행의 LOT 값
 			        const currentOutQuantity = productLotGrid.getValue(i, 'OUT_QUANTITY'); // 현재 행의 출고량
-			        const currentPrdCode = productLotGrid.getValue(i, 'PRD_CODE');
+			        const currentOrdQuantity = productLotGrid.getValue(i, 'STC_QUANTITY');
+			        const currentPrdCode = productLotGrid.getValue(i, 'PRD_CODE'); 
+			        
+			        if(Number(currentOrdQuantity) < Number(currentOutQuantity)) {
+			        	alert('해당 제품은 재고가 부족합니다.');
+			        	productLotGrid.setValue(i, 'OUT_QUANTITY', "");
 			        	
-			        if(currentOutQuantity) {
-			        	totalOutQuantity += Number(currentOutQuantity);
-			        }
+			        	for(let j = 0; j < modalRowCount; j++) {
+			        		const currentModalPrdCode = gridModal.getValue(j, 'PRDCODE');
+			        		if(currentPrdCode === currentModalPrdCode) {
+			        			gridModal.setValue(j, 'totalOutQuantity', "");
+			        		}
+			        	}
+			        	
+			        } else {
+			        	
+			        	if(currentOutQuantity) {
+				        	totalOutQuantity += Number(currentOutQuantity);
+				        }
 
-			        // 만약 출고량이 입력되어 있다면 outData에 추가, 중복 체크
-			        if (currentOutQuantity && !outLotData.some(item => item.lot === currentLot)) {
-			        	outLotData.push({
-			        		cpName: cpName,
-			        		ordCode: ordCodeValue,
-			        		prdCode: currentPrdCode,
-			                lot: currentLot,
-			                outQuantity: Number(currentOutQuantity)
-			            });
+				        // 만약 출고량이 입력되어 있다면 outData에 추가, 중복 체크
+				        if (currentOutQuantity && !outLotData.some(item => item.lot === currentLot)) {
+				        	outLotData.push({
+				        		cpName: cpName,
+				        		ordCode: ordCodeValue,
+				        		prdCode: currentPrdCode,
+				                lot: currentLot,
+				                outQuantity: Number(currentOutQuantity)
+				            });
+				        }
+				        
+				        const orderRowCount = gridModal.getRowCount(); // 주문 목록의 행 수
+					    for (let j = 0; j < orderRowCount; j++) {
+					    	const orderProductName = gridModal.getValue(j, 'PRDNAME'); // 주문 목록에서 제품명 가져오기
+					        // 제품명이 sjcon과 일치하는지 확인
+					        if (productName === orderProductName) {
+					            // 주문 목록의 출고량 업데이트
+					            gridModal.setValue(j, 'totalOutQuantity', Number(totalOutQuantity)); // 출고량 업데이트
+					            break; // 일치하는 첫 번째 제품을 찾으면 루프 종료
+					        }
+					    }
+			        	
 			        }
+			        	
 			    }
 
-			    const orderRowCount = gridModal.getRowCount(); // 주문 목록의 행 수
-			    for (let j = 0; j < orderRowCount; j++) {
-			    	const orderProductName = gridModal.getValue(j, 'PRDNAME'); // 주문 목록에서 제품명 가져오기
-			        // 제품명이 sjcon과 일치하는지 확인
-			        if (productName === orderProductName) {
-			            // 주문 목록의 출고량 업데이트
-			            gridModal.setValue(j, 'totalOutQuantity', Number(totalOutQuantity)); // 출고량 업데이트
-			            gridModal.getValue()
-			            break; // 일치하는 첫 번째 제품을 찾으면 루프 종료
-			        }
-			    }
 			});
 			
 			document.getElementById('submitBtn').addEventListener('click', () => {
@@ -334,37 +390,50 @@
 			    }
 			    
 			    const modalRowCount = gridModal.getRowCount();
+			    let isTrue = true;
 			    
 			    for(let i = 0; i < modalRowCount; i++) {
-			    	
-			    	let ordCode = gridModal.getValue(i, 'ORDCODE');
-			    	let prdCode = gridModal.getValue(i, 'PRDCODE');
+			    	let orderQuantity = gridModal.getValue(i, 'ORDQUANTITY');
 			    	let totalQuantity = gridModal.getValue(i, 'totalOutQuantity');
 			    	
-			    	if(totalQuantity) {
-				    	outPrdData.push({
-				    		ordCode : ordCode,
-			                prdCode : prdCode,
-			                totalOutQuantity : totalQuantity
-			            });
-			    	}	
+			    	if(Number(orderQuantity) !== Number(totalQuantity)) {
+			    		alert('주문량과 출고량이 일치하지 않습니다.');
+			    		isTrue = false;
+			    		break;
+			    	}
+			    } 
+			    
+			    if(isTrue) {
+				    for(let i = 0; i < modalRowCount; i++) {
+				    	
+				    	let ordCode = gridModal.getValue(i, 'ORDCODE');
+				    	let prdCode = gridModal.getValue(i, 'PRDCODE');
+				    	let totalQuantity = gridModal.getValue(i, 'totalOutQuantity');
+				    	
+				    	if(totalQuantity) {
+					    	outPrdData.push({
+					    		ordCode : ordCode,
+				                prdCode : prdCode,
+				                totalOutQuantity : totalQuantity
+				            });
+				    	}	
+				    }
+				    
+				    const requestData = {
+				    	    outLotData: outLotData,
+				    	    outPrdData: outPrdData,
+				    };
+				    
+				    $.ajax({
+			    		url: '/getPrdOutInfo',
+			    		type: 'POST',
+			    		contentType: 'application/json',
+			    		data: JSON.stringify(requestData),
+						success: function(response) {
+			    			alert("출고가 정상적으로 접수되었습니다.");
+			    		}
+			    	});
 			    }
-			    
-			    const requestData = {
-			    	    outLotData: outLotData,
-			    	    outPrdData: outPrdData,
-			    };
-			    
-			    $.ajax({
-		    		url: '/getPrdOutInfo',
-		    		type: 'POST',
-		    		contentType: 'application/json',
-		    		data: JSON.stringify(requestData),
-					success: function(response) {
-		    			console.log('Success', response);
-		    		}
-		    	});
-		    	
 
 			    // outLotData 초기화
 			    console.log(outLotData);

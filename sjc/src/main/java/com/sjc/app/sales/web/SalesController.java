@@ -100,8 +100,12 @@ public class SalesController {
 	// 제품 출고 페이지
 	@GetMapping("/productOut")
 	public String productOutPage(Model model) {
-		List<OrderVO> list = salesService.productOut();
-		model.addAttribute("orderGrid", list);
+		// 주문접수 상태의 주문 목록
+	    List<OrderVO> orderList = salesService.getOrdersByStatus("주문접수");
+	    model.addAttribute("orderGrid", orderList);
+	    // 출고완료 상태의 주문 목록
+	    List<OrderVO> outList = salesService.getOrdersByStatus("출고완료");
+	    model.addAttribute("outGrid", outList);
 		return "sales/productOut";
 	}
 	
@@ -145,7 +149,6 @@ public class SalesController {
 	@ResponseBody
 	public int remainProcess(@RequestBody Map<String, List<Map<String, Object>>> requestData) {
 		List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
-		System.err.print(outRemainData);
 		return salesService.remainProcess(outRemainData);
 	}
 

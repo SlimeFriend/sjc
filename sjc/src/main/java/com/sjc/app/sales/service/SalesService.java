@@ -12,6 +12,7 @@ public interface SalesService {
 	public List<Map<String, Object>> orderDetail(String ordCode);
     
 	// 출고접수 프로세스
+	public List<OrderVO> getOrdersByStatus(String status);
 	public int productOutProcess(Map<String, Object> data);
 	public int remainProcess(List<Map<String, Object>> outRemainData);
 	
@@ -28,8 +29,6 @@ public interface SalesService {
 	public List<ProductVO> productLot();
 	
 	public List<Map<String, Object>> productDetail(String prdCode);
-	
-	public List<OrderVO> productOut();
 	
 	// 업체
 	public List<OrderVO> companyList();
