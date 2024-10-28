@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -72,7 +71,7 @@ public class QualityController {
 //    }
 //    
     // 품질검사상세페이지.
-    @PostMapping("/incomingTestReception")
+    @PostMapping("/incomingInspection")
     @ResponseBody
     public List<InspectionVO> insertInspection(@RequestBody InspectionVO inspectionVO) {
         qualityService.insertInspection(inspectionVO);
@@ -81,6 +80,15 @@ public class QualityController {
         return inspectionList;
     }
     
+    // 품질검사 값입력
+    @PostMapping("/incomingInspectionDetail")
+    @ResponseBody
+    public List<InsDetailVO> insertInsDetail(@RequestBody InsDetailVO insDetailVO) {
+    	qualityService.insertInsDetail(insDetailVO);
+    	List<InsDetailVO> insDetailList = qualityService.insDetailList(insDetailVO);
+		return insDetailList;
+    	
+    }
     
     
     
