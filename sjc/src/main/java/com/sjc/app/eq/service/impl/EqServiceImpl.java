@@ -1,7 +1,5 @@
 package com.sjc.app.eq.service.impl;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +52,9 @@ public class EqServiceImpl implements EqService {
 	  map.put("result", isSuccessed);
 	  return map; 
 	  }
+
+
 	  
-	  
-	 
 
 	// 단건 조회
 	@Override
@@ -88,5 +86,6 @@ public class EqServiceImpl implements EqService {
 	public List<EqChckVO> jgList() {
 		return eqMapper.selectjumgumAll();
 	}
+
 
 } // end of class
