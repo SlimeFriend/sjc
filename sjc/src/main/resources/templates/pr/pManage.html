@@ -23,6 +23,7 @@
                     <th>목표량</th>
                     <th>지시량</th>
                     <th>생산량</th>
+                    <th>상태</th>
                     <th>비고</th>
                 </tr>
             </thead>    
@@ -35,6 +36,9 @@
                         <td th:text="${list.want}"></td>
                         <td>[[ ${list.command} ]]</td>
                         <td>[[ ${list.output} ]]</td>
+                        <td th:if="${list.status=='b1'}">대기</td>
+                        <td th:if="${list.status=='b2'}">진행</td>
+                        <td th:if="${list.status=='b3'}">완료</td>
                         <td th:text="${list.comm}"></td>
                     </tr>
                 </th:block>
@@ -83,6 +87,7 @@
     let pd;
     let line;
     let cnt;
+    let dstatus;
    
     
     // 지시 클릭 시 필요 자재와 공정 리스트 보여주는 기능
@@ -90,10 +95,19 @@
         pl.addEventListener('click', (event) => {
         	
         	
+        	
             prd = event.currentTarget.dataset.code;
             cnt = event.currentTarget.children[4].innerText;
             pd = event.currentTarget.children[0].innerText;
             line = event.currentTarget.children[2].innerText;
+            dstatus = event.currentTarget.children[6].innerText;
+            
+    		if(dstatus == '완료'){
+    			sBtn.disabled = true;
+    			
+    		} else{
+    			sBtn.disabled = false;
+    		}
             
             
             console.log(cnt);
@@ -188,7 +202,7 @@
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
-                        <td>${item.manager}</td>
+
                     `;}
                 
                 else if(item.status == 'b3'){
@@ -202,42 +216,46 @@
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
-                        <td>${item.manager}</td>
+						
                     `;}
             
             cbody.appendChild(row);
             
-            
-        	fetch('/lmanager?ldetailCode=' + item.ldetailCode)
-        	.then(resp =>{
-        		if (!resp.ok){
-        			throw new Error('네트워크 반응 에러');
-        		}
-        		return resp.json();
-        	})
-        	.then(res =>{
+            if(item.status != 'b3'){
+            	
+        		fetch('/lmanager?ldetailCode=' + item.ldetailCode)
+        		.then(resp =>{
+        			if (!resp.ok){
+        				throw new Error('네트워크 반응 에러');
+        			}
+        			return resp.json();
+        		})
+        		.then(res =>{
         			
 
-                const selm = document.createElement('td');
-                const selb = document.createElement('select');
+                	const selm = document.createElement('td');
+                	const selb = document.createElement('select');
                 
-                       res.forEach(n=> {
-                           selb.innerHTML += `
-                            <option value=${n.userId}>
-                               ${n.userName}
-                               	</option>`;
-                           });
-                     selm.appendChild(selb);
-                     row.appendChild(selm);
-                        }
+                	selb.name = "sname";
+                
+                	res.forEach(n=> {
+                     	selb.innerHTML += `
+                     	<option value=${n.userId}>
+                     	${n.userName}
+                     	</option>`;
+                 	});
+                	
+                    selm.appendChild(selb);
+                    row.appendChild(selm);
                         
+            }
                         	
         	)
         	.catch(error => {
         		console.error('에러 :', error);
         	});
         	
-        	
+            }
         	
         	
             
