@@ -101,7 +101,7 @@
 			line_code,
 			prd_code
 	from pdetail
-	where status = 'b1'
+	where status = 'b1' OR status = 'b2'
 </select>
 
 <!-- 생산 관리 필요 자재 -->
@@ -167,7 +167,7 @@ where p.prd_code = #{prdCode}
 	join ldetail d
 	on l.line_code = d.line_code
 	join flow f     
-	on d.flow_code = f.flow_code
+	on d.flow_code = f.flow_code AND d.no = f.no
 	join process p
 	on f.process_code = p.process_code
 	where l.line_code = #{lineCode}
@@ -201,6 +201,36 @@ where p.prd_code = #{prdCode}
      CALL outMt(#{prdCd, mode=IN, jdbcType=VARCHAR},
      			 #{accounts, mode=IN, jdbcType=INTEGER},
      			   #{vLineCode, mode=IN, jdbcType=VARCHAR},
+     			   #{pdCd, mode=IN, jdbcType=VARCHAR},
      			   #{res, mode=OUT, jdbcType=VARCHAR})
 </select>
+
+<!-- 공정 시작 -->
+<select id="pstart" statementType="CALLABLE">
+     CALL outMt(#{pdCode, mode=IN, jdbcType=VARCHAR},
+     			 #{ipt, mode=IN, jdbcType=INTEGER}
+     			 -- , #{ldmng, mode=IN}
+     			 )
+</select>
+
+
+<!-- 라인 매니저 -->
+<select id="lmanager" parameterType="String" resultType="InfoUserVO">
+	select u.user_id,
+			u.user_name
+	from sjc_user u
+	join ld_manager m
+	on u.user_id = m.user_id
+	join ldetail l
+	on m.ldetail_code = l.ldetail_code
+	where l.ldetail_code = #{ldetailCode}
+	order by l.no
+</select>
+
+
+
+
+
+
+
 </mapper>

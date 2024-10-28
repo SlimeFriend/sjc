@@ -3,6 +3,8 @@ package com.sjc.app.pr.service;
 import java.util.List;
 import java.util.Map;
 
+import com.sjc.app.info.service.InfoUserVO;
+
 public interface PrdtService {
 	// 전체 계획 조회
 	public List<PlanVO> planList();
@@ -40,4 +42,12 @@ public interface PrdtService {
 	// 공정 자재 출고
 //	public String outMt(String prdCd, int accounts, String vLineCode);
 	void outMt(Map<String, Object> params);
+	
+	
+	// 공정 시작
+	void pstart(Map<String, Object> params);
+	
+	// 라인 매니저 화면 출력
+	public List<InfoUserVO> lmanager(String ldetailCode);
+	
 }

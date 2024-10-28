@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
@@ -173,12 +174,28 @@ public class PrController {
 //	     
 //	}
 	
+	// 생산 공정 자재 가져오기
     @PostMapping("outMt")
     public ResponseEntity<String> outMt(@RequestBody Map<String, Object> params) {
         prdtService.outMt(params);
         String res = (String) params.get("res"); // OUT 파라미터 값 가져오기
         return ResponseEntity.ok(res); // 클라이언트에게 응답
     }
+    
+    @PostMapping("pstart")
+    public void pstart(@RequestBody Map<String, Object> params) {
+        prdtService.pstart(params);
+         // OUT 파라미터 값 가져오기
+        
+    }
+    
 
+    // 공정 매니저
+	@GetMapping("lmanager")
+	@ResponseBody
+	public List<InfoUserVO> lmanager(@RequestParam String ldetailCode) {
+		
+		return prdtService.lmanager(ldetailCode);
+	}
 	
 }
