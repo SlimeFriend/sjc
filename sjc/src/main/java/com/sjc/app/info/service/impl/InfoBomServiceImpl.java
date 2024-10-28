@@ -74,8 +74,8 @@ public class InfoBomServiceImpl implements InfoBomService {
 		
 		
 		if (!bomVOs.isEmpty()) { 
-		    infoBomMapper.insertBom(bomVOs.get(0));
 		    infoPrdMapper.insertProduct(bomVOs.get(0));
+		    infoBomMapper.insertBom(bomVOs.get(0));
 		}
 		
         for (BomVO bomVO : bomVOs) {

@@ -85,10 +85,17 @@ document.addEventListener('DOMContentLoaded', function() {
 			    sortable: true
 			  },
         ],
+        /*
         pageOptions: {
             useClient: false,
             perPage: 4
-        }
+        },
+        */
+	    bodyHeight: 200,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},        
     });
     
     const gridInsert = new tui.Grid({
@@ -281,7 +288,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	    })
 	    .then(result => {
 	        //fetchUsers();
-	        grid.reloadData()();
 	        console.log(result);
 	    })
 	    .catch(error => {

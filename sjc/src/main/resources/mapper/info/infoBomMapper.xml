@@ -3,13 +3,16 @@
 <mapper namespace="com.sjc.app.info.mapper.InfoBomMapper">
 
 	<select id="selectBomAllList" resultType="BomVO" parameterType="BomVO">
-		select	BOM_CODE  
-				,REG_DATE
-		        ,DESCRIPTION
-		        ,COMM
-		        ,MANAGER
-		        ,PRD_CODE
-		from    BOM
+		select	b.BOM_CODE BOM_CODE
+				,b.REG_DATE REG_DATE
+		        ,b.DESCRIPTION DESCRIPTION
+		        ,b.COMM COMM
+		        ,b.MANAGER MANAGER
+		        ,b.PRD_CODE PRD_CODE
+                ,p.prd_name prd_name
+		from    BOM b
+        join    prd p
+        on      b.prd_code = p.prd_code
 	    <where>
 	        <if test="bomCode != null and bomCode != ''">
 	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
@@ -19,42 +22,48 @@
 	</select>
 	
 	<select id="selectBomDetailAllList" resultType="BomVO" parameterType="BomVO">
-		select	B_DETAIL_CODE
-				,QUANTITY_REQUIRED
-		        ,COMM
-				,BOM_CODE  
-		        ,MT_CODE
-		        ,NO
-		from    B_DETAIL
+		select	b.B_DETAIL_CODE B_DETAIL_CODE
+				,b.QUANTITY_REQUIRED QUANTITY_REQUIRED
+		        ,b.COMM COMM
+				,b.BOM_CODE BOM_CODE 
+		        ,b.MT_CODE MT_CODE
+		        ,b.NO NO
+                ,m.MT_NAME MT_NAME
+                ,m.MATERIAL_TYPE MATERIAL_TYPE
+                ,m.SPECIFICATION SPECIFICATION
+                ,m.UNIT UNIT
+                ,m.UNIT_PRICE UNIT_PRICE
+		from    B_DETAIL b
+        join    mt m
+        on      b.mt_code = m.mt_code
 	    <where>
 	        <if test="bomCode != null and bomCode != ''">
-	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
+	            AND UPPER(b.bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY B_DETAIL_CODE DESC, MT_CODE ASC
+	    ORDER BY b.B_DETAIL_CODE DESC, m.MT_CODE ASC
 	</select>
 	
-	<!-- 
-	<selectKey keyProperty="bomCode" order="BEFORE" resultType="String">
-		select 	f_code_pk('bom','b')
-		from	dual
-	</selectKey>
-	
 	<insert id="insertBom" parameterType="BomVO">
+
+	
 	    INSERT INTO bom (
 	    	bom_code
 	    	,description
 	    	,reg_date
 	    	,manager
+	    	,prd_code
     	)
 	    VALUES (
 	    	#{bomCode}
 	    	,#{description}
 	    	,#{regDate}
 	    	,#{manager}
+	    	,#{prdCode}
+	    	
 	    )
 	</insert>
-	 -->
+	<!-- 
 	<insert id="insertBom" parameterType="BomVO">
 	    INSERT INTO bom (
 	    	bom_code
@@ -70,6 +79,7 @@
 	    	
 	    )
 	</insert>
+	 -->
 	
 
 	<insert id="insertBomDetail" parameterType="BomVO">
