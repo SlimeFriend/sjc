@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 
 
@@ -19,7 +20,9 @@ public interface QualityMapper {
 	public int insertInspection(InspectionVO inspectionVO);
 	public List<InspectionVO> selectInspection(InspectionVO inspectionVO);
 	
-	
+	// 품질검사값 입력
+	public int insertInsDetail(InsDetailVO insDetailVO);
+	public List<InsDetailVO> selectInsDetail(InsDetailVO insDetailVO);
 	
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);

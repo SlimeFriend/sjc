@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.mapper.QualityMapper;
+import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -44,6 +45,21 @@ public class QualityServiceImpl implements QualityService{
 	public int insertInspection(InspectionVO inspectionVO) {
 		return qualityMapper.insertInspection(inspectionVO);
 	}
+	//검사목록
+	@Override
+	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
+		return qualityMapper.selectInspection(inspectionVO);
+	}
+	// 품질검사 값입력
+	@Transactional
+	@Override
+	public int insertInsDetail(InsDetailVO insDetailVO) {
+		return qualityMapper.insertInsDetail(insDetailVO);
+	}
+	@Override
+	public List<InsDetailVO> insDetailList(InsDetailVO insDetailVO) {
+		return qualityMapper.selectInsDetail(insDetailVO);
+	}
 	
 	// 입고품질검사 상세목록 /
 	@Override
@@ -55,11 +71,6 @@ public class QualityServiceImpl implements QualityService{
 	@Override
 	public List<InspectionVO> testList() {
 		return qualityMapper.selectTest();
-	}
-	//검사목록
-	@Override
-	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
-		return qualityMapper.selectInspection(inspectionVO);
 	}
 	
 	
