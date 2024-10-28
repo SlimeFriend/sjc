@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.mt.mapper.MtOutMapper">
+
+	<!-- 출고 내역 조회 -->
+	<select id="selectOutgoingList" resultType="map">
+SELECT 
+    MO.OUT_CODE as "outCode", 
+    MO.LOT_NO as "lotNo", 
+    MO.MT_CODE as "materialCode", 
+    MT.MT_NAME as "materialName", 
+    MO.MT_OUT_COUNT as "outgoingQuantity", 
+    MO.OUT_DATE as "outDate", 
+    PD.PLAN_DETAIL_CODE as "planDetailCode"
+FROM 
+    MT_OUT MO 
+JOIN 
+    MT MT ON MO.MT_CODE = MT.MT_CODE 
+JOIN 
+    MT_IN MI ON MO.LOT_NO = MI.LOT_NO 
+LEFT JOIN 
+    PLAN_DETAIL PD ON PD.PRD_CODE = MT.PRD_CODE
+ORDER BY 
+    MO.LOT_NO
+
+
+
+
+
+
+
+
+	</select>
+
+	<!-- 새로운 출고 등록 -->
+	<insert id="insertOutgoing">
+		INSERT INTO MT_OUT (OUT_CODE, PLAN_DETAIL_CODE,
+		LOT_NO, MT_CODE,
+		MT_OUT_COUNT, OUT_DATE, USER_ID)
+		VALUES (#{outCode},
+		#{planDetailCode}, #{lotNo}, #{materialCode},
+		#{outgoingQuantity},
+		#{outDate}, #{userId})
+	</insert>
+</mapper>
