@@ -89,19 +89,22 @@
 
 <!-- 생산 관리쪽 지시 -->
 <select id="useD" resultType="PDetailVO">
-	select pdetail_code,
-			prd_name,
-			want,
-			command,
-			output,
-			no,
-			comm,
-			porder_code,
-			status,
-			line_code,
-			prd_code
-	from pdetail
-	where status = 'b1' OR status = 'b2'
+	
+	select p.pdetail_code,
+			p.prd_name,
+			p.want,
+			p.command,
+			p.output,
+			p.no,
+			p.comm,
+			p.porder_code,
+			p.status,
+			p.line_code,
+			p.prd_code
+	from pdetail p 
+	join porder o
+	on p.porder_code = o.porder_code
+	where o.status = 'b1' or o.status = 'b2'
 </select>
 
 <!-- 생산 관리 필요 자재 -->
@@ -206,11 +209,9 @@ where p.prd_code = #{prdCode}
 </select>
 
 <!-- 공정 시작 -->
-<select id="pstart" statementType="CALLABLE">
-     CALL outMt(#{pdCode, mode=IN, jdbcType=VARCHAR},
-     			 #{ipt, mode=IN, jdbcType=INTEGER}
-     			 -- , #{ldmng, mode=IN}
-     			 )
+<select id="pstart">
+     CALL pstart(#{pdCode, mode=IN, jdbcType=VARCHAR},
+     			 #{ipt, mode=IN, jdbcType=INTEGER})
 </select>
 
 
@@ -225,6 +226,13 @@ where p.prd_code = #{prdCode}
 	on m.ldetail_code = l.ldetail_code
 	where l.ldetail_code = #{ldetailCode}
 	order by l.no
+</select>
+
+<!-- 매니저 이름 가져오기 -->
+<select id="findMng" parameterType="String" resultType="InfoUserVO">
+	select user_name
+	from sjc_user
+	where user_id = #{userId}
 </select>
 
 
