@@ -3,6 +3,7 @@ package com.sjc.app.pr.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
@@ -48,4 +49,9 @@ public interface PrdtMapper {
 	// 공정 자재 가져오기
 //	public String outMt(String prdCd, int accounts, String vLineCode, String res);
 	void outMt(Map<String, Object> params);
+	
+	// 공정시작
+	void pstart(Map<String, Object> params);
+	
+	public List<InfoUserVO> lmanager(String ldetailCode);
 }

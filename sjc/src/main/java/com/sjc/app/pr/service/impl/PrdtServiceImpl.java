@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.mapper.PrdtMapper;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
@@ -105,5 +106,17 @@ public class PrdtServiceImpl implements PrdtService {
     public void outMt(Map<String, Object> params) {
         prdtMapper.outMt(params);
     }
+    
+    
+    @Override
+    public void pstart(Map<String, Object> params) {
+        prdtMapper.pstart(params);
+    }
+
+	@Override
+	public List<InfoUserVO> lmanager(String ldetailCode) {
+		// TODO Auto-generated method stub
+		return prdtMapper.lmanager(ldetailCode);
+	}
 
 }
