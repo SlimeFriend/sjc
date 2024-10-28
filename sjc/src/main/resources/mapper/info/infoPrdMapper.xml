@@ -8,6 +8,7 @@
 		        ,prd_name
 		        ,description
 		        ,unit_price
+		        ,bom_code
 		from    prd
 	    <where>
 	        <if test="prdCode != null and prdCode != ''">
@@ -21,6 +22,9 @@
 	        </if>
 	        <if test="description != null and description != ''">
 	            AND UPPER(description) LIKE UPPER('%' || #{description} || '%')
+	        </if>
+	        <if test="bomCode != null and bomCode != ''">
+	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
 	    ORDER BY prd_code
