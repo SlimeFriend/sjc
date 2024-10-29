@@ -297,10 +297,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		//console.log(gridInsert.validate());
 		//console.log(grid.getData());
+		//console.log(gridInsert.getData());
 		
 	    const updatedRows = gridInsert.getModifiedRows().updatedRows;
 	    
 	    const modifiedRows = gridInsert.getModifiedRows().createdRows;
+	    //const modifiedRows = gridInsert.getData();
 	    
 	    modifiedRows.forEach(object => {
 			if	(object == null || object == ""){
