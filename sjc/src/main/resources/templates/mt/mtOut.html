@@ -42,7 +42,7 @@
 					<!-- 출고 내역 반복 출력 예시 -->
 					<tr th:each="outgoing : ${outList}">
 						<td
-							th:text="${outgoing['planDetailCode'] != null ? outgoing['planDetailCode'] : '-'}"></td>
+							th:text="${outgoing['pDetailCode'] != null ? outgoing['pDetailCode'] : '-'}"></td>
 						<td
 							th:text="${outgoing['lotNo'] != null ? outgoing['lotNo'] : '-'}"></td>
 						<td

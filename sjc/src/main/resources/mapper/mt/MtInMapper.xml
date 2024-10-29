@@ -5,21 +5,18 @@
 	<!-- 품질검사완료 된 자재만 입고 목록에 포함 -->
 	<select id="getCompletedMaterials"
 		resultType="com.sjc.app.mt.service.MtInVO">
-		SELECT
-
-		MT_IN.IN_CODE AS inCode,
-		MT_IN.MT_CODE AS mtCode,
-		(SELECT MT_NAME FROM MT WHERE MT.MT_CODE = MT_IN.MT_CODE) AS mtName,
-		MT_IN.CP_CODE AS cpCode,
-		MT_IN.INQUANTITY AS inquantity,
-		MT_IN.INPUT_DATE AS inputDate,
-		MT_IN.ED AS ed,
-		MT_IN.LOT_NO AS lotNo,
-		MT_IN.COMM AS comm,
-		MTL_OD.MTL_OD_CODE
-		FROM MT_IN
-		JOIN MTL_OD ON MT_IN.MTL_OD_CODE = MTL_OD.MTL_OD_CODE
-		WHERE MTL_OD.MTL_OD_STATUS = '입고품질검사완료'
+     select 
+        MT_IN.LOT_NO AS lotNo,
+        MT_IN.MTL_OD_CODE,
+        MT.MT_CODE AS mtCode,
+        MT.MT_NAME AS mtName ,
+        MT_IN.INQUANTITY AS inquantity ,
+        MT_IN.INPUT_DATE AS inputDate ,
+        MT_IN.ED AS ed,
+        MT_IN. COMM AS comm
+        FROM MT_IN
+        JOIN MT ON MT_IN.MT_CODE = MT.MT_CODE
+        ORDER BY MT_IN.LOT_NO
 	</select>
 
 

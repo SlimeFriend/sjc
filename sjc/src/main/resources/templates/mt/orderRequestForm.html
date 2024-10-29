@@ -62,11 +62,12 @@
 
 	<script>
 	function loadItemsForCpCode(cpCode) {
+		document.getElementById("selectedCpCode").value = cpCode;
 	    if (!cpCode) {
 	        document.getElementById("itemList").innerHTML = "<tr><td colspan='4'>업체를 선택하세요.</td></tr>";
 	        return;
 	    }
-
+			
 	    fetch('/getItemsForCpCode?cpCode=' + cpCode)
 	        .then(response => response.json())
 	        .then(data => {

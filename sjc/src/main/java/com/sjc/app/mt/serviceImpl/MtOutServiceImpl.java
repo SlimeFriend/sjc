@@ -20,8 +20,5 @@ public class MtOutServiceImpl implements MtOutService {
         return mtOutMapper.selectOutgoingList();
     }
 
-    @Override
-    public void addOutgoing(Map<String, Object> outgoing) {
-        mtOutMapper.insertOutgoing(outgoing);
-    }
+
 }

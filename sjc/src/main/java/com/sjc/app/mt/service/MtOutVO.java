@@ -13,5 +13,5 @@ private String outCode; //출고 코드
 private String lotNo; //lot번호
 private String mtCode; //자재 코드
 private Integer userId; //사용자번호
-
+private String pDetailCode; // 생산지시상세코드
 }

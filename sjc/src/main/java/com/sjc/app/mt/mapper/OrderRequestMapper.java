@@ -18,8 +18,6 @@ public interface OrderRequestMapper {
 
 	void insertOrderRequest(MtlOdVO order);
 
-	void insertOrderRequestDetail(MtlOdVO detail);
-
 	void updateOrderRequest(MtlOdVO order);
 
 	void deleteOrderRequest(String orderRequestCode);
