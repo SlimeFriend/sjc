@@ -3,6 +3,7 @@ package com.sjc.app.info.mapper;
 import java.util.List;
 
 import com.sjc.app.info.service.BomVO;
+import com.sjc.app.sales.service.ProductVO;
 
 public interface InfoBomMapper {
     //Long insertBom();
@@ -12,4 +13,6 @@ public interface InfoBomMapper {
     public List<BomVO> selectBomAllList();
     public List<BomVO> selectBomDetailAllList(BomVO bomVO);
     
+    int updatePrd(ProductVO productVO);
+    int updateBom(BomVO bomVO);
 }

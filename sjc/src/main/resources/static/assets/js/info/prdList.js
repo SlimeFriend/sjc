@@ -211,20 +211,116 @@ document.addEventListener('DOMContentLoaded', function() {
             */
 	
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
-        /*
+	    rowHeaders: [
+			{
+	        type: 'checkbox',
+	        header: ' ',
+	        checkAll: false,
+	    	},
+		    {
+		        type: 'rowNum',
+			},
+	    ],        /*
         pageOptions: {
             useClient: true,
             perPage: 5
         }        
         */
-	    bodyHeight: 250,
+	    bodyHeight: 200,
 		pageOptions: {
 		    type: 'scroll', 
 		    perPage: 10 
 		}, 
     });
-    
+
+	gridBom.on('check', (ev) => {
+	    const checkedRows = gridBom.getCheckedRows();
+	    if (checkedRows.length > 1) {
+	        checkedRows.forEach(row => {
+	            if (row.rowKey !== ev.rowKey) {
+	                gridBom.uncheck(row.rowKey);
+	            }
+	        });
+	    }
+	});
+	gridBom.on('click', (ev) => {
+	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
+	    if (ev.columnName !== '_checked') {
+	        // 모든 행의 체크 해제
+	        gridBom.uncheckAll();
+	        
+	        // 클릭한 행 체크
+	        gridBom.check(ev.rowKey);
+	        
+	        // 선택된 행의 데이터
+	        const selectedRowData = gridBom.getRow(ev.rowKey);
+	        console.log('gridBom : ', selectedRowData);
+	    }
+	});
+
+    document.getElementById('bomBtn').addEventListener('click', function() {
+		
+		const bomCheckedRows = gridBom.getCheckedRows();
+		const prdCheckedRows = gridPrd.getCheckedRows();
+		
+		//const selectedRowData = bomCheckedRows.length > 0 ? bomCheckedRows : null;
+		const bom = bomCheckedRows.length > 0 ? bomCheckedRows[0] : null;
+		const prd = prdCheckedRows.length > 0 ? prdCheckedRows[0] : null;
+		
+		if (bom) {
+		    console.log('bom : ', bom);
+		} else {
+		    alert('선택된 BOM이 없습니다.');
+		    return false;
+		}
+		
+		if (prd) {
+		    console.log('prd : ', prd);
+		} else {
+		    alert('선택된 제품이 없습니다.');
+		    return false;
+		}
+		
+		if(confirm("BOM 지정 하시겠습니까?")){
+			// prd bom 업데이트
+			// bom prd 업데이트
+			const requestData = {
+			    prd: prd,
+			    bom: bom
+			};			
+			fetchBomPrd(requestData);
+		}
+    });
+    function fetchBomPrd(requestData) {
+	    fetch('prdBom', {
+	        method: 'PUT',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify(requestData),
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+      			throw new Error('response error');
+	        }
+	        return response.json();
+	    })
+	    .then(result => {
+	        //gridPrd.resetData(result.prd);
+	        //gridBom.resetData(result.bom);
+	        fetchPrds();
+	        fetchBoms();
+	        console.log(result.status);
+	        console.log(result.message);
+	    })
+	    .catch(error => {
+	        console.error('Error: ', error);
+	    })
+	    .finally(() => {
+	    	
+	    });
+    }
+	    
     const gridBomDetail = new tui.Grid({
         el: document.getElementById('gridBomDetail'),
         scrollX: false,
@@ -316,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
             perPage: 5
         } 
         */       
-	    bodyHeight: 250,
+	    bodyHeight: 200,
 		pageOptions: {
 		    type: 'scroll', 
 		    perPage: 10 
@@ -449,12 +545,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
-        pageOptions: {
+		    rowHeaders: [
+				{
+		        type: 'checkbox',
+		        header: ' ',
+		        checkAll: false,
+		    	},
+			    {
+			        type: 'rowNum',
+				},
+		    ],
+            pageOptions: {
             useClient: true,
-            perPage: 14
+            perPage: 13
         }
     });
+
+	gridPrd.on('check', (ev) => {
+	    const checkedRows = gridPrd.getCheckedRows();
+	    if (checkedRows.length > 1) {
+	        checkedRows.forEach(row => {
+	            if (row.rowKey !== ev.rowKey) {
+	                gridPrd.uncheck(row.rowKey);
+	            }
+	        });
+	    }
+	});
+	gridPrd.on('click', (ev) => {
+	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
+	    if (ev.columnName !== '_checked') {
+	        // 모든 행의 체크 해제
+	        gridPrd.uncheckAll();
+	        
+	        // 클릭한 행 체크
+	        gridPrd.check(ev.rowKey);
+	        
+	        // 선택된 행의 데이터
+	        const selectedRowData = gridPrd.getRow(ev.rowKey);
+	        console.log('gridPrd : ', selectedRowData);
+	    }
+	});
 
 
     function fetchMtList(search = {}) {
@@ -651,13 +781,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = `/prds?${params.toString()}`;
 
         fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                gridPrd.resetData(result);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        .then(response => response.json())
+        .then(result => {
+            gridPrd.resetData(result);
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
     fetchPrds();
 
@@ -695,12 +825,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	        fetch(url)
 	        .then(response => response.json())
 	        .then(result => {
-	            
 	            //gridBomDetailModal.resetData(result);
 	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
 	            //$('#bomDetailModal').modal('show');
 	            //gridBomDetailModal.refreshLayout();
-	                        
 	            gridBomDetail.resetData(result);
 	            //gridBomDetail.refreshLayout();            
 	        })
@@ -709,8 +837,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	        });
 		}
     });
-    
-    //수정필요.
     
     document.getElementById('openPrdBtn').addEventListener('click', function() {
 		fetchMtModal();
@@ -721,17 +847,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = `/mts?${params.toString()}`;
 
         fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                gridMtModal.resetData(result);
-            	$('#mtModal').modal('show');
-            	gridMtModal.refreshLayout();                  
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        .then(response => response.json())
+        .then(result => {
+            gridMtModal.resetData(result);
+        	$('#mtModal').modal('show');
+        	gridMtModal.refreshLayout();                  
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
-        
-
 
 });		 

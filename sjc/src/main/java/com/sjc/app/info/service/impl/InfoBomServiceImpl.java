@@ -1,8 +1,11 @@
 package com.sjc.app.info.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +13,8 @@ import com.sjc.app.info.mapper.InfoBomMapper;
 import com.sjc.app.info.mapper.InfoPrdMapper;
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
+import com.sjc.app.info.service.PrdBomDTO;
+import com.sjc.app.sales.service.ProductVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -95,5 +100,34 @@ public class InfoBomServiceImpl implements InfoBomService {
 		return infoBomMapper.selectBomDetailAllList(bomVO);
 	}
 
-	
+	@Override
+	public int modifyPrd(ProductVO productVO) {
+		return infoBomMapper.updatePrd(productVO);
+	}
+	@Override
+	public int modifyBom(BomVO bomVO) {
+		return infoBomMapper.updateBom(bomVO);
+	}
+	@Override
+	@Transactional
+	public ResponseEntity<Map<String, Object>> modifyPrdBom(PrdBomDTO prdBomDTO) {
+		
+		ProductVO productVO = new ProductVO();
+		productVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
+		productVO.setBomCode(prdBomDTO.getBom().getBomCode());
+		
+		infoBomMapper.updatePrd(productVO);
+		
+		BomVO bomVO = new BomVO();
+		bomVO.setBomCode(prdBomDTO.getBom().getBomCode());
+		bomVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
+		
+		infoBomMapper.updateBom(bomVO);
+		
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("status", "success");
+	    response.put("message", "modifyPrdBom 완료.");
+	    
+	    return ResponseEntity.ok(response);
+	}
 }

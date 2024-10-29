@@ -1,7 +1,9 @@
 package com.sjc.app.info.web;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
+import com.sjc.app.info.service.PrdBomDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,10 +35,14 @@ public class InfoBomRestController {
 	public List<BomVO> bomList(){
 		return bomService.bomList();
 	}
-    
 	
 	@GetMapping("bomDetails")
 	public List<BomVO> bomDetails(BomVO bomVO){
 		return bomService.bomDetailList(bomVO);
-	}    
+	}
+	
+	@PutMapping("prdBom")
+	public ResponseEntity<Map<String, Object>> updatePrdBom(@RequestBody PrdBomDTO prdBomDTO) {
+	    return bomService.modifyPrdBom(prdBomDTO);
+	}	
 }
