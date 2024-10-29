@@ -35,7 +35,7 @@ public class EqServiceImpl implements EqService {
 	}
 
 	
-	  // 수정
+	  // 설비 목록 수정
 	  
 	  @Override 
 	  public Map<String, Object> eqUpdate(EqVO eqVO) { 
@@ -54,6 +54,23 @@ public class EqServiceImpl implements EqService {
 	  }
 
 
+	  // 설비 상세 수정
+	  
+	  @Override
+	  public Map<String, Object> eqUpdate2(EqVO eqVO) {
+		  
+		  Map<String, Object> map = new HashMap<>();
+	  
+	  boolean isSuccessed = false;
+	  
+	  int result = eqMapper.updateEqInfo2(eqVO);
+	  
+	  if(result == 1) { isSuccessed = true; }
+	  
+	  
+	  map.put("result", isSuccessed);
+	  return map; 
+	  }
 	  
 
 	// 단건 조회
@@ -86,6 +103,7 @@ public class EqServiceImpl implements EqService {
 	public List<EqChckVO> jgList() {
 		return eqMapper.selectjumgumAll();
 	}
+
 
 
 } // end of class

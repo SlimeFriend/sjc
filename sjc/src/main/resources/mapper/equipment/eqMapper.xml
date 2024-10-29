@@ -83,20 +83,18 @@ from    eq
 </update>
 
 <!-- 설비상세 수정 -->
-<!-- <update id="updateEqInfo" parameterType="EqVO">
+<update id="updateEqInfo2" parameterType="EqVO">
 	UPDATE eq
 	SET	 
-		   eq_type = #{eqType}
-		 , eq_name = #{eqName}
-		 , eq_mdnm = #{eqMdnm}
+		   eq_mdnm = #{eqMdnm}
 		 , eq_mdno = #{eqMdno}
 		 , eq_period = #{eqPeriod}
-		 , manager = #{manager}
-		 , eq_loaction = #{eqLocation}
+		 , eq_location = #{eqLocation}
 		 , line_code = #{lineCode}
+		 , manager = #{manager}
 		 , use = #{use}
 	WHERE eq_code = #{eqCode}
-</update> -->
+</update>
 
 <!-- 삭제 -->
 <delete id="deleteEqInfo" parameterType="String">
