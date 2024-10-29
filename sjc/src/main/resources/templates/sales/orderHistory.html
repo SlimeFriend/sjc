@@ -14,39 +14,35 @@
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="text" placeholder="업체명">
+							<input class="form-control" id="companyName" type="text" placeholder="업체명" oninput="performSearch()">
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
+							<input class="form-control" id="orderStartDate" type="date" oninput="performSearch()">
 						</div>
 						<div
 							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
 							<span style="font-size: 1rem;">~</span>
 						</div>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
+							<input class="form-control" id="orderEndDate" type="date" oninput="performSearch()">
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
+							<input class="form-control" id="deliveryStartDate" type="date" oninput="performSearch()">
 						</div>
 						<div
 							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
 							<span style="font-size: 1rem;">~</span>
 						</div>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<button class="btn btn-dark">조회</button>
-							<button class="btn btn-dark">초기화</button>
+							<input class="form-control" id="deliveryEndDate" type="date" oninput="performSearch()">
 						</div>
 					</div>
 				</form>
@@ -57,11 +53,13 @@
 	</div>
 
 	<script th:inline="javascript">
+		let grid;
+		
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${ord}]]*/[];
 			const gridModalData = /*[[${ordDetail}]]*/[];
 
-			const grid = new tui.Grid({
+			grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
 				data : gridData,
 				scrollX : false,
@@ -150,6 +148,36 @@
 					perPage : 5
 				}
 			});
+			
 		});
+		
+		function performSearch() {
+		    const companyName = document.getElementById('companyName').value;
+		    const orderStartDate = document.getElementById('orderStartDate').value;
+		    const orderEndDate = document.getElementById('orderEndDate').value;
+		    const deliveryStartDate = document.getElementById('deliveryStartDate').value;
+		    const deliveryEndDate = document.getElementById('deliveryEndDate').value;
+
+		    const searchCriteria = {
+		        companyName: companyName,
+		        orderStartDate: orderStartDate,
+		        orderEndDate: orderEndDate,
+		        deliveryStartDate: deliveryStartDate,
+		        deliveryEndDate: deliveryEndDate
+		    };
+
+		    $.ajax({
+		        url: '/searchOrder',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify(searchCriteria),
+		        success: function(response) {
+		            grid.resetData(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('Error fetching search results:', error);
+		        }
+		    });
+		}
 	</script>
 </div>

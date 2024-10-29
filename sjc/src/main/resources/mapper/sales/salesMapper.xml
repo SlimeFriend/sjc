@@ -53,6 +53,19 @@
 	    #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
 	
+	<!-- 주문내역 검색 기능 -->
+	<select id="searchOrder" parameterType="map" resultType="orderVO">
+    	SELECT o.ord_code,
+		       c.cp_name,
+		       o.ord_date,
+		       o.dlv_req_date,
+		       o.ord_status,
+		       o.comm	       
+		FROM   ord o LEFT JOIN cp c
+		ON     o.cp_code = c.cp_code
+		WHERE  c.cp_name LIKE CONCAT(#{companyName}, '%')
+	</select>
+	
 	<select id="getOrdCode" resultType="String">
 		SELECT 
 		    CASE

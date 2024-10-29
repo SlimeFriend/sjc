@@ -56,6 +56,19 @@ public class SalesController {
 		return "sales/orderHistory";
 	}
 	
+	// 주문내역 검색 프로세스
+	@PostMapping("/searchOrder")
+	@ResponseBody
+	public List<OrderVO> searchOrder(@RequestBody Map<String, Object> request) {
+	    String companyName = (String) request.get("companyName");
+	    String orderStartDate = (String) request.get("orderStartDate");
+	    String orderEndDate = (String) request.get("orderEndDate");
+	    String deliveryStartDate = (String) request.get("deliveryStartDate");
+	    String deliveryEndDate = (String) request.get("deliveryEndDate");
+	    
+	    return salesService.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate);
+	}
+	
 	// 주문내역 상세페이지
 	@PostMapping("/getOrderDetail")
 	@ResponseBody

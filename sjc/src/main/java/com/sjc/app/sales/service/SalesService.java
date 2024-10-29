@@ -7,9 +7,9 @@ public interface SalesService {
 	
 	// 주문접수 프로세스
     public int insertOrder(SalesDTO salesDTO);
-	
 	public List<OrderVO> order();
 	public List<Map<String, Object>> orderDetail(String ordCode);
+	
     
 	// 출고접수 프로세스
 	public List<OrderVO> getOrdersByStatus(String status);
@@ -22,7 +22,9 @@ public interface SalesService {
 	// 출고내역
 	public List<outHistoryVO> outHistory();
 	
-	
+	// 주문내역 검색 프로세스
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate);
+
 	// 제품
 	public List<ProductVO> productList();
 	public List<ProductVO> productManagement();
@@ -32,6 +34,5 @@ public interface SalesService {
 	
 	// 업체
 	public List<OrderVO> companyList();
-
 
 }
