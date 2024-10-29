@@ -205,7 +205,7 @@
 
                     `;}
                 
-                else if(item.status == 'b3'){
+                else {
                     row.innerHTML = `
                         <td>${item.no}</td>
                         <td>${item.processName}</td>
@@ -216,7 +216,7 @@
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
-						
+						<td>${item.manager}</td>
                     `;}
             
             cbody.appendChild(row);
@@ -328,7 +328,7 @@
  	function pstart(){
  		let ldmng = []; 
  		Array.from(cby.children).forEach((pl) => {
- 			let sv = pl.children[9].children[0].value;
+ 			let sv = parseInt(pl.children[9].children[0].value);
  	 		
  	 		ldmng.push(sv);
  		});
@@ -344,7 +344,7 @@
 			  body: JSON.stringify({
 			    pdCode : pd,
 			    ipt : parseInt(cnt)
-			    //, ldmng : ldmng 
+//			    , ldmng : ldmng 
 			  }),
 			})
 			.then(response => response.json())
@@ -361,6 +361,7 @@
            			if (a.length>0){
            			
            				displayR(a);
+           				
            			
            			} else {
            				cbody.innerHTML = '';

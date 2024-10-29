@@ -209,9 +209,10 @@ where p.prd_code = #{prdCode}
 </select>
 
 <!-- 공정 시작 -->
-<select id="pstart">
+<select id="pstart" statementType="CALLABLE">
      CALL pstart(#{pdCode, mode=IN, jdbcType=VARCHAR},
      			 #{ipt, mode=IN, jdbcType=INTEGER})
+     			
 </select>
 
 
@@ -234,7 +235,6 @@ where p.prd_code = #{prdCode}
 	from sjc_user
 	where user_id = #{userId}
 </select>
-
 
 
 
