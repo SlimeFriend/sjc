@@ -39,7 +39,7 @@
                     </tr>
                     <tr>
                         <th>점검주기</th>
-                        <td>[[${equip.eqPeriod}]]</td>
+                        <td>[[${equip.eqPeriod}]] 개월</td>
                     </tr>
                     <tr>
                         <th>담당자</th>
@@ -59,7 +59,7 @@
                     </tr>
                     <tr>
                         <th>가동여부</th>
-                        <td>[[${equip.use}]]</td>
+                        <td>[[${equip.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
                     </tr>
                 </table>
 
@@ -94,20 +94,12 @@
                             <input type="text" id="eqCode" name="eqCode" readonly class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="eqType" class="form-label">설비구분</label>
-                            <input type="text" id="eqType" name="eqType" readonly class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="eqName" class="form-label">모델명</label>
-                            <input type="text" id="eqName" name="eqName" class="form-control">
+                            <label for="eqMdnm" class="form-label">모델명</label>
+                            <input type="text" id="eqMdnm" name="eqMdnm" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="eqMdno" class="form-label">모델번호</label>
                             <input type="text" id="eqMdno" name="eqMdno" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="eqPeriod" class="form-label">점검주기</label>
-                            <input type="number" id="eqPeriod" name="eqPeriod" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="manager" class="form-label">담당자</label>
@@ -115,9 +107,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="eqLocation" class="form-label">설치 위치</label>
-                            <input type="text" id="eqLocation" name="eqLocation" class="form-control">
+                            <select id="eqLocation" name="eqLocation" class="form-control">
+								<option value="공장_1">공장_1</option>
+								<option value="공장_2">공장_2</option>
+								<option value="공장_3">공장_3</option>
+								<option value="공장_4">공장_4</option>
+							</select>
                         </div>
-						<div>
+						<div class="mb-3">
 							<label for="lineCode">라인코드</label> 
 							<select id="lineCode" name="lineCode" class="form-control">
 								<option value="Line_1">Line_1</option>
@@ -128,8 +125,8 @@
 						</div>
                         <div class="mb-3">
                             <label for="use" class="form-label">가동여부</label>
-                            <input type="radio" id="useY" name="use" value="Y"> 가동
-                            <input type="radio" id="useN" name="use" value="N"> 비가동
+                            <input type="radio" id="useY" name="use" value="Y"> 사용 가능
+                            <input type="radio" id="useN" name="use" value="N"> 사용 불가
                         </div>
                     </form>
                 </div>
@@ -170,21 +167,17 @@
         // 수정 버튼 클릭 시 모달 열기
         $('#modifyBtn').on('click', function () {
             const eqCode = '[[${equip.eqCode}]]';
-            const eqType = '[[${equip.eqType}]]';
             const eqMdnm = '[[${equip.eqMdnm}]]';
             const eqMdno = '[[${equip.eqMdno}]]';
             const use = '[[${equip.use}]]';
             const eqLocation = '[[${equip.eqLocation}]]';
-            const eqPeriod = '[[${equip.eqPeriod}]]';
             const manager = '[[${equip.manager}]]';
             const lineCode = '[[${equip.lineCode}]]';
 
             // 모달 폼에 데이터 채우기
             $('#eqCode').val(eqCode);
-            $('#eqType').val(eqType);
-            $('#eqName').val(eqMdnm);
+            $('#eqMdnm').val(eqMdnm);
             $('#eqMdno').val(eqMdno);
-            $('#eqPeriod').val(eqPeriod);
             $('#eqLocation').val(eqLocation);
             $('input[name="use"][value="' + use + '"]').prop('checked', true);
             $('#manager').val(manager);
@@ -198,9 +191,8 @@
         $('#saveChanges').on('click', function () {
             const eqData = {
                 eqCode: $('#eqCode').val(),
-                eqName: $('#eqName').val(),
+                eqMdnm: $('#eqMdnm').val(),
                 eqMdno: $('#eqMdno').val(),
-                eqPeriod: $('#eqPeriod').val(),
                 eqLocation: $('#eqLocation').val(),
                 use: $('input[name="use"]:checked').val(),
                 manager: $('#manager').val(),

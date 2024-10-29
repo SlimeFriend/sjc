@@ -53,7 +53,7 @@ tbody>tr {
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.eqMin}]]</td>
 								<td>[[${wait.eqMax}]]</td>
-								<td>[[${wait.use}]]</td>
+								<td>[[${wait.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
 							</tr>
 						</th:block>
 					</tbody>
@@ -108,9 +108,10 @@ tbody>tr {
 										type="text" id="eqMax" name="eqMax" value="eqMax">
 								</div>
 								<div class="mb-3">
-									<label for="use" class="form-label">사용여부</label> <input
-										type="radio" id="use" name="use" value="Y">가동 <input
-										type="radio" id="use" name="use" value="N">비가동
+									<label for="use" class="form-label">사용여부</label> 
+									<input type="radio" id="use" name="use" value="Y">사용가능
+									&nbsp
+									<input type="radio" id="use" name="use" value="N">사용불가
 								</div>
 							</form>
 						</div>
