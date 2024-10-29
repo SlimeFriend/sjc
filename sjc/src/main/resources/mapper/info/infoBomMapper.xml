@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.info.mapper.InfoBomMapper">
 
+	<update id="updatePrd" parameterType="ProductVO">
+		update 	prd
+		set		bom_code = #{bomCode}
+		where	prd_code = #{prdCode}
+	</update>
+	
+	<update id="updateBom" parameterType="BomVO">
+		update 	bom
+		set		prd_code = #{prdCode}
+		where	bom_code = #{bomCode}
+	
+	</update>
+	
+
 	<select id="selectBomAllList" resultType="BomVO" parameterType="BomVO">
 		select	b.BOM_CODE BOM_CODE
 				,b.REG_DATE REG_DATE
