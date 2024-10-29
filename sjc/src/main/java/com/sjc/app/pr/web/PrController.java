@@ -184,6 +184,9 @@ public class PrController {
     
     @PostMapping("pstart")
     public void pstart(@RequestBody Map<String, Object> params) {
+    	
+    	
+    	System.out.println(params.get("ldmng"));
         prdtService.pstart(params);
          // OUT 파라미터 값 가져오기
         
