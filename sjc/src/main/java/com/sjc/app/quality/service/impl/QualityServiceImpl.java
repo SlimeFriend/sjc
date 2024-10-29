@@ -76,6 +76,7 @@ public class QualityServiceImpl implements QualityService{
 	
 	
 		}
+	// 품질검사등록모달-inspection 데이터 갯수 카운트
 	@Override
 	public int whetherInspection(InspectionVO inspectionVO) {
 		return qualityMapper.whetherInspection(inspectionVO);
@@ -91,6 +92,11 @@ public class QualityServiceImpl implements QualityService{
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
 		return qualityMapper.selectInspection(inspectionVO);
 	}
+	// 품질검사상세-insDetail 데이터 갯수 카운트
+	@Override
+	public List<InspectionVO> testCountSelect(InspectionVO inspectionVO) {
+		return qualityMapper.selectTestCount(inspectionVO);
+	}
 	// 품질검사상세- insDetail 생성
 	@Transactional
 	@Override
@@ -99,7 +105,7 @@ public class QualityServiceImpl implements QualityService{
 	}
 	// 품질검사상세- insDetail 데이터 출력
 	@Override
-	public List<InsDetailVO> insDetailList(InspectionVO inspectionVO) {
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
 		return qualityMapper.selectInsDetail(inspectionVO);
 	}
 	

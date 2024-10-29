@@ -13,14 +13,23 @@ public interface QualityService {
 	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode);
 	// 품질검사상세페이지.
 //	public List<Map<String, Object>> inspectionDetail(String mtlOdDetailCode);
+	
+	
+	// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
+	public Map<String, Object> mtlOdStatusUpdate(InspectionVO inspectionVO);
+	public Map<String, Object> mtlOdDetailStatusUpdate(InspectionVO inspectionVO);
+	// 품질검사등록모달-inspection 데이터 갯수 카운트
+	public int whetherInspection(InspectionVO inspectionVO);
 	// 품질검사등록모달-inspection 생성
 	public int insertInspection(InspectionVO inspectionVO);
 	// 품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO);
+	// 품질검사상세-insDetail 데이터 갯수 카운트
+	public List<InspectionVO> testCountSelect(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 생성
 	public int insertInsDetail(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 데이터 출력
-	public List <InsDetailVO> insDetailList(InspectionVO inspectionVO);
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
 	
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode);
@@ -65,10 +74,6 @@ public interface QualityService {
 	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs);
 	
-	// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-	public Map<String, Object> mtlOdStatusUpdate(InspectionVO inspectionVO);
-	public Map<String, Object> mtlOdDetailStatusUpdate(InspectionVO inspectionVO);
-	public int whetherInspection(InspectionVO inspectionVO);
 
 	
 	

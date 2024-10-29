@@ -1,19 +1,20 @@
 package com.sjc.app.quality.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.mt.service.MtlOdVO;
-import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -74,53 +75,71 @@ public class QualityController {
     // 품질검사
     @PostMapping("/incomingInspection")
     @ResponseBody
-    public List<InspectionVO> insertInspection(@RequestBody InspectionVO inspectionVO) {
-    	 List<InspectionVO> list;
-
-        	int  insCount = qualityService.whetherInspection(inspectionVO);
-    	if (insCount > 0) {
-    		list = qualityService.inspectionList(inspectionVO);
+    @Transactional
+    public Map<String, Object> insertInspection(@RequestBody InspectionVO inspectionVO) {
+    	 List<InspectionVO> insList;
+    	 Map<String, Object> map = new HashMap<String, Object>();
+    	 
+        int  insCount = qualityService.whetherInspection(inspectionVO);
+    	
+        if (insCount > 0) {
+    		insList = qualityService.inspectionList(inspectionVO);
     		
     	} else {
     		// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-    		qualityService.mtlOdStatusUpdate(inspectionVO);
-    		qualityService.mtlOdDetailStatusUpdate(inspectionVO);
+    		//qualityService.mtlOdStatusUpdate(inspectionVO);
+    		//qualityService.mtlOdDetailStatusUpdate(inspectionVO);
     		//inspection 데이터 생성
 	    	qualityService.insertInspection(inspectionVO);
 	    	//inspection 데이터 출력
-	    	list = qualityService.inspectionList(inspectionVO);
-	    	
+	    	insList = qualityService.inspectionList(inspectionVO);
+	    	 
 	    		
 	    	}
-    	
         
+        List<InspectionVO> testList = new ArrayList<>();
+        testList = qualityService.testCountSelect(inspectionVO);
     	
-//    	for (InspectionVO insVO : InspectionVOs) {
+	    		// 품질검사상세- insDetail 생성
+	    		//qualityService.insertInsDetail(inspectionVO);
+	    		// 품질검사상세- insDetail 데이터 출력
+	    		//insDetailList = qualityService.insDetailList(inspectionVO);
+	    		
+//    	for (InspectionVO insVO : testList) {
 //	    		// 품질검사상세- insDetail 생성
 //	    		qualityService.insertInsDetail(insVO);
-//	    		// 품질검사상세- insDetail 데이터 출력
-//	    		List<InsDetailVO> insDetailList = qualityService.insDetailList(insVO);
 //
 //    	}
     	
-    	return list ;
+    	map.put("insList", insList);
+    	//map.put("insDetailList",insDetailList );
+    	map.put("testList",testList );
+    	
+    	
+    	return map ;
 
     }
     
-//    // 품질검사상세
-//    @PostMapping("/incomingInspectionDetail")
-//    @ResponseBody
-//    public List<InsDetailVO> insertInsDetail(@RequestBody InsDetailVO insDetailVO) {
-//    	// 품질검사상세- insDetail 생성
-//		qualityService.insertInsDetail(insDetailVO);
-//		// 품질검사상세- insDetail 데이터 출력
-//		List<InsDetailVO> insDetailList = qualityService.insDetailList(insDetailVO);
-//
-//    	
-//    	return insDetailList;
-//    	
-//    }
-//    
+    // 품질검사상세
+    @PostMapping("/incomingInspectionDetail")
+    @ResponseBody
+    @Transactional
+    public List<InspectionVO> insertInsDetail(@RequestBody List<InspectionVO> list) {
+    	
+    	for(InspectionVO insVO : list ) {
+    		
+    		// 품질검사상세- insDetail 생성
+    		qualityService.insertInsDetail(insVO);
+    		// 품질검사상세- insDetail 데이터 출력
+    		//List<InspectionVO> insDetailList = qualityService.insDetailList(insVO);
+    		
+    	}
+
+    	
+    	return list;
+    	
+    }
+    
     
     
 //    // 입고품질검사 상세목록 /
