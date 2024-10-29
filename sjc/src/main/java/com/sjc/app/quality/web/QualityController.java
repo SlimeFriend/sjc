@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
@@ -70,26 +71,56 @@ public class QualityController {
 //    	return "quality/incomingQualityWaitHistory";
 //    }
 //    
-    // 품질검사상세페이지.
+    // 품질검사
     @PostMapping("/incomingInspection")
     @ResponseBody
     public List<InspectionVO> insertInspection(@RequestBody InspectionVO inspectionVO) {
-        qualityService.insertInspection(inspectionVO);
-    	List<InspectionVO> inspectionList = qualityService.inspectionList(inspectionVO);
+    	 List<InspectionVO> list;
 
-        return inspectionList;
-    }
-    
-    // 품질검사 값입력
-    @PostMapping("/incomingInspectionDetail")
-    @ResponseBody
-    public List<InsDetailVO> insertInsDetail(@RequestBody InsDetailVO insDetailVO) {
-    	qualityService.insertInsDetail(insDetailVO);
-    	List<InsDetailVO> insDetailList = qualityService.insDetailList(insDetailVO);
-		return insDetailList;
+        	int  insCount = qualityService.whetherInspection(inspectionVO);
+    	if (insCount > 0) {
+    		list = qualityService.inspectionList(inspectionVO);
+    		
+    	} else {
+    		// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
+    		qualityService.mtlOdStatusUpdate(inspectionVO);
+    		qualityService.mtlOdDetailStatusUpdate(inspectionVO);
+    		//inspection 데이터 생성
+	    	qualityService.insertInspection(inspectionVO);
+	    	//inspection 데이터 출력
+	    	list = qualityService.inspectionList(inspectionVO);
+	    	
+	    		
+	    	}
     	
+        
+    	
+//    	for (InspectionVO insVO : InspectionVOs) {
+//	    		// 품질검사상세- insDetail 생성
+//	    		qualityService.insertInsDetail(insVO);
+//	    		// 품질검사상세- insDetail 데이터 출력
+//	    		List<InsDetailVO> insDetailList = qualityService.insDetailList(insVO);
+//
+//    	}
+    	
+    	return list ;
+
     }
     
+//    // 품질검사상세
+//    @PostMapping("/incomingInspectionDetail")
+//    @ResponseBody
+//    public List<InsDetailVO> insertInsDetail(@RequestBody InsDetailVO insDetailVO) {
+//    	// 품질검사상세- insDetail 생성
+//		qualityService.insertInsDetail(insDetailVO);
+//		// 품질검사상세- insDetail 데이터 출력
+//		List<InsDetailVO> insDetailList = qualityService.insDetailList(insDetailVO);
+//
+//    	
+//    	return insDetailList;
+//    	
+//    }
+//    
     
     
 //    // 입고품질검사 상세목록 /
