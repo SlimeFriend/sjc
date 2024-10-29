@@ -32,10 +32,7 @@
 	
 	
 	<insert id="insertProduct" parameterType="ProductVO">
-		<selectKey keyProperty="bomCode" order="BEFORE" resultType="String">
-			select 	f_code_pk('bom','b') bom_code
-			from	dual
-		</selectKey>	
+
 	    INSERT INTO prd (
 	    	 prd_code
 	    	,comm

@@ -52,57 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
-            /*
-            {
-                header: '안전재고',
-                name: 'safetyStock',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            */
-            /*
-            {
-                header: '비고',
-                name: 'comm',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            */
-		   
-		   /*
-            {
-                header: '재고코드',
-                name: 'stcCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            {
-                header: '재고변동일',
-                name: 'updateDate',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            {
-                header: '현재재고',
-                name: 'currentStc',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            */
-            /*
-            {
-                header: '리드타임',
-                name: 'leadtime',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            */
             {
                 header: '필요수량',
                 name: 'quantityRequired',
@@ -117,15 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				    max: 1000
 				}
             },
-            /*
-            {
-                header: '제품명',
-                name: 'prdName',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            */
         ],
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
@@ -133,12 +73,67 @@ document.addEventListener('DOMContentLoaded', function() {
             perPage: 5
         }
     });
+    
+    const gridMtModal = new tui.Grid({
+        el: document.getElementById('gridMtModal'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '자재코드',
+                name: 'mtCode',
+                align: 'center',
+            },
+            {
+                header: '자재이름',
+                name: 'mtName',
+                align: 'center',
+            },
+            {
+                header: '자재구분',
+                name: 'materialType',
+                align: 'center',
+            },
+            {
+                header: '규격',
+                name: 'specification',
+                align: 'center',
+            },
+            {
+                header: '단위',
+                name: 'unit',
+                align: 'center',
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+            },
+            {
+                header: '필요수량',
+                name: 'quantityRequired',
+                align: 'center',
+                editor: 'text',
+				validation: {
+				    required: true,
+				    regExp: /^\d{1,3}$/,
+				    min: 1,
+				    max: 1000
+				}
+            },
+        ],
+        rowHeaders: ['checkbox', 'rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 10
+        }
+    });
 
 
     const gridBom = new tui.Grid({
         el: document.getElementById('gridBom'),
         scrollX: false,
-        scrollY: false,
+        scrollY: true,
         columns: [
             {
                 header: 'BOM코드',
@@ -151,19 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: '제품코드',
                 name: 'prdCode',
                 align: 'center',
-                sortingType: 'asc',
+                sortingType: 'desc',
                 sortable: true                
             },
             {
                 header: '제품명',
                 name: 'prdName',
-                align: 'center',
-                sortingType: 'asc',
-                sortable: true                
-            },
-            {
-                header: '설명',
-                name: 'description',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
@@ -182,15 +170,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-            /*            
+            /*
             {
-                header: 'BOM상세코드',
-                name: 'bDetailCode',
+                header: '설명',
+                name: 'description',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
-            },
-
+            },            
+			*/
             {
                 header: '메모',
                 name: 'comm',
@@ -198,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
+            /*            
             {
                 header: '소요수량',
                 name: 'quantityRequired',
@@ -220,19 +209,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
             */
-
+	
         ],
         rowHeaders: ['checkbox', 'rowNum'],
+        /*
         pageOptions: {
             useClient: true,
             perPage: 5
         }        
+        */
+	    bodyHeight: 250,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		}, 
     });
     
     const gridBomDetail = new tui.Grid({
         el: document.getElementById('gridBomDetail'),
         scrollX: false,
-        scrollY: false,
+        scrollY: true,
         columns: [
             {
                 header: 'BOM상세코드',
@@ -313,11 +309,18 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
         ],
+        /*
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 5
-        }        
+        } 
+        */       
+	    bodyHeight: 250,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},        
     });
     
     const gridBomDetailModal = new tui.Grid({
@@ -348,6 +351,41 @@ document.addEventListener('DOMContentLoaded', function() {
              
             },
             {
+                header: '자재이름',
+                name: 'mtName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '자재구분',
+                name: 'materialType',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '규격',
+                name: 'specification',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단위',
+                name: 'unit',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },            
+            {
                 header: '필요수량',
                 name: 'quantityRequired',
                 align: 'center',
@@ -362,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }        
     });
 
-	/*
+
     const gridPrd = new tui.Grid({
         el: document.getElementById('gridPrd'),
         scrollX: false,
@@ -398,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 header: '설명',
-                name: 'descripition',
+                name: 'description',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
@@ -411,13 +449,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
         ],
-        rowHeaders: ['rowNum'],
+        rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 14
         }
     });
-	*/
+
 
     function fetchMtList(search = {}) {
         const params = new URLSearchParams(search);
@@ -434,13 +472,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchMtList();
 
-    document.getElementById('registerBtn').addEventListener('click', function() {
-        const selectedRows = grid.getCheckedRows();
+    document.getElementById('mtModalRegisterBtn').addEventListener('click', function() {
+        const selectedRows = gridMtModal.getCheckedRows();
         
 		const rowKeys = selectedRows.map(row => row.rowKey);
 		
 		if (selectedRows.length > 0) {
-		    const validation = grid.validate();
+		    const validation = gridMtModal.validate();
 		    
 		    const invalidRows = validation.filter(result => 
 		        rowKeys.includes(result.rowKey)
@@ -459,18 +497,76 @@ document.addEventListener('DOMContentLoaded', function() {
 			
         	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
         		//registerBoms(selectedRows.map(row => row.mtCode));
-        		registerBoms(selectedRows);
+        		//registerBoms(selectedRows);
+        		registerPrdBom(selectedRows);
         	}else{
         		return false;
         	}
         	
         } else {
             alert('자재를 선택하세요.');
+            return false;
         }
+        
+        $('#mtModal').modal('hide');
+
+        
+        
     });
 
+    function registerPrdBom(selectedRows) {
+		
+		document.querySelector('textarea[name="description"]').value
+		
+		const editedRows = selectedRows.map(row => ({
+		    ...row,
+		    description: document.querySelector('textarea[name="description"]').value,
+		    regDate: document.querySelector('input[type="date"][name="regDate"]').value,
+		    manager: document.querySelector('input[type="text"][name="manager"]').value,
+		    
+		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
+		    prdName: document.querySelector('input[type="text"][name="prdName"]').value,
+		    unitPrice: document.querySelector('input[type="text"][name="unitPrice"]').value,
+		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
+		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
+		}));
 
+		
+        fetch('/registerPrdBoms', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(editedRows),
+        })
+	    .then(response => {
+	        if (response.ok) {
+				
+				document.querySelector('textarea[name="description"]').value = '';
+			    fetchPrds();
+			    fetchBoms();
+			    fetchBomDetails();
+			    
+			    //grid.uncheckAll();
 
+		    	gridPrd.addRowClassName(0, 'bg-success');
+		    	gridBom.addRowClassName(0, 'bg-success');
+			    selectedRows.forEach((row , index) => {
+					gridBomDetail.addRowClassName(index, 'bg-success');
+				});
+	        }
+	        
+	        return response.json();
+	    })
+        .then(result => {
+
+            console.log('result:', result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
     function registerBoms(selectedRows) {
 		
 		document.querySelector('textarea[name="description"]').value
@@ -525,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 gridBom.resetData(result);
-                //gridBom.refreshLayout();
+                gridBom.refreshLayout();
             })
             .catch(error => {
                 console.error(error);
@@ -541,16 +637,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 gridBomDetail.resetData(result);
-                //gridBomDetail.refreshLayout();
+                gridBomDetail.refreshLayout();
                 
             })
             .catch(error => {
                 console.error(error);
             });
     }
-    fetchBomDetails();
+    //fetchBomDetails();
 
-	/*
     function fetchPrds(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/prds?${params.toString()}`;
@@ -565,7 +660,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     fetchPrds();
-	*/
 
 	/*
 	gridBom.on('onGridUpdated', (ev) => {
@@ -601,16 +695,43 @@ document.addEventListener('DOMContentLoaded', function() {
 	        fetch(url)
 	        .then(response => response.json())
 	        .then(result => {
-	            gridBomDetailModal.resetData(result);
+	            
+	            //gridBomDetailModal.resetData(result);
 	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
-	            $('#BomDetailModal').modal('show');
-	            gridBomDetailModal.refreshLayout();            
+	            //$('#bomDetailModal').modal('show');
+	            //gridBomDetailModal.refreshLayout();
+	                        
+	            gridBomDetail.resetData(result);
+	            //gridBomDetail.refreshLayout();            
 	        })
 	        .catch(error => {
 	            console.error(error);
 	        });
 		}
     });
+    
+    //수정필요.
+    
+    document.getElementById('openPrdBtn').addEventListener('click', function() {
+		fetchMtModal();
+    });
+    
+    function fetchMtModal(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/mts?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                gridMtModal.resetData(result);
+            	$('#mtModal').modal('show');
+            	gridMtModal.refreshLayout();                  
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+        
 
 
 });		 

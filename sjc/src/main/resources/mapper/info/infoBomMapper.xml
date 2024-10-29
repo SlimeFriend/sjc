@@ -10,7 +10,7 @@
 		        ,b.MANAGER MANAGER
 		        ,b.PRD_CODE PRD_CODE
                 ,p.prd_name prd_name
-		from    BOM b
+		from    BOM b left outer
         join    prd p
         on      b.prd_code = p.prd_code
 	    <where>
@@ -45,7 +45,10 @@
 	</select>
 	
 	<insert id="insertBom" parameterType="BomVO">
-
+		<selectKey keyProperty="bomCode" order="BEFORE" resultType="String">
+			select 	f_code_pk('bom','b') bom_code
+			from	dual
+		</selectKey>
 	
 	    INSERT INTO bom (
 	    	bom_code
