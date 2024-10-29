@@ -15,8 +15,11 @@ public interface EqMapper {
 	// 등록 : 모델명, 사용여부, 설비코드, 모델번호, 담당부서, 가용온도, 점검주기, 사원번호, 담당자, 설치위치, 설비사진
 	public int insertEqInfo(EqVO eqVO);
 	
-	// 수정
+	// 목록 수정
 	public int updateEqInfo(EqVO eqVO);
+	
+	// 상세 수정
+	public int updateEqInfo2(EqVO eqVO);
 	
 	// 삭제
 	public int deleteEqInfo(String eqCode);

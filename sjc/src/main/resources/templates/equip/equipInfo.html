@@ -47,7 +47,7 @@
                     </tr>
                     <tr>
                         <th>기준온도</th>
-                        <td>27도</td>
+                        <td>[[${equip.eqStandTemp}]]</td>
                     </tr>
                     <tr>
                         <th>설치위치</th>
@@ -117,10 +117,15 @@
                             <label for="eqLocation" class="form-label">설치 위치</label>
                             <input type="text" id="eqLocation" name="eqLocation" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="lineCode" class="form-label">라인 코드</label>
-                            <input type="text" id="lineCode" name="lineCode" class="form-control">
-                        </div>
+						<div>
+							<label for="lineCode">라인코드</label> 
+							<select id="lineCode" name="lineCode" class="form-control">
+								<option value="Line_1">Line_1</option>
+								<option value="Line_2">Line_2</option>
+								<option value="Line_3">Line_3</option>
+								<option value="Line_4">Line_4</option>
+							</select>
+						</div>
                         <div class="mb-3">
                             <label for="use" class="form-label">가동여부</label>
                             <input type="radio" id="useY" name="use" value="Y"> 가동
@@ -171,6 +176,8 @@
             const use = '[[${equip.use}]]';
             const eqLocation = '[[${equip.eqLocation}]]';
             const eqPeriod = '[[${equip.eqPeriod}]]';
+            const manager = '[[${equip.manager}]]';
+            const lineCode = '[[${equip.lineCode}]]';
 
             // 모달 폼에 데이터 채우기
             $('#eqCode').val(eqCode);
@@ -180,6 +187,8 @@
             $('#eqPeriod').val(eqPeriod);
             $('#eqLocation').val(eqLocation);
             $('input[name="use"][value="' + use + '"]').prop('checked', true);
+            $('#manager').val(manager);
+            $('#lineCode').val(lineCode);
 
             // 모달 열기
             $('#modifyModal').modal('show');
@@ -187,26 +196,27 @@
 
         // 모달 창에서 수정 처리
         $('#saveChanges').on('click', function () {
-            const eqCode = $('#eqCode').val(); // 설비 코드 추출
             const eqData = {
-                eqCode: eqCode,
+                eqCode: $('#eqCode').val(),
                 eqName: $('#eqName').val(),
                 eqMdno: $('#eqMdno').val(),
-                eqLocation: $('#eqLocation').val(),
                 eqPeriod: $('#eqPeriod').val(),
-                use: $('input[name="use"]:checked').val()
+                eqLocation: $('#eqLocation').val(),
+                use: $('input[name="use"]:checked').val(),
+                manager: $('#manager').val(),
+                lineCode: $('#lineCode').val()
             };
 
             // 서버로 데이터 전송 (AJAX 요청)
             $.ajax({
                 type: 'POST',
-                url: '/eqUpdate', // 서버에서 해당 설비 코드만 수정하도록 보장
+                url: '/eqUpdate2', // 서버에서 해당 설비 코드만 수정하도록 보장
                 contentType: 'application/json',
                 data: JSON.stringify(eqData),
                 success: function (response) {
                     if (response.result) {
                         alert('수정이 완료되었습니다.');
-                        location.href = '/eqList'; // 수정 후 목록 페이지로 이동
+                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 목록 페이지로 이동
                     } else {
                         alert('수정에 실패했습니다.');
                     }

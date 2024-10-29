@@ -79,11 +79,31 @@ public class EqController {
 		  return "equip/equipUpdate"; 
 	  }// end eqUpdateForm
 	  
-	  // 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과 데이터(Map)
+	  // 목록 수정 - 처리 : URI - eqUpdate / PARAMETER - EqVO(JSON) // RETURN - 수정결과 데이터(Map)
 	  @PostMapping("eqUpdate")
 	  @ResponseBody 
 	  public Map<String, Object> eqUpdateAJAXJSON(@RequestBody EqVO eqVO) {
 		  return eqService.eqUpdate(eqVO); 
+		  
+	  }// end eqUpdateAJAXJSON
+	  
+	  
+	  // 상세 수정 - 처리 : URI - eqUpdate2 / PARAMETER - EqVO(JSON) // RETURN - 수정결과 데이터(Map)
+	  @PostMapping("eqUpdate2")
+	  @ResponseBody 
+	  public Map<String, Object> eqUpdate2AJAXJSON(@RequestBody EqVO eqVO) {
+		// 필요한 필드만 업데이트하는 로직으로 수정
+		    EqVO targetEqVO = new EqVO();
+		    targetEqVO.setEqCode(eqVO.getEqCode());
+		    targetEqVO.setEqMdnm(eqVO.getEqMdnm());
+		    targetEqVO.setEqMdno(eqVO.getEqMdno());
+		    targetEqVO.setEqPeriod(eqVO.getEqPeriod());
+		    targetEqVO.setEqLocation(eqVO.getEqLocation());
+		    targetEqVO.setLineCode(eqVO.getLineCode());
+		    targetEqVO.setManager(eqVO.getManager());
+		    targetEqVO.setUse(eqVO.getUse());
+		    
+		  return eqService.eqUpdate2(eqVO); 
 		  
 	  }// end eqUpdateAJAXJSON
 	 	  
