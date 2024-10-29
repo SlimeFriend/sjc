@@ -47,7 +47,8 @@ public class InspectionVO {
 		private String cpCode;//업체 코드
 		private String mtlOdStatus;//발주상태
 		private String mtlOdComm;//발주비고
-		
+	// CpVO
+		private String cpName; //업체이름
 	// MtInVO
 		private Date inputDate; //입고일
 		private Integer inquantity; //입고수량
@@ -58,7 +59,7 @@ public class InspectionVO {
 	// MtlOdDetailVO
 		private String mtlOdDetailCode;
 		private int mtlOdDetailQuantity;
-		
+		private String mtlOdDetailStatus;
 		
 	// InsItemVO
 		private String insItemCode;

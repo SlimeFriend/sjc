@@ -1,5 +1,6 @@
 package com.sjc.app.quality.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,27 +39,68 @@ public class QualityServiceImpl implements QualityService{
 //	public List<Map<String, Object>> inspectionDetail(String mtlOdDetailCode) {
 //		return qualityMapper.selectInspectionDetail(mtlOdDetailCode);
 //	}
+	// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
+	@Override
+	public Map<String, Object> mtlOdStatusUpdate(InspectionVO inspectionVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = qualityMapper.updateMtlOdStatus(inspectionVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("target", inspectionVO);
+		
+		return map;
 	
-	// 품질검사상세페이지.
+	}
+	
+	@Override
+	public Map<String, Object> mtlOdDetailStatusUpdate(InspectionVO inspectionVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = qualityMapper.updateMtlOdDetailStatus(inspectionVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("target", inspectionVO);
+		
+		return map;
+	
+	
+		}
+	@Override
+	public int whetherInspection(InspectionVO inspectionVO) {
+		return qualityMapper.whetherInspection(inspectionVO);
+	}
+	// 품질검사등록모달-inspection 생성
 	@Transactional
 	@Override
 	public int insertInspection(InspectionVO inspectionVO) {
 		return qualityMapper.insertInspection(inspectionVO);
 	}
-	//검사목록
+	// 품질검사등록모달-inspection 데이터 출력
 	@Override
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
 		return qualityMapper.selectInspection(inspectionVO);
 	}
-	// 품질검사 값입력
+	// 품질검사상세- insDetail 생성
 	@Transactional
 	@Override
-	public int insertInsDetail(InsDetailVO insDetailVO) {
-		return qualityMapper.insertInsDetail(insDetailVO);
+	public int insertInsDetail(InspectionVO inspectionVO) {
+		return qualityMapper.insertInsDetail(inspectionVO);
 	}
+	// 품질검사상세- insDetail 데이터 출력
 	@Override
-	public List<InsDetailVO> insDetailList(InsDetailVO insDetailVO) {
-		return qualityMapper.selectInsDetail(insDetailVO);
+	public List<InsDetailVO> insDetailList(InspectionVO inspectionVO) {
+		return qualityMapper.selectInsDetail(inspectionVO);
 	}
 	
 	// 입고품질검사 상세목록 /
@@ -238,6 +280,8 @@ public class QualityServiceImpl implements QualityService{
 //	}
 //		return list;
 //	}
+
+
 
 
 
