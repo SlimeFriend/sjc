@@ -25,8 +25,9 @@ public interface QualityMapper {
 	public List<InspectionVO> selectInspection(InspectionVO inspectionVO);
 	
 	// 품질검사값 입력
+	public List<InspectionVO> selectTestCount(InspectionVO inspectionVO);
 	public int insertInsDetail(InspectionVO inspectionVO);
-	public List<InsDetailVO> selectInsDetail(InspectionVO inspectionVO);
+	public List<InspectionVO> selectInsDetail(InspectionVO inspectionVO);
 	
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);

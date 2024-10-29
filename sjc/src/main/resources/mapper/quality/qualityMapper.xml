@@ -144,6 +144,20 @@
 	
 	
 	<!-- insDetail -->
+	<select id="selectTestCount" resultType="InspectionVO">
+		select  im.mt_code mt_code
+        ,ii.ins_item_code ins_item_code
+        ,ii.ins_item_name ins_item_name
+        ,ii.ins_item_citeria ins_item_citeria
+		from    ins_map im
+		join    ins_item ii
+		on      im.ins_item_code = ii.ins_item_code
+		where   im.mt_code = (
+					    select  mt_code
+					    from    copy_mtl_od_detail
+					    where   MTL_OD_DETAIL_CODE = #{mtlOdDetailCode}
+					)
+	</select>
 	<insert id="insertInsDetail" parameterType="InspectionVO">
 	    <selectKey keyProperty="insDetailCode" order="BEFORE" resultType="string">
 	        SELECT 'INSD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_DETAIL_SEQ.NEXTVAL, 4, '0') 
