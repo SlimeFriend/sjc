@@ -130,6 +130,12 @@ public class SalesServiceImpl implements SalesService {
 		return salesMapper.selectProductIn();
 	}
 	
+	// 주문내역 검색
+	@Override
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate) {
+		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate);
+	}
+	
 	@Override
 	public List<ProductVO> productList() {
 		return salesMapper.selectProduct();
@@ -169,5 +175,6 @@ public class SalesServiceImpl implements SalesService {
 	public List<ProductVO> productManagement() {
 		return salesMapper.selectProductManagement();
 	}
+
 
 }

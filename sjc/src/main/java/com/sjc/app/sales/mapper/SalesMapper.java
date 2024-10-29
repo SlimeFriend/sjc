@@ -60,5 +60,6 @@ public interface SalesMapper {
 	public int prdLotOutProcess(@Param("outQuantity") int outQuantity, @Param("lot") String lot);
 	public int updateOrdFinish(@Param("ordCode") String ordCode);
 
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate);
 	
 }
