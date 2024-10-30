@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.info.service.InfoUserVO;
+import com.sjc.app.sales.service.ProductVO;
 
 public interface PrdtService {
 	// 전체 계획 조회
@@ -50,4 +51,7 @@ public interface PrdtService {
 	// 라인 매니저 화면 출력
 	public List<InfoUserVO> lmanager(String ldetailCode);
 	
+	public List<ProductVO> productList();
+	
+	public int insertPlan(CplanVO cplanVO);
 }

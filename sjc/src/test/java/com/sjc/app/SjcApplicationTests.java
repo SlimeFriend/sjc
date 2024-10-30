@@ -1,4 +1,4 @@
-package com.yedam.app;
+package com.sjc.app;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
