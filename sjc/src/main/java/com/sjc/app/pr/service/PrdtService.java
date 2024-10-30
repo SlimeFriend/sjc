@@ -53,5 +53,9 @@ public interface PrdtService {
 	
 	public List<ProductVO> productList();
 	
+	// 계획 생성
 	public int insertPlan(CplanVO cplanVO);
+	
+	// 계획 삭제
+	public int deletePlan(String pCode);
 }

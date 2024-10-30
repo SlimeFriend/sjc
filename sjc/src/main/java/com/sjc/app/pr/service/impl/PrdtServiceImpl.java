@@ -152,4 +152,16 @@ public class PrdtServiceImpl implements PrdtService {
 		return 1;
 	}
 
+	@Override
+	public int deletePlan(String pCode) {
+		int drs = prdtMapper.deletePlanD(pCode);
+		int rs = prdtMapper.deletePlan(pCode);
+		
+		if(drs > 0 && rs> 0 ) {
+			return 1;
+		}
+		
+		return 0;
+	}
+
 }

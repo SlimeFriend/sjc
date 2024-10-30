@@ -42,9 +42,7 @@ public class PrController {
 	// 계획 전체 조회
 	@GetMapping("planList")
 	public String planList(Model model) {
-		List<PlanVO> list = prdtService.planList();
 		
-		model.addAttribute("list", list);
 		
 		return "pr/planList";
 	}
@@ -226,4 +224,12 @@ public class PrController {
 		return prdtService.useD();
 	}
 	
+	@PostMapping("deletePlan")
+	@ResponseBody
+	public int deletePlan(String pCode) {
+		
+		int a = prdtService.deletePlan(pCode);
+		
+		return a;
+	}
 }

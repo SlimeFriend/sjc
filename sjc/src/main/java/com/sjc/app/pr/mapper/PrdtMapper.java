@@ -61,9 +61,18 @@ public interface PrdtMapper {
 	// 제품리스트
 	public List<ProductVO> productList();
 	
+	// 계획 생성을 위한 코드 생성
 	public String getPlanCode();
 	
+	// 계획 생성
 	public int insertPlan(PlanVO planVO);
 	
+	// 계획 상세 생성
 	public int insertPlanDetail(@Param("productVO") ProductVO productVO,@Param("planCode") String planCode);
+	
+	// 계획 상세 삭제
+	public int deletePlanD(String pCode);
+	
+	// 계획 삭제
+	public int deletePlan(String pCode);
 }
