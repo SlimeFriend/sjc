@@ -1,12 +1,16 @@
 package com.sjc.app.mt.serviceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.sjc.app.mt.mapper.OrderRequestMapper;
-import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.mt.service.MtVO;
+import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.mt.service.OrderRequestService;
 import com.sjc.app.sales.service.CpVO;
 
@@ -32,20 +36,31 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
+    @Transactional
     public void insertOrderRequest(MtlOdVO order) {
         orderRequestMapper.insertOrderRequest(order);
-    }   
+    }
+
+    // 발주 요청 상세 정보 삽입 메서드 구현
+    @Override
+    @Transactional
+    public void insertOrderRequestDetails(List<MtVO> details, String mtlOdCode) {
+        details.forEach(detail -> {
+                       
+            orderRequestMapper.insertOrderRequestDetails(detail);  // 메서드 이름 그대로 사용
+        });
+    }
 
     @Override
     public void updateOrderRequest(MtlOdVO order) {
         orderRequestMapper.updateOrderRequest(order);
     }
 
-    @Override
-    public void deleteOrderRequest(String orderRequestCode) {
-        orderRequestMapper.deleteOrderRequest(orderRequestCode);
+    @Transactional
+    public void deleteOrderRequest(String mtlOdCode) {
+        orderRequestMapper.deleteOrderRequestDetails(mtlOdCode); // 먼저 상세 목록 삭제
+        orderRequestMapper.deleteOrderRequest(mtlOdCode); // 그 후 발주 요청 삭제
     }
-
     @Override
     public List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode) {
         return orderRequestMapper.getOrderRequestDetailsByOrderRequestCode(orderRequestCode);
@@ -61,7 +76,6 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         return orderRequestMapper.getItemsByCpCode(cpCode);
     }
 
-    // CP 코드에 따른 발주 상세내역 가져오기 추가
     @Override
     public List<MtVO> getOrderRequestDetailsByCpCode(String cpCode) {
         return orderRequestMapper.getOrderRequestDetailsByCpCode(cpCode);

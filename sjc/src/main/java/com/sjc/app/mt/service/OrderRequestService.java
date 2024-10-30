@@ -4,16 +4,27 @@ import java.util.List;
 import com.sjc.app.sales.service.CpVO;
 
 public interface OrderRequestService {
-    List<MtlOdVO> getAllOrderRequestsByCpCode(String cpCode);
-    List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode);
-    MtlOdVO getOrderRequestById(String orderRequestCode);
-    void insertOrderRequest(MtlOdVO order);
-    void updateOrderRequest(MtlOdVO order);
-    void deleteOrderRequest(String orderRequestCode);
-    List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
-    List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);
-    List<CpVO> getAllCpInfo();
-    List<MtVO> getItemsByCpCode(String cpCode);
 
- 
+    List<MtlOdVO> getAllOrderRequestsByCpCode(String cpCode);
+
+    List<MtlOdVO> getGroupedOrderRequestsByCpCode(String cpCode);
+
+    MtlOdVO getOrderRequestById(String orderRequestCode);
+
+    void insertOrderRequest(MtlOdVO order);
+
+    // 발주 요청 시 자재별 상세 정보를 함께 삽입하는 메서드 추가
+    void insertOrderRequestDetails(List<MtVO> details, String mtlOdCode);
+
+    void updateOrderRequest(MtlOdVO order);
+
+    void deleteOrderRequest(String orderRequestCode);
+
+    List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
+
+    List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);
+
+    List<CpVO> getAllCpInfo();
+
+    List<MtVO> getItemsByCpCode(String cpCode);
 }
