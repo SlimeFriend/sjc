@@ -4,13 +4,16 @@
 
 <!-- 조회 -->
 <select id="selectPlanAll" resultType="PlanVO">
-	select plan_code, 
-			start_date,
-			end_date,
-			manager,
-			comm,
-			status
-	from plan
+	select p.plan_code, 
+			p.start_date,
+			p.end_date,
+			p.manager,
+			p.comm,
+			p.status,
+			u.user_name
+	from plan p
+	join sjc_user u
+	on p.manager = u.user_id
 </select>
 
 
@@ -79,13 +82,16 @@
 
 <!-- 계획 조건부 조회 -->
 <select id="selectPlanS" resultType="PlanVO" parameterType="String">
-		select plan_code, 
-			start_date,
-			end_date,
-			manager,
-			comm,
-			status
-	from plan
+		select p.plan_code, 
+			p.start_date,
+			p.end_date,
+			p.manager,
+			p.comm,
+			p.status,
+			u.user_name
+	from plan p
+	join sjc_user u
+	on p.manager = u.user_id
 	where status like #{status}||'%'
 </select>
 
@@ -288,5 +294,14 @@ where p.prd_code = #{prdCode}
     )
 </insert>
 
+<delete id="deletePlanD" parameterType="String">
+	delete plan_detail
+	where plan_code = #{pCode}
+</delete>
+
+<delete id="deletePlan" parameterType="String">
+	delete plan
+	where plan_code = #{planCode}
+</delete>
 
 </mapper>
