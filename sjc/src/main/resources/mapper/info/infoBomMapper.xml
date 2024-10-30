@@ -15,6 +15,13 @@
 	
 	</update>
 	
+	<update id="updateBomNull" parameterType="ProductVO">
+		update 	bom
+		set		prd_code = null
+		where	prd_code = #{prdCode}
+	
+	</update>
+	
 
 	<select id="selectBomAllList" resultType="BomVO" parameterType="BomVO">
 		select	b.BOM_CODE BOM_CODE

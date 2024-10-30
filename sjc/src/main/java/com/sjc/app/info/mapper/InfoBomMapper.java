@@ -15,4 +15,5 @@ public interface InfoBomMapper {
     
     int updatePrd(ProductVO productVO);
     int updateBom(BomVO bomVO);
+    int updateBomNull(ProductVO productVO);
 }

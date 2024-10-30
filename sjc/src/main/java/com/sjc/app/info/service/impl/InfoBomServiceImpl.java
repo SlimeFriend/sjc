@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,7 +109,7 @@ public class InfoBomServiceImpl implements InfoBomService {
 	}
 	@Override
 	@Transactional
-	public ResponseEntity<Map<String, Object>> modifyPrdBom(PrdBomDTO prdBomDTO) {
+	public Map<String, Object> modifyPrdBom(PrdBomDTO prdBomDTO) {
 		
 		ProductVO productVO = new ProductVO();
 		productVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
@@ -122,12 +121,14 @@ public class InfoBomServiceImpl implements InfoBomService {
 		bomVO.setBomCode(prdBomDTO.getBom().getBomCode());
 		bomVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
 		
+		infoBomMapper.updateBomNull(productVO);
 		infoBomMapper.updateBom(bomVO);
+		
 		
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("status", "success");
 	    response.put("message", "modifyPrdBom 완료.");
 	    
-	    return ResponseEntity.ok(response);
+	    return response;
 	}
 }

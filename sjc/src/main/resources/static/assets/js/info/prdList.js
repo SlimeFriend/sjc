@@ -405,18 +405,18 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
         ],
-        /*
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 5
         } 
-        */       
+        /*
 	    bodyHeight: 200,
 		pageOptions: {
 		    type: 'scroll', 
 		    perPage: 10 
 		},        
+		*/
     });
     
     const gridBomDetailModal = new tui.Grid({
