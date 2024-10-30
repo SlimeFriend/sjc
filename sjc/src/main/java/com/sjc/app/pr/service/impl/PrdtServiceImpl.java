@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.mapper.PrdtMapper;
+import com.sjc.app.pr.service.CplanVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
@@ -16,6 +17,7 @@ import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
+import com.sjc.app.sales.service.ProductVO;
 
 @Service
 public class PrdtServiceImpl implements PrdtService {
@@ -117,6 +119,37 @@ public class PrdtServiceImpl implements PrdtService {
 	public List<InfoUserVO> lmanager(String ldetailCode) {
 		// TODO Auto-generated method stub
 		return prdtMapper.lmanager(ldetailCode);
+	}
+
+	@Override
+	public List<ProductVO> productList() {
+		// TODO Auto-generated method stub
+		return prdtMapper.productList();
+	}
+
+	@Override
+	public int insertPlan(CplanVO cplanVO) {
+		
+		// 생산계획 코드
+		String nextId = prdtMapper.getPlanCode();
+		String planCode = String.valueOf(nextId);
+		
+		// 생산계획 
+		PlanVO planVO = cplanVO.getPlanVO();
+		planVO.setPlanCode(planCode);
+		int pinresult = prdtMapper.insertPlan(planVO);
+		
+		
+		List<ProductVO> productVOList = cplanVO.getProductVO(); 
+	    if(pinresult > 0) {
+	        productVOList.forEach(productVO -> {
+	        	prdtMapper.insertPlanDetail(productVO, planVO.getPlanCode());
+	        });
+	    }
+		
+		
+		
+		return 1;
 	}
 
 }

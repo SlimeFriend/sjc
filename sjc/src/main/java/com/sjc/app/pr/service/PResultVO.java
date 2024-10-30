@@ -13,11 +13,12 @@ public class PResultVO {
 	private String processDate;		// 공정 일자
 	private String eqCode;			// 설비 이름
 	private String processName;		// 공정 이름
-	private String manager;			// 담당자
+	private Integer manager;			// 담당자
 	private String pdetailCode;		// 생산지시상세 코드
 	private String ldetailCode;		// 라인상세정보 코드
 	private Integer input;			// 투입량
 	private String status;			// 상태
 	private Integer no;				// 순서
-	private String lineCode;
+	private String lineCode;		// 라인코드
+	private String userName;		// 유저명
 }		

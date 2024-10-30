@@ -216,12 +216,12 @@
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
-						<td>${item.manager}</td>
+						<td>${item.userName}</td>
                     `;}
             
             cbody.appendChild(row);
             
-            if(item.status != 'b3'){
+            if(item.status == 'b1' || item.status == 'b2'){
             	
         		fetch('/lmanager?ldetailCode=' + item.ldetailCode)
         		.then(resp =>{
@@ -270,10 +270,10 @@
     		}
     		return resp.json();
     	})
-    	.then(data=>{
-			console.log(data);
+    	.then(data =>{
 			
-			displayR(data)
+			
+			displayR(data);
 	    		
 			});
 
@@ -343,8 +343,8 @@
            	},
 			  body: JSON.stringify({
 			    pdCode : pd,
-			    ipt : parseInt(cnt)
-//			    , ldmng : ldmng 
+			    ipt : parseInt(cnt), 
+			    ldmng : ldmng
 			  }),
 			})
 			.then(response => response.json())
@@ -359,13 +359,14 @@
            		})
            		.then(a=>{
            			if (a.length>0){
+           				
+           				
            			
            				displayR(a);
            				
            			
            			} else {
-           				cbody.innerHTML = '';
-           				insertR(pd);
+
            			}
            		})
            		.catch(error => {
@@ -376,83 +377,80 @@
  
 
 
+	function updatePD(){
+		
+		fetch('/updatePD')
+		.then(resp =>{
+			if (!resp.ok){
+				throw new Error('네트워크 반응 에러');
+			}
+			return resp.json();
+		})
+		.then(res =>{
+			
 
+        	plan.innerHTML = '';
+        
+        
+        	res.forEach(n=> {
+        	const ctr = document.createElement("tr");
+        	
+        	if(n.status == 'b1'){
+        	
+        	ctr.innerHTML =
+        		`
+            	<td>${n.pdetailCode}</td>
+                <td>${n.prdName}</td>
+                <td>${n.lineCode}</td>
+                <td>${n.want}</td>
+                <td>${n.command}</td>
+                <td>${n.output}</td>
+                <td>대기</td>
+		        <td>${n.comm}</td>
+                `
+        	plan.appendChild(ctr);
+         	}
+        	
+        	else if(n.status == 'b2'){
+            	ctr.innerHTML =
+            		`
+                	<td>${n.pdetailCode}</td>
+                    <td>${n.prdName}</td>
+                    <td>${n.lineCode}</td>
+                    <td>${n.want}</td>
+                    <td>${n.command}</td>
+                    <td>${n.output}</td>
+                    <td>진행</td>
+    		        <td>${n.comm}</td>
+                    `
+            	plan.appendChild(ctr);
+        	}
+        	else{
+            	ctr.innerHTML =
+            		`
+                	<td>${n.pdetailCode}</td>
+                    <td>${n.prdName}</td>
+                    <td>${n.lineCode}</td>
+                    <td>${n.want}</td>
+                    <td>${n.command}</td>
+                    <td>${n.output}</td>
+                    <td>완료</td>
+    		        <td>${n.comm}</td>
+                    `
+            	plan.appendChild(ctr);
+        	}
+        	
+
+        	});
+        	
+
+        	
+	})
+	} 	
     	
-    	
- 	
- 	/*        
- 		let rows = Array.from(document.getElementById("cbody").children);
-        let currentIndex = 0; // 현재 진행 중인 행의 인덱스
 
-        function updateRow(row) {
-            let today = new Date();
-            row.children[3].innerText = '진행'; // 상태를 '진행'으로 설정
-            row.children[4].innerText = formatTime(today); // 시간 업데이트
-
-            let input = parseInt(row.children[6].innerText, 10); // 목표 지시량 가져오기
-
-            let pCount = 0; // 생산량 초기화
-            let dCount = 0; // 불량량 초기화
-
-            const intervalId = setInterval(() => {
-                const random = Math.floor(Math.random() * 100);
-                let remain = input - (pCount + dCount);
-
-
-                // 생산 및 불량량 업데이트
-                if (remain < 10) {
-                    if (random <= 10) {
-                        dCount += 1; // 불량량 증가
-                        pCount += Math.max(0, remain - 1); // 남은 수량을 생산량으로 설정
-                    } else {
-                        pCount += remain; // 남은 수량을 생산량으로 설정
-                    }
-                } else {
-                    if (random <= 10) {
-                        pCount += 9;
-                        dCount += 1; // 불량량 증가
-                    } else {
-                        pCount += 10; // 생산량 10 증가
-                    }
-                }
-
-                // 업데이트된 값 표시
-                row.children[7].innerText = dCount;     // 불량량 업데이트
-                row.children[8].innerText = pCount;     // 생산량 업데이트
-
-                // 생산량과 불량량의 합이 지시량에 도달하는지 확인
-                if (pCount + dCount === input) {
-                    clearInterval(intervalId); // 인터벌 중지
-                    let now = new Date();
-                    row.children[3].innerText = '종료';
-                    row.children[5].innerText = formatTime(now);
-                    currentIndex++;
-                    if (currentIndex < rows.length) {
-                        rows[currentIndex].children[6].innerText = pCount; // 다음 행의 지시량 업데이트
-                        updateRow(rows[currentIndex]); // 다음 행 업데이트
-                    }
-                }
-            }, 1000);
-            
-        }
-
-        // 행이 존재하면 첫 번째 행 업데이트 시작
-        if (rows.length > 0) {
-            updateRow(rows[currentIndex]);
-        }
-    });
-
-    // 시간 포맷팅 함수
-    function formatTime(date) {
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-        return `${hours} : ${minutes} : ${seconds}`;
-    }
-
-*/
-	
 
     
     </script>
 </body>
+</html>
