@@ -124,7 +124,7 @@
 				el : document.getElementById('gridOrderDetail'),
 				data : gridModalData,
 				scrollX : false,
-				scrollY : false,
+				scrollY : true,
 				columns : [ {
 					header : '주문코드',
 					name : 'ORDCODE',
@@ -157,6 +157,14 @@
 		    const orderEndDate = document.getElementById('orderEndDate').value;
 		    const deliveryStartDate = document.getElementById('deliveryStartDate').value;
 		    const deliveryEndDate = document.getElementById('deliveryEndDate').value;
+		    
+		    console.log(companyName);
+		   	
+		    console.log(orderStartDate);
+		    console.log(orderEndDate);
+		    
+		    console.log(deliveryStartDate);
+		    console.log(deliveryEndDate);
 
 		    const searchCriteria = {
 		        companyName: companyName,

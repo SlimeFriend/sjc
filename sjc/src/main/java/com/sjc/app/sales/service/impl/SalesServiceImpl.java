@@ -1,13 +1,7 @@
 package com.sjc.app.sales.service.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.sales.mapper.SalesMapper;
 import com.sjc.app.sales.service.OrderVO;
+import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
@@ -27,12 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service 
 public class SalesServiceImpl implements SalesService {
 	private SalesMapper salesMapper;
-	private DataSource dataSource;
 	
 	@Autowired
-	SalesServiceImpl(SalesMapper salesMapper, DataSource dataSource, MeterRegistry registry) {
+	SalesServiceImpl(SalesMapper salesMapper, MeterRegistry registry) {
 		this.salesMapper = salesMapper;
-		this.dataSource = dataSource;
 	}
 	
 	// 주문접수 프로세스
@@ -133,6 +126,10 @@ public class SalesServiceImpl implements SalesService {
 	// 주문내역 검색
 	@Override
 	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate) {
+	    System.err.println(orderStartDate);
+	    System.err.println(orderEndDate);
+	    System.err.println(deliveryStartDate);
+	    System.err.println(deliveryEndDate);
 		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate);
 	}
 	
@@ -162,11 +159,6 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public List<outHistoryVO> outHistory() {
-		return salesMapper.selectOutHistory();
-	}
-
-	@Override
 	public List<OrderVO> companyList() {
 		return salesMapper.selectCompany();
 	}
@@ -175,6 +167,15 @@ public class SalesServiceImpl implements SalesService {
 	public List<ProductVO> productManagement() {
 		return salesMapper.selectProductManagement();
 	}
+	
+	@Override
+	public List<PrdManagementVO> inHistory() {
+		return salesMapper.selectInHistory();
+	}
 
+	@Override
+	public List<outHistoryVO> outHistory() {
+		return salesMapper.selectOutHistory();
+	}
 
 }

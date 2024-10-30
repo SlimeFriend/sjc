@@ -20,6 +20,7 @@ public interface SalesService {
 	public List<ProductVO> productIn();
 	
 	// 출고내역
+	public List<PrdManagementVO> inHistory();
 	public List<outHistoryVO> outHistory();
 	
 	// 주문내역 검색 프로세스

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.sales.service.OrderVO;
+import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.SalesDTO;
 import com.sjc.app.sales.service.SalesService;
@@ -168,8 +169,12 @@ public class SalesController {
 	// 입/출고 내역 페이지
 	@GetMapping("/inoutHistory")
 	public String inoutHistoryPage(Model model) {
-		List<outHistoryVO> list = salesService.outHistory();
-		model.addAttribute("outHistory", list);
+		
+		List<PrdManagementVO> inList = salesService.inHistory();
+		model.addAttribute("inHistory", inList);
+		List<outHistoryVO> outList = salesService.outHistory();
+		model.addAttribute("outHistory", outList);
+		
 		return "sales/inoutHistory";
 	}
 	
