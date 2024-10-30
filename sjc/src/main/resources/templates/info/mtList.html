@@ -17,15 +17,33 @@
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">자재 목록</h2>
 
 			<div class="pd-20 card-box mb-20">
-		        <button class="btn btn-primary mb-3 mr-3" id="registerBtn">BOM 추가</button>
-		        <button class="btn btn-success mb-3 mr-3" id="insertBtn">BOM 목록</button>
-		        <button class="btn btn-secondary mb-3 mr-3" id="saveBtn">BOM 상세</button>
+			<!-- 
+			<h2 class="h2 mb-20">자재 목록</h2>
+			 -->
+			
+			<div class="d-flex justify-content-between align-items-center align-middle mb-20">
+		        <h2 class="h5 mb-0">자재 목록</h2>
+				<div>
+					<!-- 
+					<button type="button" class="btn btn-success" id="openBomBtn">BOM 생성</button>
+					 -->
+			        <button class="btn btn-primary mb-3 mr-3" id="insertBtn">등록</button>
+			        <button class="btn btn-warning mb-3 mr-3" id="updateBtn">수정</button>
+			        <button class="btn btn-danger mb-3 mr-3" id="deleteBtn">삭제</button>
+					<!-- 
+					<button type="button" class="btn btn-warning" id="">수정</button>
+					<button type="button" class="btn btn-danger" id="">삭제</button>
+					 -->
+				</div>
+			</div>			
+			
 				<div id="grid"></div>
+		        <!--
 				<div id="gridBom"></div>
 				<div id="gridBomDetail"></div>
+		         -->
 			</div>
 		</div>
 	</div>

@@ -1,13 +1,10 @@
 /**
- * userListGridApi.js
+ * mtList.js
  */
 
-	
 
 document.addEventListener('DOMContentLoaded', function() {
 	
-	const gridData = /*[[${prds}]]*/[];
-
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -121,43 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-    const gridBom = new tui.Grid({
-        el: document.getElementById('grid'),
-        scrollX: false,
-        scrollY: false,
-        width: 'auto',
-
-        columns: [
-            {
-                header: '자재코드',
-                name: 'mtCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
-        ]
-    });
-    
-    const gridBomDetail = new tui.Grid({
-        el: document.getElementById('grid'),
-        scrollX: false,
-        scrollY: false,
-        width: 'auto',
-        
-        columns: [
-            {
-                header: '자재코드',
-                name: 'mtCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
-        ]
-    });
-
-
-
     function fetchMtList(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/mts?${params.toString()}`;
@@ -171,72 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error(error);
             });
     }
+    
     fetchMtList();
 
-    document.getElementById('registerBtn').addEventListener('click', function() {
-        const selectedRows = grid.getCheckedRows();
-        
-        if (selectedRows.length > 0) {
-        	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
-        		//registerBoms(selectedRows.map(row => row.userId));
-        		registerBoms(selectedRows.map(row => row.mtCode));
-        	}else{
-        		return false;
-        	}
-        } else {
-            alert('등록할 자재를 선택해주세요.');
-        }
-    });
-
-    function registerBoms(mtCode) {
-        fetch('/registerBoms', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userIds),
-        })
-        .then(response => response.json())
-        .then(result => {
-            fetchBoms();
-            fetchBomDetails();
-            console.error('result:', result);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-
-    function fetchBoms(search = {}) {
-        const params = new URLSearchParams(search);
-        const url = `/boms?${params.toString()}`;
-
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                gridBom.resetData(result);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-    fetchBoms();
-    
-    function fetchBomDetails(search = {}) {
-        const params = new URLSearchParams(search);
-        const url = `/bomDetails?${params.toString()}`;
-
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                gridBomDetail.resetData(result);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-    fetchBomDetails();
-
-
-		 
 });		 
