@@ -77,12 +77,13 @@ public class QualityController {
     @ResponseBody
     @Transactional
     public Map<String, Object> insertInspection(@RequestBody InspectionVO inspectionVO) {
-    	 List<InspectionVO> insList;
-    	 Map<String, Object> map = new HashMap<String, Object>();
-    	 
-        int  insCount = qualityService.whetherInspection(inspectionVO);
     	
-        if (insCount > 0) {
+    	List<InspectionVO> insList;
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	 
+        int  countIns = qualityService.whetherInspection(inspectionVO);
+    	
+        if (countIns > 0) {
     		insList = qualityService.inspectionList(inspectionVO);
     		
     	} else {
@@ -93,52 +94,92 @@ public class QualityController {
 	    	qualityService.insertInspection(inspectionVO);
 	    	//inspection 데이터 출력
 	    	insList = qualityService.inspectionList(inspectionVO);
-	    	 
+	    	
+	    	
 	    		
 	    	}
+        String insCode = null;
+        for(InspectionVO insVO : insList ) {
+        	
+        	insCode = insVO.getInsCode();
+        }
+        
         
         List<InspectionVO> testList = new ArrayList<>();
-        testList = qualityService.testCountSelect(inspectionVO);
+        List<InspectionVO> insDetailList = new ArrayList<>();
+        
+        
+        int countInsItem = qualityService.insItemCount(inspectionVO);
+        System.out.println(countInsItem);
+        	
+        	if(countInsItem > 0) {
+        		// 품질검사상세- insDetail 데이터 출력
+        		testList = qualityService.testDetailSelect(inspectionVO);
+        		
+        	} else {
+        		System.out.println(countInsItem);
+        		for(InspectionVO insVO : testList ) {
+        			insVO.setInsCode(insCode);
+        			// 품질검사상세- insDetail 생성
+        			qualityService.insertInsDetail(insVO);
+        			
+        			// 품질검사상세- insDetail 데이터 출력
+        			testList = qualityService.testDetailSelect(inspectionVO);
+        		}
+        		
+        	}
+        	
+        		InspectionVO insDetailVO = new InspectionVO();
+        		insDetailVO.setInsCode(insCode);
+        		// 품질검사상세- insDetail 데이터 출력
+	    		insDetailList = qualityService.insDetailList(insDetailVO);
     	
-	    		// 품질검사상세- insDetail 생성
-	    		//qualityService.insertInsDetail(inspectionVO);
-	    		// 품질검사상세- insDetail 데이터 출력
-	    		//insDetailList = qualityService.insDetailList(inspectionVO);
 	    		
-//    	for (InspectionVO insVO : testList) {
-//	    		// 품질검사상세- insDetail 생성
-//	    		qualityService.insertInsDetail(insVO);
-//
-//    	}
+	    		List<InspectionVO> newList = new ArrayList<>();
+
+	            for(int i = 0; i < testList.size(); i++) {
+	                InspectionVO insVO = testList.get(i);
+	                InspectionVO idVO = insDetailList.get(i);
+
+	                insVO.setInsDetailCode(idVO.getInsDetailCode());
+	                insVO.setInsCode(idVO.getInsCode());
+
+	                newList.add(insVO);
+	            }
     	
     	map.put("insList", insList);
-    	//map.put("insDetailList",insDetailList );
+    	//map.put("insDetailList",insDetailList);
     	map.put("testList",testList );
+    	map.put("newList",newList );
     	
     	
     	return map ;
 
     }
     
-    // 품질검사상세
-    @PostMapping("/incomingInspectionDetail")
-    @ResponseBody
-    @Transactional
-    public List<InspectionVO> insertInsDetail(@RequestBody List<InspectionVO> list) {
-    	
-    	for(InspectionVO insVO : list ) {
-    		
-    		// 품질검사상세- insDetail 생성
-    		qualityService.insertInsDetail(insVO);
-    		// 품질검사상세- insDetail 데이터 출력
-    		//List<InspectionVO> insDetailList = qualityService.insDetailList(insVO);
-    		
-    	}
-
-    	
-    	return list;
-    	
-    }
+//    // 품질검사상세
+//    @PostMapping("/incomingInspectionDetail")
+//    @ResponseBody
+//    @Transactional
+//    public List<InspectionVO> insertInsDetail(@RequestBody List<InspectionVO> list) {
+//    	
+//    	
+//    	
+//    	
+//    	
+//    	for(InspectionVO insVO : list ) {
+//    		
+//    		// 품질검사상세- insDetail 생성
+//    		qualityService.insertInsDetail(insVO);
+//    		// 품질검사상세- insDetail 데이터 출력
+//    		//List<InspectionVO> insDetailList = qualityService.insDetailList(insVO);
+//    		
+//    	}
+//
+//    	
+//    	return list;
+//    	
+//    }
     
     
     

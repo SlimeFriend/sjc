@@ -25,10 +25,11 @@ public interface QualityService {
 	// 품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO);
 	// 품질검사상세-insDetail 데이터 갯수 카운트
-	public List<InspectionVO> testCountSelect(InspectionVO inspectionVO);
+	public int insItemCount(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 생성
 	public int insertInsDetail(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 데이터 출력
+	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
 	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
 	
 	// 입고품질검사 상세목록 /
