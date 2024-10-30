@@ -28,5 +28,6 @@ public class MtVO {
 	 private List<MtInVO> lotDetails;
 	 private Integer totalQuantity; // 수량 합계
 	private String mtlOdCode;
+	private String cpCode;
 	
 }

@@ -24,7 +24,7 @@ public class MtOutController {
     public String listOutgoing(Model model) {
         List<Map<String, Object>> outList = mtOutService.getOutgoingList();
         model.addAttribute("outList", outList);
-        return "mt/mtOut";
+        return "mt/mtOutList";
     }
 
 

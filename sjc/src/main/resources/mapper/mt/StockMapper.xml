@@ -16,6 +16,7 @@
         STC_CODE AS stcCode,
         CURRENT_STC AS currentStc
         FROM MT
+        ORDER BY MT_CODE
     </select>
 
     <!-- 자재 코드로 자재 정보 조회 -->

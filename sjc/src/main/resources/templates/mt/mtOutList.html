@@ -12,21 +12,10 @@
 </head>
 <body>
 	<div class="main-container">
-
-
-		<!-- 검색 필터 영역 -->
+		
+		
 		<div class="container">
-			<h1>출고 내역</h1>
-			<form th:action="@{/mtOutList/search}" method="get">
-			
-				<input type="text" name="materialName" placeholder="자재명"> <input
-					type="text" name="lotNo" placeholder="LOT 번호">
-				<button type="submit">검색</button>
-			</form>
-		</div>
-
-		<!-- 출고 내역 테이블 -->
-		<div class="container">
+		<h1>출고 내역</h1>
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -39,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!-- 출고 내역 반복 출력 예시 -->
+				
 					<tr th:each="outgoing : ${outList}">
 						<td
 							th:text="${outgoing['pDetailCode'] != null ? outgoing['pDetailCode'] : '-'}"></td>
