@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.sjc.app.sales.service.OrderVO;
+import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.outHistoryVO;
 
@@ -44,6 +45,7 @@ public interface SalesMapper {
 	public List<OrderVO> selectOrdersByStatus(@Param("status") String status);
 	
 	// 입출고 내역
+	public List<PrdManagementVO> selectInHistory();
 	public List<outHistoryVO> selectOutHistory();
 	
 	// 업체 리스트

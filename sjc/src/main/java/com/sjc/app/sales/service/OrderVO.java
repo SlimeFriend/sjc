@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -13,10 +15,12 @@ public class OrderVO {
 	private String ordStatus;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date ordDate;
-	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dlvReqDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date ordDate;
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dlvReqDate;
 	
 	private String comm;
 	private String cpCode;
