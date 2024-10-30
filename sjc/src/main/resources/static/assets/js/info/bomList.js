@@ -128,10 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
             */
         ],
         rowHeaders: ['checkbox', 'rowNum'],
+	    bodyHeight: 200,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},        
+		/*
         pageOptions: {
             useClient: true,
             perPage: 5
         }
+        */
+        
     });
 
 
@@ -358,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 10
         }        
     });
 

@@ -1,6 +1,7 @@
-/**
- * cpList.js
- */
+/*
+* processList.js
+*/
+
 document.addEventListener('DOMContentLoaded', function() {
 
     tui.Grid.applyTheme('striped');
@@ -11,36 +12,29 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollY: false,
         columns: [
             {
-                header: '업체코드',
-                name: 'cpCode',
+                header: '공정코드',
+                name: 'processCode',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
             },
             {
-                header: '업체명',
-                name: 'cpName',
+                header: '공정이름',
+                name: 'processName',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
             },
             {
-                header: '업체구분',
-                name: 'cpType',
+                header: '공겅구분',
+                name: 'prccessType',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
             },
             {
-                header: '사업자번호',
-                name: 'businessNo',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            {
-                header: '주소',
-                name: 'address',
+                header: '설명',
+                name: 'description',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
@@ -51,27 +45,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
-            }
+            },
         ],
         rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 10
         }
     });
 
     document.getElementById('searchBtn').addEventListener('click', function() {
         const search = {
-        		cpCode: document.getElementById('inputCpCode').value,
-        		cpName: document.getElementById('inputCpName').value,
-        		cpType: document.getElementById('inputCpType').value,
+        		processCode: document.getElementById('inputProcessCode').value,
+        		processName: document.getElementById('inputProcessName').value,
+        		prccessType: document.getElementById('inputPrccessType').value,
         };
-        fetchUsers(search);
+        fetchPrds(search);
     });
 
-    function fetchUsers(search = {}) {
+    function fetchPrds(search = {}) {
         const params = new URLSearchParams(search);
-        const url = `/cps?${params.toString()}`;
+        const url = `/processes?${params.toString()}`;
 
         fetch(url)
             .then(response => response.json())
@@ -83,5 +77,5 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    fetchUsers();
+    fetchPrds();
 });

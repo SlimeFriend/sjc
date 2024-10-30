@@ -23,4 +23,9 @@ public class InfoController {
 		return "info/prdList";
 	}
 	
+	@GetMapping("infoLineProcessList")
+	public String infoLineProcessList() {
+		return "info/lineProcessList";
+	}
+	
 }
