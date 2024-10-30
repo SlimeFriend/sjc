@@ -203,4 +203,29 @@ from    eq
 	ORDER BY eq_code
 </select>
 
+<!-- 비가동 내역 등록 -->
+<insert id="insertNonOperating" parameterType="EqChckVO">
+	<selectKey keyProperty="eqChckOpcd" resultType="String" order="BEFORE">
+	select
+    case
+        when (max(substr(eq_chck_opcd, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('O' || to_char(max(substr(eq_chck_opcd, 2, 13)) + 1))
+        else ('O' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
+    end    eq_chck_opcd
+	from    eq_chck
+	</selectKey>
+    INSERT INTO eq_chck (
+    					  eq_chck_opcd
+    					, eq_code
+    					, reason
+    					, start_date
+    					, end_date)
+    VALUES (
+    					  #{eqChckOpcd}
+    					, #{eqCode}
+    					, #{reason}
+    					, #{startDate}
+    					, #{endDate})
+</insert>
+
+
 </mapper>

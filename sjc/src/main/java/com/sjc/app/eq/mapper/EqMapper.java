@@ -33,4 +33,7 @@ public interface EqMapper {
 	// 설비 점검 목록
 	public List<EqChckVO> selectjumgumAll();
 	
+	// 비가동 내역 등록
+	void insertNonOperating(EqChckVO eqChckVO);
+
 }

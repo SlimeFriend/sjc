@@ -103,6 +103,12 @@ public class EqServiceImpl implements EqService {
 	public List<EqChckVO> jgList() {
 		return eqMapper.selectjumgumAll();
 	}
+	
+	// 비가동 내역 등록
+	@Override
+	public void saveNonOperating(EqChckVO eqChckVO) {
+		eqMapper.insertNonOperating(eqChckVO);
+	}
 
 
 
