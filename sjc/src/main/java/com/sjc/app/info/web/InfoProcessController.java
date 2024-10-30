@@ -19,5 +19,10 @@ public class InfoProcessController {
 	public String infoProcessListGridFetch() {
 		return "info/processListGridFetch";
 	}
+	
+	@GetMapping("infoProcessList")
+	public String infoProcessList() {
+		return "info/processList";
+	}
 
 }

@@ -19,5 +19,10 @@ public class InfoLineController {
 	public String infoLineListGridFetch() {
 		return "info/lineListGridFetch";
 	}
+	
+	@GetMapping("infoLineList")
+	public String infoLineList() {
+		return "info/lineList";
+	}
 
 }

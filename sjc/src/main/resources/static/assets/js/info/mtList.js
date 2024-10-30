@@ -60,13 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
             {
-                header: '비고',
-                name: 'comm',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
-            {
                 header: '재고코드',
                 name: 'stcCode',
                 align: 'center',
@@ -97,24 +90,26 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
             {
-                header: '현재수량',
-                name: 'quantityRequired',
+                header: '비고',
+                name: 'comm',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
-            },
+            },            
+            /*
             {
-                header: '제품명',
-                name: 'prdName',
+                header: '제품코드',
+                name: 'prdCode',
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
         ],
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 4
+            perPage: 15
         }
     });
 
