@@ -42,7 +42,7 @@ public class InfoBomRestController {
 	}
 	
 	@PutMapping("prdBom")
-	public ResponseEntity<Map<String, Object>> updatePrdBom(@RequestBody PrdBomDTO prdBomDTO) {
+	public Map<String, Object> updatePrdBom(@RequestBody PrdBomDTO prdBomDTO) {
 	    return bomService.modifyPrdBom(prdBomDTO);
 	}	
 }
