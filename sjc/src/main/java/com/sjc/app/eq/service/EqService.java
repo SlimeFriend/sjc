@@ -32,4 +32,8 @@ public interface EqService {
 	// 점검 목록 조회 eqChckVO 쪽
 	public List<EqChckVO> jgList();
 	
+	// 비가동 목록 등록
+	void saveNonOperating(EqChckVO eqChckVO);
+
 }
+

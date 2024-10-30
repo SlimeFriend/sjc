@@ -139,5 +139,15 @@ public class EqController {
 		
 		return "equip/eqJumgum";
 	}
+	
+	@PostMapping("nOpRegister")
+	@ResponseBody
+	public EqChckVO registerNonOperating(@RequestBody EqChckVO eqChckVO) {
+	    // eqChckVO를 이용해 서비스 레이어에서 로직 처리 후 DB에 저장
+		//int nid = eqService.nOpRegister(eqChckVO)
+	    eqService.saveNonOperating(eqChckVO);
+	    return eqChckVO;  // 저장된 데이터를 반환해 화면에서 바로 추가할 수 있게 함
+	}
+
 
 } // end of class
