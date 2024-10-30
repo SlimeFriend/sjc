@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>업체 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+</head>
+<body>
+<div class="main-container">
+    <h3>업체 관리</h3>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-1 col-form-label h4">업체코드</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpCode" placeholder="업체코드 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpName" placeholder="업체명 입력">
+        </div>
+
+        <label class="col-sm-12 col-md-1 col-form-label">업체구분</label>
+        <div class="col-sm-12 col-md-2">
+            <input class="form-control" type="text" id="inputCpType" placeholder="업체구분 입력">
+        </div>
+
+		<button class="btn btn-primary" id="searchBtn">검색</button>
+		
+    </div>
+
+    <div id="grid"></div>
+</div>
+
+<script th:src="@{/assets/js/info/cpList.js}"></script>
+
+</body>
+</html>

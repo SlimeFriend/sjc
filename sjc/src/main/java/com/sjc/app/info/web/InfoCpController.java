@@ -19,5 +19,10 @@ public class InfoCpController {
 	public String infoCpListGridFetch() {
 		return "info/cpListGridFetch";
 	}
+	
+	@GetMapping("infoCpList")
+	public String infoCpList() {
+		return "info/cpList";
+	}
 
 }
