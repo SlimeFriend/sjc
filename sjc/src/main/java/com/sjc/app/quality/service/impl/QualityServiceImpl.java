@@ -94,8 +94,8 @@ public class QualityServiceImpl implements QualityService{
 	}
 	// 품질검사상세-insDetail 데이터 갯수 카운트
 	@Override
-	public List<InspectionVO> testCountSelect(InspectionVO inspectionVO) {
-		return qualityMapper.selectTestCount(inspectionVO);
+	public int insItemCount(InspectionVO inspectionVO) {
+		return qualityMapper.countInsItem(inspectionVO);
 	}
 	// 품질검사상세- insDetail 생성
 	@Transactional
@@ -105,10 +105,11 @@ public class QualityServiceImpl implements QualityService{
 	}
 	// 품질검사상세- insDetail 데이터 출력
 	@Override
-	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
-		return qualityMapper.selectInsDetail(inspectionVO);
+	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO) {
+		return qualityMapper.selectTestDetail(inspectionVO);
 	}
-	
+
+
 	// 입고품질검사 상세목록 /
 	@Override
 	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode) {
@@ -121,7 +122,10 @@ public class QualityServiceImpl implements QualityService{
 		return qualityMapper.selectTest();
 	}
 	
-	
+	@Override
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
+		return qualityMapper.selectInsDetailList(inspectionVO);
+	}
 	
 	
 	
@@ -286,6 +290,8 @@ public class QualityServiceImpl implements QualityService{
 //	}
 //		return list;
 //	}
+
+
 
 
 

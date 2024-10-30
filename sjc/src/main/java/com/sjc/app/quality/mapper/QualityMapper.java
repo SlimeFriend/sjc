@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
-import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 
 
@@ -14,21 +13,22 @@ public interface QualityMapper {
 	
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> selectMtlOdDetail(String mtlOdCode);
-	// 품질검사상세페이지
-//	public List<Map<String, Object>> selectInspectionDetail(String mtlOdDetailCode);
+
 	// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
 	public int updateMtlOdStatus(InspectionVO inspectionVO);
 	public int updateMtlOdDetailStatus(InspectionVO inspectionVO);
-	// 품질검사상세페이지
+	// 품질검사
 	public int whetherInspection(InspectionVO inspectionVO);
 	public int insertInspection(InspectionVO inspectionVO);
 	public List<InspectionVO> selectInspection(InspectionVO inspectionVO);
 	
-	// 품질검사값 입력
-	public List<InspectionVO> selectTestCount(InspectionVO inspectionVO);
+	// 품질검사상세-insDetail 데이터 갯수 카운트
+	public int countInsItem(InspectionVO inspectionVO);
+	// 품질검사상세- insDetail 생성
 	public int insertInsDetail(InspectionVO inspectionVO);
-	public List<InspectionVO> selectInsDetail(InspectionVO inspectionVO);
-	
+	// 품질검사상세- insDetail 데이터 출력
+	public List<InspectionVO> selectTestDetail(InspectionVO inspectionVO);
+	public List<InspectionVO> selectInsDetailList(InspectionVO inspectionVO);
 	// 입고품질검사 상세목록 /
 	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);
 	
@@ -84,6 +84,9 @@ public interface QualityMapper {
 	//public int updateMtlOdDone(@Param("mtlOdStatus")String mtlOdStatus, InspectionVO inspectionVO);
 
 	public void insertMtInInfo(InspectionVO inspectionVO);
+
+
+
 
 
 	
