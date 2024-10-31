@@ -8,10 +8,10 @@
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">완제품 출고</h2>
+			<h2 class="h2 mb-20">출고관리</h2>
 			
 			<div class="pd-30 card-box mb-20">
-				<h4 class="h5 mb-20">주문내역</h4>
+				<h4 class="h5 mb-20">출고접수</h4>
 				<div id="gridOrder"></div>
 			</div>
 			
@@ -270,7 +270,7 @@
 			                	outRemainData: remainData
 			                };
 			                
-			                console.log(requestData);
+			                console.log("미출고량 데이터: " + JSON.stringify(requestData));
 			                
 			                $.ajax({
 			                    url: '/remainInfo',
