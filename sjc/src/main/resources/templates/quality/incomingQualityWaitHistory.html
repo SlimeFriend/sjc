@@ -76,10 +76,10 @@
 									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 조회 </button></div>
 									
 								</div>
-								<div class="pd-20 card-box mb-20" style="width: 50%;">
+<!-- 								<div class="pd-20 card-box mb-20" style="width: 50%;">
 									<h2 class="h5 mb-20">불량상세목록</h2>
 									<div id="gridBomDetail"></div>
-								</div> 
+								</div> --> 
 							</div>
 
 						</div>
@@ -309,10 +309,6 @@
 					name : 'numberOfFailed',
 					align : 'center',
 				}, {
-					header : '총합격수',
-					name : 'numberOfTotalPass',
-					align : 'center',
-				}, {
 					header : '총합격여부',
 					name : 'totalPass',
 					align : 'center',
@@ -374,7 +370,7 @@
 					header : '품질검사결과값',
 					name : 'insValue',
 					align : 'center',
-					editor : 'text'
+					editor : 'text',
 				}, {
 					header : '품질검사기준',
 					name : 'insItemCiteria',
@@ -383,6 +379,15 @@
 					header : '품질검사결과판정',
 					name : 'insResult',
 					align : 'center',
+					editor: {
+		                  type: 'select',
+		                  options: {
+		                    listItems: [
+		                      { text: '합격', value: '합격' },
+		                      { text: '불합격', value: '불합격' },
+		                    ]
+		                  }
+		                },
 				}, ],
 				rowHeaders : [ 'rowNum' ],
 				pageOptions : {

@@ -261,10 +261,10 @@ public class QualityServiceImpl implements QualityService{
 	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> list) {
 	
 		for (InspectionVO inspectionVO : list) {
-			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료
 			qualityMapper.updateMtlOdDone(inspectionVO);
 			// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
-			qualityMapper.selectMtIn(inspectionVO);
+			//qualityMapper.selectMtIn(inspectionVO);
 			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 			qualityMapper.insertMtInInfo(inspectionVO);
 		
