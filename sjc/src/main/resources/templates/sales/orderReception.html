@@ -12,8 +12,7 @@
 			<div class="d-flex justify-content-between">
 				<div class="pd-20 card-box mb-20" style="width: 48%">
 					<h2 class="h5 mb-20">주문서 작성</h2>
-					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form"
-						method="post">
+					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
 						<div class="form-group">
 							<label for="company">업체명</label> 
 							<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요.">
