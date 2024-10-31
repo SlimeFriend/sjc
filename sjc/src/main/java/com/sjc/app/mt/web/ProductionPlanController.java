@@ -23,6 +23,9 @@ public class ProductionPlanController {
     @Autowired
     private MaterialService materialService;
 
+    /**
+     * 모든 생산 계획 목록을 가져와서 productionPlanList 페이지에 전달
+     */
     @GetMapping("/productionPlanList")
     public String getProductionPlans(Model model) {
         List<PlanVO> productionPlans = productionPlanService.getAllProductionPlans();
@@ -30,7 +33,9 @@ public class ProductionPlanController {
         return "mt/productionPlanList";   
     }
 
-    // 선택된 생산 계획에 따른 자재 목록을 반환하는 메서드
+    /**
+     * 선택된 생산 계획 코드(planCode)에 따른 자재 목록을 반환
+     */
     @GetMapping("/getMaterialsByPlan")
     @ResponseBody
     public List<MtVO> getMaterialsByPlan(@RequestParam String planCode) {

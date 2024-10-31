@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>입고 목록</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>입고 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-	<div class="main-container">
-		<div class="container">
-			<h1>입고 내역</h1>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>LOT번호</th>
-						<th>발주코드</th>
-						<th>자재코드</th>
-						<th>자재명</th>
-						<th>입고량</th>
-						<th>입고일</th>
-						<th>유통기한</th>
-					</tr>
-				</thead>
-				<tbody>
-					
-					<tr th:if="${#lists.isEmpty(mtInList)}">
-						<td colspan="7" class="text-center">입고된 자재가 없습니다.</td>
-					</tr>
-					
-					<tr th:each="mtIn : ${mtInList}">
-						<td th:text="${mtIn.lotNo != null ? mtIn.lotNo : '-'}">LOT번호</td>
-						<td th:text="${mtIn.mtlOdCode != null ? mtIn.mtlOdCode : '-'}">발주코드</td>
-						<td th:text="${mtIn.mtCode != null ? mtIn.mtCode : '-'}">자재코드</td>
-						<td th:text="${mtIn.mtName != null ? mtIn.mtName : '-'}">자재명</td>
-						<td th:text="${mtIn.inquantity != null ? mtIn.inquantity : '-'}">입고수량</td>
-						<td
-							th:text="${mtIn.inputDate != null ? #dates.format(mtIn.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
-						<td
-							th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+    <div class="main-container">
+        <div class="container">
+            <h1>입고 내역</h1>
+
+            <!-- 입고 목록 테이블 -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>LOT번호</th>
+                        <th>발주코드</th>
+                        <th>자재코드</th>
+                        <th>자재명</th>
+                        <th>입고량</th>
+                        <th>입고일</th>
+                        <th>유통기한</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 입고된 자재가 없는 경우 -->
+                    <tr th:if="${#lists.isEmpty(mtInList)}">
+                        <td colspan="7" class="text-center">입고된 자재가 없습니다.</td>
+                    </tr>
+
+                    <!-- 입고된 자재 목록 반복 출력 -->
+                    <tr th:each="mtIn : ${mtInList}">
+                        <td th:text="${mtIn.lotNo != null ? mtIn.lotNo : '-'}">LOT번호</td>
+                        <td th:text="${mtIn.mtlOdCode != null ? mtIn.mtlOdCode : '-'}">발주코드</td>
+                        <td th:text="${mtIn.mtCode != null ? mtIn.mtCode : '-'}">자재코드</td>
+                        <td th:text="${mtIn.mtName != null ? mtIn.mtName : '-'}">자재명</td>
+                        <td th:text="${mtIn.inquantity != null ? mtIn.inquantity : '-'}">입고수량</td>
+                        <td th:text="${mtIn.inputDate != null ? #dates.format(mtIn.inputDate, 'yyyy-MM-dd') : '-'}">입고일</td>
+                        <td th:text="${mtIn.ed != null ? #dates.format(mtIn.ed, 'yyyy-MM-dd') : '-'}">유통기한</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

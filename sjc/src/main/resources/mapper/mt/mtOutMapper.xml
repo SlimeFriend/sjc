@@ -2,29 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.MtOutMapper">
 
-	<!-- 출고 내역 조회 -->
-	<select id="selectOutgoingList" resultType="map">
- SELECT 
-    MO.OUT_CODE AS "outCode",
-    MO.PDETAIL_CODE AS "pDetailCode" ,
-    MO.LOT_NO AS "lotNo" ,    
-    MO.MT_CODE AS "materialCode" ,
-    MT.MT_NAME AS "materialName" ,
-    MO.MT_OUT_COUNT AS "outgoingQuantity" ,
-    MO.OUT_DATE AS "outDate"   
-FROM 
-    MT_OUT MO 
-JOIN 
-    MT MT ON MO.MT_CODE = MT.MT_CODE 
-ORDER BY 
-    MO.LOT_NO
-
-
-
-
-
-
-
-	</select>
+    <!-- 출고 내역 조회: MT_OUT 테이블에서 출고 내역을 조회하고 LOT_NO 기준으로 정렬 -->
+    <select id="selectOutgoingList" resultType="map">
+        SELECT 
+            MO.OUT_CODE AS "outCode",
+            MO.PDETAIL_CODE AS "pDetailCode",
+            MO.LOT_NO AS "lotNo",
+            MO.MT_CODE AS "materialCode",
+            MT.MT_NAME AS "materialName",
+            MO.MT_OUT_COUNT AS "outgoingQuantity",
+            MO.OUT_DATE AS "outDate"
+        FROM 
+            MT_OUT MO
+        JOIN 
+            MT MT ON MO.MT_CODE = MT.MT_CODE
+        ORDER BY 
+            MO.LOT_NO
+    </select>
 
 </mapper>
