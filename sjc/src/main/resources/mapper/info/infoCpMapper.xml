@@ -14,8 +14,45 @@
 	        <if test="cpCode != null and cpCode != ''">
 	            AND UPPER(cp_code) LIKE UPPER('%' || #{cpCode} || '%')
 	        </if>
-
+	        <if test="cpName != null and cpName != ''">
+	            AND UPPER(cp_name) LIKE UPPER('%' || #{cpName} || '%')
+	        </if>
 	    </where>
 	    ORDER BY CP_CODE
 	</select>
+	
+    <update id="updateCp" parameterType="CpVO">
+        UPDATE 	cp
+        SET 	
+            	cp_name = #{cpName}
+            	cp_type = #{cpType}
+            	business_no = #{businessNo}
+            	address = #{address}
+        		comm = #{comm}
+        WHERE 	cp_code = #{cpCode}
+    </update>
+    
+    <insert id="insertCp" parameterType="CpVO">
+	<selectKey keyProperty="cpCode" order="BEFORE" resultType="String">
+		select 'CP' || lpad(to_char(NVL(max(substr(cp_code, 3, 2)), 0) + 1), 2, 0)
+		from 	cp
+	</selectKey>
+	    INSERT INTO cp (
+	    	cp_code
+	    	,cp_name
+	    	,cp_type
+	    	,business_no
+	    	,address
+	    	,comm
+	
+	    ) VALUES (
+	    	#{cpCode}
+	    	,#{cpName}
+	    	,#{cpType}
+	    	,#{businessNo}
+	    	,#{address}
+	    	,#{comm}
+	    )
+    </insert>
+	
 </mapper>
