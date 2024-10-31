@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoCpMapper;
 import com.sjc.app.info.service.InfoCpService;
+import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.sales.service.CpVO;
 
 import io.micrometer.core.annotation.Timed;
@@ -28,6 +30,16 @@ public class InfoCpServiceImpl implements InfoCpService {
 	@Override
 	public List<CpVO> cpList(CpVO cpVO) {
 		return infoCpMapper.selectCpAllList(cpVO);
+	}
+
+	@Override
+	@Transactional
+	public List<CpVO> modifyCps(List<CpVO> CpVOs) {
+	    	
+        for (CpVO cpVO : CpVOs) {
+        	infoCpMapper.insertCp(cpVO);
+        }
+        return CpVOs;
 	}
 
 }

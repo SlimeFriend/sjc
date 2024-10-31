@@ -3,6 +3,8 @@ package com.sjc.app.info.web;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sjc.app.info.service.InfoCpService;
@@ -21,4 +23,9 @@ public class InfoCpRestController {
 		return infoCpService.cpList(cpVO);
 	}
 
+    @PutMapping("cps")
+    public List<CpVO> updateUsers(@RequestBody List<CpVO> cpVOs) {
+        return infoCpService.modifyCps(cpVOs);
+    }	
+	
 }
