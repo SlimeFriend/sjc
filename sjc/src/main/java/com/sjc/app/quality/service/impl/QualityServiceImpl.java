@@ -103,28 +103,34 @@ public class QualityServiceImpl implements QualityService{
 	public int insertInsDetail(InspectionVO inspectionVO) {
 		return qualityMapper.insertInsDetail(inspectionVO);
 	}
-	// 품질검사상세- insDetail 데이터 출력
+	// 품질검사상세- 검사리스트 출력
 	@Override
 	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO) {
 		return qualityMapper.selectTestDetail(inspectionVO);
 	}
-
-
-	// 입고품질검사 상세목록 /
 	@Override
-	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode) {
-		return qualityMapper.selectIncomingTest(mtlOdDetailCode);
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
+		return qualityMapper.selectInsDetailList(inspectionVO);
 	}
+	// 품질검사상세 - insDetail - insValue 업데이트
+	@Override
+	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> list) {
+		
+		for(InsDetailVO insDetailVO : list) {
+			
+			qualityMapper.updateInsValue(insDetailVO);
+		}
+		
+		
+		return list;
+	}
+
+
 	
 	//검사기준목록
 	@Override
 	public List<InspectionVO> testList() {
 		return qualityMapper.selectTest();
-	}
-	
-	@Override
-	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
-		return qualityMapper.selectInsDetailList(inspectionVO);
 	}
 	
 	

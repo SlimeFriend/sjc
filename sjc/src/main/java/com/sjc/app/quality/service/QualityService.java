@@ -28,15 +28,24 @@ public interface QualityService {
 	public int insItemCount(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 생성
 	public int insertInsDetail(InspectionVO inspectionVO);
-	// 품질검사상세- insDetail 데이터 출력
+	// 품질검사상세- 검사리스트 출력
 	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
 	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
-	
-	// 입고품질검사 상세목록 /
-	public List<Map<String, Object>> incomingTestList(String mtlOdDetailCode);
+	// 품질검사상세 - insDetail - insValue 업데이트
+	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> insDetailVO);
+
 	
 	//검사기준목록
 	public List<InspectionVO> testList();
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

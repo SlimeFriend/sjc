@@ -3,7 +3,10 @@ package com.sjc.app.quality.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 
 
@@ -26,12 +29,11 @@ public interface QualityMapper {
 	public int countInsItem(InspectionVO inspectionVO);
 	// 품질검사상세- insDetail 생성
 	public int insertInsDetail(InspectionVO inspectionVO);
-	// 품질검사상세- insDetail 데이터 출력
+	// 품질검사상세- 검사리스트 출력
 	public List<InspectionVO> selectTestDetail(InspectionVO inspectionVO);
 	public List<InspectionVO> selectInsDetailList(InspectionVO inspectionVO);
-	// 입고품질검사 상세목록 /
-	public List<Map<String, Object>> selectIncomingTest(String mtlOdDetailCode);
-	
+	// 품질검사상세 - insDetail - insValue 업데이트
+	public void updateInsValue (InsDetailVO insDetailVO);
 	
 	//검사기준목록
 	public List<InspectionVO> selectTest();
