@@ -230,4 +230,9 @@ public class PrdtServiceImpl implements PrdtService {
 		return 0;
 
 	}
+
+	@Override
+	public List<PlanDVO> planPrd(String planCode) {
+		return prdtMapper.planPrd(planCode);
+	}
 }

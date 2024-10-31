@@ -71,4 +71,7 @@ public interface PrdtService {
 	// 오더 생성
 	public int insertOrd(PoVO poVO);
 	
+	// 생산 계획 남은 제품 수량 파악
+	public List<PlanDVO> planPrd(String planCode);
+	
 }

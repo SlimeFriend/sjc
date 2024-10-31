@@ -17,7 +17,7 @@
 					method="post">
 					<div class="form-group">
 							<label>생산계획</label> 
-							<select name="planCode">
+							<select name="planCode" id="planCode">
 								<option></option>
 								<th:block th:block th:each="list: ${list}">
 									<option>[[ ${list} ]]</option>
@@ -80,7 +80,13 @@
 			
 			let plangrid;
 			
+			let planData;
+			
+			
 			document.addEventListener('DOMContentLoaded', function() {
+				
+				const pc = $('#planCode');
+				
 				
 				const gridData = /*[[${linePrd}]]*/[];
 
@@ -162,16 +168,30 @@
 							
 				 });
 				
+				pc.on('change', ()=>{
+					const planCode= pc.val();
+						
+					$.ajax({
+					    url: 'planPrd',
+					    type: 'GET',
+					    data: {
+					        planCode : planCode // 예를 들어 특정 ID의 데이터를 요청
+					    },
+					    success: function(response) {
+					        plangrid.resetData(response);
+					    },
+					    error: function(jqXHR, textStatus, errorThrown) {
+					        console.error('Error:', textStatus, errorThrown);
+					    }
+					});
+				});
+				
 				plangrid = new tui.Grid({
 					el : document.getElementById('plangrid'),
-					data : gridData,
+					data : planData,
 					scrollX : false,
 					scrollY : false,
 					columns : [ {
-						header : '가동 가능 라인',
-						name : 'lineCode',
-						align : 'center',
-					}, {
 						header : '제품명',
 						name : 'prdName',
 						align : 'center',
@@ -179,23 +199,20 @@
 						header : '제품코드',
 						name : 'prdCode',
 						align : 'center',
-					},  {
-						header : '목표량',
-						name : 'want',
-						align : 'center',
-						editor: 'text',
 					}, {
-						header : '지시량',
-						name : 'command',
+						header : '남은 계획량',
+						name : 'quantity',
 						align : 'center',
-						editor: 'text',
-					}],
+					}
+					],
 					rowHeaders : [ 'rowNum' ],
 					pageOptions : {
 						useClient : true,
 						perPage : 10
 					}
 				});
+				
+
 				
 				
 			function mtload(){
@@ -218,28 +235,19 @@
 		            return response.json(); // JSON 응답으로 변환
 		        })
 		        .then(data => {
-		            data.forEach(need =>{
-		            	mtgridData = /*[[${need}]]*/[];
+		            
 		            	mtgrid.resetData(data);
-		            });
+		           
 		            
 		        })
 		        .catch(error => {
 		            console.error('문제가 발생했습니다:', error);
 		        });
 			}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			});
+						
+		});
 			
+	
 			
 		// 체크된 행의 데이터를 가져오는 함수
 		/* function logCheckedRows() {
@@ -276,7 +284,7 @@
 		        contentType: 'application/json', // JSON 형식으로 데이터 전송
 		        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
 		        success: function(response) {
-		            alert('주문이 성공적으로 접수되었습니다!');
+		            alert('생산지시가 생성되었습니다!');
 		            window.location.href = "pOrderList";
 		            console.log(response); // 서버에서 받은 응답 처리
 		        }
