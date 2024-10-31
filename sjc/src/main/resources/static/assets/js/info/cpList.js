@@ -60,6 +60,82 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    const gridCpModal = new tui.Grid({
+        el: document.getElementById('gridCpModal'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '업체코드',
+                name: 'cpCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '업체명',
+                name: 'cpName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',
+                validation: {
+					required: true,
+			        regExp: /^[가-힣a-zA-Z]+$/
+                },                
+            },
+            {
+                header: '업체구분',
+                name: 'cpType',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: {
+                  type: 'select',
+                  options: {
+                    listItems: [
+                      { text: '자재', value: '자재' },
+                      { text: '완제품', value: '완제품' },
+                    ]
+                  }
+                },                
+                                  
+            },
+            {
+                header: '사업자번호',
+                name: 'businessNo',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+                                  
+            },
+            {
+                header: '주소',
+                name: 'address',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+                                  
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+                                  
+            }
+        ],
+        //rowHeaders: ['checkbox', 'rowNum'],
+        pageOptions: {
+            useClient: true,
+            perPage: 15
+        }
+    });
+    
     const gridCpInsertModal = new tui.Grid({
         el: document.getElementById('gridCpInsertModal'),
         scrollX: false,
@@ -92,8 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					required: true,
 			        regExp: /^[가-힣a-zA-Z]+$/
                 },                
-                                
-                                  
             },
             {
                 header: '업체구분',
@@ -257,5 +331,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	    .finally(() => {
 	    	
 	    });
-    }    
+    }
+    
+	grid.on('click', (ev) => {
+	    const rowKey = ev.rowKey;
+	    
+		const cpCode = grid.getValue(rowKey, 'cpCode');
+		
+		if(cpCode){
+	        const params = new URLSearchParams({
+			    cpCode: cpCode,
+			}); 
+	        
+	        const url = `/cps?${params.toString()}`;
+		
+	        fetch(url)
+	        .then(response => response.json())
+	        .then(result => {
+	            gridCpModal.resetData(result);
+	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
+	            $('#CpModal').modal('show');
+	            gridCpModal.refreshLayout();            
+	        })
+	        .catch(error => {
+	            console.error(error);
+	        });
+		}
+    });    
+    
+    
+    
+        
 });

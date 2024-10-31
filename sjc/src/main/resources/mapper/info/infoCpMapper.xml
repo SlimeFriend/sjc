@@ -12,7 +12,7 @@
 		from    CP
 	    <where>
 	        <if test="cpCode != null and cpCode != ''">
-	            AND UPPER(cp_code) LIKE UPPER('%' || #{cpCode} || '%')
+	            AND UPPER(cp_code) = UPPER(#{cpCode})
 	        </if>
 	        <if test="cpName != null and cpName != ''">
 	            AND UPPER(cp_name) LIKE UPPER('%' || #{cpName} || '%')
