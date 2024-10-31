@@ -12,13 +12,21 @@ import lombok.Data;
 public class PrdManagementVO {
 	private String prdName;
 	private String prdCode;
+	private String inOutType;
+	private String cpName;
 	private String lot;
-	private Date md;
-	private Date ed;
 	private Integer inQuantity;
 	private Integer outQuantity;
 	private Integer stcQuantity;
 	private Integer remainQuantity;
+	
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date md;
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date ed;
 	
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -27,7 +35,4 @@ public class PrdManagementVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date outDate;
-    
-	private String inOutType;
-	private String cpName;
 }

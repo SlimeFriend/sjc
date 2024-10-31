@@ -21,7 +21,7 @@
 						</div>
 						<div class="form-group">
 							<label>납기일자</label> 
-							<input class="form-control" type="date" name="dlvReqDate">
+							<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate">
 						</div>
 						<div class="form-group">
 							<label>요청사항</label>
@@ -163,13 +163,22 @@
 				    
 				});
 				
+			    // 현재 날짜 가져오기
+			    const today = new Date();
+			 	
+			    // 오늘 날짜에 1일 추가
+			    today.setDate(today.getDate() + 1);
+			    const dd = String(today.getDate()).padStart(2, '0');
+			    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 1월은 0
+			    const yyyy = today.getFullYear();
+
+			    // YYYY-MM-DD 형식으로 변환
+			    const formattedToday = yyyy + '-' + mm + '-' + dd;
+
+			    // 납기일자 입력 필드에 min 속성 설정
+			    document.getElementById('dlvReqDate').setAttribute('min', formattedToday);
+				
 			});
-			
-		// 체크된 행의 데이터를 가져오는 함수
-		/* function logCheckedRows() {
-		    const checkedRows = grid.getCheckedRows();
-		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
-		} */
 		
 		document.getElementById('cpInput').addEventListener('click', function() {
 			$('#myModal').modal('show'); // 모달 열기

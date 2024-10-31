@@ -26,7 +26,7 @@
 						</div>
 						<!-- Modal body -->
 						<div class="modal-body">
-							    <h5 class="h5">주문목록</h5>
+							    <h5 class="h5 mb-20">주문목록</h5>
 								<div id="gridOrderDetail"></div>
 								<div id="selectProductLot"></div>
 						</div>
@@ -232,6 +232,24 @@
 				}
 			});
 			
+			function fetchOutGrid() {
+				fetch('/getOutOrders')
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Network response was not ok');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                outGrid.resetData(data); // TOAST UI Grid에 데이터 설정
+	            })
+	            .catch(error => {
+	                console.error('Error fetching out orders:', error);
+	            });
+			}
+			
+			fetchOutGrid();
+			
 		    let ordCodeValue = "";
 		    let prdCodeValue = "";
 		    let cpName = "";
@@ -297,9 +315,16 @@
 			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
 			    const lotValue = productLotGrid.getValue(rowKey, 'LOT'); // LOT 값 가져오기
 			    const productName = productLotGrid.getValue(rowKey, 'PRD_NAME'); // 제품명 가져오기
+			    const lotOutQuantity = productLotGrid.getValue(rowKey, 'OUT_QUANTITY');
 
 			    // 출고량을 해당 행에 설정
 			    productLotGrid.setValue(rowKey, 'OUT_QUANTITY', value);
+			    
+			 	// 가격과 수량 검증
+			    if (isNaN(lotOutQuantity) || lotOutQuantity === '' || Number(lotOutQuantity) <= 0) {
+			        alert('올바르지 않은 값이 들어왔습니다.');
+			        productLotGrid.setValue(rowKey, 'OUT_QUANTITY', '');
+			    }
 			    
 			    totalOutQuantity = 0;
 			    let alertTriggered = false; // 알림이 발생했는지 추적하는 변수
@@ -328,9 +353,10 @@
 			                }
 			            }
 			        } else {
-			            if (currentOutQuantity) { 
-			                totalOutQuantity += Number(currentOutQuantity);
-			            }
+			        	
+			        	if (currentOutQuantity && !isNaN(currentOutQuantity)) { 
+			        	    totalOutQuantity += Number(currentOutQuantity);
+			        	}
 
 			            // 출고량이 입력되어 있다면 outData에 추가, 중복 체크
 			            if (currentOutQuantity && !outLotData.some(item => item.lot === currentLot)) {
@@ -380,7 +406,7 @@
 			});
 
 			document.getElementById('submitBtn').addEventListener('click', () => {
-			    
+				
 				const lotRowCount = productLotGrid.getRowCount();
 							    
 			    for (let i = 0; i < lotRowCount; i++) {
@@ -390,6 +416,16 @@
 			    const modalRowCount = gridModal.getRowCount();
 			    let isTrue = true;
 			    
+			    for(let i = 0; i < modalRowCount; i++) {
+			    	let orderQuantity = gridModal.getValue(i, 'ORDQUANTITY');
+			    	let totalOutQuantity = gridModal.getValue(i, 'totalOutQuantity');
+			    	
+			    	if(orderQuantity != totalOutQuantity) {
+			    		alert('제품 주문량과 출고량을 확인해주세요.')
+			    		isTrue = false;
+			    		return;
+			    	}
+			    }
 			    
 			    if(isTrue) {
 				    for(let i = 0; i < modalRowCount; i++) {
@@ -412,13 +448,14 @@
 				    	    outPrdData: outPrdData,
 				    };
 				    
-				    $.ajax({
+				   $.ajax({
 			    		url: '/getPrdOutInfo',
 			    		type: 'POST',
 			    		contentType: 'application/json',
 			    		data: JSON.stringify(requestData),
 						success: function(response) {
 			    			alert("출고가 정상적으로 접수되었습니다.");
+			    			fetchOutGrid();
 			    		}
 			    	});
 			    }
@@ -432,7 +469,7 @@
 			    
 			    // 그리드 레이아웃 새로고침
 			    productLotGrid.refreshLayout();
-			    
+			    outGrid.refreshLayout();
 			});
 			
 			document.getElementById('cancelBtn').addEventListener('click', () => {

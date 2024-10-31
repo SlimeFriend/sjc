@@ -90,6 +90,7 @@ public class SalesController {
 		List<ProductVO> productLotList = salesService.productLot();
 		model.addAttribute("products", productList);
 		model.addAttribute("productManagement", productLotList);
+
 		return "sales/productManagement";
 	}
 	
@@ -118,10 +119,14 @@ public class SalesController {
 		// 주문접수 상태의 주문 목록
 	    List<OrderVO> orderList = salesService.getOrdersByStatus("주문접수");
 	    model.addAttribute("orderGrid", orderList);
-	    // 출고완료 상태의 주문 목록
-	    List<OrderVO> outList = salesService.getOrdersByStatus("출고완료");
-	    model.addAttribute("outGrid", outList);
 		return "sales/productOut";
+	}
+	
+	// 출고완료 상태의 주문 목록
+	@GetMapping("/getOutOrders")
+	@ResponseBody
+	public List<OrderVO> getOutOrders() {
+	    return salesService.getOrdersByStatus("출고완료");
 	}
 	
 	// 제품 출고 상세 페이지
