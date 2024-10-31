@@ -49,17 +49,18 @@
 <a href="/orderRequestList" class="btn btn-primary">발주 목록으로 돌아가기</a>
 <script>
 function loadOrderDetails(cpCode) {
-    $.ajax({
-        url: '/orderRequestDetails',
-        method: 'GET',
-        data: { cpCode: cpCode },
-        success: function(data) {
-            let detailsTable = $('#order-details-table tbody');
-            detailsTable.empty();
-            if (data.length > 0) {
-                data.forEach(function(detail) {
+    fetch(`/orderRequestDetails?cpCode=${encodeURIComponent(cpCode)}`)
+        .then(response => response.json())
+        .then(data => {
+            let detailsTable = document.getElementById("orderDetailsBody");
+            detailsTable.innerHTML = "";
+
+            if (data.length === 0) {
+                detailsTable.innerHTML = "<tr><td colspan='8'>발주 상세 내역이 없습니다.</td></tr>";
+            } else {
+                data.forEach(detail => {
                     const orderAmount = detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-';
-                    detailsTable.append(`
+                    detailsTable.innerHTML += `
                         <tr>
                             <td>${detail.mtlOdDetailCode || '-'}</td>
                             <td>${detail.mtCode || '-'}</td>
@@ -70,17 +71,11 @@ function loadOrderDetails(cpCode) {
                             <td>${orderAmount}</td> 
                             <td>${detail.mtlOdDate ? new Date(detail.mtlOdDate).toLocaleString() : '-'}</td>
                             <td>${detail.comm || '-'}</td>
-                        </tr>
-                    `);
+                        </tr>`;
                 });
-            } else {
-                detailsTable.append('<tr><td colspan="8">발주 상세 내역이 없습니다.</td></tr>'); // colspan 수정
             }
-        },
-        error: function() {
-            alert('발주 상세 내역을 가져오는 중 오류가 발생했습니다.');
-        }
-    });
+        })
+        .catch(error => console.error("Error fetching order details:", error));
 }
 
 </script>

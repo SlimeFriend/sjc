@@ -3,6 +3,8 @@ package com.sjc.app.pr.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
@@ -11,6 +13,7 @@ import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrcVO;
+import com.sjc.app.sales.service.ProductVO;
 
 public interface PrdtMapper {
 	// 계획 전체조회
@@ -54,4 +57,22 @@ public interface PrdtMapper {
 	void pstart(Map<String, Object> params);
 	
 	public List<InfoUserVO> lmanager(String ldetailCode);
+	
+	// 제품리스트
+	public List<ProductVO> productList();
+	
+	// 계획 생성을 위한 코드 생성
+	public String getPlanCode();
+	
+	// 계획 생성
+	public int insertPlan(PlanVO planVO);
+	
+	// 계획 상세 생성
+	public int insertPlanDetail(@Param("productVO") ProductVO productVO,@Param("planCode") String planCode);
+	
+	// 계획 상세 삭제
+	public int deletePlanD(String pCode);
+	
+	// 계획 삭제
+	public int deletePlan(String pCode);
 }

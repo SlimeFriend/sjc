@@ -1,45 +1,11 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
-<head>
-    <meta charset="UTF-8">
-    <title>BOM 관리</title>
-    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-</head>
-<body>
-<div class="main-container">
-    <h3>BOM 관리</h3>
+/*
+* processList.js
+*/
 
-    <div class="form-group row">
-        <label class="col-sm-12 col-md-1 col-form-label">공정코드</label>
-        <div class="col-sm-12 col-md-2">
-            <input class="form-control" type="text" id="inputProcessCode" placeholder="공정코드 입력">
-        </div>
-        
-        <label class="col-sm-12 col-md-1 col-form-label h4">공정명</label>
-        <div class="col-sm-12 col-md-2">
-            <input class="form-control" type="text" id="inputProcessName" placeholder="공정명 입력">
-        </div>
-        
-        <label class="col-sm-12 col-md-1 col-form-label">공겅구분</label>
-        <div class="col-sm-12 col-md-2">
-            <input class="form-control" type="text" id="inputPrccessType" placeholder="공정구분 입력">
-        </div>
-
-		<button class="btn btn-primary" id="searchBtn">검색</button>
-    </div>
-    
-    <div id="grid"></div>
-</div>
-
-<script>
 document.addEventListener('DOMContentLoaded', function() {
+
+    tui.Grid.applyTheme('striped');
+	
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -60,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
             {
-                header: '공정구분',
+                header: '공겅구분',
                 name: 'prccessType',
                 align: 'center',
                 sortingType: 'desc',
@@ -113,6 +79,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fetchPrds();
 });
-</script>
-</body>
-</html>

@@ -13,16 +13,6 @@ layout:fragment="Content">
 <body>
     <div class="main-container">
         <h3>생산 계획</h3>
-        <table id="bl" class="table table-secondary table-hover">
-            <thead>
-                <tr>
-                    <th>생산계획 코드</th>
-                    <th>시작 일자</th>
-                    <th>완료 일자</th>
-                    <th>담당자</th>
-                    <th>비고</th>
-                </tr>
-            </thead>    
             <input name="btn" type="radio" value="a" id="all" checked>
             <label for="all">전체</label>
             <input name="btn" type="radio" value="a1" id="no">
@@ -34,16 +24,20 @@ layout:fragment="Content">
             
             
             
+            <button id='dbtn' name='dbtn' disabled='true'>삭제</button>
+        <table id="bl" class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    <th>생산계획 코드</th>
+                    <th>시작 일자</th>
+                    <th>완료 일자</th>
+                    <th>담당자</th>
+                    <th>비고</th>
+                </tr>
+            </thead>    
+            
             <tbody id="plan">
-                <th:block th:each="list, sts : ${list}">
-                    <tr>
-                        <td th:text="${list.planCode}"></td>
-                        <td>[[ ${list.startDate} ]]</td>
-                        <td>[[ ${list.endDate} ]]</td>
-                        <td th:text="${list.manager}"></td>
-                        <td th:text="${list.comm}"></td>
-                    </tr>
-                </th:block>
+
             </tbody>
         </table>
         <h3>생산 계획 상세</h3>
@@ -53,7 +47,6 @@ layout:fragment="Content">
                     <th>제품명</th>
                     <th>수량</th>
                     <th>우선 순위</th>
-                    <th>비고</th>
                 </tr>
             </thead>    
             <tbody id="dbody"> 
@@ -62,149 +55,101 @@ layout:fragment="Content">
     </div>
     
     <script>
-        const plan = document.getElementById('plan');
-        const detailBody = document.getElementById('detail-body');  
-        const be = document.getElementsByName('btn');
-        
-		Array.from(be).forEach((b) =>{ 
-        
-        	b.addEventListener('change', (event) => {
-        		console.log(1);
-                const val = document.querySelector('input[type=radio][name=btn]:checked').value;
-                
-                fetch('/planListS?status=' + val)
-                    .then(function(resp) {
-                        if (!resp.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return resp.json();
-                    })
-                    .then(function(resp) {
-                        // 상세 테이블 내용 초기화
-                        plan.innerHTML = '';
-
-                        // 받아온 데이터로 테이블 행 추가
-                        resp.forEach(item => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${item.planCode}</td>
-                                <td>${item.startDate}</td>
-                                <td>${item.endDate}</td>
-                                <td>${item.manager}</td>
-                                <td>${item.comm}</td>
-                            `;
-                            plan.appendChild(row);
-                            
-                            dbody.innerHTML = '';
-                            
-                            Array.from(plan.children).forEach((pl) => {
-                                pl.addEventListener('click', (event) => {
-                                    const planCode = event.currentTarget.children[0].textContent;
-                                    
-                                    fetch('/planDList?planCode=' + planCode)
-                                        .then(function(resp) {
-                                            if (!resp.ok) {
-                                                throw new Error('Network response was not ok');
-                                            }
-                                            return resp.json();
-                                        })
-                                        .then(function(resp) {
-                                            // 상세 테이블 내용 초기화
-                                            dbody.innerHTML = '';
-
-                                            // 받아온 데이터로 테이블 행 추가
-                                            resp.forEach(item => {
-                                                const row = document.createElement('tr');
-                                                row.innerHTML = `
-                                                    <td>${item.prdName}</td>
-                                                    <td>${item.quantity}</td>
-                                                    <td>${item.no}</td>
-                                                    <td>${item.comm}</td>
-                                                `;
-                                                dbody.appendChild(row);
-                                            });
-                                        })
-                                        .catch(function(error) {
-                                            console.error('Fetch error:', error);
-                                        });
-                                });
-                            });
-                            
-                        });
-                    })
-                    .catch(function(error) {
-                        console.error('Fetch error:', error);
-                    });
-                
-                
-                Array.from(plan.children).forEach((pl) => {
-                    pl.addEventListener('click', (event) => {
-                        const planCode = event.currentTarget.children[0].textContent;
-                        
-                        fetch('/planDList?planCode=' + planCode)
-                            .then(function(resp) {
-                                if (!resp.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
-                                return resp.json();
-                            })
-                            .then(function(resp) {
-                                // 상세 테이블 내용 초기화
-                                dbody.innerHTML = '';
-
-                                // 받아온 데이터로 테이블 행 추가
-                                resp.forEach(item => {
-                                    const row = document.createElement('tr');
-                                    row.innerHTML = `
-                                        <td>${item.prdName}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${item.no}</td>
-                                        <td>${item.comm}</td>
-                                    `;
-                                    dbody.appendChild(row);
-                                });
-                            })
-                            .catch(function(error) {
-                                console.error('Fetch error:', error);
-                            });
-                    });
+    const plan = document.getElementById('plan');
+    const detailBody = document.getElementById('dbody');  
+    const be = document.getElementsByName('btn');
+    const dbtn = document.getElementById('dbtn');
+    let pCode = '';
+    
+    const fetchPlans = (status) => {
+        detailBody.innerHTML = ''; // 상세 테이블 초기화
+        fetch('/planListS?status=' + status)
+            .then(resp => {
+                if (!resp.ok) throw new Error('Network response was not ok');
+                return resp.json();
+            })
+            .then(resp => {
+                plan.innerHTML = ''; // 현재 계획 초기화
+                resp.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.dataset.code = item.status;
+                    row.innerHTML = `
+                        <td>${item.planCode}</td>
+                        <td>${item.startDate}</td>
+                        <td>${item.endDate}</td>
+                        <td>${item.userName}</td>
+                        <td>${item.comm}</td>
+                    `;
+                    plan.appendChild(row);
                 });
-            });
-        	
-		});
-		
+                addRowClickListeners(); // 계획이 채워진 후 클릭 리스너 추가
+            })
+            .catch(error => console.error('Fetch error:', error));
+    };
+
+    const fetchDetails = (planCode) => {
+        fetch('/planDList?planCode=' + planCode)
+            .then(resp => {
+                if (!resp.ok) throw new Error('Network response was not ok');
+                return resp.json();
+            })
+            .then(resp => {
+                detailBody.innerHTML = ''; // 상세 테이블 초기화
+                resp.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.prdName}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.no}</td>
+                    `;
+                    detailBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Fetch error:', error));
+    };
+
+    const addRowClickListeners = () => {
         Array.from(plan.children).forEach((pl) => {
             pl.addEventListener('click', (event) => {
-                const planCode = event.currentTarget.children[0].textContent;
-                
-                fetch('/planDList?planCode=' + planCode)
-                    .then(function(resp) {
-                        if (!resp.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return resp.json();
-                    })
-                    .then(function(resp) {
-                        // 상세 테이블 내용 초기화
-                        dbody.innerHTML = '';
-
-                        // 받아온 데이터로 테이블 행 추가
-                        resp.forEach(item => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${item.prdName}</td>
-                                <td>${item.quantity}</td>
-                                <td>${item.no}</td>
-                                <td>${item.comm}</td>
-                            `;
-                            dbody.appendChild(row);
-                        });
-                    })
-                    .catch(function(error) {
-                        console.error('Fetch error:', error);
-                    });
+                pCode = event.currentTarget.children[0].textContent;
+                const cstatus = event.currentTarget.dataset.code;
+                dbtn.disabled = (cstatus !== 'a1'); // 상태가 'a1'일 때만 삭제 버튼 활성화
+                fetchDetails(pCode);
             });
         });
+    };
+
+    Array.from(be).forEach((b) => {
+        b.addEventListener('change', (event) => {
+        	dbtn.disabled = true;
+            const val = document.querySelector('input[type=radio][name=btn]:checked').value;
+            fetchPlans(val);
+        });
+    });
+
+    // 기본 체크된 라디오 버튼에 대한 초기 fetch
+    fetchPlans('a'); // 'a'가 기본 값이라고 가정
+        
+    dbtn.addEventListener('click', function(){
+    	$.ajax({
+    	    url: 'deletePlan', // 요청할 URL
+    	    type: 'POST', // HTTP 요청 방식
+    	    data: {
+    	        pCode : pCode
+    	    },
+    	    dataType: 'json', // 응답 데이터 형식
+    	    success: function(response) {
+    	        // 요청 성공 시 실행되는 콜백 함수
+    	        if(reponse = 1){
+    	        	alert('삭제 완료');
+    	        }
+    	    },
+    	    error: function(xhr, status, error) {
+    	        // 요청 실패 시 실행되는 콜백 함수
+    	        console.error('Error:', error);
+    	    }
+    	});
+    });
 
        	
         	

@@ -19,5 +19,10 @@ public class InfoMtController {
 	public String infoMtListGridFetch() {
 		return "info/mtListGridFetch";
 	}
+	
+	@GetMapping("infoMtList")
+	public String infoMtList() {
+		return "info/mtList";
+	}
 
 }

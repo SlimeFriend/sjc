@@ -405,6 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
         ],
+	    bodyHeight: 210,
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
@@ -557,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    ],
             pageOptions: {
             useClient: true,
-            perPage: 13
+            perPage: 15
         }
     });
 

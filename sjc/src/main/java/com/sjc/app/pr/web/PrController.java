@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.info.service.InfoUserVO;
+import com.sjc.app.pr.service.CplanVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
@@ -22,6 +23,7 @@ import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
+import com.sjc.app.sales.service.ProductVO;
 
 /**
  * 개발자 조수호     
@@ -40,9 +42,7 @@ public class PrController {
 	// 계획 전체 조회
 	@GetMapping("planList")
 	public String planList(Model model) {
-		List<PlanVO> list = prdtService.planList();
 		
-		model.addAttribute("list", list);
 		
 		return "pr/planList";
 	}
@@ -58,13 +58,29 @@ public class PrController {
 	// 계획 생성 Get
 	@GetMapping("planCreate")
 	public String planCreatePage(Model model) {
+		
+		List<ProductVO> productList = prdtService.productList();
+	
+
+		model.addAttribute("products", productList);
+		
 		return "pr/planCreate";
 	}
 	
 	// 계획 생성 Post
 	@PostMapping("planCreate")
-	public int planCreate(Model model) {
-		return 0;
+	@ResponseBody
+	public String planCreate(@RequestBody CplanVO cplanVO) {
+		
+		int createResult = prdtService.insertPlan(cplanVO);
+		
+		if(createResult > 0) {
+		
+		return "suc";
+		}
+		
+		
+		return "fail";
 	}
 	
 	// 계획 상세 조회
@@ -201,4 +217,19 @@ public class PrController {
 		return prdtService.lmanager(ldetailCode);
 	}
 	
+	@GetMapping("updatePD")
+	@ResponseBody
+	public List<PDetailVO> updatePD(){
+		
+		return prdtService.useD();
+	}
+	
+	@PostMapping("deletePlan")
+	@ResponseBody
+	public int deletePlan(String pCode) {
+		
+		int a = prdtService.deletePlan(pCode);
+		
+		return a;
+	}
 }
