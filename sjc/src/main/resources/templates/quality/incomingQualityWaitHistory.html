@@ -100,8 +100,8 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const gridData = /*[[${mtlList}]]*/[];
 			const gridDetailData = /*[[${mtlOdDetail}]]*/[];
-			const gridInspectionData = /*[[${inspectionList}]]*/[];
-			const gridInsDetailData = /*[[${insDetailList}]]*/[];
+			const gridInspectionData = /*[[${insList}]]*/[];
+			const gridInsDetailData = /*[[${newList}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -402,7 +402,7 @@
 	                console.log(requestData);
 	                
 	                $.ajax({
-	                    url: '/incomingInspectionDetail',
+	                    url: '/insValueUpdate',
 	                    type: 'POST',
 	                    contentType: 'application/json',
 	                    data: JSON.stringify(requestData),

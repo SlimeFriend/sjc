@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
 
@@ -107,7 +108,7 @@ public class QualityController {
 
 			int countInsItem = qualityService.insItemCount(inspectionVO);
 
-			// 품질검사상세- insDetail 데이터 출력
+			// 품질검사상세- 검사리스트 출력
 			testList = qualityService.testDetailSelect(inspectionVO);
 			if (countInsItem == 0) {
 
@@ -144,41 +145,25 @@ public class QualityController {
 
 		}
 
-//    // 품질검사상세
-//    @PostMapping("/incomingInspectionDetail")
-//    @ResponseBody
-//    @Transactional
-//    public List<InspectionVO> insertInsDetail(@RequestBody List<InspectionVO> list) {
-//    	
-//    	
-//    	
-//    	
-//    	
-//    	for(InspectionVO insVO : list ) {
-//    		
-//    		// 품질검사상세- insDetail 생성
-//    		qualityService.insertInsDetail(insVO);
-//    		// 품질검사상세- insDetail 데이터 출력
-//    		//List<InspectionVO> insDetailList = qualityService.insDetailList(insVO);
-//    		
-//    	}
-//
-//    	
-//    	return list;
-//    	
-//    }
+		
+		// 품질검사상세 - insDetail - insValue 업데이트
+		@PostMapping("insValueUpdate")
+		@ResponseBody
+		public List<InsDetailVO> insValueUpdate(@RequestBody List<InsDetailVO> insDetailVO) {
+			
+
+			
+			return qualityService.insValueUpdate(insDetailVO);
+		}
+
+		
+		
+		
+		
     
     
     
-//    // 입고품질검사 상세목록 /
-//    @PostMapping("incomingTestReception")
-//    @ResponseBody
-//    public List<Map<String, Object>> incomingTestReceptionPage(@RequestBody Map<String, String> requestData) {
-//    	String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
-//    	
-//    	List<Map<String, Object>> mtlOdDetailCodeDetail =  qualityService.incomingTestList(mtlOdDetailCode);
-//    	return mtlOdDetailCodeDetail;
-//    }
+
     
     
 

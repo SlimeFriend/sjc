@@ -193,6 +193,12 @@
 		WHERE	ins_code = #{insCode}
 	</select>
 	
+	<update id="updateInsValue">
+		UPDATE 	ins_detail
+		SET   	ins_value = #{insValue}
+		WHERE 	ins_detail_code = #{insDetailCode}
+	</update>
+	
 	
 	
 	
