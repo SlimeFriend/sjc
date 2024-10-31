@@ -32,13 +32,17 @@
 
 <!-- 지시 전체 조회 -->
 <select id="selectOrderAll" resultType="POrderVO">
-	select porder_code,
-			start_date,
-			porder_date,
-			manager,
-			comm,
-			plan_code
-	from porder
+	select p.porder_code,
+			p.start_date,
+			p.porder_date,
+			p.manager,
+			p.comm,
+			plan_code,
+			u.user_name
+	from porder p
+	join sjc_user u
+	on p.manager = u.user_id
+	
 	
 </select>
 
@@ -304,4 +308,99 @@ where p.prd_code = #{prdCode}
 	where plan_code = #{planCode}
 </delete>
 
+
+<select id="linePrdList" resultType="LinePrdVO">
+	select l.line_code,
+        l.prd_code,
+        p.prd_name
+		from line l
+		join prd p
+		on l.prd_code = p.prd_code
+		where l.use = 'Y'
+		order by p.prd_code
+</select>
+
+
+<select id="orderMt" resultType="NeedVO">
+	select d.mt_code,
+        d.quantity_required * #{command} AS quantity_required,
+        m.mt_name,
+        m.current_stc
+		from prd p
+		join bom b 
+		on p.prd_code = b.prd_code
+		join b_detail d 
+		on b.bom_code = d.bom_code
+		join mt m
+		on d.mt_code = m.mt_code
+		where p.prd_code = #{prdCode}
+	
+</select>
+
+<select id="findPC" resultType="String">
+	select plan_code
+	from plan
+	where status = 'a1'
+</select>
+
+
+<!-- 오더 코드 생성 -->
+<select id="getOrdCode" resultType="String">
+	SELECT 
+		CASE
+		WHEN (MAX(SUBSTR(porder_code, 3, 8)) = TO_CHAR(SYSDATE, 'yyyyMMdd')) THEN 
+		     ('PO' || TO_CHAR(MAX(SUBSTR(plan_code, 3, 11)) + 1))
+		ELSE 
+		     ('PO' || TO_CHAR(SYSDATE, 'yyyyMMdd') || TO_CHAR(LPAD(1, 3, '0')))
+		   END AS porder_code
+		FROM porder
+</select>
+	
+	
+	
+<!-- 지시 생성 -->
+<insert id="insertOrd" parameterType="PlanVO">
+	insert into porder(porder_code,
+					plan_code,
+					porder_date,
+					manager,
+					comm,
+					status)
+	values (#{porderCode},
+			#{planCode},
+			sysdate,
+			#{manager},
+			#{comm},
+			'b1')
+</insert>
+
+<!-- 지시상세 생성 -->
+<insert id="insertDetail" parameterType="map">
+    INSERT INTO pdetail (
+        pdetail_code,
+        prd_name,
+        want,
+        command,
+        output,
+        porder_code,
+        status,
+        line_code,
+        prd_code
+        
+    ) VALUES (
+        'PD' || TO_CHAR(SYSDATE, 'yyyyMMdd') || LPAD(pd_seq.NEXTVAL, 4, '0'),
+        #{linePrdVO.prdName},
+        #{linePrdVO.want},
+        #{linePrdVO.command},
+        0,
+        #{porderCode},
+        'b1',
+        #{linePrdVO.lineCode},
+        #{linePrdVO.prdCode}
+        
+    )
+</insert>	
+	
+	
+	
 </mapper>

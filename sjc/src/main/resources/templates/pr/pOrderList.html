@@ -17,8 +17,8 @@ layout:fragment="Content">
             <thead>
                 <tr>
                     <th>생산지시 코드</th>
+                    <th>지시 일자</th>
                     <th>시작 일자</th>
-                    <th>완료 일자</th>
                     <th>담당자</th>
                     <th>비고</th>
                 </tr>
@@ -27,9 +27,9 @@ layout:fragment="Content">
                 <th:block th:each="list: ${list}">
                     <tr>
                         <td th:text="${list.porderCode}"></td>
-                        <td>[[ ${list.startDate} ]]</td>
                         <td>[[ ${list.porderDate} ]]</td>
-                        <td th:text="${list.manager}"></td>
+                        <td>[[ ${list.startDate} ]]</td>
+                        <td th:text="${list.userName}"></td>
                         <td th:text="${list.comm}"></td>
                     </tr>
                 </th:block>

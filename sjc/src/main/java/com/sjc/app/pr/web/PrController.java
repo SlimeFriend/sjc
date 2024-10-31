@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.service.CplanVO;
+import com.sjc.app.pr.service.LinePrdVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PoVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 import com.sjc.app.sales.service.ProductVO;
@@ -105,6 +107,13 @@ public class PrController {
 	// 지시 페이지
 	@GetMapping("pOrder")
 	public String pOrder(Model model) {
+		List<LinePrdVO> linePrdList = prdtService.linePrdList();
+		
+		List<String> list = prdtService.findPC();
+		
+		model.addAttribute("linePrd", linePrdList);
+		
+		model.addAttribute("list", list);
 
 		return "pr/pOrder";
 	}
@@ -231,5 +240,32 @@ public class PrController {
 		int a = prdtService.deletePlan(pCode);
 		
 		return a;
+	}
+	
+	
+	// 생산 지시 자재 수량
+	@PostMapping("orderMt")
+	@ResponseBody
+	public List<NeedVO> orderMt(@RequestBody List<LinePrdVO> linePrd) {
+		
+		List<NeedVO> need = prdtService.orderMt(linePrd);
+		
+		return need;
+	}
+	
+	
+	@PostMapping("pOrder")
+	@ResponseBody
+	public String pOrder(@RequestBody PoVO poVO) {
+		
+		int createResult = prdtService.insertOrd(poVO);
+		
+		if(createResult > 0) {
+		
+		return "suc";
+		}
+		
+		
+		return "fail";
 	}
 }
