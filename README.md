@@ -8,4 +8,4 @@
 김동훈, 조수호, 정현우, 이성철, 김민준, 이승주
 
 # 3. 사용기술
-Spring Boot, Spring Security, BootStrap5, HTML5, Javascript, Jquery, Ajax, CSS, Thymeleaf, Mybatis, Java, Oracle 11g, GitHub, Lombok
+Spring Boot, Spring Security, BootStrap5, HTML5, Javascript, Jquery, Ajax, CSS, Thymeleaf, Mybatis, Java, Oracle 11g, GitHub, Lombok, Toast UI
