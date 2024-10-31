@@ -352,7 +352,7 @@
                , mtl_od_date
                , dilivery_date
                , price
-               , mt_code
+               --, mt_code 수정해야함 수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함
                , cp_code
                , user_id
                , mtl_od_status
