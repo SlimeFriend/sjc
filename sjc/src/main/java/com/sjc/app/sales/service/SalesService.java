@@ -6,6 +6,10 @@ import java.util.Map;
 public interface SalesService {
 	
 	// 주문접수 프로세스
+	
+	// 업체 선택
+	public List<CpVO> cpList();
+	
     public int insertOrder(SalesDTO salesDTO);
 	public List<OrderVO> order();
 	public List<Map<String, Object>> orderDetail(String ordCode);
@@ -33,7 +37,5 @@ public interface SalesService {
 	
 	public List<Map<String, Object>> productDetail(String prdCode);
 	
-	// 업체
-	public List<OrderVO> companyList();
 
 }

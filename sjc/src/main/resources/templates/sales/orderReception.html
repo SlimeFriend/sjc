@@ -10,36 +10,54 @@
 		<div class="pd-20">
 			<h2 class="h2 mb-20">주문접수</h2>
 			<div class="d-flex justify-content-between">
-				<div class="pd-20 card-box mb-20" style="width: 48%;">
+				<div class="pd-20 card-box mb-20" style="width: 48%">
 					<h2 class="h5 mb-20">주문서 작성</h2>
-					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
+					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form"
+						method="post">
 						<div class="form-group">
-							<label for="company">업체명</label> <input list="companies"
-								id="company" class="form-control" placeholder="업체를 선택하세요">
-							<input name="companyCode" id="companyCode" type="hidden" th:field="*{cpCode}">
-							<datalist id="companies">
-								<th:block th:each="company : ${companyList}">
-									<option th:value="${company.cpName}" th:text="${company.cpCode}"
-										th:attr="data-id=${company.cpCode}"></option>
-								</th:block>
-							</datalist>
+							<label for="company">업체명</label> 
+							<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요.">
+							<input class="form-control" type="hidden" id="cpCode" name="cpCode">
 						</div>
 						<div class="form-group">
-							<label>납기일자</label> <input class="form-control" type="date"
-								th:field="*{dlvReqDate}" name="dlvReqDate">
+							<label>납기일자</label> 
+							<input class="form-control" type="date" name="dlvReqDate">
 						</div>
 						<div class="form-group">
 							<label>요청사항</label>
-							<textarea class="form-control" name="comm" th:field="*{comm}"></textarea>
+							<textarea class="form-control" name="comm"></textarea>
 						</div>
 						<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
 					</form>
 				</div>
 				
-				<div class="pd-20 card-box mb-20" style="width: 48%;">
+				<div class="pd-20 card-box mb-20" style="width: 48%">
 					<h2 class="h5 mb-20">제품 선택</h2>
 					<div id="grid"></div>
 				</div>
+				
+				<!-- The Modal -->
+			<div class="modal" id="myModal">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">업체선택</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<div class="modal-body">
+							    <h5 class="h5">업체목록</h5>
+								<div id="cpList"></div>
+						</div>
+						<!-- Modal footer -->
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmitBtn">등록</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancelBtn">취소</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</div>
@@ -51,6 +69,7 @@
 			document.addEventListener('DOMContentLoaded', function() {
 				
 				const gridData = /*[[${products}]]*/[];
+				const modalGridData = /*[[${cpList}]]*/[];
 
 				grid = new tui.Grid({
 					el : document.getElementById('grid'),
@@ -86,6 +105,64 @@
 						perPage : 10
 					}
 				});
+				
+				modalGrid = new tui.Grid({
+					el : document.getElementById('cpList'),
+					data : modalGridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '업체코드',
+						name : 'cpCode',
+						align : 'center',
+					}, {
+						header : '업체명',
+						name : 'cpName',
+						align : 'center',
+					}, {
+						header : '주소',
+						name : 'address',
+						align : 'center',
+					}, ],
+					rowHeaders : [ 'rowNum' ],
+					selectionUnit: 'row',
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
+				
+				modalGrid.on('click', (ev) => {
+				    const { value } = ev; // 입력된 출고량
+				    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+					const cpCode = modalGrid.getValue(rowKey, 'cpCode');
+				    const cpName = modalGrid.getValue(rowKey, 'cpName');
+				    
+			        document.getElementById('cpCode').value = cpCode; // 업체 코드
+			        document.getElementById('cpInput').value = cpName; // 업체 이름
+				});
+				
+				grid.on('editingFinish', (ev) => {
+				    const { value } = ev; // 입력된 출고량
+				    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+					const price = grid.getValue(rowKey, 'price');
+				    const quantity = grid.getValue(rowKey, 'ordQuantity');
+				    
+				    // 가격과 수량 검증
+				    if (isNaN(price) || price === '' || Number(price) < 0) {
+				        alert('가격은 숫자여야 하며 0보다 커야 합니다.');
+				        grid.setValue(rowKey, 'price', ''); // 가격 필드를 초기화
+				        return; // 함수 종료
+				    }
+
+				    if (isNaN(quantity) || quantity === '' || Number(quantity) < 0) {
+				        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
+				        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
+				        return; // 함수 종료
+				    }
+				    
+				});
+				
 			});
 			
 		// 체크된 행의 데이터를 가져오는 함수
@@ -94,59 +171,75 @@
 		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
 		} */
 		
+		document.getElementById('cpInput').addEventListener('click', function() {
+			$('#myModal').modal('show'); // 모달 열기
+			modalGrid.refreshLayout();
+		});
+		
+		
+		document.getElementById('modalSubmitBtn').addEventListener('click', function() {
+			modalGrid
+		});
+		
 		function sendCheckedRows() {
-		    const checkedRows = grid.getCheckedRows();
-
-		    if (checkedRows.length === 0) {
-		        alert('선택된 데이터가 없습니다.');
-		        return;
-		    }
-
-		    // 폼 데이터를 직접 수집
+			
+			let checkedRows = grid.getCheckedRows();
+			
+			// 폼 데이터를 직접 수집
 		    const formArr = $("form[name=form]").serializeArray();
 		    
 		    const formObj = {};
 		    $.each(formArr, function(idx, tag) {
-		    	formObj[tag.name] = tag.value;
+		        formObj[tag.name] = tag.value;
 		    });
 
-		    // 폼 데이터와 체크된 그리드 데이터를 병합
+		    // 업체 유효성 검사
+		    if (!formObj.cpName) {
+		        alert('업체를 선택해주세요.');
+		        return;
+		    }
+		    
+		    if (!formObj.dlvReqDate) {
+		        alert('납기일자를 설정해주세요');
+		        return;
+		    }
+		    
+		    // 체크된 행이 없는 경우 경고
+		    if (checkedRows.length === 0) {
+		        alert('제품을 선택해주세요.');
+		        return;
+		    }
+		    
+		 	// 가격과 수량 유효성 검사
+		    for (let i = 0; i < checkedRows.length; i++) {
+		        const row = checkedRows[i];
+		        if (!row.price || row.price <= 0) {
+		            alert('체크된 제품의 가격을 입력해주세요.');
+		            return;
+		        }
+		        if (!row.ordQuantity || row.ordQuantity <= 0) {
+		            alert('체크된 제품의 수량을 입력해주세요.');
+		            return;
+		        }
+		    }
+
+		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    const payload = {
 		        orderVO: formObj,    // 폼 데이터 (주문 정보)
 		        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
 		    };
 
-		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    $.ajax({
-		        url: '/orderReception', // 서버에서 처리할 URL 경로
+		        url: '/orderReception',
 		        type: 'POST',
-		        contentType: 'application/json', // JSON 형식으로 데이터 전송
-		        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
+		        contentType: 'application/json',
+		        data: JSON.stringify(payload),
 		        success: function(response) {
 		            alert('주문이 성공적으로 접수되었습니다!');
 		            window.location.href = "orderHistory";
-		            console.log(response); // 서버에서 받은 응답 처리
+		            console.log(response);
 		        }
 		    });
 		}
 
-		</script>
-
-	<script>
-		 let company = document.querySelector("#company")
-		 let companyCode =  document.querySelector("#companyCode")
-		 let companies = document.querySelector("#companies");
-
-		 company.addEventListener("change", function(){
-		   let sel = this.value;
-		   let result = Array.from(companies.options).find(ele =>(ele.value == sel));
-		   if( result ) 
-		     companyCode.value = result.dataset.id
-		   else {
-		     this.value = '';
-		     companyCode.value = '';
-		     this.focus();
-		     alert('업체를 올바르게 선택하세요');
-		   }
-		 })
 	</script>

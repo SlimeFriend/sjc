@@ -5,15 +5,19 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.sjc.app.sales.service.CpVO;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
 import com.sjc.app.sales.service.outHistoryVO;
 
 public interface SalesMapper {
-
+	
 	// 주문접수
 	public int insertOrder(OrderVO orderVO);
+	
+	// 업체 리스트
+	public List<CpVO> selectCp();
 	
 	// 주문내역
 	public List<OrderVO> selectOrder();
@@ -48,14 +52,11 @@ public interface SalesMapper {
 	public List<PrdManagementVO> selectInHistory();
 	public List<outHistoryVO> selectOutHistory();
 	
-	// 업체 리스트
-	public List<OrderVO> selectCompany();
-	
 	
 	// 제품 출고 프로세스
 	
 	// 미출고량 계산
-	int selectRemainData(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode);
+	public int selectRemainData(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode);
 	
 	// 출고내역 등록
 	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName);

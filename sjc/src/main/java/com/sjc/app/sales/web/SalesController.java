@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sjc.app.sales.service.CpVO;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
@@ -33,10 +34,10 @@ public class SalesController {
 	@GetMapping("/orderReception")
 	public String orderReceptionPage(Model model) {
 		List<ProductVO> productList = salesService.productList();
-		List<OrderVO> companyList = salesService.companyList();
+		List<CpVO> cpList = salesService.cpList();
 
 		model.addAttribute("products", productList);
-		model.addAttribute("companyList", companyList);
+		model.addAttribute("cpList", cpList);
 		model.addAttribute("orderVO", new OrderVO());
 
 		return "sales/orderReception";
@@ -147,12 +148,10 @@ public class SalesController {
 		
 	    List<Map<String, Object>> outLotData = requestData.get("outLotData");
 	    List<Map<String, Object>> outPrdData = requestData.get("outPrdData");
-	    List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
 	    
 	    Map<String, Object> combinedData = new HashMap<>();
 	    combinedData.put("outLotData", outLotData);
 	    combinedData.put("outPrdData", outPrdData);
-	    combinedData.put("outRemainData", outRemainData);
 	    
 	    int result = salesService.productOutProcess(combinedData);
 	    
