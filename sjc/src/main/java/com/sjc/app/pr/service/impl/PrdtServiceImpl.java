@@ -1,5 +1,7 @@
 package com.sjc.app.pr.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,12 +11,14 @@ import org.springframework.stereotype.Service;
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.mapper.PrdtMapper;
 import com.sjc.app.pr.service.CplanVO;
+import com.sjc.app.pr.service.LinePrdVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
 import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
+import com.sjc.app.pr.service.PoVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
 import com.sjc.app.sales.service.ProductVO;
@@ -164,4 +168,66 @@ public class PrdtServiceImpl implements PrdtService {
 		return 0;
 	}
 
+	@Override
+	public List<LinePrdVO> linePrdList() {
+		return prdtMapper.linePrdList();
+	}
+
+	@Override
+	public List<NeedVO> orderMt(List<LinePrdVO> linePrd) {
+	    Map<String, NeedVO> needsMap = new HashMap<>(); // 자재 코드를 키로 사용
+	    List<NeedVO> needs = new ArrayList<>(); // 최종 결과 리스트
+
+	    linePrd.forEach(lpd -> {
+	        prdtMapper.orderMt(lpd).forEach(need -> {
+	            String code = need.getMtCode(); // NeedVO에서 자재 코드 가져오기
+
+	            if (needsMap.containsKey(code)) {
+	                // 이미 존재하는 자재이면 수량 합산
+	                NeedVO existingNeed = needsMap.get(code);
+	                existingNeed.setQuantityRequired(existingNeed.getQuantityRequired() + need.getQuantityRequired());
+	            } else {
+	                // 새 자재이면 맵에 추가
+	                needsMap.put(code, need);
+	            }
+	        });
+	    });
+
+	    // 맵의 값을 리스트로 변환
+	    needs.addAll(needsMap.values());
+
+	    return needs;
+	}
+
+	@Override
+	public List<String> findPC() {
+		
+		return prdtMapper.findPC();
+	}
+
+	@Override
+	public int insertOrd(PoVO poVO) {
+
+		// 생산계획 코드
+		String nextId = prdtMapper.getOrdCode();
+		String ordCode = String.valueOf(nextId);
+				
+		// 생산계획 
+		POrderVO porderVO = poVO.getPorderVO();
+		porderVO.setPorderCode(ordCode);
+		int pinresult = prdtMapper.insertOrd(porderVO);
+				
+				
+		List<LinePrdVO> linePrdList = poVO.getLinePrdVO(); 
+		if(pinresult > 0) {
+			linePrdList.forEach(lp -> {
+			     prdtMapper.insertDetail(lp, porderVO.getPorderCode());
+			     });
+			        
+			        
+			return 1;
+		}
+		return 0;
+
+	}
 }

@@ -58,4 +58,17 @@ public interface PrdtService {
 	
 	// 계획 삭제
 	public int deletePlan(String pCode);
+	
+	// 가동 라인 제품
+	public List<LinePrdVO> linePrdList();
+	
+	// 라인 제품 수량
+	public List<NeedVO> orderMt(List<LinePrdVO> linePrd);
+	
+	// 상태 a1인 계획 코드
+	public List<String> findPC();
+	
+	// 오더 생성
+	public int insertOrd(PoVO poVO);
+	
 }

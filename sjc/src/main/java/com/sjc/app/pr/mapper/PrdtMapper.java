@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.sjc.app.info.service.InfoUserVO;
+import com.sjc.app.pr.service.LinePrdVO;
 import com.sjc.app.pr.service.NeedVO;
 import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.pr.service.POrderVO;
@@ -75,4 +76,20 @@ public interface PrdtMapper {
 	
 	// 계획 삭제
 	public int deletePlan(String pCode);
+	
+	// 가동 라인 제품
+	public List<LinePrdVO> linePrdList();
+	
+	// 지시 자재
+	public List<NeedVO> orderMt(LinePrdVO linePrdVO);
+	
+	// 계획코드 
+	public List<String> findPC();
+	
+	// 지시 생성 위한 코드
+	public String getOrdCode();
+	
+	public int insertOrd(POrderVO porderVO);
+	
+	public int insertDetail(@Param("linePrdVO") LinePrdVO linePrdVO,@Param("porderCode") String porderCode);
 }

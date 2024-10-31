@@ -11,5 +11,5 @@ public class POrderVO {
     private String comm;
     private String status;
     private String planCode;
-    
+    private String userName;
 }

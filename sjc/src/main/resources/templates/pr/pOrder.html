@@ -8,9 +8,289 @@
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 <div class="main-container">
 	<div class="pd-ltr-20">
-
-			
 		
+		<h2 class="h2 mb-20">생산지시</h2>
+		<div class="d-flex justify-content-between">
+			<div class="pd-20 card-box mb-20" style="width: 48%;">	
+				<h2 class="h5 mb-20">생산지시 정보</h2>
+				<form name="form"
+					method="post">
+					<div class="form-group">
+							<label>생산계획</label> 
+							<select name="planCode">
+								<option></option>
+								<th:block th:block th:each="list: ${list}">
+									<option>[[ ${list} ]]</option>
+								</th:block>
+							</select>
+							<br>
+							
+						<th:block sec:authorize="isAuthenticated()">
+							<label>담당자</label>
+							<input class="form-control" type="text"
+						th:value="${#authentication.principal.authorities[2]}" readonly>
+							<input type="hidden" 
+							th:value="${#authentication.principal.authorities[1]}"
+							name="manager">
+						</th:block>
+					</div>
+						
+					<div class="form-group">
+						<label>요청사항</label>
+						<textarea class="form-control" name="comm"></textarea>
+					</div>
+					<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+
+				</form>
+			</div>
+			
+			<div class="pd-20 card-box mb-20" style="width: 48%;"> 
+				<h2 class="h5 mb-20">생산계획 정보</h2>
+				<div id="plangrid"></div>
+			</div>
+			
+		</div>
+		
+		<div class="d-flex justify-content-between">
+			<div class="pd-20 card-box mb-20" style="width: 48%;"> 
+				<h2 class="h5 mb-20">제품 선택</h2>
+				<div id="grid"></div>
+			</div>
+			
+			
+			<div class="pd-20 card-box mb-20" style="width: 48%;"> 
+				<h2 class="h5 mb-20">필요 자재</h2>
+				<div id="mtgrid">
+				</div>
+			</div>
+		</div>
+
 
 	</div>
 </div>
+
+
+<script th:inline="javascript">
+	
+			let grid; 
+			
+			let mtgrid;
+			
+			let mtgridData;
+			
+			let plangrid;
+			
+			document.addEventListener('DOMContentLoaded', function() {
+				
+				const gridData = /*[[${linePrd}]]*/[];
+
+				grid = new tui.Grid({
+					el : document.getElementById('grid'),
+					data : gridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '가동 가능 라인',
+						name : 'lineCode',
+						align : 'center',
+					}, {
+						header : '제품명',
+						name : 'prdName',
+						align : 'center',
+					}, {
+						header : '제품코드',
+						name : 'prdCode',
+						align : 'center',
+					},  {
+						header : '목표량',
+						name : 'want',
+						align : 'center',
+						editor: 'text',
+					}, {
+						header : '지시량',
+						name : 'command',
+						align : 'center',
+						editor: 'text',
+					}],
+					rowHeaders : [ 'checkbox' ],
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
+				
+				
+				mtgrid = new tui.Grid({
+					el : document.getElementById('mtgrid'),
+					data : mtgridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '자재명',
+						name : 'mtName',
+						align : 'center',
+					}, {
+						header : '자재코드',
+						name : 'mtCode',
+						align : 'center',
+					}, {
+						header : '필요수량',
+						name : 'quantityRequired',
+						align : 'center',
+					},  {
+						header : '재고량',
+						name : 'currentStc',
+						align : 'center'
+					}],
+					rowHeaders : [ 'rowNum' ],
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
+				
+				
+				
+				
+				grid.on('uncheck', (ev)=>{
+					mtload();
+				})
+				
+				 grid.on('check', (ev) => {
+					 mtload();
+				        
+							
+				 });
+				
+				plangrid = new tui.Grid({
+					el : document.getElementById('plangrid'),
+					data : gridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '가동 가능 라인',
+						name : 'lineCode',
+						align : 'center',
+					}, {
+						header : '제품명',
+						name : 'prdName',
+						align : 'center',
+					}, {
+						header : '제품코드',
+						name : 'prdCode',
+						align : 'center',
+					},  {
+						header : '목표량',
+						name : 'want',
+						align : 'center',
+						editor: 'text',
+					}, {
+						header : '지시량',
+						name : 'command',
+						align : 'center',
+						editor: 'text',
+					}],
+					rowHeaders : [ 'rowNum' ],
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
+				
+				
+			function mtload(){
+				const checkedRows = grid.getCheckedRows();
+				  if(checkedRows.length == 0){
+			        	mtgrid.resetData([]);
+			        	return;
+			        }
+				fetch('/orderMt', {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/json' // JSON 형식으로 데이터 전송
+		            },
+		            body: JSON.stringify(checkedRows) // 데이터를 JSON으로 변환하여 전송
+		        })
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('네트워크 응답이 좋지 않습니다.');
+		            }
+		            return response.json(); // JSON 응답으로 변환
+		        })
+		        .then(data => {
+		            data.forEach(need =>{
+		            	mtgridData = /*[[${need}]]*/[];
+		            	mtgrid.resetData(data);
+		            });
+		            
+		        })
+		        .catch(error => {
+		            console.error('문제가 발생했습니다:', error);
+		        });
+			}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			});
+			
+			
+		// 체크된 행의 데이터를 가져오는 함수
+		/* function logCheckedRows() {
+		    const checkedRows = grid.getCheckedRows();
+		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
+		} */
+		
+		function sendCheckedRows() {
+		    const checkedRows = grid.getCheckedRows();
+
+		    if (checkedRows.length === 0) {
+		        alert('선택된 데이터가 없습니다.');
+		        return;
+		    }
+
+		    // 폼 데이터를 직접 수집
+		    const formArr = $("form[name=form]").serializeArray();
+		    
+		    const formObj = {};
+		    $.each(formArr, function(idx, tag) {
+		    	formObj[tag.name] = tag.value;
+		    });
+
+		    // 폼 데이터와 체크된 그리드 데이터를 병합
+		    const payload = {
+		        porderVO: formObj,    // 폼 데이터 (주문 정보)
+		        linePrdVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+		    };
+
+		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
+		    $.ajax({
+		        url: '/pOrder', // 서버에서 처리할 URL 경로
+		        type: 'POST',
+		        contentType: 'application/json', // JSON 형식으로 데이터 전송
+		        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
+		        success: function(response) {
+		            alert('주문이 성공적으로 접수되었습니다!');
+		            window.location.href = "planList";
+		            console.log(response); // 서버에서 받은 응답 처리
+		        }
+		    });
+		}
+		
+		
+		
+		
+		
+	
+
+		</script>
+
+	<script>
+
+	</script>
