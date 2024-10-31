@@ -82,6 +82,7 @@
 	join sjc_user u
 	on p.manager = u.user_id
 	where p.status = 'b3'
+	order by pdetail_code desc, start_time desc
 </select>
 
 <!-- 계획 조건부 조회 -->
@@ -308,7 +309,7 @@ where p.prd_code = #{prdCode}
 	where plan_code = #{planCode}
 </delete>
 
-
+<!-- 지시 라인 제품 보여주기 -->
 <select id="linePrdList" resultType="LinePrdVO">
 	select l.line_code,
         l.prd_code,
@@ -316,7 +317,6 @@ where p.prd_code = #{prdCode}
 		from line l
 		join prd p
 		on l.prd_code = p.prd_code
-		where l.use = 'Y'
 		order by p.prd_code
 </select>
 
@@ -340,7 +340,7 @@ where p.prd_code = #{prdCode}
 <select id="findPC" resultType="String">
 	select plan_code
 	from plan
-	where status = 'a1'
+	where status = 'a1' OR status = 'a2'
 </select>
 
 
@@ -401,6 +401,23 @@ where p.prd_code = #{prdCode}
     )
 </insert>	
 	
+<!-- 생산계획 남은 제품 수 -->
+<select id="planPrd" resultType="planDVO">
+select  l.prd_name,
+        l.prd_code,
+        l.quantity - NVL(SUM(d.output), 0) quantity,
+        p.start_date,
+        p.end_date
+from plan_detail l
+left join plan p
+on l.plan_code = p.plan_code
+left join porder o
+on l.plan_code = o.plan_code
+left join pdetail d
+on o.porder_code = d.porder_code
+where l.plan_code = #{planCode}
+group by l.prd_code, l.prd_name, l.quantity, l.plan_detail_code, p.start_date, p.end_date
+</select>
 	
 	
 </mapper>

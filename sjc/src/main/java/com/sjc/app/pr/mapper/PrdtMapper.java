@@ -92,4 +92,6 @@ public interface PrdtMapper {
 	public int insertOrd(POrderVO porderVO);
 	
 	public int insertDetail(@Param("linePrdVO") LinePrdVO linePrdVO,@Param("porderCode") String porderCode);
+	
+	public List<PlanDVO> planPrd(String planCode);
 }

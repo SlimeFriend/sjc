@@ -124,7 +124,7 @@
 		        contentType: 'application/json', // JSON 형식으로 데이터 전송
 		        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
 		        success: function(response) {
-		            alert('주문이 성공적으로 접수되었습니다!');
+		            alert('생산계획이 생성되었습니다!');
 		            window.location.href = "planList";
 		            console.log(response); // 서버에서 받은 응답 처리
 		        }

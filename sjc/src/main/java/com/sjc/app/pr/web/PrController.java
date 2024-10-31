@@ -253,7 +253,7 @@ public class PrController {
 		return need;
 	}
 	
-	
+	// 생산 지시 생성
 	@PostMapping("pOrder")
 	@ResponseBody
 	public String pOrder(@RequestBody PoVO poVO) {
@@ -267,5 +267,13 @@ public class PrController {
 		
 		
 		return "fail";
+	}
+	
+	// 계획 클릭시 나올 남은 제품
+	@GetMapping("planPrd")
+	@ResponseBody
+	public List<PlanDVO> planPrd(@RequestParam String planCode){
+		
+		return prdtService.planPrd(planCode);
 	}
 }
