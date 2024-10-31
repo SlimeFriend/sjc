@@ -26,37 +26,42 @@ public class StockController {
     @Autowired
     private StockService stockService;
 
-    // 전체 재고 리스트를 조회
+    /**
+     * 전체 재고 리스트를 조회하여 stockPage 페이지로 이동
+     */
     @GetMapping("/stock")
     public String getStockList(Model model) {
-        List<MtVO> materials = stockService.getAllMaterials(); // 전체 자재 목록 조회
+        List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials);
-        model.addAttribute("lotDetails", null); // 로트 정보 초기화
-        model.addAttribute("totalQuantity", 0); // 총 수량 초기화
-        return "mt/stockPage"; // 재고 페이지로 이동
+        model.addAttribute("lotDetails", null);
+        model.addAttribute("totalQuantity", 0);
+        return "mt/stockPage";
     }
 
-    // 자재 구분 업데이트 기능
+    /**
+     * 자재 구분(materialType)을 업데이트
+     */
     @PostMapping("/stock/updateMaterialType")
     public String updateMaterialType(@RequestParam("mtCode") String mtCode,
                                      @RequestParam("materialType") String materialType, 
                                      RedirectAttributes redirectAttributes) {
         try {
-            // 자재 구분 업데이트
             stockService.updateMaterialType(mtCode, materialType);
             redirectAttributes.addFlashAttribute("message", "자재 구분이 성공적으로 업데이트되었습니다.");
         } catch (Exception e) {
             logger.error("자재 구분 업데이트 중 오류 발생: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("error", "자재 구분 업데이트에 실패했습니다.");
         }
-        return "redirect:/stock"; 
+        return "redirect:/stock";
     }
 
-    // 품질검사 완료된 자재의 수량을 현재 재고에 추가
+    /**
+     * 품질검사 완료된 자재의 수량을 현재 재고에 추가
+     */
     @PostMapping("/stock/addCompletedInspectionToCurrentStock")
     public String addCompletedInspectionToCurrentStock(RedirectAttributes redirectAttributes) {
         try {
-            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials(); 
+            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials();
             for (MtVO material : completedMaterials) {
                 stockService.updateCurrentStock(material.getMtCode(), material.getQuantity());
             }
@@ -68,47 +73,46 @@ public class StockController {
         return "redirect:/stock";
     }
 
-    // 로트번호별 자재 수량 조회
+    /**
+     * 로트번호별 자재 수량 조회 및 stockPage의 stockDetail 영역으로 이동
+     */
     @GetMapping("/stock/{mtCode}/lots")
     public String getMaterialsByLotNo(@PathVariable String mtCode, Model model) {
-        List<MtInVO> lotDetails = stockService.getMaterialsByLotNo(mtCode); // 로트번호별 자재 수량 조회
-        Integer totalQuantity = stockService.getTotalQuantityByLotNo(mtCode); // 로트번호별 총 수량 조회
+        List<MtInVO> lotDetails = stockService.getMaterialsByLotNo(mtCode);
+        Integer totalQuantity = stockService.getTotalQuantityByLotNo(mtCode);
 
         model.addAttribute("lotDetails", lotDetails.isEmpty() ? null : lotDetails);
         model.addAttribute("totalQuantity", totalQuantity != null ? totalQuantity : 0);
 
-        // 재고 목록을 다시 조회하여 모델에 추가
+        // 전체 자재 목록 다시 조회하여 모델에 추가
         List<MtVO> materials = stockService.getAllMaterials();
         model.addAttribute("materials", materials);
 
-        return "mt/stockPage :: stockDeatil"; 
+        return "mt/stockPage :: stockDeatil";
     }
 
-    
-    
-    // 자재 코드에 해당하는 로트번호를 반환하는 API (Ajax 요청 처리용)
+    /**
+     * 자재 코드에 해당하는 로트번호 목록을 반환하는 API (AJAX 요청 처리용)
+     */
     @GetMapping("/api/stock/{mtCode}/lotNumbers")
     @ResponseBody
     public List<String> getLotNumbersByMtCode(@PathVariable("mtCode") String mtCode) {
-        return stockService.getLotNumbersByMtCode(mtCode); // 자재 코드에 따른 로트번호 조회
+        return stockService.getLotNumbersByMtCode(mtCode);
     }
 
-    // 재고 조정 기능 (AJAX 처리)
+    /**
+     * 재고 조정 기능 (AJAX 처리) - 특정 자재 및 로트번호에 대해 수량 조정
+     */
     @PostMapping("/stock/adjust")
     @ResponseBody
     public ResponseEntity<String> adjustStock(@RequestParam("mtCode") String mtCode,
                                               @RequestParam("lotNo") String lotNo,
                                               @RequestParam(value = "newStock", required = false) Integer newStock,
                                               @RequestParam(value = "stockDecrease", required = false) Integer stockDecrease) {
-        if (newStock == null) {
-            newStock = 0;
-        }
-        if (stockDecrease == null) {
-            stockDecrease = 0;
-        }
+        if (newStock == null) newStock = 0;
+        if (stockDecrease == null) stockDecrease = 0;
 
         try {
-            // 수량 추가 및 차감 처리
             int adjustedStock = newStock - stockDecrease;
             if (adjustedStock != 0) {
                 stockService.addQuantityToLotAndUpdateStock(mtCode, lotNo, adjustedStock);

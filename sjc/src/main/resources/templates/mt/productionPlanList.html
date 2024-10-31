@@ -4,6 +4,7 @@
       xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Content">
+
 <head>
     <meta charset="UTF-8">
     <title>생산 계획 목록</title>
@@ -15,10 +16,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="main-container">
         <div class="container">
             <h1>생산 계획 목록</h1>
+
             <!-- 생산 계획 목록 테이블 -->
             <table class="table table-striped">
                 <thead>
@@ -33,24 +36,12 @@
                 </thead>
                 <tbody>
                     <tr th:each="plan : ${productionPlans}">
-                        <td>
-                            <input type="radio" name="planRadio" class="plan-radio"
-                                th:value="${plan.planCode}"
-                                th:data-quantity="${plan.planDetails[0].quantity}" />
-                        </td>
+                        <td><input type="radio" name="planRadio" class="plan-radio" th:value="${plan.planCode}" th:data-quantity="${plan.planDetails[0].quantity}" /></td>
                         <td th:text="${plan.planCode}">생산계획 코드</td>
-                        <td>
-                            <div th:each="detail : ${plan.planDetails}">
-                                <span th:text="${detail.prdName}">제품명</span><br/>
-                            </div>
-                        </td>
+                        <td><div th:each="detail : ${plan.planDetails}"><span th:text="${detail.prdName}">제품명</span><br/></div></td>
                         <td th:text="${plan.startDate}">시작일자</td>
                         <td th:text="${plan.endDate}">종료일자</td>
-                        <td>
-                            <div th:each="detail : ${plan.planDetails}">
-                                <span th:text="${detail.quantity}">수량</span><br/>
-                            </div>
-                        </td>
+                        <td><div th:each="detail : ${plan.planDetails}"><span th:text="${detail.quantity}">수량</span><br/></div></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(productionPlans)}">
                         <td colspan="6" class="text-center">등록된 생산 계획이 없습니다.</td>
@@ -61,33 +52,33 @@
                 <button class="btn btn-primary" id="selectProductionPlans">선택</button>
             </div>
 
-            <!-- 자재 목록 테이블 -->
+            <!-- 생산계획별 자재 재고 테이블 -->
             <h2>생산계획별 자재재고</h2>
             <table id="materialsTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>자재명</th>                       
+                        <th>자재명</th>
                         <th>요청수량</th>
                         <th>현재재고</th>
                         <th>안전재고</th>
                         <th>총소요량</th>
-                        <th>부족수량</th> 
+                        <th>부족수량</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:if="${#lists.isEmpty(materials)}">
-                        <td colspan="7" class="text-center">등록된 자재가 없습니다.</td>
+                        <td colspan="6" class="text-center">등록된 자재가 없습니다.</td>
                     </tr>
                     <tr th:each="material : ${materials}">
-                        <td th:text="${material.mtName}">자재명</td>                   
+                        <td th:text="${material.mtName}">자재명</td>
                         <td th:text="${material.quantity}">요청수량</td>
                         <td th:text="${material.currentStc}" class="current-stc">현재재고</td>
                         <td th:text="${material.safetyStock}">안전재고</td>
                         <td th:text="${material.totalRequired}">총소요량</td>
                         <td th:text="${material.currentStc - material.totalRequired}"
                             th:classappend="${(material.currentStc - material.totalRequired) < 0} ? 'low-stock' : ''">
-                            부족수량
-                        </td> 
+                            <span th:text="${material.currentStc - material.totalRequired} + ' ' + ((material.currentStc - material.totalRequired) < 0 ? '(부족)' : '(충분)')"></span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -99,27 +90,27 @@
         const selectedPlan = document.querySelector('.plan-radio:checked');
         if (selectedPlan) {
             const planCode = selectedPlan.value;
-            const requestedQuantity = selectedPlan.getAttribute('data-quantity'); // 요청수량 가져오기
+            const requestedQuantity = selectedPlan.getAttribute('data-quantity');
+
+         // 선택된 생산 계획에 따라 자재 정보를 가져옴
             fetch(`/getMaterialsByPlan?planCode=${planCode}`)
                 .then(response => response.json())
                 .then(data => {
                     const materialsTableBody = document.querySelector('#materialsTable tbody');
-                    materialsTableBody.innerHTML = ''; // 기존 내용을 초기화
+                    materialsTableBody.innerHTML = ''; 
 
                     if (data.length === 0) {
-                        const row = `<tr><td colspan="6" class="text-center">등록된 자재가 없습니다.</td></tr>`;
-                        materialsTableBody.innerHTML = row;
+                        materialsTableBody.innerHTML = `<tr><td colspan="6" class="text-center">등록된 자재가 없습니다.</td></tr>`;
                     } else {
                         data.forEach(material => {
-                            const shortage = material.currentStc - material.totalRequired; 
+                            const shortage = material.currentStc - material.totalRequired;
                             const row = `<tr>
                                 <td>${material.mtName}</td>
-                             
                                 <td>${material.quantity}</td>
                                 <td class="current-stc">${material.currentStc}</td>
                                 <td>${material.safetyStock}</td>
                                 <td>${material.totalRequired}</td>
-                                <td class="${shortage < 0 ? 'low-stock' : ''}">${shortage}</td> 
+                                <td class="${shortage < 0 ? 'low-stock' : ''}">${shortage} ${shortage < 0 ? '(부족)' : '(충분)'}</td>
                             </tr>`;
                             materialsTableBody.innerHTML += row;
                         });

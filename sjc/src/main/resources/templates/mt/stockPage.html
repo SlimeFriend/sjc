@@ -1,250 +1,227 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>전체 재고 관리</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>전체 재고 관리</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-	<div class="main-container ">
-		<h1>전체 재고 관리</h1>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>자재 코드</th>
-					<th>자재명</th>
-					<th>자재 구분</th>
-					<th>현재재고</th>
-					<th>상세보기</th>
-					<th>재고조정</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="material : ${materials}">
-					<td th:text="${material.mtCode}"></td>
-					<td th:text="${material.mtName}"></td>
-					<td th:text="${material.materialType}"></td>
-					<td
-						th:text="${material.currentStc != null ? material.currentStc : '-'}"></td>
-					<td><a href="#"
-						th:onclick="updateStockTable([[${material.mtCode}]])"
-						class="btn btn-info">상세보기</a></td>
-					<td>
-						<button class="btn btn-warning" data-toggle="modal"
-							data-target="#adjustStockModal"
-							th:data-mtcode="${material.mtCode}"
-							th:data-mtname="${material.mtName}"
-							th:data-currentstc="${material.currentStc}">재고 조정</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+    <div class="main-container">
+        <div class="container">
+            <h1>전체 재고 관리</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>자재 코드</th>
+                        <th>자재명</th>
+                        <th>자재 구분</th>
+                        <th>현재재고</th>
+                        <th>상세보기</th>
+                        <th>재고조정</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 재고 목록을 반복하여 표시 -->
+                    <tr th:each="material : ${materials}">
+                        <td th:text="${material.mtCode}"></td> <!-- 자재 코드 -->
+                        <td th:text="${material.mtName}"></td> <!-- 자재명 -->
+                        <td th:text="${material.materialType}"></td> <!-- 자재 구분 -->
+                        <td th:text="${material.currentStc != null ? material.currentStc : '-'}"></td> <!-- 현재재고 수량 -->
 
-		<!-- 재고 조정 모달 -->
-		<div class="modal" id="adjustStockModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal Header -->
-					<div class="modal-header">
-						<h4 class="modal-title">재고 조정</h4>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal Body -->
-					<div class="modal-body">
-						<form id="stockAdjustmentForm" action="/stock/adjust"
-							method="post">
-							<div class="mb-3">
-								<label for="mtCode" class="form-label">자재코드</label> <input
-									type="text" class="form-control" id="mtCode" name="mtCode"
-									readonly>
-							</div>
-							<div class="mb-3">
-								<label for="mtName" class="form-label">자재명</label> <input
-									type="text" class="form-control" id="mtName" name="mtName"
-									readonly>
-							</div>
-							<div class="mb-3">
-								<label for="currentStc" class="form-label">현재수량</label> <input
-									type="number" class="form-control" id="currentStc"
-									name="currentStc" readonly>
-							</div>
-							<div class="mb-3">
-								<label for="lotNo" class="form-label">로트번호</label> <select
-									class="form-control" id="lotNo" name="lotNo">
-									<option value="">로트번호 선택</option>
-									<!-- 로트번호는 AJAX를 통해 동적으로 추가됨 -->
-								</select>
-							</div>
-							<div class="mb-3">
-								<label for="newStock" class="form-label">수량 추가</label> <input
-									type="number" class="form-control" id="newStock"
-									name="newStock" placeholder="재고 추가" value="0">
-							</div>
-							<div class="mb-3">
-								<label for="stockDecrease" class="form-label">수량 차감</label> <input
-									type="number" class="form-control" id="stockDecrease"
-									name="stockDecrease" placeholder="재고 차감" value="0">
-							</div>
-						</form>
-					</div>
-					<!-- Modal Footer -->
-					<div class="modal-footer">
-						<button type="submit" form="stockAdjustmentForm"
-							class="btn btn-success">등록</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <!-- 상세보기 버튼 (자재코드로 상세 조회 호출) -->
+                        <td><a href="#"
+                               th:onclick="updateStockTable([[${material.mtCode}]])"
+                               class="btn btn-info">상세보기</a></td>
 
-	<!-- 상세 조회 결과 -->
-	<th:block th:fragment="stockDeatil">
-		<div id="lotDetailsContainer" class="main-container">
-			<h3>상세 조회 결과</h3>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Lot 번호</th>
-						<th>자재명</th>
-						<th>수량</th>
-						<th>입고 날짜</th>
-						<th>유통 기한</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="lotDetail : ${lotDetails}">
-						<td th:text="${lotDetail.lotNo != null ? lotDetail.lotNo : '-'}"></td>
-						<td th:text="${lotDetail.mtName != null ? lotDetail.mtName : '-'}"></td>
-						<td
-							th:text="${lotDetail.inquantity != null ? lotDetail.inquantity : '-'}"></td>
-						<td
-							th:text="${lotDetail.inputDate != null ? #dates.format(lotDetail.inputDate, 'yyyy-MM-dd') : '-'}"></td>
-						<td
-							th:text="${lotDetail.ed != null ? #dates.format(lotDetail.ed, 'yyyy-MM-dd') : '-'}"></td>
-					</tr>
-				</tbody>
-			</table>
-			<div th:if="${lotDetails == null or #lists.isEmpty(lotDetails)}">
-				<p>입고된 자재가 없습니다.</p>
-			</div>
-		</div>
-	</th:block>
-	<script>
-		$(document)
-				.ready(
-						function() {
+                        <!-- 재고 조정 버튼 (모달 호출) -->
+                        <td>
+                            <button class="btn btn-warning" data-toggle="modal"
+                                    data-target="#adjustStockModal"
+                                    th:data-mtcode="${material.mtCode}"
+                                    th:data-mtname="${material.mtName}"
+                                    th:data-currentstc="${material.currentStc}">재고 조정</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-							$('#adjustStockModal')
-									.on(
-											'show.bs.modal',
-											function(event) {
-												var button = $(event.relatedTarget);
-												var mtCode = button
-														.data('mtcode');
-												var mtName = button
-														.data('mtname');
-												var currentStc = button
-														.data('currentstc');
+            <!-- 재고 조정 모달 -->
+            <div class="modal" id="adjustStockModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- 모달 헤더 -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">재고 조정</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- 모달 바디 -->
+                        <div class="modal-body">
+                            <!-- 재고 조정 폼 -->
+                            <form id="stockAdjustmentForm" action="/stock/adjust" method="post">
+                                <!-- 자재 코드 입력 (수정 불가) -->
+                                <div class="mb-3">
+                                    <label for="mtCode" class="form-label">자재코드</label>
+                                    <input type="text" class="form-control" id="mtCode" name="mtCode" readonly>
+                                </div>
+                                <!-- 자재명 입력 (수정 불가) -->
+                                <div class="mb-3">
+                                    <label for="mtName" class="form-label">자재명</label>
+                                    <input type="text" class="form-control" id="mtName" name="mtName" readonly>
+                                </div>
+                                <!-- 현재 수량 입력 (수정 불가) -->
+                                <div class="mb-3">
+                                    <label for="currentStc" class="form-label">현재수량</label>
+                                    <input type="number" class="form-control" id="currentStc" name="currentStc" readonly>
+                                </div>
+                                <!-- 로트번호 선택 -->
+                                <div class="mb-3">
+                                    <label for="lotNo" class="form-label">로트번호</label>
+                                    <select class="form-control" id="lotNo" name="lotNo">
+                                        <option value="">로트번호 선택</option>
+                                    </select>
+                                </div>
+                                <!-- 수량 추가 입력 -->
+                                <div class="mb-3">
+                                    <label for="newStock" class="form-label">수량 추가</label>
+                                    <input type="number" class="form-control" id="newStock" name="newStock" placeholder="재고 추가" value="0">
+                                </div>
+                                <!-- 수량 차감 입력 -->
+                                <div class="mb-3">
+                                    <label for="stockDecrease" class="form-label">수량 차감</label>
+                                    <input type="number" class="form-control" id="stockDecrease" name="stockDecrease" placeholder="재고 차감" value="0">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- 모달 푸터 -->
+                        <div class="modal-footer">
+                            <!-- 폼 제출 버튼 -->
+                            <button type="submit" form="stockAdjustmentForm" class="btn btn-success">등록</button>
+                            <!-- 모달 닫기 버튼 -->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-												var modal = $(this);
-												modal.find('#mtCode').val(
-														mtCode);
-												modal.find('#mtName').val(
-														mtName);
-												modal.find('#currentStc').val(
-														currentStc);
+    <!-- 상세 조회 결과 영역 -->
+    <th:block th:fragment="stockDeatil">
+        <div id="lotDetailsContainer" class="main-container">
+            <div class="container">
+                <h3>상세 조회 결과</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Lot 번호</th>
+                            <th>자재명</th>
+                            <th>수량</th>
+                            <th>입고 날짜</th>
+                            <th>유통 기한</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 로트별 상세 정보 반복 표시 -->
+                        <tr th:each="lotDetail : ${lotDetails}">
+                            <td th:text="${lotDetail.lotNo != null ? lotDetail.lotNo : '-'}"></td>
+                            <td th:text="${lotDetail.mtName != null ? lotDetail.mtName : '-'}"></td>
+                            <td th:text="${lotDetail.inquantity != null ? lotDetail.inquantity : '-'}"></td>
+                            <td th:text="${lotDetail.inputDate != null ? #dates.format(lotDetail.inputDate, 'yyyy-MM-dd') : '-'}"></td>
+                            <td th:text="${lotDetail.ed != null ? #dates.format(lotDetail.ed, 'yyyy-MM-dd') : '-'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${lotDetails == null or #lists.isEmpty(lotDetails)}">
+                    <p>입고된 자재가 없습니다.</p>
+                </div>
+            </div>
+        </div>
+    </th:block>
 
-												$
-														.ajax({
-															url : '/api/stock/'
-																	+ mtCode
-																	+ '/lotNumbers',
-															method : 'GET',
-															success : function(
-																	lotNumbers) {
-																var lotNoSelect = modal
-																		.find('#lotNo');
-																lotNoSelect
-																		.empty();
-																lotNoSelect
-																		.append('<option value="">로트번호 선택</option>');
-																$
-																		.each(
-																				lotNumbers,
-																				function(
-																						index,
-																						lotNo) {
-																					lotNoSelect
-																							.append('<option value="' + lotNo + '">'
-																									+ lotNo
-																									+ '</option>');
-																				});
-															},
-															error : function(
-																	error) {
-																console
-																		.log('로트번호를 불러오는데 실패했습니다.');
-															}
-														});
-											});
+    <!-- JavaScript 코드 -->
+    <script>
+        $(document).ready(function () {
+            // 모달이 표시될 때 자재 정보 로딩
+            $('#adjustStockModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var mtCode = button.data('mtcode'); // 자재 코드
+                var mtName = button.data('mtname'); // 자재명
+                var currentStc = button.data('currentstc'); // 현재 재고
 
-							$('#stockAdjustmentForm')
-									.on(
-											'submit',
-											function(event) {
-												event.preventDefault();
+                var modal = $(this);
+                modal.find('#mtCode').val(mtCode);
+                modal.find('#mtName').val(mtName);
+                modal.find('#currentStc').val(currentStc);
 
-												var formData = $(this)
-														.serialize();
+                // 로트번호 목록 로드 (AJAX 요청)
+                $.ajax({
+                    url: '/api/stock/' + mtCode + '/lotNumbers',
+                    method: 'GET',
+                    success: function (lotNumbers) {
+                        var lotNoSelect = modal.find('#lotNo');
+                        lotNoSelect.empty();
+                        lotNoSelect.append('<option value="">로트번호 선택</option>');
+                        $.each(lotNumbers, function (index, lotNo) {
+                            lotNoSelect.append('<option value="' + lotNo + '">' + lotNo + '</option>');
+                        });
+                    },
+                    error: function (error) {
+                        console.log('로트번호를 불러오는데 실패했습니다.');
+                    }
+                });
+            });
 
-												$
-														.ajax({
-															url : '/stock/adjust',
-															method : 'POST',
-															data : formData,
-															success : function(
-																	response) {
-																$(
-																		'#adjustStockModal')
-																		.modal(
-																				'hide');
-																var mtCode = $(
-																		'#mtCode')
-																		.val();
-																updateStockTable(mtCode);
+            // 재고 조정 폼 제출 시
+            $('#stockAdjustmentForm').on('submit', function (event) {
+                event.preventDefault();
 
-															},
-															error : function(
-																	error) {
-																console
-																		.log('재고 조정에 실패했습니다.');
-															}
-														});
-											});
+                var formData = $(this).serialize();
 
-						});
+                $.ajax({
+                    url: '/stock/adjust',
+                    method: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        $('#adjustStockModal').modal('hide');
+                        var mtCode = $('#mtCode').val();
+                        updateStockTable(mtCode); // 재고 테이블 갱신
+                    },
+                    error: function (error) {
+                        console.log('재고 조정에 실패했습니다.');
+                    }
+                });
+            });
+        });
 
-		function updateStockTable(mtCode) {
-			event.preventDefault();
-			$.ajax({
-				url : '/stock/' + mtCode + '/lots', 
-				method : 'GET',
-				success : function(data) {
-					$('#lotDetailsContainer').replaceWith(data)
-
-				},
-				error : function(error) {
-					console.log('테이블 갱신에 실패했습니다.');
-				}
-			});
-		}
-	</script>
+     // 선택된 자재의 상세 재고 테이블을 갱신
+        function updateStockTable(mtCode) {
+            event.preventDefault();
+            $.ajax({
+                url: '/stock/' + mtCode + '/lots',
+                method: 'GET',
+                success: function (data) {
+                    // #lotDetailsContainer에 새로운 데이터로 교체
+                    $('#lotDetailsContainer').replaceWith(data);
+                    
+                    // 수량이 0인 로트 행 제거
+                    $('#lotDetailsContainer tbody tr').each(function () {
+                        var quantity = parseInt($(this).find('td:nth-child(3)').text(), 10); // 세 번째 열이 수량
+                        if (quantity === 0) {
+                            $(this).remove(); // 수량이 0인 행 제거
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log('테이블 갱신에 실패했습니다.');
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

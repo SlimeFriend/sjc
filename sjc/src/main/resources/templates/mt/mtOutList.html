@@ -1,51 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>출고 목록</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>출고 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-	<div class="main-container">
-		
-		
-		<div class="container">
-		<h1>출고 내역</h1>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>생산지시 상세코드</th>
-						<th>LOT 번호</th>
-						<th>자재 코드</th>
-						<th>자재명</th>
-						<th>출고 수량</th>
-						<th>출고일</th>
-					</tr>
-				</thead>
-				<tbody>
-				
-					<tr th:each="outgoing : ${outList}">
-						<td
-							th:text="${outgoing['pDetailCode'] != null ? outgoing['pDetailCode'] : '-'}"></td>
-						<td
-							th:text="${outgoing['lotNo'] != null ? outgoing['lotNo'] : '-'}"></td>
-						<td
-							th:text="${outgoing['materialCode'] != null ? outgoing['materialCode'] : '-'}"></td>
-						<td
-							th:text="${outgoing['materialName'] != null ? outgoing['materialName'] : '-'}"></td>
-						<td
-							th:text="${outgoing['outgoingQuantity'] != null ? outgoing['outgoingQuantity'] : '-'}"></td>
-						<td th:text="${outgoing['outDate'] != null ? #dates.format(outgoing['outDate'], 'yyyy/MM/dd') : '-'}"></td>
+    <div class="main-container">
+        <div class="container">
+            <h1>출고 내역</h1>
 
-				</tbody>
-			</table>
-		</div>
-
-	</div>
+            <!-- 출고 목록 테이블 -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>생산지시 상세코드</th>
+                        <th>LOT 번호</th>
+                        <th>자재 코드</th>
+                        <th>자재명</th>
+                        <th>출고 수량</th>
+                        <th>출고일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 출고된 자재 목록 반복 출력 -->
+                    <tr th:each="outgoing : ${outList}">
+                        <td th:text="${outgoing['pDetailCode'] != null ? outgoing['pDetailCode'] : '-'}"></td>
+                        <td th:text="${outgoing['lotNo'] != null ? outgoing['lotNo'] : '-'}"></td>
+                        <td th:text="${outgoing['materialCode'] != null ? outgoing['materialCode'] : '-'}"></td>
+                        <td th:text="${outgoing['materialName'] != null ? outgoing['materialName'] : '-'}"></td>
+                        <td th:text="${outgoing['outgoingQuantity'] != null ? outgoing['outgoingQuantity'] : '-'}"></td>
+                        <td th:text="${outgoing['outDate'] != null ? #dates.format(outgoing['outDate'], 'yyyy/MM/dd') : '-'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

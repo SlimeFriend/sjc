@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
@@ -10,75 +11,78 @@
 </head>
 
 <body>
+    <h1>발주 상세내역</h1>
 
-<h1>발주 상세내역</h1>
+    <!-- 발주 상세 내역 테이블 -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>자재 발주 상세 코드</th>
+                <th>자재 코드</th>
+                <th>자재 명</th>
+                <th>규격</th>
+                <th>단가</th>
+                <th>수량</th>
+                <th>주문 금액</th>
+                <th>발주 일자</th>
+                <th>상태</th>
+                <th>비고</th>
+            </tr>
+        </thead>
+        <tbody id="orderDetailsBody">
+            <!-- 발주 상세 항목을 반복 출력 -->
+            <tr th:each="detail : ${orderDetails}">
+                <td th:text="${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}"></td>
+                <td th:text="${detail.mtCode != null ? detail.mtCode : '-'}"></td>
+                <td th:text="${detail.mtName != null ? detail.mtName : '-'}"></td>
+                <td th:text="${detail.specification != null ? detail.specification : '-'}"></td>
+                <td th:text="${detail.unitPrice != null ? detail.unitPrice : '-'}"></td>
+                <td th:text="${detail.quantity != null ? detail.quantity : '-'}"></td>
+                <td th:text="${detail.unitPrice != null && detail.quantity != null ? detail.unitPrice * detail.quantity : '-'}"></td>
+                <td th:text="${detail.mtlOdDate != null ? #dates.format(detail.mtlOdDate, 'yyyy-MM-dd') : '-'}"></td>
+                <td th:text="${detail.status != null ? detail.status : '발주대기'}"></td>
+                <td th:text="${detail.comm != null ? detail.comm : '-'}"></td>
+            </tr>
+        </tbody>
+    </table>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>자재 발주 상세 코드</th>
-            <th>자재 코드</th>
-            <th>자재 명</th>
-            <th>규격</th>
-            <th>단가</th>
-            <th>수량</th>
-            <th>주문 금액</th> <!-- 새로운 열 추가 -->
-            <th>발주 일자</th>
-            <th>비고</th>
-        </tr>
-    </thead>
-   
-    <tbody id="orderDetailsBody">
-        <tr th:each="detail : ${orderDetails}">
-            <td th:text="${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}"></td>
-            <td th:text="${detail.mtCode != null ? detail.mtCode : '-'}"></td>
-            <td th:text="${detail.mtName != null ? detail.mtName : '-'}"></td>
-            <td th:text="${detail.specification != null ? detail.specification : '-'}"></td>
-            <td th:text="${detail.unitPrice != null ? detail.unitPrice : '-'}"></td>
-            <td th:text="${detail.quantity != null ? detail.quantity : '-'}"></td>
-            
-            <!-- 주문 금액 계산 -->
-            <td th:text="${detail.unitPrice != null && detail.quantity != null ? detail.unitPrice * detail.quantity : '-'}"></td>
-            
-            <td th:text="${detail.mtlOdDate != null ? #dates.format(detail.mtlOdDate, 'yyyy-MM-dd') : '-'}"></td>
-            <td th:text="${detail.comm != null ? detail.comm : '-'}"></td>
-        </tr>
-    </tbody>
-</table>
+    <!-- 목록으로 돌아가는 버튼 -->
+    <a href="/orderRequestList" class="btn btn-primary">발주 목록으로 돌아가기</a>
 
-<a href="/orderRequestList" class="btn btn-primary">발주 목록으로 돌아가기</a>
-<script>
-function loadOrderDetails(cpCode) {
-    fetch(`/orderRequestDetails?cpCode=${encodeURIComponent(cpCode)}`)
-        .then(response => response.json())
-        .then(data => {
-            let detailsTable = document.getElementById("orderDetailsBody");
-            detailsTable.innerHTML = "";
+    <script>
+        // AJAX를 이용하여 발주 상세 내역을 불러오는 함수
+        function loadOrderDetails(cpCode) {
+            fetch(`/orderRequestDetails?cpCode=${encodeURIComponent(cpCode)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let detailsTable = document.getElementById("orderDetailsBody");
+                    detailsTable.innerHTML = "";  // 기존 데이터를 초기화
 
-            if (data.length === 0) {
-                detailsTable.innerHTML = "<tr><td colspan='8'>발주 상세 내역이 없습니다.</td></tr>";
-            } else {
-                data.forEach(detail => {
-                    const orderAmount = detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-';
-                    detailsTable.innerHTML += `
-                        <tr>
-                            <td>${detail.mtlOdDetailCode || '-'}</td>
-                            <td>${detail.mtCode || '-'}</td>
-                            <td>${detail.mtName || '-'}</td>
-                            <td>${detail.specification || '-'}</td>
-                            <td>${detail.unitPrice || '-'}</td>
-                            <td>${detail.quantity || '-'}</td>
-                            <td>${orderAmount}</td> 
-                            <td>${detail.mtlOdDate ? new Date(detail.mtlOdDate).toLocaleString() : '-'}</td>
-                            <td>${detail.comm || '-'}</td>
-                        </tr>`;
-                });
-            }
-        })
-        .catch(error => console.error("Error fetching order details:", error));
-}
-
-</script>
+                    if (data.length === 0) {
+                        detailsTable.innerHTML = "<tr><td colspan='10'>발주 상세 내역이 없습니다.</td></tr>";
+                    } else {
+                        // 발주 상세 내역 테이블에 데이터 추가
+                        data.forEach(detail => {
+                            const orderAmount = detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-';
+                            const status = detail.status || '발주대기'; // 상태 기본값 설정
+                            detailsTable.innerHTML += `
+                                <tr>
+                                    <td>${detail.mtlOdDetailCode || '-'}</td>
+                                    <td>${detail.mtCode || '-'}</td>
+                                    <td>${detail.mtName || '-'}</td>
+                                    <td>${detail.specification || '-'}</td>
+                                    <td>${detail.unitPrice || '-'}</td>
+                                    <td>${detail.quantity || '-'}</td>
+                                    <td>${orderAmount}</td>
+                                    <td>${detail.mtlOdDate ? new Date(detail.mtlOdDate).toLocaleDateString() : '-'}</td>
+                                    <td>${status}</td>
+                                    <td>${detail.comm || '-'}</td>
+                                </tr>`;
+                        });
+                    }
+                })
+                .catch(error => console.error("Error fetching order details:", error));
+        }
+    </script>
 </body>
-
 </html>
