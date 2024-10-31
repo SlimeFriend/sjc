@@ -1,6 +1,11 @@
 package com.sjc.app.sales.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -11,8 +16,6 @@ public class ProductVO {
 	private String description;
 	private String comm;
 	private String lot;
-	private Date md;
-	private Date ed;
 	private Integer inQuantity;
 	private Integer outQuantity;
 	private Integer stcQuantity;
@@ -20,4 +23,13 @@ public class ProductVO {
 	private Integer ordQuantity;
 	private Integer price;
 	private String bomCode;
+	
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date md;
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date ed;
+    
 }

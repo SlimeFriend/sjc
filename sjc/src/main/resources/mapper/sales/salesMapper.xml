@@ -45,8 +45,8 @@
 		SELECT p.prd_name,
 		       p.prd_code,
 		       pm.lot,
-		       pm.md,
-		       pm.ed,
+		       TO_CHAR(pm.md,'yyyy-mm-dd') MD,
+		       TO_CHAR(pm.ed, 'yyyy-mm-dd') ED,
 		       pm.stc_quantity
 		       
 		FROM   prd p JOIN prd_management pm
