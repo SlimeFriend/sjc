@@ -32,7 +32,7 @@
 						</div>
 						<!-- Modal footer -->
 						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-primary" data-dismiss="modal" id="submitBtn">등록</button>
+							<button type="button" class="btn btn-primary" id="submitBtn">등록</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">취소</button>
 						</div>
 					</div>
@@ -95,6 +95,23 @@
 				}
 			});
 			
+			function fetchGrid() {
+				fetch('/getOrders')
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Network response was not ok');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                grid.resetData(data); // TOAST UI Grid에 데이터 설정
+	            })
+	            .catch(error => {
+	                console.error('Error fetching out orders:', error);
+	            });
+			}
+			
+			fetchGrid();
 			
 			const gridModal = new tui.Grid({
 				el : document.getElementById('gridOrderDetail'),
@@ -132,7 +149,6 @@
 					perPage : 5
 				}
 			});
-			
 			
 			gridModal.on('click', (ev) => {
 				productLotGrid.refreshLayout();
@@ -232,7 +248,7 @@
 				}
 			});
 			
-			function fetchOutGrid() {
+		   function fetchOutGrid() {
 				fetch('/getOutOrders')
 	            .then(response => {
 	                if (!response.ok) {
@@ -455,21 +471,16 @@
 			    		data: JSON.stringify(requestData),
 						success: function(response) {
 			    			alert("출고가 정상적으로 접수되었습니다.");
+			    			$('#myModal').modal('hide');
+			    			fetchGrid();
 			    			fetchOutGrid();
 			    		}
 			    	});
 			    }
-
-			    // outLotData 초기화
-			    console.log(outLotData);
-			    console.log(outPrdData);
 			    
 			    outLotData = [];
 			    outPrdData = [];
 			    
-			    // 그리드 레이아웃 새로고침
-			    productLotGrid.refreshLayout();
-			    outGrid.refreshLayout();
 			});
 			
 			document.getElementById('cancelBtn').addEventListener('click', () => {

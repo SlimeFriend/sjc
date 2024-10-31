@@ -116,11 +116,16 @@ public class SalesController {
 	// 제품 출고 페이지
 	@GetMapping("/productOut")
 	public String productOutPage(Model model) {
-		// 주문접수 상태의 주문 목록
-	    List<OrderVO> orderList = salesService.getOrdersByStatus("주문접수");
-	    model.addAttribute("orderGrid", orderList);
 		return "sales/productOut";
 	}
+	
+	// 출고완료 상태의 주문 목록
+		@GetMapping("/getOrders")
+		@ResponseBody
+		public List<OrderVO> getOrders() {
+		    return salesService.getOrdersByStatus("주문접수");
+		}
+	
 	
 	// 출고완료 상태의 주문 목록
 	@GetMapping("/getOutOrders")
