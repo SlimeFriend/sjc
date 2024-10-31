@@ -7,7 +7,11 @@
 <head>
 <meta charset="UTF-8">
 
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <title>설비 비가동 관리</title>
+
 </head>
 
 <style>
@@ -62,7 +66,7 @@ tbody > tr {
 								<td>[[${wait.eqType}]]</td>
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.eqPeriod}]]</td>
-								<td>[[${wait.use == 'Y' ? '가동 중' : '비가동 중'}]]</td>
+								<td>[[${wait.use == 'Y' ? '가동' : '비가동'}]]</td>
 							</tr>
 						</th:block>
 					</tbody>
@@ -106,9 +110,9 @@ tbody > tr {
 								<td>[[${wait.eqCode}]]</td>
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.reason}]]</td>
-								<td>[[ ${ #dates.format(wait.startDate, "yyyy년 MM월 dd일" )}
+								<td>[[ ${ #dates.format(wait.startDate, "yyyy-MM-dd HH:mm" )}
 									]]</td>
-								<td>[[ ${ #dates.format(wait.endDate, "yyyy년 MM월 dd일" )} ]]</td>
+								<td>[[ ${ #dates.format(wait.endDate, "yyyy-MM-dd HH:mm" )} ]]</td>
 							</tr>
 						</th:block>
 					</tbody>
@@ -143,16 +147,16 @@ tbody > tr {
 								<div class="mb-3">
 									<label for="reason" class="form-label">사유 :</label> 
 									<select id="reason" name="reason">
-										<option value="temporary">상시점검
-										<option value="momentary">임시점검
-										<option value="broken">고장
-										<option value="replace">부품교체
+										<option value="상시점검">상시점검
+										<option value="임시점검">임시점검
+										<option value="고장">고장
+										<option value="부품교체">부품교체
 									</select>
 								</div>
 								<div class="mb-3">
 									<label for="use" class="form-label">사용여부</label> 
 									<select name="use">
-										<option value="can" selected>가동
+										<option value="" selected>--선택
 										<option value="cannot">비가동
 									</select>
 								</div>
@@ -191,25 +195,29 @@ tbody > tr {
 			// 라디오 버튼 클릭 시 필터링 함수
 			$('input[name="section"]').on('change', function() {
 				let selectedValue = $('input[name="section"]:checked').val(); // 선택된 라디오 버튼의 값 가져오기
-
-				// 테이블 행 필터링
-				$('tbody tr').each(function() {
-					let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼 값 가져오기
+				let rowCount = 1; // No. 재정렬을 위한 카운트 변수 초기화
+				
+	            // 첫 번째 테이블의 tbody에서만 필터링 적용
+	            $('table:first tbody tr').each(function() {
+	                let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼
 
 					if (selectedValue === 'all') {
 						// '전체' 선택 시 모든 행을 보여줌
 						$(this).show();
+						$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
 					} else if (selectedValue === 'op') {
-						// '가동' 선택 시 'Y'인 행만 보여줌
-						if (useStatus === '가동 중') {
+						// '가동' 선택 시 '가동'인 행만 보여줌
+						if (useStatus === '가동') {
 							$(this).show();
+							$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
 						} else {
 							$(this).hide();
 						}
 					} else if (selectedValue === 'nOp') {
-						// '비가동' 선택 시 'N'인 행만 보여줌
-						if (useStatus === '비가동 중') {
+						// '비가동' 선택 시 '비가동'인 행만 보여줌
+						if (useStatus === '비가동') {
 							$(this).show();
+							$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
 						} else {
 							$(this).hide();
 						}
@@ -225,20 +233,22 @@ tbody > tr {
 		        let eqCode = $('#eqCode').val();
 		        let eqName = $('#eqName').val();
 		        let startDate = $('#nOpModal #startDate').val();
-		        let endDate = $('#nOpModal #endDate').val();
+		        let endDate = $('#nOpModal #endDate').val() || null;
 		        let reason = $('#reason').val();
+		        let use = $('#nOpModal select[name="use"]').val(); // 사용 여부 가져오기
 
 		        // Ajax로 서버에 데이터 전송
 		        $.ajax({
-		            url: "/nOpRegister",
 		            type: "POST",
+		            url: "/nOpRegister",
 		            contentType: "application/json",
 		            data: JSON.stringify({
 		                eqCode: eqCode,
 		                eqName: eqName,
 		                startDate: startDate,
 		                endDate: endDate,
-		                reason: reason
+		                reason: reason,
+		                use: use
 		            }),
 		            success: function(response) {
 		                // 비가동 내역 테이블에 새로운 행 추가
@@ -251,15 +261,30 @@ tbody > tr {
 		                        <td>${response.eqName}</td>
 		                        <td>${response.reason}</td>
 		                        <td>${response.startDate}</td>
-		                        <td>${response.endDate}</td>
+		                        <td>${response.endDate ? response.endDate : '-'}</td>
+		                        <td>${use === 'can' ? '가동' : '비가동'}</td>
 		                    </tr>
 		                `;
 		                $('#nOpTableBody').append(newRow);
+		                
+		                // 첫 번째 테이블의 사용 여부 업데이트
+                let updatedStatus = use === 'can' ? '가동' : '비가동';
+                $('table:first tbody tr').each(function() {
+                    if ($(this).children().eq(1).text().trim() === eqCode) {
+                        $(this).children().eq(5).text(updatedStatus);
+                    }
+                });
+		                // 등록 완료 알림
+		                alert("등록이 완료되었습니다.");
 
+		                // 페이지 새로고침
+		                location.reload();
+		                
 		                // 모달 닫기 및 초기화
 		                $('#nOpModal').modal('hide');
 		                $('#NeqModal')[0].reset();
 		            },
+
 		            error: function(error) {
 		                alert("등록 중 오류가 발생했습니다.");
 		                console.error(error);
@@ -267,7 +292,6 @@ tbody > tr {
 		        });
 		    });
 		});
-
 	</script>
 	
 
