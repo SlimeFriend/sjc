@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.sales.mapper.SalesMapper;
+import com.sjc.app.sales.service.CpVO;
 import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.PrdManagementVO;
 import com.sjc.app.sales.service.ProductVO;
@@ -26,6 +27,12 @@ public class SalesServiceImpl implements SalesService {
 	@Autowired
 	SalesServiceImpl(SalesMapper salesMapper, MeterRegistry registry) {
 		this.salesMapper = salesMapper;
+	}
+	
+	// 업체 검색
+	@Override
+	public List<CpVO> cpList() {
+		return salesMapper.selectCp();
 	}
 	
 	// 주문접수 프로세스
@@ -83,17 +90,6 @@ public class SalesServiceImpl implements SalesService {
 		}
 		
 		salesMapper.updateOrdFinish(ordCode);
-		
-		/*
-		 * // Prd별 제품 출고 프로세스 List<Map<String, Object>> outPrdData = (List<Map<String,
-		 * Object>>) data.get("outPrdData"); for(Map<String, Object> prd : outPrdData) {
-		 * String prdCode = (String) prd.get("prdCode"); String ordCode = (String)
-		 * prd.get("ordCode"); int totalOutQuantity = (Integer)
-		 * prd.get("totalOutQuantity");
-		 * 
-		 * totalRowsAffected += salesMapper.prdOutProcess(ordCode, prdCode,
-		 * totalOutQuantity); }
-		 */
 	    
 		return totalRowsAffected;
 	}
@@ -109,9 +105,9 @@ public class SalesServiceImpl implements SalesService {
 			String ordCode = (String) item.get("ordCode");
 			String prdCode = (String) item.get("prdCode");
 			
-			System.err.println(ordCode + " " + prdCode);
+			System.err.println("이 놈은" + ordCode + " " + prdCode);
 			
-			int remainQuantity = salesMapper.selectRemainData(ordCode, prdCode);
+			Integer remainQuantity = salesMapper.selectRemainData(ordCode, prdCode);
 		}
 		return totalRowsAffected;
 	}
@@ -156,11 +152,6 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<ProductVO> productLot() {
 		return salesMapper.selectProductLot();
-	}
-
-	@Override
-	public List<OrderVO> companyList() {
-		return salesMapper.selectCompany();
 	}
 
 	@Override
