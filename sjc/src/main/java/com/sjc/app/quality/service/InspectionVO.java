@@ -55,6 +55,8 @@ public class InspectionVO {
 		private Date ed; //유통기한
 		private String inCode; //입고코드
 		private String lotNo; //LOT번호
+		private String mtInComm; //비고
+		
 		
 	// MtlOdDetailVO
 		private String mtlOdDetailCode;

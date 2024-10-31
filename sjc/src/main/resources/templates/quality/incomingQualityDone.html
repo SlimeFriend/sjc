@@ -352,7 +352,7 @@
 			var mtlOdCode = td.eq(10).text();
 			var mtCode = td.eq(11).text();
 			var userId = td.eq(12).text();
-			var comm = td.eq(13).find("input").val();
+			var mtInComm = td.eq(13).find("input").val();
 			
 						
 			//객체에 담기
@@ -362,7 +362,7 @@
 			obj["mtlOdCode"] = mtlOdCode;      					
 			obj["mtCode"] = mtCode;      	
 			obj["userId"] = userId; 
-			obj["comm"] = comm;
+			obj["mtInComm"] = mtInComm;
 			
 			//목록에 담기
 			list.push(obj);

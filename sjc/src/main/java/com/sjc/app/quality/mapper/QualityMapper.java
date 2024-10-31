@@ -3,8 +3,6 @@ package com.sjc.app.quality.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.sjc.app.mt.service.MtlOdVO;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;

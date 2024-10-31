@@ -13,10 +13,13 @@
         , o.user_id user_id
         , o.mtl_od_status mtl_od_status
         , o.comm comm
-        FROM copy_mtl_od o
-        JOIN copy_cp c
+        --FROM copy_mtl_od o
+        FROM mtl_od o
+        --JOIN copy_cp c
+        JOIN cp c
         ON o.cp_code = c.cp_code
-        JOIN copy_mtl_od_detail od
+        --JOIN copy_mtl_od_detail od
+        JOIN mtl_od_detail od
         ON od.mtl_od_code = o.mtl_od_code
         where o.mtl_od_status ='입고품질검사대기' -- 완료
         and     od.MTL_OD_DETAIL_STATUS  is null
@@ -41,8 +44,10 @@
 	        , m.specification AS "specification"
 	        , m.unit AS "unit"
 	        , m.unit_price AS "unitPrice"
-		FROM copy_mtl_od_detail d
-		JOIN copy_mt m
+		--FROM copy_mtl_od_detail d
+		FROM mtl_od_detail d
+		--JOIN copy_mt m
+		JOIN mt m
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_code = #{mtlOdCode}
 	</select>
@@ -58,8 +63,10 @@
 	        , m.specification AS "specification"
 	        , m.unit AS "unit"
 	        , m.unit_price AS "unitPrice"
-		FROM copy_mtl_od_detail d
-		JOIN copy_mt m
+		--FROM copy_mtl_od_detail d
+		FROM mtl_od_detail d
+		--JOIN copy_mt m
+		JOIN mt m
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
@@ -71,15 +78,18 @@
 	
 	<!-- Update Status (mtlOd, mtlOdDetail) -->
 	<update id="updateMtlOdStatus">
-		UPDATE copy_mtl_od
+		--UPDATE copy_mtl_od
+		UPDATE mtl_od
 		SET mtl_od_status = '입고품질검사중'
 		WHERE mtl_od_code = (SELECT mtl_od_code
-							 FROM copy_mtl_od_detail
+							 --FROM copy_mtl_od_detail
+							 FROM mtl_od_detail
 							 WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 							)
 	</update>
 	<update id="updateMtlOdDetailStatus">
-		UPDATE copy_mtl_od_detail
+		--UPDATE copy_mtl_od_detail
+		UPDATE mtl_od_detail
 		SET mtl_od_detail_status = '개별입고품질검사중'
 		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 	</update>
@@ -150,7 +160,8 @@
 		FROM ins_detail d
 		JOIN inspection i
 		ON	i.ins_code = d.ins_code
-        JOIN copy_mtl_od_detail cmod
+        --JOIN copy_mtl_od_detail cmod
+        JOIN mtl_od_detail cmod
         ON  i.mtl_od_detail_code = cmod.mtl_od_detail_code
 		WHERE i.mtl_od_detail_code =  #{mtlOdDetailCode}
 	</select>
@@ -182,7 +193,8 @@
 		on      im.ins_item_code = ii.ins_item_code
 		where   im.mt_code = (
 					    select  mt_code
-					    from    copy_mtl_od_detail
+					    --from    copy_mtl_od_detail
+					    from    mtl_od_detail
 					    where   MTL_OD_DETAIL_CODE = #{mtlOdDetailCode}
 					)
 	</select>
@@ -196,6 +208,7 @@
 	<update id="updateInsValue">
 		UPDATE 	ins_detail
 		SET   	ins_value = #{insValue}
+				, ins_result = #{insResult}
 		WHERE 	ins_detail_code = #{insDetailCode}
 	</update>
 	
@@ -345,30 +358,38 @@
                , mtl_od_status
 
 
-		FROM copy_mtl_od
+		--FROM copy_mtl_od
+		FROM mtl_od
 		WHERE mtl_od_status = '입고품질검사대기'
 
 	</select>
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
 		SELECT i.ins_date
-               , i.ins_code
-               , i.ins_status
-               , m.mt_name
-               , m.specification
-               , i.number_of_tests
-               , i.number_of_passes
-               , i.total_pass
-               , o.mtl_od_detail_code
-               , o.mt_code
-               , i.user_id
-               
-		FROM copy_mtl_od_detail o
-		    JOIN inspection i
-		        ON o.mtl_od_detail_code = i.mtl_od_detail_code
-		    JOIN copy_mt m
-		        ON o.mt_code = m.mt_code
-		WHERE i.ins_status = '검사완료'
-		and     o.MTL_OD_detail_STATUS not in ('반품', '입고품질검사완료')
+		        , i.ins_code
+		        , i.ins_status
+		        , cmo.mtl_od_status
+		        , cmod.mtl_od_detail_status
+		        , cm.mt_name
+		        , cm.specification
+		        , i.number_of_tests
+		        , i.number_of_passes
+		        , i.total_pass
+		        , cmo.mtl_od_code
+		        , cmod.mtl_od_detail_code
+		        , cm.mt_code
+		        , i.user_id
+		        , cmo.cp_code
+		--FROM    copy_mt cm
+		FROM    mt cm
+		JOIN    mtl_od_detail cmod
+		ON      cmod.mt_code = cm.mt_code
+        JOIN    mtl_od cmo
+        ON      cmo.mtl_od_code = cmod.mtl_od_code
+		JOIN    inspection i
+		ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
+		WHERE   i.ins_status = '검사완료'
+		        and cmod.mtl_od_detail_status = '개별입고품질검사완료'
+		        and cmo.mtl_od_status not in ('반품', '입고완료')
 	</select>
 <!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
@@ -408,10 +429,12 @@
 		       , o.mt_code
 		       , o.cp_code
 		       , m.mt_name
-		FROM copy_mtl_od o
+		--FROM copy_mtl_od o
+		FROM mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
-		    JOIN copy_mt m
+		    --JOIN copy_mt m
+		    JOIN mt m
 		        ON o.mt_code = m.mt_code
 		 WHERE
 		 	o.mtl_od_code = #{mtlOdCode}
@@ -427,10 +450,12 @@
         JOIN ins_item i
         ON d.ins_item_code = i.ins_item_code
         WHERE i.ins_type_code = (SELECT material_type_code
-                                 FROM copy_mt
+                                 --FROM copy_mt
+                                 FROM mt
                                  WHERE mt_code = (
                                                         SELECT MATERIAL_TYPE
-                                                        FROM    copy_mt
+                                                        --FROM    copy_mt
+                                                        FROM    mt
                                                         WHERE   mt_code = (
                                                                             SELECT  mt_code
                                                                             FROM    mtl_od
@@ -448,15 +473,20 @@
 		SET ins_status = '검사완료'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
+
+
+
 <!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료 -->
 	<update id="updateMtlOdDone" parameterType="InspectionVO">
-		UPDATE copy_mtl_od
-		SET mtl_od_status = '입고품질검사완료'
+		--UPDATE copy_mtl_od
+		UPDATE mtl_od
+		SET mtl_od_status = '입고완료'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
 <!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
-		UPDATE copy_mtl_od
+		--UPDATE copy_mtl_od
+		UPDATE mtl_od
 		SET mtl_od_status = '반품'
 		WHERE mtl_od_code = #{mtlOdCode}
 	</update>
@@ -465,7 +495,7 @@
 	
 	
 	<!-- 자재입고테이블 -->
-	<select id="selectMtIn" resultType="InspectionVO">
+<!-- 	<select id="selectMtIn" resultType="InspectionVO">
 			SELECT i.number_of_passes
 		        , i.user_id
 		        , i.ins_code
@@ -476,41 +506,57 @@
 		JOIN copy_mtl_od o
 		    on i.mtl_od_code = o.mtl_od_code
 		WHERE mtl_od_status = '입고품질검사완료'
+	</select> -->
+	<select id="selectMtIn" resultType="InspectionVO">
+		SELECT  i.number_of_passes
+	        , i.user_id
+	        , i.ins_code
+	        , o.mtl_od_code
+	        , cmod.mt_code
+	        , o.cp_code
+		FROM inspection i
+		--JOIN copy_mtl_od_detail cmod
+		JOIN mtl_od_detail cmod
+		ON   cmod.mtl_od_detail_code = i.mtl_od_detail_code
+		--JOIN copy_mtl_od o
+		JOIN mtl_od o
+		    on cmod.mtl_od_code = o.mtl_od_code
+		WHERE o.mtl_od_status = '입고완료'
 	</select>
+	
+	
 	<insert id="insertMtInInfo" parameterType="InspectionVO">
-    <selectKey keyProperty="inCode" order="BEFORE" resultType="string">
-        SELECT 'IN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0') 
-        FROM dual
-    </selectKey>
-
-    
-    INSERT INTO mt_in (
-        input_date,
-        inquantity, 
-        ed, 
-        in_code, 
-        user_id, 
-        mtl_od_code, 
-        ins_code, 
-        mt_code, 
-        cp_code, 
-        comm, 
-        lot_no
-    )
-    VALUES (
-        SYSDATE,
-        #{numberOfPasses},
-        ADD_MONTHS(SYSDATE, 6),
-        #{inCode},
-        #{userId},
-        #{mtlOdCode},
-        #{insCode},
-        #{mtCode},
-        #{cpCode},
-        #{comm},
-        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.CURRVAL, 4, '0')
-    )
-</insert>
+	    <selectKey keyProperty="inCode" order="BEFORE" resultType="string">
+	        SELECT 'IN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0') 
+	        FROM dual
+	    </selectKey>
+		    INSERT INTO mt_in (
+						        input_date,
+						        inquantity, 
+						        ed, 
+						        in_code, 
+						        user_id, 
+						        mtl_od_code, 
+						        ins_code, 
+						        mt_code, 
+						        cp_code, 
+						        comm, 
+						        lot_no
+						    )
+		    VALUES 			(
+						        SYSDATE,
+						        #{numberOfPasses},
+						        ADD_MONTHS(SYSDATE, 6),
+						        #{inCode},
+						        #{userId},
+						        #{mtlOdCode},
+						        #{insCode},
+						        #{mtCode},
+						        #{cpCode},
+						        #{mtInComm},
+						        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.CURRVAL, 4, '0')
+						    )
+	</insert>
 	
 
 
