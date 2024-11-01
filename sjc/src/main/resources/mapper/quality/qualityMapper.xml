@@ -22,7 +22,9 @@
         JOIN mtl_od_detail od
         ON od.mtl_od_code = o.mtl_od_code
         where o.mtl_od_status ='입고품질검사대기' -- 완료
-        and     od.MTL_OD_DETAIL_STATUS  is null
+        
+        or		(o.mtl_od_status = '입고품질검사중'
+        			and     od.MTL_OD_DETAIL_STATUS  is null)
 		<!-- <where>
 			o.mtl_od_status ='입고품질검사대기'
 			<if test="cpCode != null and cpCode != ''">
