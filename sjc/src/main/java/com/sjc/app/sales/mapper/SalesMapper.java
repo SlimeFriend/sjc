@@ -63,6 +63,10 @@ public interface SalesMapper {
 	public int prdLotOutProcess(@Param("outQuantity") int outQuantity, @Param("lot") String lot);
 	public int updateOrdFinish(@Param("ordCode") String ordCode);
 
-	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate);
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus);
+	
+	// 입/출고 내역 검색 프로세스
+	public List<PrdManagementVO> inSearch(String prdName, String inStartDate, String inEndDate);
+	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate);
 	
 }

@@ -121,12 +121,8 @@ public class SalesServiceImpl implements SalesService {
 	
 	// 주문내역 검색
 	@Override
-	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate) {
-	    System.err.println(orderStartDate);
-	    System.err.println(orderEndDate);
-	    System.err.println(deliveryStartDate);
-	    System.err.println(deliveryEndDate);
-		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate);
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus) {
+		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate, orderStatus);
 	}
 	
 	@Override
@@ -167,6 +163,18 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<outHistoryVO> outHistory() {
 		return salesMapper.selectOutHistory();
+	}
+	
+	// 입고 내역 검색 프로세스
+	@Override
+	public List<PrdManagementVO> inSearch(String prdName, String inStartDate, String inEndDate) {
+		return salesMapper.inSearch(prdName, inStartDate, inEndDate);
+	}
+	
+	// 출고 내역 검색 프로세스
+	@Override
+	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate) {
+		return salesMapper.outSearch(prdName, cpName, outStartDate, outEndDate);
 	}
 
 }

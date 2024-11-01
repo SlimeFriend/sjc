@@ -30,7 +30,7 @@
 		       cp_name,
 		       address
 		FROM   cp
-		<!-- WHERE  cp_type = '완제품' -->
+		WHERE  cp_type = '완제품' 
 	</select>
 
 	<!-- 제품조회 -->
@@ -103,6 +103,9 @@
 	    <if test="deliveryEndDate != null and deliveryEndDate != ''">
 	        AND o.dlv_req_date <![CDATA[<=]]> TO_DATE(#{deliveryEndDate}, 'YYYY-MM-DD')
 	    </if>
+	    <if test="orderStatus != null and orderStatus != ''">
+        	AND o.ord_status = #{orderStatus}
+    	</if>
 	</select>
 
 	<!-- 주문내역 조회 -->
@@ -186,28 +189,6 @@
 		FROM   ord o JOIN cp c
 		               ON o.cp_code = c.cp_code
 	</select>
-
-	<!-- 제품 입출고 내역 -->
-	<select id="selectInHistory" resultType="PrdManagementVO">
-       SELECT pm.lot,
-              p.prd_name,
-              pm.in_date,
-              pm.in_quantity
-       FROM   prd_management pm JOIN prd p
-                                  ON pm.prd_code = p.prd_code
-	</select>
-	
-	<select id="selectOutHistory" resultType="outHistoryVO">
-		SELECT      poh.LOT AS "lot",
-		            p.PRD_NAME AS "prdName",
-		            poh.OUT_QUANTITY AS "outQuantity",
-		            poh.OUT_DATE AS "outDate",
-		            poh.CP_NAME AS "cpName",
-		            poh.ORD_CODE AS "ordCode"
-		FROM        prd_out_history poh LEFT JOIN prd p
-		                                ON p.prd_code = poh.prd_code
-		ORDER BY    poh.LOT
-	</select>
 	
 	
 	<!-- 출고접수 프로세스 -->
@@ -250,6 +231,75 @@
 		SET    out_quantity = out_quantity + #{outQuantity}
 		WHERE  lot = #{lot}
 	</update>
+	
+	<!-- 제품 입출고 내역 -->
+	<select id="selectInHistory" resultType="PrdManagementVO">
+       SELECT pm.lot,
+              p.prd_name,
+              pm.in_date,
+              pm.in_quantity
+       FROM   prd_management pm JOIN prd p
+                                  ON pm.prd_code = p.prd_code
+	</select>
+	
+	<select id="selectOutHistory" resultType="outHistoryVO">
+		SELECT      poh.LOT AS "lot",
+		            p.PRD_NAME AS "prdName",
+		            poh.OUT_QUANTITY AS "outQuantity",
+		            poh.OUT_DATE AS "outDate",
+		            poh.CP_NAME AS "cpName",
+		            poh.ORD_CODE AS "ordCode"
+		FROM        prd_out_history poh LEFT JOIN prd p
+		                                ON p.prd_code = poh.prd_code
+		ORDER BY    poh.LOT
+	</select>
+	
+	<!-- 입고 검색 프로세스 -->
+	<select id="inSearch" resultType="PrdManagementVO">
+	    SELECT pm.lot,
+	           p.prd_name,
+	           pm.in_date,
+	           pm.ed,
+	           pm.in_quantity
+	    FROM prd_management pm 
+	    JOIN prd p ON pm.prd_code = p.prd_code
+	    WHERE 1 = 1
+	    <if test="prdName != null and prdName != ''">
+	        AND p.prd_name LIKE '%' || #{prdName} || '%'
+	    </if>
+	    <if test="inStartDate != null and inStartDate != ''">
+	        AND pm.in_date <![CDATA[>=]]> TO_DATE(#{inStartDate}, 'YYYY-MM-DD')
+	    </if>
+	    <if test="inEndDate != null and inEndDate != ''">
+	        AND pm.in_date <![CDATA[<=]]> TO_DATE(#{inEndDate}, 'YYYY-MM-DD')
+	    </if>
+	</select>
+	
+	<!-- 출고 검색 프로세스 -->
+	<select id="outSearch" resultType="outHistoryVO">
+		SELECT      poh.LOT AS "lot",
+		            p.PRD_NAME AS "prdName",
+		            poh.OUT_QUANTITY AS "outQuantity",
+		            poh.OUT_DATE AS "outDate",
+		            poh.CP_NAME AS "cpName",
+		            poh.ORD_CODE AS "ordCode"
+		FROM        prd_out_history poh LEFT JOIN prd p
+		                                       ON p.prd_code = poh.prd_code
+	    WHERE 1 = 1
+	    <if test="prdName != null and prdName != ''">
+	        AND p.prd_name LIKE '%' || #{prdName} || '%'
+	    </if>
+	    <if test="cpName != null and cpName != ''">
+	        AND poh.cp_name LIKE '%' || #{cpName} || '%'
+	    </if>
+	    <if test="outStartDate != null and outStartDate != ''">
+	        AND poh.out_date <![CDATA[>=]]> TO_DATE(#{outStartDate}, 'YYYY-MM-DD')
+	    </if>
+	    <if test="outEndDate != null and outEndDate != ''">
+	        AND poh.out_date <![CDATA[<=]]> TO_DATE(#{outEndDate}, 'YYYY-MM-DD')
+	    </if>
+	    ORDER BY    poh.ord_code
+	</select>
 	
 </mapper>
 

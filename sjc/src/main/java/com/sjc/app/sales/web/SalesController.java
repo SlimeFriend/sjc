@@ -67,8 +67,9 @@ public class SalesController {
 	    String orderEndDate = (String) request.get("orderEndDate");
 	    String deliveryStartDate = (String) request.get("deliveryStartDate");
 	    String deliveryEndDate = (String) request.get("deliveryEndDate");
+	    String orderStatus = (String) request.get("orderStatus");
 	    
-	    return salesService.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate);
+	    return salesService.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate, orderStatus);
 	}
 	
 	// 주문내역 상세페이지
@@ -120,11 +121,11 @@ public class SalesController {
 	}
 	
 	// 출고완료 상태의 주문 목록
-		@GetMapping("/getOrders")
-		@ResponseBody
-		public List<OrderVO> getOrders() {
-		    return salesService.getOrdersByStatus("주문접수");
-		}
+	@GetMapping("/getOrders")
+	@ResponseBody
+	public List<OrderVO> getOrders() {
+	    return salesService.getOrdersByStatus("주문접수");
+	}
 	
 	
 	// 출고완료 상태의 주문 목록
@@ -185,6 +186,29 @@ public class SalesController {
 		model.addAttribute("outHistory", outList);
 		
 		return "sales/inoutHistory";
+	}
+	
+	// 입고 내역 검색 페이지
+	@PostMapping("/inSearch")
+	@ResponseBody
+	public List<PrdManagementVO> inSearch(@RequestBody Map<String, Object> request) {
+	    String prdName = (String) request.get("prdName");
+	    String inStartDate = (String) request.get("inStartDate");
+	    String inEndDate = (String) request.get("inEndDate");
+	   
+	    return salesService.inSearch(prdName, inStartDate, inEndDate);
+	}
+	
+	// 출고 내역 검색 페이지
+	@PostMapping("/outSearch")
+	@ResponseBody
+	public List<outHistoryVO> outSearch(@RequestBody Map<String, Object> request) {
+	    String prdName = (String) request.get("prdName");
+	    String cpName = (String) request.get("cpName");
+	    String outStartDate = (String) request.get("outStartDate");
+	    String outEndDate = (String) request.get("outEndDate");
+	    
+	    return salesService.outSearch(prdName, cpName, outStartDate, outEndDate);
 	}
 	
 	// 주문성공시 페이지
