@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.quality.mapper.QualityMapper;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
@@ -123,15 +124,79 @@ public class QualityServiceImpl implements QualityService{
 		
 		
 		return list;
-	}
-
-
-	
+	}	
 	//검사기준목록
 	@Override
 	public List<InspectionVO> testList() {
 		return qualityMapper.selectTest();
 	}
+	
+	// 자재입고검사완료 조회페이지
+	@Override
+	public List<InspectionVO> incomingDoneInfo() {
+		return qualityMapper.selectQualityDoneInfo();
+	}
+	// 자재입고검사완료 조회페이지 - 입고처리 버튼
+	@Override
+	@Transactional 
+	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> list) {
+		
+		for (InspectionVO inspectionVO : list) {
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료
+			qualityMapper.updateMtlOdDone(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
+			//qualityMapper.selectMtIn(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
+			qualityMapper.insertMtInInfo(inspectionVO);
+		}
+		return list;
+	}
+	
+	
+	
+	
+	// 출고
+	// 완제품품질검사 대기목록1
+	@Override
+	public List<InspectionVO> pDetailSelect1() {
+		return qualityMapper.selectPDetail1();
+	}
+	// 완제품품질검사 대기목록2
+	@Override
+	public List<Map<String, Object>> pDetailSelect2(String porderCode) {
+		return qualityMapper.selectPDetail2(porderCode);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// 제품출고검사완료 조회
+	@Override
+	public List<PDetailVO> outDoneInfoSelect() {
+		return qualityMapper.selectOutDoneInfo();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -149,13 +214,6 @@ public class QualityServiceImpl implements QualityService{
 	@Override
 	public List<MtlOdVO> incomingWaitInfo() {
 		return qualityMapper.selectQualityWaitInfo();
-	}
-	
-	// 조회 - 입고검사완료 조회페이지
-	@Override
-	public List<InspectionVO> incomingDoneInfo() {
-		// TODO Auto-generated method stub
-		return qualityMapper.selectQualityDoneInfo();
 	}
 
 	//	// 전체 조회 - 입고등록 페이지   
@@ -254,24 +312,6 @@ public class QualityServiceImpl implements QualityService{
 		//list.add(inspectionVO);
 		}
 		return list;
-	}
-	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
-	@Override
-	@Transactional 
-	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> list) {
-	
-		for (InspectionVO inspectionVO : list) {
-			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료
-			qualityMapper.updateMtlOdDone(inspectionVO);
-			// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
-			//qualityMapper.selectMtIn(inspectionVO);
-			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
-			qualityMapper.insertMtInInfo(inspectionVO);
-		
-			
-		}
-			return list;
-	
 	}
 	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 	@Override

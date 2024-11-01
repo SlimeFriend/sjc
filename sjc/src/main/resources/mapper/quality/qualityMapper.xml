@@ -22,19 +22,26 @@
         JOIN mtl_od_detail od
         ON od.mtl_od_code = o.mtl_od_code
         where o.mtl_od_status ='입고품질검사대기' -- 완료
-        
         or		(o.mtl_od_status = '입고품질검사중'
         			and     od.MTL_OD_DETAIL_STATUS  is null)
-		<!-- <where>
-			o.mtl_od_status ='입고품질검사대기'
-			<if test="cpCode != null and cpCode != ''">
-				AND c.cp_code = #{cpCode}
-			</if>
-			<if test="cpName != null and userId != ''">
-				AND c.cp_name = #{cpName}
-			</if>
-		</where> -->
 	</select>
+	<!-- 완제품품질검사 대기목록1 -->
+	<select id="selectPDetail1" resultType="InspectionVO">
+		SELECT distinct(po.porder_code) AS "porderCode" 
+        		--, pd.pdetail_code AS "pdetailCode"
+				, pd.prd_code AS "prdCode"
+		        , pd.prd_name AS "prdName"
+		        , pd.output AS "output"
+				, pd.line_code AS "lineCode"
+		        , po.plan_code AS "planCode"
+		        , pd.status AS "porderStatus"
+		FROM porder po
+		JOIN pdetail pd
+		ON po.porder_code = pd.porder_code
+		WHERE pd.status = 'b3'
+	</select>
+	
+	
 	<!-- 입고품질검사 대기목록 2 (mtlOdDetail) -->
 	<select id="selectMtlOdDetail" parameterType="String" resultType="map">
 	    SELECT d.mtl_od_code  AS "mtlOdCode"
@@ -54,6 +61,24 @@
 		WHERE d.mtl_od_code = #{mtlOdCode}
 		and d.mtl_od_detail_status is null
 	</select>
+	<!-- 완제품품질검사 대기목록2(pdetail_code) -->
+	<select id="selectPDetail2" parameterType="String" resultType="map">
+		SELECT pd.pdetail_code
+        		,po.porder_code
+				, pd.prd_code
+		        , pd.prd_name
+		        , pd.output
+				, pd.line_code
+		        , po.plan_code
+		        , pd.status AS "pdetailStatus"
+		FROM pdetail pd
+		JOIN porder po
+		ON po.porder_code = pd.porder_code
+		WHERE po.porder_code = #{porderCode}
+		AND     pd.status = 'b3'
+	</select>
+	
+	
 	<!-- 입고품질검사 등록목록 (mtlOdDetailCode) -->
 	<select id="selectIncomingTest" parameterType="String" resultType="map">
 		SELECT d.mtl_od_code  AS "mtlOdCode"
@@ -73,7 +98,25 @@
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
-	
+	<!-- 완제품품질검사 등록목록 (porderCode) -->
+	<select id="selectPDetailTest" parameterType="String" resultType="map">
+		SELECT pd.pdetail_code AS "pdetailCode"
+				, pd.prd_code AS "prdCode"
+		        , pd.prd_name AS "prdName"
+		        , pd.output AS "output"
+				, pd.line_code AS "lineCode"
+		        , po.plan_code AS "planCode"
+		        , po.status AS "porderStatus"
+		        , pland.quantity AS "planDetailQuantity"
+		        , pland.plan_detail_code AS "planDetailCode"
+		        , pland.no AS "planDetailNo"
+		FROM porder po
+		JOIN pdetail pd
+		ON po.porder_code = pd.porder_code
+		JOIN plan_detail pland
+		ON  pland.prd_code = pd.prd_code
+		WHERE po.porder_code = #{porderCode}
+	</select>
 	
 	
 	
@@ -97,13 +140,22 @@
 		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 	</update>
 	
-	<!-- Inspection insert 여부 조회 (mtl_od_detail_code) -->
+	
+	
+	<!--자재 Inspection insert 여부 조회 (mtl_od_detail_code) -->
 	<select id="whetherInspection" resultType="Integer">
 		SELECT count(1)
 		FROM inspection
 		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
-	<!-- Inspection  -->
+	<!--완제품 Inspection insert 여부 조회 (porderCode) -->
+	<select id="whetherPOrderInspection" resultType="Integer">
+		SELECT count(1)
+		FROM inspection
+		WHERE porder_code = #{porderCode}
+	</select>
+	
+	<!--자재 insert Inspection  -->
 	<insert id="insertInspection" parameterType="InspectionVO">
 	    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
 	        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
@@ -139,6 +191,40 @@
 		    )
 	</insert>
 	
+	<!--완제품 insert Inspection  -->
+	<insert id="insertPOrderInspection" parameterType="InspectionVO">
+	    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
+	        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
+	        FROM dual
+	    </selectKey>
+	    INSERT INTO inspection (
+		        ins_code
+		        , ins_date
+		        , ins_status
+		        , user_id
+		        , user_name
+		        , number_of_tests
+		        , number_of_passes
+		        , number_of_failed
+		        , number_of_total_pass
+		        , total_pass
+		        , porder_code
+		    )
+		    VALUES ( 
+		    		#{insCode}
+		        	, SYSDATE
+		        	, '검사중'
+		        	, #{userId}
+		        	, #{userName}
+		        	, #{numberOfTests}
+		        	, #{numberOfPasses}
+		        	, #{numberOfFailed}
+		        	, #{numberOfTotalPass}
+		        	, #{totalPass}
+		        	, #{porderCode}
+		    )
+	</insert>
+	
 	<select id="selectInspection" resultType="InspectionVO">
 			SELECT i.ins_code
 			        , i.ins_date
@@ -154,10 +240,26 @@
 			 FROM inspection i
 	         WHERE i.mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
+	<select id="selectPOrderInspection" resultType="InspectionVO">
+			SELECT ins_code
+			        , ins_date
+			        , ins_status
+			        , user_id
+			        , user_name
+			        , number_of_tests
+			        , number_of_passes
+			        , number_of_failed
+			        , number_of_total_pass
+			        , total_pass
+			        , porder_code
+			 FROM inspection i
+	         WHERE i.porder_code = #{porderCode}
+	</select>
+	
 
 	
 	
-	<!-- insDetail -->
+	<!-- 자재 insDetail insert 여부 조회 (mtl_od_detail_code)  -->
 	<select id="countInsItem" resultType="Integer">
 		SELECT count(1)
 		FROM ins_detail d
@@ -168,8 +270,16 @@
         ON  i.mtl_od_detail_code = cmod.mtl_od_detail_code
 		WHERE i.mtl_od_detail_code =  #{mtlOdDetailCode}
 	</select>
+	<!-- 완제품 insDetail  insert 여부 조회 (porder_code) -->
+	<select id="countPOrderInsItem" resultType="Integer">
+		SELECT count(1)
+		FROM ins_detail d
+		JOIN inspection i
+		ON	i.ins_code = d.ins_code
+		WHERE i.porder_code =  #{porderCode}
+	</select>
 	
-	
+	<!-- 자재 insDetail insert -->
 	<insert id="insertInsDetail" parameterType="InspectionVO">
 	    <selectKey keyProperty="insDetailCode" order="BEFORE" resultType="string">
 	        SELECT 'INSD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_DETAIL_SEQ.NEXTVAL, 4, '0') 
@@ -184,8 +294,23 @@
 		                	, #{insCode}
 		                )
 	</insert>
+	<!-- 완제품 insDetail insert -->
+	<insert id="insertPOrderInsDetail" parameterType="InspectionVO">
+	    <selectKey keyProperty="insDetailCode" order="BEFORE" resultType="string">
+	        SELECT 'INSD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_DETAIL_SEQ.NEXTVAL, 4, '0') 
+	        FROM dual
+	    </selectKey>
 	
+	    INSERT INTO ins_detail 
+		                ( ins_detail_code
+		                	, ins_code
+		                )
+		VALUES          ( #{insDetailCode}
+		                	, #{insCode}
+		                )
+	</insert>
 	
+	<!-- 자재입고품질검사모달창 insItem 목록 출력 -->
 	<select id="selectTestDetail" resultType="InspectionVO">
 		select  im.mt_code mt_code
         ,ii.ins_item_code ins_item_code
@@ -201,13 +326,39 @@
 					    where   MTL_OD_DETAIL_CODE = #{mtlOdDetailCode}
 					)
 	</select>
+	<!-- 완제품품질검사모달창 insItem 목록 출력 -->
+	<select id="selectPOrderTest" resultType="InspectionVO">
+		select  ipm.prd_code prd_code
+        ,ii.ins_item_code ins_item_code
+        ,ii.ins_item_name ins_item_name
+        ,ii.ins_item_citeria ins_item_citeria
+		from    ins_prd_map ipm
+		join    ins_item ii
+		on      ipm.ins_item_code = ii.ins_item_code
+		where   ipm.prd_code = (
+					    select  prd_code
+					    from    porder
+					    where   porder_code = #{porderCode}
+					)
+	</select>
+	<!-- 자재입고품질검사모달창 insDetail 목록 출력 -->
 	<select id="selectInsDetailList" resultType="InspectionVO">
 		SELECT ins_detail_code
 				, ins_code
 		FROM	ins_detail
 		WHERE	ins_code = #{insCode}
 	</select>
+	<!-- 완제품품질검사모달창 insDetail 목록 출력 -->
+	<select id="selectPOrderInsDetailList" resultType="InspectionVO">
+		SELECT ins_detail_code
+				, ins_code
+		FROM	ins_detail
+		WHERE	ins_code = #{insCode}
+	</select>
 	
+	
+	
+	<!-- 자재입고품질검사모달창 insDetail 값 입력 -->
 	<update id="updateInsValue">
 		UPDATE 	ins_detail
 		SET   	ins_value = #{insValue}
@@ -308,8 +459,94 @@
 		        					, #{mtlOdDetailCode}
 		        					)
 	</insert>
+	<!-- 완료목록페이지 -->
+	<!-- 입고 -->
+	<select id="selectQualityDoneInfo" resultType="InspectionVO">
+		SELECT i.ins_date
+		        , i.ins_code
+		        , i.ins_status
+		        , cmo.mtl_od_status
+		        , cmod.mtl_od_detail_status
+		        , cm.mt_name
+		        , cm.specification
+		        , i.number_of_tests
+		        , i.number_of_passes
+		        , i.total_pass
+		        , cmo.mtl_od_code
+		        , cmod.mtl_od_detail_code
+		        , cm.mt_code
+		        , i.user_id
+		        , cmo.cp_code
+		--FROM    copy_mt cm
+		FROM    mt cm
+		JOIN    mtl_od_detail cmod
+		ON      cmod.mt_code = cm.mt_code
+        JOIN    mtl_od cmo
+        ON      cmo.mtl_od_code = cmod.mtl_od_code
+		JOIN    inspection i
+		ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
+		WHERE   i.ins_status = '검사완료'
+		        and cmod.mtl_od_detail_status = '개별입고품질검사완료'
+		        and cmo.mtl_od_status not in ('반품', '입고완료')
+	</select>
+	
+<!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료 -->
+	<update id="updateMtlOdDone" parameterType="InspectionVO">
+		--UPDATE copy_mtl_od
+		UPDATE mtl_od
+		SET mtl_od_status = '입고완료'
+		WHERE mtl_od_code = #{mtlOdCode}
+	</update>
+	
+	<insert id="insertMtInInfo" parameterType="InspectionVO">
+	    <selectKey keyProperty="inCode" order="BEFORE" resultType="string">
+	        SELECT 'IN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0') 
+	        FROM dual
+	    </selectKey>
+		    INSERT INTO mt_in (
+						        input_date,
+						        inquantity, 
+						        ed, 
+						        in_code, 
+						        user_id, 
+						        mtl_od_code, 
+						        ins_code, 
+						        mt_code, 
+						        cp_code, 
+						        comm, 
+						        lot_no
+						    )
+		    VALUES 			(
+						        SYSDATE,
+						        #{numberOfPasses},
+						        ADD_MONTHS(SYSDATE, 6),
+						        #{inCode},
+						        #{userId},
+						        #{mtlOdCode},
+						        #{insCode},
+						        #{mtCode},
+						        #{cpCode},
+						        #{mtInComm},
+						        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.CURRVAL, 4, '0')
+						    )
+	</insert>
 	
 	
+	
+	
+
+
+
+	
+
+
+
+	
+	<!-- 완제품품질검사 완료목록 -->
+	<select id="selectOutDoneInfo" resultType="PDetailVO">
+
+	</select>
+
 
 
 
@@ -365,34 +602,6 @@
 		FROM mtl_od
 		WHERE mtl_od_status = '입고품질검사대기'
 
-	</select>
-	<select id="selectQualityDoneInfo" resultType="InspectionVO">
-		SELECT i.ins_date
-		        , i.ins_code
-		        , i.ins_status
-		        , cmo.mtl_od_status
-		        , cmod.mtl_od_detail_status
-		        , cm.mt_name
-		        , cm.specification
-		        , i.number_of_tests
-		        , i.number_of_passes
-		        , i.total_pass
-		        , cmo.mtl_od_code
-		        , cmod.mtl_od_detail_code
-		        , cm.mt_code
-		        , i.user_id
-		        , cmo.cp_code
-		--FROM    copy_mt cm
-		FROM    mt cm
-		JOIN    mtl_od_detail cmod
-		ON      cmod.mt_code = cm.mt_code
-        JOIN    mtl_od cmo
-        ON      cmo.mtl_od_code = cmod.mtl_od_code
-		JOIN    inspection i
-		ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
-		WHERE   i.ins_status = '검사완료'
-		        and cmod.mtl_od_detail_status = '개별입고품질검사완료'
-		        and cmo.mtl_od_status not in ('반품', '입고완료')
 	</select>
 <!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
@@ -479,13 +688,6 @@
 
 
 
-<!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료 -->
-	<update id="updateMtlOdDone" parameterType="InspectionVO">
-		--UPDATE copy_mtl_od
-		UPDATE mtl_od
-		SET mtl_od_status = '입고완료'
-		WHERE mtl_od_code = #{mtlOdCode}
-	</update>
 <!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
 		--UPDATE copy_mtl_od
@@ -528,38 +730,6 @@
 	</select>
 	
 	
-	<insert id="insertMtInInfo" parameterType="InspectionVO">
-	    <selectKey keyProperty="inCode" order="BEFORE" resultType="string">
-	        SELECT 'IN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.NEXTVAL, 4, '0') 
-	        FROM dual
-	    </selectKey>
-		    INSERT INTO mt_in (
-						        input_date,
-						        inquantity, 
-						        ed, 
-						        in_code, 
-						        user_id, 
-						        mtl_od_code, 
-						        ins_code, 
-						        mt_code, 
-						        cp_code, 
-						        comm, 
-						        lot_no
-						    )
-		    VALUES 			(
-						        SYSDATE,
-						        #{numberOfPasses},
-						        ADD_MONTHS(SYSDATE, 6),
-						        #{inCode},
-						        #{userId},
-						        #{mtlOdCode},
-						        #{insCode},
-						        #{mtCode},
-						        #{cpCode},
-						        #{mtInComm},
-						        'L' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(MT_IN_SEQ.CURRVAL, 4, '0')
-						    )
-	</insert>
 	
 
 
