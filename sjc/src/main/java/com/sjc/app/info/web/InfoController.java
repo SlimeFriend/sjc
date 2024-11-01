@@ -28,4 +28,9 @@ public class InfoController {
 		return "info/lineProcessList";
 	}
 	
+	@GetMapping("infoEqChart")
+	public String infoEqChart() {
+		return "info/eqChart";
+	}
+	
 }

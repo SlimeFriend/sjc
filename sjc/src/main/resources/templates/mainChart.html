@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 관리</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+	<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
+	<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+<style>
+	.chart-container {
+	    width: 100%;
+	    max-width: 100%;
+	    overflow-x: auto;
+	}
+	.chart-wrapper {
+	    position: relative;
+	    width: 100%;
+	    min-height: 250px;
+	    margin: 0 auto;
+	}
+		
+	#pieChart {
+	    margin: 0 auto;
+	}
+	
+	@media (max-width: 768px) {
+	    .chart-wrapper {
+	        min-height: 250px;
+	    }
+	}
+</style></head>
+<body>
+<div class="main-container">
+    <div class="pd-ltr-20">
+        <div class="row">
+            <div class="col-12">
+		        <div style="display: flex; width: 100%; gap: 20px;">
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">설비 가동율</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="pieChartLeft"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartRight"></div>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-12">
+		        <div style="display: flex; width: 100%; gap: 20px;">
+		            <div class="pd-20 card-box mb-20" style="width: 100%;">                    
+		            	<h2 class="h5 mb-20">실시간 온도 모니터링</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="lineChartBottom"></div>
+	                    </div>
+	                </div>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+const columnChartData = {
+		  categories: ['라인1', '라인2', '라인3', '라인4', '라인5', '라인6', '라인7'],
+		  series: [
+		    {
+		      name: '배합기',
+		      data: [5, 3, 5, 7, 6, 4, 1]
+		    },
+		    {
+		      name: '냉각기',
+		      data: [8, 4, 7, 2, 6, 3, 5]
+		    },
+		    {
+		      name: '성형기',
+		      data: [4, 4, 6, 3, 4, 5, 7]
+		    },
+		    {
+		      name: '포장기',
+		      data: [3, 4, 3, 1, 2, 4, 3]
+		    }
+		  ]
+		}
+const pieChartData = {
+    categories: ['가동율'],
+    series: [
+        {
+            name: '가동',
+            data: 80.00,
+        },
+        {
+            name: '비가동',
+            data: 20.00,
+        },
+
+    ],
+};
+
+const lineChartData = {
+		categories: [
+	        '11-01 09:00',
+	        '11-01 09:01',
+	        '11-01 09:02',
+	        '11-01 09:03',
+	        '11-01 09:04',
+	        '11-01 09:05',
+	        '11-01 09:06',
+	        '11-01 09:07',
+	        '11-01 09:08',
+	        '11-01 09:09',
+	        '11-01 09:10',
+	        '11-01 09:11',
+		],
+		series: [
+			{
+			 name: '성형기',
+			 data: [143.5, 141.1, 144.0, 141.3, 147.5, 141.5, 145.9, 147.2, 144.4, 139.9, 136.6, 140.6],
+			},
+			{
+			 name: '혼합기',
+			 data: [136.8, 135.6, 137.0, 139.1, 142.4, 145.3, 147.5, 147.8, 150.0, 150.6, 146.6, 143.7],
+			},
+		],
+};
+
+function getChartSize() {
+    const containerWidth = document.querySelector('.chart-wrapper').offsetWidth;
+    let chartWidth = containerWidth;
+    let chartHeight = containerWidth * 0.6; // 높이를 너비의 60%로 설정
+
+    // 최소/최대 크기 제한
+    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
+    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
+
+    return { width: chartWidth, height: chartHeight };
+}
+
+function initPieChartLeft() {
+    const { width, height } = getChartSize();
+    
+    const options = {
+        chart: { 
+            width: width,
+            height: height,
+        },
+        series: {
+            dataLabels: {
+                visible: true,
+                pieSeriesName: {
+                    visible: true
+                }
+            }
+        },
+        legend: {
+            align: 'bottom'
+        },
+        theme: {
+            chart: {
+                fontFamily: 'Arial'
+            }
+        },
+        exportMenu: {
+            visible: false
+        }
+    };
+  
+    const pieChartLeft = new toastui.Chart.pieChart({ 
+        el: document.getElementById('pieChartLeft'),
+        data: pieChartData, 
+        options: options
+    });
+
+    return pieChartLeft;
+}
+
+function initColumnChartRight() {
+    const { width, height } = getChartSize();
+    
+    const options = {
+        chart: { 
+            width: width,
+            height: height,
+        },
+        series: {
+            dataLabels: {
+                visible: false,
+                pieSeriesName: {
+                    visible: true
+                }
+            }
+        },
+        legend: {
+            align: 'bottom'
+        },
+        theme: {
+            chart: {
+                fontFamily: 'Arial'
+            }
+        },
+        exportMenu: {
+            visible: false
+        }
+    };
+  
+    const columnChartRight = new toastui.Chart.columnChart({ 
+        el: document.getElementById('columnChartRight'),
+        data: columnChartData, 
+        options: options
+    });
+
+    return columnChartRight;
+}
+
+function initLineChartBottom() {
+    const { width, height } = getChartSize();
+    
+    const options = {
+        chart: { 
+            width: width * 2,
+            height: height,
+        },
+        series: {
+            dataLabels: {
+                visible: false,
+                pieSeriesName: {
+                    visible: true
+                }
+            },
+            spline: true,
+            
+        },
+        legend: {
+            align: 'bottom'
+        },
+        theme: {
+            chart: {
+                fontFamily: 'Arial'
+            }
+        },
+        exportMenu: {
+            visible: false
+        },
+        xAxis: {
+            title: '시간',
+            tick: {
+                interval: 3,
+              },
+              label: {
+                interval: 11,
+                rotatable: false  // 라벨 회전 비활성화
+              },
+        },
+        yAxis: {
+            title: '온도'
+        },        
+    };
+  
+    const lineChartBottom = new toastui.Chart.lineChart({ 
+        el: document.getElementById('lineChartBottom'),
+        data: lineChartData, 
+        options: options
+    });
+
+    return lineChartBottom;
+}
+
+let chartLeft = initPieChartLeft();
+let chartRight = initColumnChartRight();
+let chartBottom = initLineChartBottom();
+
+// 디바운스 함수
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// 리사이즈 핸들러
+const handleResize = debounce(() => {
+    if (chart) {
+        chart.destroy();
+    }
+    chart = initChart();
+}, 250);
+
+window.addEventListener('resize', handleResize);
+</script>
+</body>
