@@ -77,7 +77,7 @@
 					el : document.getElementById('grid'),
 					data : gridData,
 					scrollX : false,
-					scrollY : false,
+					scrollY : true,
 					columns : [ {
 						header : '제품명',
 						name : 'prdName',
@@ -102,10 +102,11 @@
 						editor: 'text',
 					}, ],
 					rowHeaders : [ 'checkbox' ],
-					pageOptions : {
-						useClient : true,
-						perPage : 10
-					}
+					bodyHeight: 200,
+					pageOptions: {
+					    type: 'scroll',
+					    perPage: 10 
+					}, 
 				});
 				
 				modalGrid = new tui.Grid({
