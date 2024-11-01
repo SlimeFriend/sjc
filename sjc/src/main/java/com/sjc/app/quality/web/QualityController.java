@@ -89,8 +89,8 @@ public class QualityController {
 
 			} else {
 				// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-				// qualityService.mtlOdStatusUpdate(inspectionVO);
-				// qualityService.mtlOdDetailStatusUpdate(inspectionVO);
+				 qualityService.mtlOdStatusUpdate(inspectionVO);
+				 qualityService.mtlOdDetailStatusUpdate(inspectionVO);
 				// inspection 데이터 생성
 				qualityService.insertInspection(inspectionVO);
 				// inspection 데이터 출력
