@@ -50,6 +50,7 @@
 		JOIN mt m
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_code = #{mtlOdCode}
+		and d.mtl_od_detail_status is null
 	</select>
 	<!-- 입고품질검사 등록목록 (mtlOdDetailCode) -->
 	<select id="selectIncomingTest" parameterType="String" resultType="map">
