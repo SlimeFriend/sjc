@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
+import com.sjc.app.pr.service.PDetailVO;
 
 
 public interface QualityService {
+	//입고
 	// 발주목록전체
 	public List<InspectionVO> mtlOdList();
 	// 발주목록상세 테이블
@@ -38,6 +40,32 @@ public interface QualityService {
 	//검사기준목록
 	public List<InspectionVO> testList();
 	
+	// 자재입고검사완료 - 조회
+	public List<InspectionVO> incomingDoneInfo();
+	// 자재입고검사완료  - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료  
+	// 자재입고검사완료  - 입고처리 버튼 - mt_in으로 데이터 넣기
+	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> inspectionVOs);
+	
+	
+	// 출고
+	// 완제품품질검사 대기목록1
+	public List<InspectionVO> pDetailSelect1();
+	// 완제품품질검사 대기목록2
+	public List<Map<String, Object>> pDetailSelect2(String porderCode);
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// 제품출고검사완료 조회
+	public List<PDetailVO> outDoneInfoSelect();
 	
 	
 	
@@ -54,8 +82,6 @@ public interface QualityService {
 	// 조회 - 입고검사대기 조회페이지
 	public List<MtlOdVO> incomingWaitInfo();
 	
-	// 조회 - 입고검사완료 조회페이지
-	public List<InspectionVO> incomingDoneInfo();
 
 	//	// 전체조회 - 입고등록 페이지
 //	public List<InspectionVO> incomingRegistrationInfo();
@@ -79,8 +105,6 @@ public interface QualityService {
 	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs);
 	
-	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
-	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> inspectionVOs);
 	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs);
 	

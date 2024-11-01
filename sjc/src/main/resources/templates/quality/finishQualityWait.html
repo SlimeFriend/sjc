@@ -1,0 +1,527 @@
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+	<!-- 페이징 필요하신분 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+			<h2 class="h2 mb-20">완제품품질검사 대기 목록</h2>
+			<div class="pd-30 card-box mb-20">
+				<form>
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="text" placeholder="업체명">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<button class="btn btn-dark">조회</button>
+							<button class="btn btn-dark">초기화</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="gridOrder"></div>
+			<div id="gridOrderDetail" style="opacity : 0"></div>
+
+			
+			<div class="modal" id="myModal">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<div class="pd-ltr-20">
+							<h2 class="h2 mb-20">검사등록</h2>
+
+							<div class="pd-20 card-box mb-20">
+								<button class="btn btn-primary mb-3 mr-3" id="registerBtn">
+								검사 등록</button>
+								<button type="button" class="btn btn-danger"
+									data-dismiss="modal" id="cancelBtn">취소</button>
+								<h2 class="h5 mb-20">검사대상 목록</h2>
+								<div id="modalInspection"></div>
+							</div>
+
+							<div style="display: flex; width: 100%; gap: 20px;">
+								<div class="pd-20 card-box mb-20" style="width: 100%;">
+									<h2 class="h5 mb-20">검사상세등록</h2>
+									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 조회 </button></div>
+									
+								</div>
+<!-- 								<div class="pd-20 card-box mb-20" style="width: 50%;">
+									<h2 class="h5 mb-20">불량상세목록</h2>
+									<div id="gridBomDetail"></div>
+								</div> --> 
+							</div>
+
+						</div>
+
+
+
+
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const gridData = /*[[${pdetailList}]]*/[];
+			const gridDetailData = /*[[${pdetailDetail}]]*/[];
+			//const gridInspectionData = /*[[${insList}]]*/[];
+			//const gridInsDetailData = /*[[${newList}]]*/[];
+
+			const grid = new tui.Grid({
+				el : document.getElementById('gridOrder'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '생산지시코드',
+					name : 'porderCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '제품 코드',
+					name : 'prdCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '제품 이름',
+					name : 'prdName',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산량',
+					name : 'output',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산지시상태',
+					name : 'porderStatus',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '라인 코드',
+					name : 'lineCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산계획 코드',
+					name : 'planCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				},  ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+
+			grid.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const porderCodeValue = grid.getValue(rowKey, 'porderCode');
+			    
+			    if(porderCodeValue) {
+			    	$.ajax({
+			    		url : '/finishQualityWaitDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({porderCode : porderCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('gridOrderDetail').style.opacity = 1;
+			    			griddetail.resetData(response); 
+			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
+			    	});
+			    }
+			    
+			});
+			
+			
+			const griddetail = new tui.Grid({
+				el : document.getElementById('gridOrderDetail'),
+				data : gridDetailData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '생산지시상세 코드',
+					name : 'pdetailCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산지시코드',
+					name : 'porderCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '제품 코드',
+					name : 'prdCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '제품 이름',
+					name : 'prdName',
+					align : 'center',
+					resizable: true,
+				}, {
+					header : '생산량',
+					name : 'output',
+					align : 'center',
+					resizable: true,
+				}, {
+					header : '라인 코드',
+					name : 'lineCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산계획 코드',
+					name : 'planCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '생산계획 상태',
+					name : 'porderStatus',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '우선순위',
+					name : 'pdetailNo',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 5
+				}
+			});
+			
+			let mtlOdDetailCodeValue = "";
+			let mtName = "";
+		    let remainData = [];
+		    
+			
+/* 		    griddetail.on('click', (ev) => {
+		        const rowKey = ev.rowKey;
+		        const pdetailCodeValue = griddetail.getValue(rowKey, 'pdetailCode');
+				console.log(pdetailCodeValue);
+		        if (pdetailCodeValue) {
+		            $.ajax({
+		                url: '/finishQualityWait2',
+		                type: 'POST',
+		                contentType: 'application/json',
+		                data: JSON.stringify({ pdetailCode: pdetailCodeValue }),
+		                success: function(response,) {
+		                	console.log('Response:', response);
+		                	gridInspectionModal.resetData(response.insList);
+		                	gridInsDetailModal.resetData(response.newList);
+						    document.getElementById('gridOrderDetail').style.opacity = 1;
+						    $('#myModal').modal('show'); // 모달 열기
+						    gridInspectionModal.refreshLayout(); 
+						    gridInsDetailModal.refreshLayout(); 
+		                },
+		                error: function(xhr, status, error) {
+		                    console.error('Error during request', error);
+		                    alert('데이터를 가져오는 데 오류가 발생했습니다.');
+		                }
+		            });
+		        }
+		    });
+		    
+		    
+
+			const gridInspectionModal = new tui.Grid({
+				el : document.getElementById('modalInspection'),
+				data : gridInspectionData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '발주상세코드',
+					name : 'mtlOdDetailCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사코드',
+					name : 'insCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사일자',
+					name : 'insDate',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				},  {
+					header : '사용자번호',
+					name : 'userId',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '사용자이름',
+					name : 'userName',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사상태',
+					name : 'insStatus',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '검사수',
+					name : 'numberOfTests',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '합격수',
+					name : 'numberOfPasses',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '불합격수',
+					name : 'numberOfFailed',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '총합격여부',
+					name : 'totalPass',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+ */			
+			/* gridInspectionModal.on('click', (ev) => {
+			    const rowKey = ev.rowKey;
+			    const insCodeValue = gridInspectionModal.getValue(rowKey, 'insCode');
+			    
+			    if(insCodeValue) {
+			    	$.ajax({
+			    		url : '/incomingInspectionDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({insCode : insCodeValue}),
+			    		success: function(response) {
+			    			console.log('Order details received:', response);
+			    			document.getElementById('modalInspectionDetail').style.opacity = 1;
+			    			gridInsDetailModal.resetData(response); 
+			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
+			    	});
+			    }
+			    
+			}); */
+			
+			
+			
+/* 			const gridInsDetailModal = new tui.Grid({
+				el : document.getElementById('modalInspectionDetail'),
+				data : gridInsDetailData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '품질검사코드',
+					name : 'insCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '검사상세코드',
+					name : 'insDetailCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사항목코드',
+					name : 'insItemCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				},  {
+					header : '품질검사이름',
+					name : 'insItemName',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				},  {
+					header : '품질검사결과값',
+					name : 'insValue',
+					align : 'center',
+					editor : 'text',
+					resizable: true,
+					sortable: true,
+					validation: {
+                        required: true,
+                        dataType: 'int',
+                        regExp: /^[0-9 ]*$/, //    [정규식] 영문 숫자에 대한 조합만 가능
+                    },
+				}, {
+					header : '품질검사기준',
+					name : 'insItemCiteria',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사결과판정',
+					name : 'insResult',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+					editor: {
+		                  type: 'select',
+		                  options: {
+		                    listItems: [
+		                      { text: '합격', value: '합격' },
+		                      { text: '불합격', value: '불합격' },
+		                    ]
+		                  }
+		                },
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			
+ */			
+/* 			
+			document.getElementById('testInsert').addEventListener('click', () => {
+				
+	                
+	                const requestData = gridInsDetailModal.getData();
+	                
+	                console.log(requestData);
+	                
+	                $.ajax({
+	                    url: '/insValueUpdate',
+	                    type: 'POST',
+	                    contentType: 'application/json',
+	                    data: JSON.stringify(requestData),
+	                    success: function(response) {
+	                        console.log('Grid modal received:', response);
+	                    },
+	                    error: function(xhr, status, error) {
+	                        console.error('Error fetching remain info:', error);
+	                    }
+	                });
+	           
+
+			});
+			
+			
+ */			
+			
+			
+	/* 		
+			function sendTestResults() {
+			    const testResults = grid.getCheckedRows();
+
+			    if (checkedRows.length === 0) {
+			        alert('선택된 데이터가 없습니다.');
+			        return;
+			    }
+
+			    // 폼 데이터를 직접 수집
+			    const formArr = $("form[name=form]").serializeArray();
+			    
+			    const formObj = {};
+			    $.each(formArr, function(idx, tag) {
+			    	formObj[tag.name] = tag.value;
+			    });
+
+			    // 폼 데이터와 체크된 그리드 데이터를 병합
+			    const payload = {
+			        orderVO: formObj,    // 폼 데이터 (주문 정보)
+			        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+			    };
+
+			    // 병합된 데이터를 서버로 전송 (AJAX 요청)
+			    $.ajax({
+			        url: '/orderReception', // 서버에서 처리할 URL 경로
+			        type: 'POST',
+			        contentType: 'application/json', // JSON 형식으로 데이터 전송
+			        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
+			        success: function(response) {
+			            alert('주문이 성공적으로 접수되었습니다!');
+			            window.location.href = "orderHistory";
+			            console.log(response); // 서버에서 받은 응답 처리
+			        }
+			    });
+			} */
+			
+
+
+			
+			
+		});
+		
+
+	</script>
+</div>

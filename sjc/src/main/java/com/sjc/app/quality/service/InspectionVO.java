@@ -36,7 +36,6 @@ public class InspectionVO {
 		private int leadtime; // 리드타임
 
 		private int mtQuantity; //현재수량 
-		private String prdName; //제품명
 		
 		
 	// MtlOdVO
@@ -77,4 +76,33 @@ public class InspectionVO {
 		private String insValue;
 		private String insResult;
 		
+		
+	//	PDetailVO 
+		private String pdetailCode;	// 생산지시상세 코드
+		private String prdName;		// 제품이름
+		private Integer want;		// 목표량
+		private Integer command;	// 지시량
+		private Integer output;		// 생산량
+		private Integer pdetailNo;			// 우선순위
+		private String pdetailComm;		// 비고
+		private String pdetailStatus;		// 상태
+		private String lineCode;	// 라인 코드
+		private String prdCode; 	// 제품 코드
+	
+	//	POrderVO 
+	    private String porderCode;
+	    private String startDate;
+	    private String porderDate;
+	    private String manager;
+	    private String pordercomm;
+	    private String porderStatus;
+	    
+	 //   PlanDVO 
+	        private String planDetailCode;  // 생산계획상세 코드
+	        private Integer planDetailQuantity;        // 수량
+	        private Integer planDetailNo;                // 우선순위
+	        private String planDetailComm;            // 비고
+	        private String planCode;        // 생산코드
+	    
+
 }
