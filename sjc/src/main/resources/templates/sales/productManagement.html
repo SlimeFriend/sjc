@@ -26,7 +26,7 @@
 				el : document.getElementById('selectProduct'),
 				data : productGridData,
 				scrollX : false,
-				scrollY : false,
+				scrollY : true,
 				columns : [ {
 					header : '제품코드',
 					name : 'prdCode',
@@ -45,10 +45,11 @@
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 10
-				}
+				bodyHeight: 400,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10
+				}, 
 			});
 			
 			productGrid.on('click', (ev) => {

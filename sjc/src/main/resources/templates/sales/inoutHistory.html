@@ -10,109 +10,230 @@
 		<div class="pd-ltr-20">
 			<h2 class="h2 mb-20">완제품 입/출고 내역</h2>
 			<div class="pd-30 card-box mb-20">
-				<div class="d-flex justify-content-between align-items-center mb-20">
-					<h2 class="h5 mb-0" id="title">입고</h2>
-					<div>
-						<button class="btn btn-danger" id="inButton">입고</button>
-						<button class="btn btn-primary" id="outButton">출고</button>
+				<div class="d-flex justify-content-between align-items-start">
+					<div style="flex-grow:1" id="inInput">
+						<h2 class="h5 mb-20" id="title">입고</h2>
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="prdName" type="text" placeholder="제품명" oninput="inSearch()">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">입고일자</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="inStartDate" type="date" oninput="inSearch()">
+							</div>
+							<div
+								class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+								<span style="font-size: 1rem;">~</span>
+							</div>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="inEndDate" type="date" oninput="inSearch()">
+							</div>
+						</div>
+					</div>
+					
+					<div style="flex-grow:1; display: none;" id="outInput">
+						<h2 class="h5 mb-20">출고</h2>
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">출고일자</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
+							</div>
+							<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+								<span style="font-size: 1rem;">~</span>
+							</div>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">
+							</div>
+						</div>
+					</div>
+					
+					<div class="mb-20 d-flex flex-column align-items-end">
+						<div>
+							<button class="btn btn-danger" id="inButton">입고</button>
+							<button class="btn btn-primary" id="outButton">출고</button>
+						</div>
 					</div>
 				</div>
-				<div id="inGrid"></div>
-				<div id="outGrid" style="display : none"></div>
 			</div>
+			
+			<div id="inGrid"></div>
+			<div id="outGrid" style="display : none"></div>
 		</div>
-
-		<script th:inline="javascript">
-			document.addEventListener('DOMContentLoaded', function() {
-				
-				const inGrid = document.getElementById('inGrid');
-		        const outGrid = document.getElementById('outGrid');
-				const title = document.getElementById('title');
-				
-				const outGridData = /*[[${outHistory}]]*/[];
-				const inGridData = /*[[${inHistory}]]*/[];
-				
-				const iGrid = new tui.Grid({
-					el : document.getElementById('inGrid'),
-					data : inGridData,
-					scrollX : false,
-					scrollY : false,
-					columns : [ {
-						header : 'LOT',
-						name : 'lot',
-						align : 'center',
-					}, {
-						header : '제품명',
-						name : 'prdName',
-						align : 'center',
-					}, {
-						header : '입고일자',
-						name : 'inDate',
-						align : 'center',
-					}, {
-						header : '유통기한',
-						name : 'ed',
-						align : 'center',
-					}, {
-						header : '입고량',
-						name : 'inQuantity',
-						align : 'center',
-					}, ],
-					rowHeaders : [ 'rowNum' ],
-					pageOptions : {
-						useClient : true,
-						perPage : 10
-					}
-				});
-				
-				const oGrid = new tui.Grid({
-					el : document.getElementById('outGrid'),
-					data : outGridData,
-					scrollX : false,
-					scrollY : false,
-					columns : [ {
-						header : 'LOT',
-						name : 'lot',
-						align : 'center',
-					}, {
-						header : '제품명',
-						name : 'prdName',
-						align : 'center',
-					}, {
-						header : '업체명',
-						name : 'cpName',
-						align : 'center',
-					}, {
-						header : '출고일자',
-						name : 'outDate',
-						align : 'center',
-					}, {
-						header : '출고량',
-						name : 'outQuantity',
-						align : 'center',
-					}, ],
-					rowHeaders : [ 'rowNum' ],
-					pageOptions : {
-						useClient : true,
-						perPage : 10
-					}
-				});
-				
-				// 입고 버튼 클릭 이벤트
-		        document.getElementById('inButton').addEventListener('click', function() {
-		            inGrid.style.display = 'block'; // 입고 그리드 보이기
-		            outGrid.style.display = 'none'; // 출고 그리드 숨기기
-		            title.textContent = '입고';
-		            iGrid.refreshLayout();
-		        });
-
-		        // 출고 버튼 클릭 이벤트
-		        document.getElementById('outButton').addEventListener('click', function() {
-		            outGrid.style.display = 'block'; // 출고 그리드 보이기
-		            inGrid.style.display = 'none'; // 입고 그리드 숨기기
-		            title.textContent = '출고';
-		            oGrid.refreshLayout();
-		        });
-			});
-		</script>
 	</div>
+	
+	<script th:inline="javascript">
+		let iGrid;
+		let oGrid;
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			
+			const inGrid = document.getElementById('inGrid');
+	        const outGrid = document.getElementById('outGrid');
+			const title = document.getElementById('title');
+			
+			const inInput = document.getElementById('inInput');
+			const outInput = document.getElementById('outInput');
+			
+			const outGridData = /*[[${outHistory}]]*/[];
+			const inGridData = /*[[${inHistory}]]*/[];
+			
+			iGrid = new tui.Grid({
+				el : document.getElementById('inGrid'),
+				data : inGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : 'LOT',
+					name : 'lot',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '입고일자',
+					name : 'inDate',
+					align : 'center',
+				}, {
+					header : '유통기한',
+					name : 'ed',
+					align : 'center',
+				}, {
+					header : '입고량',
+					name : 'inQuantity',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			oGrid = new tui.Grid({
+				el : document.getElementById('outGrid'),
+				data : outGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : 'LOT',
+					name : 'lot',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '출고일자',
+					name : 'outDate',
+					align : 'center',
+				}, {
+					header : '출고량',
+					name : 'outQuantity',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			// 입고 버튼 클릭 이벤트
+	        document.getElementById('inButton').addEventListener('click', function() {
+	            inGrid.style.display = 'block'; // 입고 그리드 보이기
+	            outGrid.style.display = 'none'; // 출고 그리드 숨기기
+	            inInput.style.display = 'block';
+	            outInput.style.display = 'none';
+	            iGrid.refreshLayout();
+	        });
+
+	        // 출고 버튼 클릭 이벤트
+	        document.getElementById('outButton').addEventListener('click', function() {
+	            outGrid.style.display = 'block'; // 출고 그리드 보이기
+	            inGrid.style.display = 'none'; // 입고 그리드 숨기기
+	            inInput.style.display = 'none';
+	            outInput.style.display = 'block';
+	            oGrid.refreshLayout();
+	        });
+		});
+		
+		function inSearch() {
+		    const prdName = document.getElementById('prdName').value;
+		    const inStartDate = document.getElementById('inStartDate').value;
+		    const inEndDate = document.getElementById('inEndDate').value;
+		    
+		    const inSearchCriteria = {
+		    	prdName: prdName,
+		    	inStartDate: inStartDate,
+		    	inEndDate: inEndDate,
+		    };
+
+		    $.ajax({
+		        url: '/inSearch',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify(inSearchCriteria),
+		        success: function(response) {
+		            iGrid.resetData(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('Error fetching search results:', error);
+		        }
+		    });
+		}
+		
+		function outSearch() {
+		    const prdName = document.getElementById('outPrdName').value;
+		    const cpName = document.getElementById('cpName').value;
+		    const outStartDate = document.getElementById('outStartDate').value;
+		    const outEndDate = document.getElementById('outEndDate').value;
+		    
+		    const outSearchCriteria = {
+		    	prdName: prdName,
+		    	cpName: cpName,
+		    	outStartDate: outStartDate,
+		    	outEndDate: outEndDate,
+		    };
+
+		    $.ajax({
+		        url: '/outSearch',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify(outSearchCriteria),
+		        success: function(response) {
+		            oGrid.resetData(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('Error fetching search results:', error);
+		        }
+		    });
+		}
+		
+	</script>
