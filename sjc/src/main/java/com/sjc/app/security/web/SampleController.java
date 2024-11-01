@@ -10,8 +10,13 @@ public class SampleController {
 		return "redirect:main";
 	}
 	
+//	@GetMapping("main")
+//	public void main() {}
+
 	@GetMapping("main")
-	public void main() {}
+	public String main() {
+		return "mainChart";
+	}
 	
 	@GetMapping("error")
 	public void error() {}
