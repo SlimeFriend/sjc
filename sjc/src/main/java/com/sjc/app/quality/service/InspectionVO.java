@@ -98,11 +98,11 @@ public class InspectionVO {
 	    private String porderStatus;
 	    
 	 //   PlanDVO 
-	        private String planDetailCode;  // 생산계획상세 코드
-	        private Integer planDetailQuantity;        // 수량
-	        private Integer planDetailNo;                // 우선순위
-	        private String planDetailComm;            // 비고
-	        private String planCode;        // 생산코드
+	    private String planDetailCode;  // 생산계획상세 코드
+	    private Integer planDetailQuantity;        // 수량
+	    private Integer planDetailNo;                // 우선순위
+	    private String planDetailComm;            // 비고
+	    private String planCode;        // 생산코드
 	    
 
 }

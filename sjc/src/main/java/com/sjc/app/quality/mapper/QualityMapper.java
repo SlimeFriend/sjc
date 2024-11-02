@@ -46,15 +46,30 @@ public interface QualityMapper {
 	public int updateMtlOdDone(InspectionVO inspectionVO);
 	// 자재입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 	public List<InspectionVO> insertMtIn(InspectionVO inspectionVOs);
-	
+
 	
 	
 	
 	// 출고
 	// 완제품품질검사 대기목록1
-	public List<InspectionVO> selectPDetail1();
+	public List<InspectionVO> selectPOrder();
 	// 완제품품질검사 대기목록2
-	public List<Map<String, Object>> selectPDetail2(String porderCode);
+	public List<Map<String, Object>> selectPDetail(String porderCode);
+	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
+	public int cntPDtlIns(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-inspection 생성
+	public int insertPDtlIns(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-inspection 데이터 출력
+	public List<InspectionVO> selectPDtlIns(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
+	public int countPDInsD(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달- insDetail 생성
+	public int insertPDtlInsD(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달- 검사리스트 출력
+	public List<InspectionVO> selectPDtlTest(InspectionVO inspectionVO);
+	public List<InspectionVO> selectPDtlInsDList(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달 - insDetail - insValue 업데이트
+	public void updateInsValue2 (InsDetailVO insDetailVO);
 	
 	
 	

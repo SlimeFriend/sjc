@@ -25,22 +25,6 @@
         or		(o.mtl_od_status = '입고품질검사중'
         			and     od.MTL_OD_DETAIL_STATUS  is null)
 	</select>
-	<!-- 완제품품질검사 대기목록1 -->
-	<select id="selectPDetail1" resultType="InspectionVO">
-		SELECT distinct(po.porder_code) AS "porderCode" 
-        		--, pd.pdetail_code AS "pdetailCode"
-				, pd.prd_code AS "prdCode"
-		        , pd.prd_name AS "prdName"
-		        , pd.output AS "output"
-				, pd.line_code AS "lineCode"
-		        , po.plan_code AS "planCode"
-		        , pd.status AS "porderStatus"
-		FROM porder po
-		JOIN pdetail pd
-		ON po.porder_code = pd.porder_code
-		WHERE pd.status = 'b3'
-	</select>
-	
 	
 	<!-- 입고품질검사 대기목록 2 (mtlOdDetail) -->
 	<select id="selectMtlOdDetail" parameterType="String" resultType="map">
@@ -61,26 +45,10 @@
 		WHERE d.mtl_od_code = #{mtlOdCode}
 		and d.mtl_od_detail_status is null
 	</select>
-	<!-- 완제품품질검사 대기목록2(pdetail_code) -->
-	<select id="selectPDetail2" parameterType="String" resultType="map">
-		SELECT pd.pdetail_code
-        		,po.porder_code
-				, pd.prd_code
-		        , pd.prd_name
-		        , pd.output
-				, pd.line_code
-		        , po.plan_code
-		        , pd.status AS "pdetailStatus"
-		FROM pdetail pd
-		JOIN porder po
-		ON po.porder_code = pd.porder_code
-		WHERE po.porder_code = #{porderCode}
-		AND     pd.status = 'b3'
-	</select>
 	
 	
 	<!-- 입고품질검사 등록목록 (mtlOdDetailCode) -->
-	<select id="selectIncomingTest" parameterType="String" resultType="map">
+<!-- 	<select id="selectIncomingTest" parameterType="String" resultType="map">
 		SELECT d.mtl_od_code  AS "mtlOdCode"
 	        , d.mtl_od_detail_code AS "mtlOdDetailCode"
 	        , d.mtl_od_detail_staus As "mtlOdDetailStatus"
@@ -91,38 +59,53 @@
 	        , m.specification AS "specification"
 	        , m.unit AS "unit"
 	        , m.unit_price AS "unitPrice"
-		--FROM copy_mtl_od_detail d
+		FROM copy_mtl_od_detail d
 		FROM mtl_od_detail d
-		--JOIN copy_mt m
+		JOIN copy_mt m
 		JOIN mt m
 		ON d.mt_code = m.mt_code
 		WHERE d.mtl_od_detail_code = #{mtlOdDetailCode}
+	</select> -->
+
+	
+	
+	
+	
+	<!-- 완제품품질검사 대기목록1 -->
+	<select id="selectPOrder" resultType="InspectionVO">
+		SELECT  po.porder_code          AS "porderCode"
+		        , MAX(po.plan_code)     AS "planCode"
+		        , SUM(pd.output)        AS "output"
+		        , MIN(pd.no)            AS "pdetailNo"
+		        , MAX(u.user_name)      AS "userName"
+		FROM    porder po
+		JOIN    pdetail pd
+		ON      pd.porder_code = po.porder_code
+		JOIN    sjc_user u
+		ON      u.user_id = po.manager
+		WHERE   po.status = 'b3'
+		GROUP BY po.porder_code
 	</select>
-	<!-- 완제품품질검사 등록목록 (porderCode) -->
-	<select id="selectPDetailTest" parameterType="String" resultType="map">
+	<!-- 완제품품질검사 대기목록2(porder_code) -->
+	<select id="selectPDetail" parameterType="String" resultType="map">
 		SELECT pd.pdetail_code AS "pdetailCode"
+        		,po.porder_code AS "porderCode"
 				, pd.prd_code AS "prdCode"
 		        , pd.prd_name AS "prdName"
 		        , pd.output AS "output"
 				, pd.line_code AS "lineCode"
-		        , po.plan_code AS "planCode"
-		        , po.status AS "porderStatus"
-		        , pland.quantity AS "planDetailQuantity"
-		        , pland.plan_detail_code AS "planDetailCode"
-		        , pland.no AS "planDetailNo"
-		FROM porder po
-		JOIN pdetail pd
+		        , pd.status AS "pdetailStatus"
+		        , pd.no AS "pdetailNo"
+		FROM pdetail pd
+		JOIN porder po
 		ON po.porder_code = pd.porder_code
-		JOIN plan_detail pland
-		ON  pland.prd_code = pd.prd_code
 		WHERE po.porder_code = #{porderCode}
+		AND     pd.status = 'b3'
 	</select>
 	
 	
 	
-	
-	
-	<!-- Update Status (mtlOd, mtlOdDetail) -->
+<!-- Update Status (mtlOd, mtlOdDetail) -->
 	<update id="updateMtlOdStatus">
 		--UPDATE copy_mtl_od
 		UPDATE mtl_od
@@ -142,27 +125,25 @@
 	
 	
 	
-	<!--자재 Inspection insert 여부 조회 (mtl_od_detail_code) -->
+<!--자재 Inspection insert 여부 조회 (mtl_od_detail_code) -->
 	<select id="whetherInspection" resultType="Integer">
 		SELECT count(1)
 		FROM inspection
 		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
-	<!--완제품 Inspection insert 여부 조회 (porderCode) -->
-	<select id="whetherPOrderInspection" resultType="Integer">
+<!--완제품 Inspection insert 여부 조회 (pdetail_code) -->
+	<select id="cntPDtlIns" resultType="Integer">
 		SELECT count(1)
 		FROM inspection
-		WHERE porder_code = #{porderCode}
+		WHERE pdetail_code = #{pdetailCode}
 	</select>
 	
-	<!--자재 insert Inspection  -->
+<!--자재 insert Inspection  -->
 	<insert id="insertInspection" parameterType="InspectionVO">
 	    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
 	        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
 	        FROM dual
 	    </selectKey>
-	
-	    
 	    INSERT INTO inspection (
 		        ins_code
 		        , ins_date
@@ -191,8 +172,8 @@
 		    )
 	</insert>
 	
-	<!--완제품 insert Inspection  -->
-	<insert id="insertPOrderInspection" parameterType="InspectionVO">
+<!--완제품 insert Inspection  -->
+	<insert id="insertPDtlIns" parameterType="InspectionVO">
 	    <selectKey keyProperty="insCode" order="BEFORE" resultType="string">
 	        SELECT 'INS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_SEQ.NEXTVAL, 4, '0') 
 	        FROM dual
@@ -208,7 +189,7 @@
 		        , number_of_failed
 		        , number_of_total_pass
 		        , total_pass
-		        , porder_code
+		        , pdetail_code
 		    )
 		    VALUES ( 
 		    		#{insCode}
@@ -221,10 +202,10 @@
 		        	, #{numberOfFailed}
 		        	, #{numberOfTotalPass}
 		        	, #{totalPass}
-		        	, #{porderCode}
+		        	, #{pdetailCode}
 		    )
 	</insert>
-	
+<!-- 자재품질검사등록모달-inspection 데이터 출력 -->
 	<select id="selectInspection" resultType="InspectionVO">
 			SELECT i.ins_code
 			        , i.ins_date
@@ -240,20 +221,21 @@
 			 FROM inspection i
 	         WHERE i.mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
-	<select id="selectPOrderInspection" resultType="InspectionVO">
-			SELECT ins_code
-			        , ins_date
-			        , ins_status
-			        , user_id
-			        , user_name
-			        , number_of_tests
-			        , number_of_passes
-			        , number_of_failed
-			        , number_of_total_pass
-			        , total_pass
-			        , porder_code
+<!-- 완제품품질검사등록모달-inspection 데이터 출력 -->
+	<select id="selectPDtlIns" resultType="InspectionVO">
+			SELECT ins_code		  AS "insCode"
+			        , ins_date		  AS "insDate"
+			        , ins_status		  AS "insStatus"
+			        , user_id		  AS "userId"
+			        , user_name		  AS "userName"
+			        , number_of_tests		  AS "numberOfTests"
+			        , number_of_passes		  AS "numberOfPasses"
+			        , number_of_failed		  AS "numberOfFailed"
+			        , number_of_total_pass		  AS "numberOfTotalPass"
+			        , total_pass		  AS "totalPass"
+			        , pdetail_code		  AS "pdetailCode"
 			 FROM inspection i
-	         WHERE i.porder_code = #{porderCode}
+	         WHERE i.pdetail_code = #{pdetailCode}
 	</select>
 	
 
@@ -270,13 +252,13 @@
         ON  i.mtl_od_detail_code = cmod.mtl_od_detail_code
 		WHERE i.mtl_od_detail_code =  #{mtlOdDetailCode}
 	</select>
-	<!-- 완제품 insDetail  insert 여부 조회 (porder_code) -->
-	<select id="countPOrderInsItem" resultType="Integer">
+	<!-- 완제품 insDetail  insert 여부 조회 (pdetail_code) -->
+	<select id="countPDInsD" resultType="Integer">
 		SELECT count(1)
 		FROM ins_detail d
 		JOIN inspection i
 		ON	i.ins_code = d.ins_code
-		WHERE i.porder_code =  #{porderCode}
+		WHERE i.pdetail_code =  #{pdetailCode}
 	</select>
 	
 	<!-- 자재 insDetail insert -->
@@ -294,8 +276,8 @@
 		                	, #{insCode}
 		                )
 	</insert>
-	<!-- 완제품 insDetail insert -->
-	<insert id="insertPOrderInsDetail" parameterType="InspectionVO">
+<!-- 완제품 insDetail insert -->
+	<insert id="insertPDtlInsD" parameterType="InspectionVO">
 	    <selectKey keyProperty="insDetailCode" order="BEFORE" resultType="string">
 	        SELECT 'INSD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(INS_DETAIL_SEQ.NEXTVAL, 4, '0') 
 	        FROM dual
@@ -309,17 +291,16 @@
 		                	, #{insCode}
 		                )
 	</insert>
-	
-	<!-- 자재입고품질검사모달창 insItem 목록 출력 -->
+<!-- 자재입고품질검사모달창 insItem 목록 출력 -->
 	<select id="selectTestDetail" resultType="InspectionVO">
-		select  im.mt_code mt_code
+		SELECT  im.mt_code mt_code
         ,ii.ins_item_code ins_item_code
         ,ii.ins_item_name ins_item_name
         ,ii.ins_item_citeria ins_item_citeria
-		from    ins_map im
-		join    ins_item ii
-		on      im.ins_item_code = ii.ins_item_code
-		where   im.mt_code = (
+		FROM    ins_map im
+		JOIN    ins_item ii
+		ON      im.ins_item_code = ii.ins_item_code
+		WHERE   im.mt_code = (
 					    select  mt_code
 					    --from    copy_mtl_od_detail
 					    from    mtl_od_detail
@@ -327,18 +308,18 @@
 					)
 	</select>
 	<!-- 완제품품질검사모달창 insItem 목록 출력 -->
-	<select id="selectPOrderTest" resultType="InspectionVO">
-		select  ipm.prd_code prd_code
-        ,ii.ins_item_code ins_item_code
-        ,ii.ins_item_name ins_item_name
-        ,ii.ins_item_citeria ins_item_citeria
-		from    ins_prd_map ipm
-		join    ins_item ii
-		on      ipm.ins_item_code = ii.ins_item_code
-		where   ipm.prd_code = (
-					    select  prd_code
-					    from    porder
-					    where   porder_code = #{porderCode}
+	<select id="selectPDtlTest" resultType="InspectionVO">
+		SELECT  ipm.prd_code 		  AS "prdCode"
+        		,ii.ins_item_code 		  AS "insItemCode"
+        		,ii.ins_item_name 		  AS "insItemName"
+        		,ii.ins_item_citeria 		  AS "insItemCiteria"
+		FROM    ins_item ii
+		JOIN    ins_prd_map ipm
+		ON      ipm.ins_item_code = ii.ins_item_code
+		WHERE   ipm.prd_code = (
+					    SELECT  prd_code
+					    FROM    pdetail
+					    WHERE   pdetail_code = #{pdetailCode}
 					)
 	</select>
 	<!-- 자재입고품질검사모달창 insDetail 목록 출력 -->
@@ -349,9 +330,9 @@
 		WHERE	ins_code = #{insCode}
 	</select>
 	<!-- 완제품품질검사모달창 insDetail 목록 출력 -->
-	<select id="selectPOrderInsDetailList" resultType="InspectionVO">
-		SELECT ins_detail_code
-				, ins_code
+	<select id="selectPDtlInsDList" resultType="InspectionVO">
+		SELECT ins_detail_code 		  AS "insDetailCode"
+				, ins_code 		  AS "insCode"
 		FROM	ins_detail
 		WHERE	ins_code = #{insCode}
 	</select>
@@ -360,6 +341,13 @@
 	
 	<!-- 자재입고품질검사모달창 insDetail 값 입력 -->
 	<update id="updateInsValue">
+		UPDATE 	ins_detail
+		SET   	ins_value = #{insValue}
+				, ins_result = #{insResult}
+		WHERE 	ins_detail_code = #{insDetailCode}
+	</update>
+	<!-- 완제품품질검사모달창 insDetail 값 입력 -->
+	<update id="updateInsValue2">
 		UPDATE 	ins_detail
 		SET   	ins_value = #{insValue}
 				, ins_result = #{insResult}
