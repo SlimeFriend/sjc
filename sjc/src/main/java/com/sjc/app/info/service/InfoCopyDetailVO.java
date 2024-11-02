@@ -1,7 +1,5 @@
 package com.sjc.app.info.service;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data

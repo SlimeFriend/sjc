@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 	@RestController
 	@RequiredArgsConstructor
 	public class InfoRestController {
-
+		// do nothing.
 	}

@@ -25,6 +25,7 @@ public class InfoMtServiceImpl implements InfoMtService {
 		this.infoMtMapper = infoMtMapper;
 	}
 	
+	// 자재 조회
 	@Override
 	public List<MtVO> mtList(MtVO mtVO) {
 		return infoMtMapper.selectMtAllList(mtVO);

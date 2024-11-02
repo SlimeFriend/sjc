@@ -5,5 +5,6 @@ import java.util.List;
 import com.sjc.app.info.service.LineVO;
 
 public interface InfoLineMapper {
+	// 라인 조회
 	public List<LineVO> selectLineAllList(LineVO lineVO);
 }
