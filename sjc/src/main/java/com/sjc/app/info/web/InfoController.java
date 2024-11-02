@@ -7,30 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 // URI + METHOD => Service => View
 //@RequiredArgsConstructor
 public class InfoController {
-
+	// 제품,자제,BOM 관리 페이지
 	@GetMapping("infoPrdMtBomList")
 	public String infoPrdMtBomList() {
 		return "info/prdMtBomList";
 	}
-	
+	// 제품,BOM 관리 페이지
 	@GetMapping("infoPrdBomList")
 	public String infoPrdBomList() {
 		return "info/prdBomList";
 	}
-	
-	@GetMapping("infoPrdList")
-	public String infoPrdList() {
-		return "info/prdList";
-	}
-	
+	// 라인,공정 페이지
 	@GetMapping("infoLineProcessList")
 	public String infoLineProcessList() {
 		return "info/lineProcessList";
 	}
-	
-	@GetMapping("infoEqChart")
-	public String infoEqChart() {
-		return "info/eqChart";
-	}
-	
 }

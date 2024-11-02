@@ -27,11 +27,13 @@ public class InfoCpServiceImpl implements InfoCpService {
 		this.infoCpMapper = infoCpMapper;
 	}
 	
+	// 업체 조회
 	@Override
 	public List<CpVO> cpList(CpVO cpVO) {
 		return infoCpMapper.selectCpAllList(cpVO);
 	}
-
+	
+	// 업체 수정
 	@Override
 	@Transactional
 	public List<CpVO> modifyCps(List<CpVO> CpVOs) {

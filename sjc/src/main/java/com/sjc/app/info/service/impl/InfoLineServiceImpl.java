@@ -25,6 +25,7 @@ public class InfoLineServiceImpl implements InfoLineService {
 		this.infoLineMapper = infoLineMapper;
 	}
 	
+	// 라인 조회
 	@Override
 	public List<LineVO> lineList(LineVO lineVO) {
 		return infoLineMapper.selectLineAllList(lineVO);

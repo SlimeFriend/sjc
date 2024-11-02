@@ -33,11 +33,12 @@ public class InfoBomServiceImpl implements InfoBomService {
 		this.infoPrdMapper = infoPrdMapper;
 	}
 	
+	// BOM 등록
 	@Override
     @Transactional
 //	public List<String> registerBoms(List<String> mtCodes) {
 	public List<BomVO> registerBoms(List<BomVO> bomVOs) {
-		
+
 		/*
         List<BomVO> BomVOs = new ArrayList<>();
         
@@ -71,11 +72,10 @@ public class InfoBomServiceImpl implements InfoBomService {
 		
 	}
 	
+	// 제품, BOM 등록
 	@Override
 	@Transactional
 	public List<BomVO> registerPrdBoms(List<BomVO> bomVOs) {
-		// 제품 추가
-		
 		
 		if (!bomVOs.isEmpty()) { 
 		    infoPrdMapper.insertProduct(bomVOs.get(0));
@@ -89,24 +89,31 @@ public class InfoBomServiceImpl implements InfoBomService {
         return bomVOs;	
 	}
 	
+	// BOM 조회
 	@Override
 	public List<BomVO> bomList() {
 		return infoBomMapper.selectBomAllList();
 	}
 	
+	// BOM 상세 조회
 	@Override
 	public List<BomVO> bomDetailList(BomVO bomVO) {
 		return infoBomMapper.selectBomDetailAllList(bomVO);
 	}
-
+	
+	// 제품 수정
 	@Override
 	public int modifyPrd(ProductVO productVO) {
 		return infoBomMapper.updatePrd(productVO);
 	}
+	
+	// BOM 수정
 	@Override
 	public int modifyBom(BomVO bomVO) {
 		return infoBomMapper.updateBom(bomVO);
 	}
+	
+    // 제품, BOM 수정
 	@Override
 	@Transactional
 	public Map<String, Object> modifyPrdBom(PrdBomDTO prdBomDTO) {

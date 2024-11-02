@@ -14,12 +14,12 @@ public class InfoMtController {
 	InfoMtController(InfoMtService infoMtService){
 		this.infoMtService = infoMtService;
 	}
-
+	// 자제 관리 페이지 - 테스트
 	@GetMapping("infoMtListGridFetch")
 	public String infoMtListGridFetch() {
 		return "info/mtListGridFetch";
 	}
-	
+	// 자재 관리 페이지
 	@GetMapping("infoMtList")
 	public String infoMtList() {
 		return "info/mtList";

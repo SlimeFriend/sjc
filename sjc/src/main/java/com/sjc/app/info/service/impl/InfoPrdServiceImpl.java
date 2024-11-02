@@ -25,6 +25,7 @@ public class InfoPrdServiceImpl implements InfoPrdService {
 		this.infoPrdMapper = infoPrdMapper;
 	}
 	
+	// 제품 조회
 	@Override
 	public List<ProductVO> prdList(ProductVO productVO) {
 		return infoPrdMapper.selectPrdAllList(productVO);

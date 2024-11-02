@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class InfoMtRestController {
 	
 	private final InfoMtService infoMtService;
-
+	// 자재 조회
 	@GetMapping("mts")
 	public List<MtVO> mtList(MtVO mtVO){
 		return infoMtService.mtList(mtVO);

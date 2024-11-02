@@ -14,12 +14,12 @@ public class InfoProcessController {
 	InfoProcessController(InfoProcessService infoProcessService){
 		this.infoProcessService = infoProcessService;
 	}
-
+	// 공정 관리 페이지 - 테스트
 	@GetMapping("infoProcessListGridFetch")
 	public String infoProcessListGridFetch() {
 		return "info/processListGridFetch";
 	}
-	
+	// 공정 관리 페이지
 	@GetMapping("infoProcessList")
 	public String infoProcessList() {
 		return "info/processList";

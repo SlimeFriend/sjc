@@ -15,12 +15,13 @@ public class InfoBomController {
 		this.infoBomService = infoBomService;
 	}
 
-
+	// BOM 관리 - 테스트
 	@GetMapping("infoBomListGridFetch")
 	public String infoBomListGridFetch() {
 		return "info/bomListGridFetch";
 	}
 	
+	// BOM 관리
 	@GetMapping("infoBomList")
 	public String infoBomList() {
 		return "info/bomList";

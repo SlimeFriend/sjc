@@ -14,12 +14,12 @@ public class InfoCpController {
 	InfoCpController(InfoCpService infoCpService){
 		this.infoCpService = infoCpService;
 	}
-
+	// 업체 관리 페이지 - 테스트
 	@GetMapping("infoCpListGridFetch")
 	public String infoCpListGridFetch() {
 		return "info/cpListGridFetch";
 	}
-	
+	// 업체 관리 페이지
 	@GetMapping("infoCpList")
 	public String infoCpList() {
 		return "info/cpList";

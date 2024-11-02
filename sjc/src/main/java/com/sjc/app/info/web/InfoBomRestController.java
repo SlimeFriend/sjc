@@ -21,26 +21,27 @@ public class InfoBomRestController {
 	
 	private final InfoBomService bomService;
 
+	// 제품,BOM 등록
 	@PutMapping("registerPrdBoms")
 	public List<BomVO> registerPrdBoms(@RequestBody List<BomVO> bomVOs) {
 		return bomService.registerPrdBoms(bomVOs);
 	}
-	
+	// BOM 등록
 	@PutMapping("registerBoms")
 	public List<BomVO> registerBoms(@RequestBody List<BomVO> bomVOs) {
 		return bomService.registerBoms(bomVOs);
 	}
-	
+	// BOM 조회
 	@GetMapping("boms")
 	public List<BomVO> bomList(){
 		return bomService.bomList();
 	}
-	
+	// BOM 상세 조회
 	@GetMapping("bomDetails")
 	public List<BomVO> bomDetails(BomVO bomVO){
 		return bomService.bomDetailList(bomVO);
 	}
-	
+	// 제품,BOM 수정
 	@PutMapping("prdBom")
 	public Map<String, Object> updatePrdBom(@RequestBody PrdBomDTO prdBomDTO) {
 	    return bomService.modifyPrdBom(prdBomDTO);
