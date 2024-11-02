@@ -71,8 +71,8 @@
 							    <div class="col">
 							        <div class="btn-group" role="group">
 							            <button type="button" class="btn mr-2" style="opacity:0" id="">빈 버튼</button>
-							            <button type="button" class="btn btn-success active" id="intervalStartBtn">시작</button>
-							            <button type="button" class="btn btn-light" id="intervalStopBtn">종료</button>
+							            <button type="button" class="btn btn-light" id="intervalStartBtn">시작</button>
+							            <button type="button" class="btn btn-success active" id="intervalStopBtn">종료</button>
 							        </div>
 							    </div>
 							</div>
@@ -80,8 +80,8 @@
 							<div class="row">
 							    <div class="col">
 							        <div class="btn-group" role="group">
-							            <button type="button" class="btn btn-light" id="schedulerStartBtn" style="opacity:0">스케줄러 시작</button>
-							            <button type="button" class="btn btn-primary active" id="schedulerStopBtn" style="opacity:0">스케줄러 종료</button>
+							            <button type="button" class="btn btn-light" id="schedulerStartBtn" style="opacity:1">스케줄러 시작</button>
+							            <button type="button" class="btn btn-primary active" id="schedulerStopBtn" style="opacity:1">스케줄러 종료</button>
 							        </div>
 							    </div>
 							</div>
@@ -245,7 +245,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	        },
 	        exportMenu: {
 	            visible: false
-	        }
+	        },
+	        tooltip: {
+	            formatter: (value) => `${value}대`,
+            },	        
 	    };
 	  
 	    const columnChartRight = new toastui.Chart.columnChart({ 
@@ -302,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        },
 	        tooltip: {
 	            formatter: (value) => `${value}°C`,
-	          },	        
+            },	        
 	    };
 	  
 	    const lineChartBottom = new toastui.Chart.lineChart({ 
@@ -397,12 +400,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	        $('#schedulerStartBtn').removeClass('btn-light').addClass('btn-primary active');
 	        $('#schedulerStopBtn').removeClass('btn-primary active').addClass('btn-light');
 	        // 스케줄러 시작
-	        //$.post('/startScheduler');
+	        $.post('/startScheduler');
 	    } else {
 	        $('#schedulerStartBtn').removeClass('btn-primary active').addClass('btn-light');
 	        $('#schedulerStopBtn').removeClass('btn-light').addClass('btn-primary active');
 	        // 스케줄러 정지
-	        //$.post('/stopScheduler');
+	        $.post('/stopScheduler');
 	    }
 	    console.log(isStart);
 	});
@@ -410,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	let intervalId = null; // 인터벌 버튼
 	
-    intervalId = setInterval(getChartData, 1000); // 화면 로드 시 모니터링 시작
+    // intervalId = setInterval(getChartData, 1000); // 화면 로드 시 테스트 모니터링 시작
 	$('#intervalStartBtn, #intervalStopBtn').click(function() {
 	    const isStart = $(this).attr('id') === 'intervalStartBtn';
 	    
@@ -418,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        $('#intervalStartBtn').removeClass('btn-light').addClass('btn-success active');
 	        $('#intervalStopBtn').removeClass('btn-success active').addClass('btn-light');
 	        // 인터벌 시작
-	        intervalId = setInterval(getChartData, 1000);
+	        intervalId = setInterval(getEqLog, 1000);
 	        
 	    } else {
 	        $('#intervalStartBtn').removeClass('btn-success active').addClass('btn-light');
@@ -456,13 +459,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	        
 	        // 차트에 데이터 추가
 	        lineChart.addData(newData, newCategory);
+	    });
+	}
+	
+	function getEqLog() {
+	    $.get('/getEqLog', function(data) {
+	        // 새로운 카테고리
+	        const newCategory = data.categories[0];
 	        
-	        // 데이터가 12개 이상이면 첫 번째 데이터 제거
-	        /*
-	        if (lineChart.getData().categories.length > 12) {
-	        	lineChart.removeData(0);
-	        }
-	        */
+	        // 새로운 데이터 (성형기, 혼합기 값)
+	        const newData = [
+	            data.series[0].data[0],  // 성형기 값
+	            data.series[1].data[0]   // 혼합기 값
+	        ];
+	        
+	        // 차트에 데이터 추가
+	        lineChart.addData(newData, newCategory);
 	    });
 	}	
 

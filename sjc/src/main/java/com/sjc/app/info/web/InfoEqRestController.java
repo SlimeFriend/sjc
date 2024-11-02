@@ -21,7 +21,11 @@ public class InfoEqRestController {
     
     @GetMapping("/getChartData")
     public ChartDataVO getChartData() {
-    	
     	return infoEqService.getChartData();
+    }
+    
+    @GetMapping("/getEqLog")
+    public ChartDataVO getEqLog() {
+    	return infoEqService.getEqLog();
     }
 }
