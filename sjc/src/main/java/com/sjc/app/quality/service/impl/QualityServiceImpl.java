@@ -158,15 +158,61 @@ public class QualityServiceImpl implements QualityService{
 	// 출고
 	// 완제품품질검사 대기목록1
 	@Override
-	public List<InspectionVO> pDetailSelect1() {
-		return qualityMapper.selectPDetail1();
+	public List<InspectionVO> pOrderSelect() {
+		return qualityMapper.selectPOrder();
 	}
 	// 완제품품질검사 대기목록2
 	@Override
-	public List<Map<String, Object>> pDetailSelect2(String porderCode) {
-		return qualityMapper.selectPDetail2(porderCode);
+	public List<Map<String, Object>> pDetailSelect(String porderCode) {
+		return qualityMapper.selectPDetail(porderCode);
 	}
-	
+	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
+	@Override
+	public int pDtlInsCnt(InspectionVO inspectionVO) {
+		return  qualityMapper.cntPDtlIns(inspectionVO);
+	}
+	// 완제품품질검사등록모달-inspection 생성
+	@Override
+	public int dtlInsInsert(InspectionVO inspectionVO) {
+		return  qualityMapper.insertPDtlIns(inspectionVO);
+	}
+	// 완제품품질검사등록모달-inspection 데이터 출력
+	@Override
+	public List<InspectionVO> pDtlInsSelect(InspectionVO inspectionVO) {
+		return  qualityMapper.selectPDtlIns(inspectionVO);
+	}
+	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
+	@Override
+	public int pDInsDCount(InspectionVO inspectionVO) {
+		return qualityMapper.countPDInsD(inspectionVO);
+	}
+	// 완제품품질검사등록모달- insDetail 생성
+	@Transactional
+	@Override
+	public int pDtlInsDInsert(InspectionVO inspectionVO) {
+		return qualityMapper.insertPDtlInsD(inspectionVO);
+	}
+	// 완제품품질검사등록모달- 검사리스트 출력
+	@Override
+	public List<InspectionVO> pDtlTestSelect(InspectionVO inspectionVO) {
+		return qualityMapper.selectPDtlTest(inspectionVO);
+	}
+	@Override
+	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO) {
+		return qualityMapper.selectPDtlInsDList(inspectionVO);
+	}
+	// 완제품품질검사등록모달 - insDetail - insValue 업데이트
+	@Override
+	public List<InsDetailVO> insValueUpdate2(List<InsDetailVO> list) {
+		
+		for(InsDetailVO insDetailVO : list) {
+			
+			qualityMapper.updateInsValue2(insDetailVO);
+		}
+		
+		
+		return list;
+	}	
 	
 	
 	

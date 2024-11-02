@@ -98,10 +98,10 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			const gridData = /*[[${pdetailList}]]*/[];
-			const gridDetailData = /*[[${pdetailDetail}]]*/[];
-			//const gridInspectionData = /*[[${insList}]]*/[];
-			//const gridInsDetailData = /*[[${newList}]]*/[];
+			const gridData = /*[[${pOrderList}]]*/[];
+			const gridDetailData = /*[[${pDetail}]]*/[];
+			const gridInspectionData = /*[[${pDInsList}]]*/[];
+			const gridInsDetailData = /*[[${pDInsDtlList}]]*/[];
 
 			const grid = new tui.Grid({
 				el : document.getElementById('gridOrder'),
@@ -115,38 +115,26 @@
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '제품 코드',
-					name : 'prdCode',
+					header : '생산계획 코드',
+					name : 'planCode',
 					align : 'center',
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '제품 이름',
-					name : 'prdName',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
-					header : '생산량',
+					header : '총 생산량',
 					name : 'output',
 					align : 'center',
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '생산지시상태',
-					name : 'porderStatus',
+					header : '우선순위',
+					name : 'pdetailNo',
 					align : 'center',
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '라인 코드',
-					name : 'lineCode',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
-					header : '생산계획 코드',
-					name : 'planCode',
+					header : '담당자',
+					name : 'userName',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -194,12 +182,6 @@
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '생산지시코드',
-					name : 'porderCode',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
 					header : '제품 코드',
 					name : 'prdCode',
 					align : 'center',
@@ -211,7 +193,7 @@
 					align : 'center',
 					resizable: true,
 				}, {
-					header : '생산량',
+					header : '제품별 생산량',
 					name : 'output',
 					align : 'center',
 					resizable: true,
@@ -222,14 +204,8 @@
 					resizable: true,
 					sortable: true,
 				}, {
-					header : '생산계획 코드',
-					name : 'planCode',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
-					header : '생산계획 상태',
-					name : 'porderStatus',
+					header : '상세 상태',
+					name : 'pdetailStatus',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -247,25 +223,24 @@
 				}
 			});
 			
-			let mtlOdDetailCodeValue = "";
-			let mtName = "";
+ 			let pdetailCodeValue = "";
 		    let remainData = [];
 		    
 			
-/* 		    griddetail.on('click', (ev) => {
+ 		    griddetail.on('click', (ev) => {
 		        const rowKey = ev.rowKey;
 		        const pdetailCodeValue = griddetail.getValue(rowKey, 'pdetailCode');
 				console.log(pdetailCodeValue);
 		        if (pdetailCodeValue) {
 		            $.ajax({
-		                url: '/finishQualityWait2',
+		                url: '/finishQualityInspection',
 		                type: 'POST',
 		                contentType: 'application/json',
 		                data: JSON.stringify({ pdetailCode: pdetailCodeValue }),
 		                success: function(response,) {
 		                	console.log('Response:', response);
-		                	gridInspectionModal.resetData(response.insList);
-		                	gridInsDetailModal.resetData(response.newList);
+		                	gridInspectionModal.resetData(response.pDInsList);
+		                	gridInsDetailModal.resetData(response.pDInsDtlList);
 						    document.getElementById('gridOrderDetail').style.opacity = 1;
 						    $('#myModal').modal('show'); // 모달 열기
 						    gridInspectionModal.refreshLayout(); 
@@ -287,8 +262,8 @@
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
-					header : '발주상세코드',
-					name : 'mtlOdDetailCode',
+					header : '생산지시상세 코드',
+					name : 'pdetailCode',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -341,6 +316,12 @@
 					resizable: true,
 					sortable: true,
 				}, {
+					header : '총합격수',
+					name : 'numberOfTotalPass',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
 					header : '총합격여부',
 					name : 'totalPass',
 					align : 'center',
@@ -353,8 +334,8 @@
 					perPage : 10
 				}
 			});
- */			
-			/* gridInspectionModal.on('click', (ev) => {
+ 			
+/* 			 gridInspectionModal.on('click', (ev) => {
 			    const rowKey = ev.rowKey;
 			    const insCodeValue = gridInspectionModal.getValue(rowKey, 'insCode');
 			    
@@ -375,18 +356,18 @@
 			    	});
 			    }
 			    
-			}); */
+			});  */
 			
 			
 			
-/* 			const gridInsDetailModal = new tui.Grid({
+ 			const gridInsDetailModal = new tui.Grid({
 				el : document.getElementById('modalInspectionDetail'),
 				data : gridInsDetailData,
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
-					header : '품질검사코드',
-					name : 'insCode',
+					header : '제품코드',
+					name : 'prdCode',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -403,7 +384,7 @@
 					resizable: true,
 					sortable: true,
 				},  {
-					header : '품질검사이름',
+					header : '품질검사항목이름',
 					name : 'insItemName',
 					align : 'center',
 					resizable: true,
@@ -450,8 +431,8 @@
 			});
 			
 			
- */			
-/* 			
+			
+ 			
 			document.getElementById('testInsert').addEventListener('click', () => {
 				
 	                
@@ -460,7 +441,7 @@
 	                console.log(requestData);
 	                
 	                $.ajax({
-	                    url: '/insValueUpdate',
+	                    url: '/finQualityInsUpdate',
 	                    type: 'POST',
 	                    contentType: 'application/json',
 	                    data: JSON.stringify(requestData),
@@ -476,7 +457,7 @@
 			});
 			
 			
- */			
+ 			
 			
 			
 	/* 		

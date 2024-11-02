@@ -9,6 +9,7 @@ import com.sjc.app.pr.service.PDetailVO;
 
 public interface QualityService {
 	//입고
+	// 자재입고품질검사 대기목록
 	// 발주목록전체
 	public List<InspectionVO> mtlOdList();
 	// 발주목록상세 테이블
@@ -20,21 +21,21 @@ public interface QualityService {
 	// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
 	public Map<String, Object> mtlOdStatusUpdate(InspectionVO inspectionVO);
 	public Map<String, Object> mtlOdDetailStatusUpdate(InspectionVO inspectionVO);
-	// 품질검사등록모달-inspection 데이터 갯수 카운트
+	// 자재품질검사등록모달-inspection 데이터 갯수 카운트
 	public int whetherInspection(InspectionVO inspectionVO);
-	// 품질검사등록모달-inspection 생성
+	// 자재품질검사등록모달-inspection 생성
 	public int insertInspection(InspectionVO inspectionVO);
-	// 품질검사등록모달-inspection 데이터 출력
+	// 자재품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO);
-	// 품질검사상세-insDetail 데이터 갯수 카운트
-	public int insItemCount(InspectionVO inspectionVO);
-	// 품질검사상세- insDetail 생성
-	public int insertInsDetail(InspectionVO inspectionVO);
-	// 품질검사상세- 검사리스트 출력
-	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
-	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
-	// 품질검사상세 - insDetail - insValue 업데이트
-	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> insDetailVO);
+	// 자재품질검사등록모달-insDetail 데이터 갯수 카운트
+	public int pDInsDCount(InspectionVO inspectionVO);
+	// 자재품질검사등록모달- insDetail 생성
+	public int pDtlInsDInsert(InspectionVO inspectionVO);
+	// 자재품질검사등록모달- 검사리스트 출력
+	public List<InspectionVO> pDtlTestSelect(InspectionVO inspectionVO);
+	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO);
+	// 자재품질검사등록모달 - insDetail - insValue 업데이트
+	public List<InsDetailVO> insValueUpdate2(List<InsDetailVO> insDetailVO);
 
 	
 	//검사기준목록
@@ -49,9 +50,24 @@ public interface QualityService {
 	
 	// 출고
 	// 완제품품질검사 대기목록1
-	public List<InspectionVO> pDetailSelect1();
+	public List<InspectionVO> pOrderSelect();
 	// 완제품품질검사 대기목록2
-	public List<Map<String, Object>> pDetailSelect2(String porderCode);
+	public List<Map<String, Object>> pDetailSelect(String porderCode);
+	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
+	public int pDtlInsCnt(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-inspection 생성
+	public int dtlInsInsert(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-inspection 데이터 출력
+	public List<InspectionVO> pDtlInsSelect(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
+	public int insItemCount(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달- insDetail 생성
+	public int insertInsDetail(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달- 검사리스트 출력
+	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
+	// 완제품품질검사등록모달 - insDetail - insValue 업데이트
+	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> insDetailVO);
 
 	
 	
