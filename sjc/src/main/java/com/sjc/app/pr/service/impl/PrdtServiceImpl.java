@@ -198,13 +198,14 @@ public class PrdtServiceImpl implements PrdtService {
 
 	    return needs;
 	}
-
+	
 	@Override
 	public List<String> findPC() {
 		
 		return prdtMapper.findPC();
 	}
-
+	
+	// 생산지시와 생산지시상세(pOrder, pDetail 생성)
 	@Override
 	public int insertOrd(PoVO poVO) {
 
@@ -230,9 +231,22 @@ public class PrdtServiceImpl implements PrdtService {
 		return 0;
 
 	}
-
+	
+	// 선택 계획의 남은 제품 계획량 가져오기
 	@Override
 	public List<PlanDVO> planPrd(String planCode) {
 		return prdtMapper.planPrd(planCode);
+	}
+
+	@Override
+	public List<String> oList() {
+		// TODO Auto-generated method stub
+		return prdtMapper.oList();
+	}
+
+	@Override
+	public List<ProductVO> ordPrd(String ordCode) {
+		// TODO Auto-generated method stub
+		return prdtMapper.ordPrd(ordCode);
 	}
 }

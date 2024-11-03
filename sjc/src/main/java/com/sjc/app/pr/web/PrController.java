@@ -63,8 +63,11 @@ public class PrController {
 		
 		List<ProductVO> productList = prdtService.productList();
 	
+		List<String> oList = prdtService.oList();
 
 		model.addAttribute("products", productList);
+		
+		model.addAttribute("oList", oList);
 		
 		return "pr/planCreate";
 	}
@@ -275,5 +278,13 @@ public class PrController {
 	public List<PlanDVO> planPrd(@RequestParam String planCode){
 		
 		return prdtService.planPrd(planCode);
+	}
+	
+	// 주문 클릭시 나올 제품
+	@GetMapping("ordPrd")
+	@ResponseBody
+	public List<ProductVO> ordPrd(@RequestParam String ordCode){
+		
+		return prdtService.ordPrd(ordCode);
 	}
 }

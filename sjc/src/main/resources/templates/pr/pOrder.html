@@ -85,18 +85,20 @@
 			
 			document.addEventListener('DOMContentLoaded', function() {
 				
+				// 계획 select 
 				const pc = $('#planCode');
 				
-				
+				// 라인 선택 데이터
 				const gridData = /*[[${linePrd}]]*/[];
-
+				
+				// 라인 선택 그리드
 				grid = new tui.Grid({
 					el : document.getElementById('grid'),
 					data : gridData,
 					scrollX : false,
 					scrollY : false,
 					columns : [ {
-						header : '가동 가능 라인',
+						header : '라인',
 						name : 'lineCode',
 						align : 'center',
 					}, {
@@ -111,12 +113,30 @@
 						header : '목표량',
 						name : 'want',
 						align : 'center',
-						editor: 'text',
+						editor: {
+			                type: 'text',
+			                // 조건에 따라 editor 사용 여부 설정
+			                options: {
+			                    disabled: true // 기본적으로 비활성화
+			                }
+			            }
+						
 					}, {
 						header : '지시량',
 						name : 'command',
 						align : 'center',
-						editor: 'text',
+						editor: {
+			                type: 'text',
+			                // 조건에 따라 editor 사용 여부 설정
+			                options: {
+			                    disabled: true // 기본적으로 비활성화
+			                }
+			            }
+					}, {
+						header : '사용 가능 여부',
+						name : 'use',
+						align : 'center',
+						
 					}],
 					rowHeaders : [ 'checkbox' ],
 					pageOptions : {
@@ -125,7 +145,7 @@
 					}
 				});
 				
-				
+				// 필요 자재 그리드
 				mtgrid = new tui.Grid({
 					el : document.getElementById('mtgrid'),
 					data : mtgridData,
@@ -157,25 +177,25 @@
 				
 				
 				
-				
+				// 제품 라인 선택 시 자재 그리드 ajax
 				grid.on('uncheck', (ev)=>{
 					mtload();
 				})
 				
-				 grid.on('check', (ev) => {
+				grid.on('check', (ev) => {
 					 mtload();
-				        
-							
-				 });
+				});
 				
+				// 계획 select 바꿀경우 
 				pc.on('change', ()=>{
 					const planCode= pc.val();
-						
+					
+					// 계획 그리드 ajax 변경(선택한 plancode의 남은 제품계획수량) 
 					$.ajax({
 					    url: 'planPrd',
 					    type: 'GET',
 					    data: {
-					        planCode : planCode // 예를 들어 특정 ID의 데이터를 요청
+					        planCode : planCode 
 					    },
 					    success: function(response) {
 					        plangrid.resetData(response);
@@ -184,6 +204,10 @@
 					        console.error('Error:', textStatus, errorThrown);
 					    }
 					});
+					
+					$.ajax({
+						
+					})
 				});
 				
 				plangrid = new tui.Grid({
@@ -212,7 +236,18 @@
 					}
 				});
 				
+				
+				grid.on('afterChange', (ev) => {
+			        const changedRows = ev.changes;
+			        
+			        
+			        mtload();
+			    	
+				});
 
+				
+				
+			
 				
 				
 			function mtload(){
@@ -247,7 +282,6 @@
 						
 		});
 			
-	
 			
 		// 체크된 행의 데이터를 가져오는 함수
 		/* function logCheckedRows() {
@@ -259,7 +293,7 @@
 		    const checkedRows = grid.getCheckedRows();
 
 		    if (checkedRows.length === 0) {
-		        alert('선택된 데이터가 없습니다.');
+		        alert('제품을 선택해주세요.');
 		        return;
 		    }
 
