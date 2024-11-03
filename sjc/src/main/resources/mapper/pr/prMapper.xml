@@ -313,11 +313,12 @@ where p.prd_code = #{prdCode}
 <select id="linePrdList" resultType="LinePrdVO">
 	select l.line_code,
         l.prd_code,
-        p.prd_name
+        p.prd_name,
+        l.use
 		from line l
 		join prd p
 		on l.prd_code = p.prd_code
-		order by p.prd_code
+		order by p.prd_code, l.use DESC, l.line_code
 </select>
 
 
@@ -337,6 +338,7 @@ where p.prd_code = #{prdCode}
 	
 </select>
 
+<!-- 생산 지시를 위한 계획 코드(미진행, 진행중) 가져오기 -->
 <select id="findPC" resultType="String">
 	select plan_code
 	from plan
@@ -418,6 +420,22 @@ on o.porder_code = d.porder_code
 where l.plan_code = #{planCode}
 group by l.prd_code, l.prd_name, l.quantity, l.plan_detail_code, p.start_date, p.end_date
 </select>
-	
-	
+
+<!-- 생산계획 생성시 주문 보여주기 -->
+<select id="oList" resultType="String">
+select ord_code
+from ord
+where ord_status = '주문접수'
+</select>
+
+<!-- 주문 클릭 시 가져올 제품 -->
+<select id="ordPrd" resultType="ProductVO">
+select prd_name,
+		prd_code,
+		ord_quantity
+from ord_detail
+where ord_code = #{ordCode}
+</select>
+
+
 </mapper>

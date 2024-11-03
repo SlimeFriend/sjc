@@ -74,4 +74,9 @@ public interface PrdtService {
 	// 생산 계획 남은 제품 수량 파악
 	public List<PlanDVO> planPrd(String planCode);
 	
+	// 생산 계획생성에 주문 가져오기
+	public List<String> oList();
+	
+	// 주문 클릭시 가져올 완제품
+	public List<ProductVO> ordPrd(String ordCode);
 }

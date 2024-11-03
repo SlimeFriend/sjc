@@ -7,15 +7,26 @@
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
 	<div class="main-container">
-		<div class="pd-ltr-20">
+	<div class="pd-ltr-20">
 		
 		
-			<h2 class="h2 mb-20">생산계획 생성</h2>
+	<h2 class="h2 mb-20">생산계획 생성</h2>
+		<div class="d-flex justify-content-between">
 			<div class="pd-20 card-box mb-20" style="width: 48%;">	
 				<h2 class="h5 mb-20">생산계획</h2>
 				<form name="form"
 					method="post">
 					<div class="form-group">
+						<label>생산계획</label> 
+							<select name="oList" id="oList">
+								<option></option>
+								<th:block th:block th:each="list: ${oList}">
+									<option>[[ ${list} ]]</option>
+								</th:block>
+							</select>
+						<br>
+					
+					
 							<label>시작일자</label> 
 							<input class="form-control" type="date"
 						 	name="startDate" >
@@ -49,18 +60,22 @@
 				<h2 class="h5 mb-20">제품 선택</h2>
 				<div id="grid"></div>
 			</div>
-
+		</div>
 			
 		</div>
 	</div>
 
 <script th:inline="javascript">
-	
+			
+			const ol = $('#oList');
+			
+			const gridData = /*[[${products}]]*/[];
+			
 			let grid; 
 			
 			document.addEventListener('DOMContentLoaded', function() {
 				
-				const gridData = /*[[${products}]]*/[];
+				
 
 				grid = new tui.Grid({
 					el : document.getElementById('grid'),
@@ -89,6 +104,44 @@
 				});
 			});
 			
+			
+			
+			
+			// 주문 select 바꿀경우 
+			ol.on('change', ()=>{
+				const ordCode = ol.val();
+				
+				// 계획 그리드 ajax 변경(선택한 plancode의 남은 제품계획수량) 
+				$.ajax({
+				    url: 'ordPrd',
+				    type: 'GET',
+				    data: {
+				        ordCode : ordCode 
+				    },
+				    success: function(response) {
+				    	if(response.length>0){
+				        grid.resetData(response);
+				        
+				        response.forEach(item => {
+
+		                        const rowKey = item.prdCode;  // 각 행의 고유 키 사용
+		                        grid.setChecked(rowKey, true); // 해당 행 체크
+
+		                });
+				        
+				    	}
+				    	else{
+				    		grid.resetData(gridData);	
+				    	}
+				    },
+				    error: function(jqXHR, textStatus, errorThrown) {
+				        console.error('Error:', textStatus, errorThrown);
+				    }
+				});
+				
+
+			});
+			
 		// 체크된 행의 데이터를 가져오는 함수
 		/* function logCheckedRows() {
 		    const checkedRows = grid.getCheckedRows();
@@ -99,7 +152,7 @@
 		    const checkedRows = grid.getCheckedRows();
 
 		    if (checkedRows.length === 0) {
-		        alert('선택된 데이터가 없습니다.');
+		        alert('제품을 선택해주세요.');
 		        return;
 		    }
 
