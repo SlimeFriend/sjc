@@ -52,23 +52,6 @@ public class SalesServiceImpl implements SalesService {
 	    
 	    // 주문 상태 초기화
 	    String orderStatus = "주문접수"; // 기본 상태
-	    
-	    // 각 제품에 대해 재고량 체크
-	    for (ProductVO productVO : productVOList) {
-	        String prdCode = productVO.getPrdCode();
-	        
-	        // 총 주문량 계산
-	        int totalOrderQuantity = salesMapper.getTotalOrderQuantity(prdCode);
-	        
-	        // 재고량 계산
-	        int stockQuantity = salesMapper.getStockQuantity(prdCode);
-	        
-	        // 재고량 부족 시 상태 변경
-	        if (stockQuantity < totalOrderQuantity) {
-	            orderStatus = "재고부족"; // 재고가 부족할 경우 상태 변경
-	            break; // 재고 부족이 확인되면 더 이상 체크할 필요 없음
-	        }
-	    }
 
 	    // 주문 상태 업데이트
 	    orderVO.setOrdStatus(orderStatus);
@@ -81,8 +64,26 @@ public class SalesServiceImpl implements SalesService {
 	        });
 	    }
 	    
+	    // 각 제품에 대해 재고량 체크
+	    for (ProductVO productVO : productVOList) {
+	        String prdCode = productVO.getPrdCode();
+	        
+	        // 총 주문량 계산
+	        int totalOrderQuantity = salesMapper.getTotalOrderQuantity(prdCode, ordCode);
+	        
+	        // 재고량 계산
+	        int stockQuantity = salesMapper.getStockQuantity(prdCode);
+	        
+	        // 재고량 부족 시 상태 변경
+	        if (stockQuantity < totalOrderQuantity) {
+	            orderStatus = "재고부족"; // 재고가 부족할 경우 상태 변경
+	            salesMapper.updateOrdStatus(orderStatus, ordCode);
+	        }
+	    }
+	    
 	    return 1;
 	}
+
 
 	
 	// 출고 화면
@@ -161,7 +162,18 @@ public class SalesServiceImpl implements SalesService {
 	
 	@Override
 	public List<Map<String, Object>> orderDetail(String ordCode) {
-	    return salesMapper.selectOrderDetail(ordCode);
+		
+		List<Map<String, Object>> list = salesMapper.selectOrderDetail(ordCode);
+		
+		return list;
+	}
+	
+	@Override
+	public List<Map<String, Object>> lackOrderDetail(String ordCode) {
+		
+		List<Map<String, Object>> list = salesMapper.selectLackOrderDetail(ordCode);
+		
+		return list;
 	}
 	
 	@Override
@@ -200,5 +212,6 @@ public class SalesServiceImpl implements SalesService {
 	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate) {
 		return salesMapper.outSearch(prdName, cpName, outStartDate, outEndDate);
 	}
+
 
 }

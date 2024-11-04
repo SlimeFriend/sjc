@@ -57,6 +57,13 @@
 	</select>
 
 	<!-- 주문 접수 -->
+	<insert id="updateOrdStatus">
+		UPDATE ORD
+		SET ord_status = #{ordStatus}
+		WHERE ord_code = #{ordCode}
+	</insert>
+	
+	<!-- 주문 상태 업데이트 -->
 	<insert id="insertOrder" parameterType="OrderVO">
 		INSERT INTO ORD (ord_code, 
                  ord_date, 
@@ -83,7 +90,7 @@
 		SELECT COALESCE(SUM(od.ord_quantity), 0)
 		FROM   ord O JOIN ord_detail od
 					   ON o.ord_code = od.ord_code
-		WHERE  od.prd_code = #{prdCode}
+		WHERE  od.prd_code = #{prdCode} AND od.ord_code = #{ordCode}
 	</select>
 	
 	<select id="getStockQuantity" resultType="Integer">
@@ -134,19 +141,65 @@
 		       
 		FROM   ord o LEFT JOIN cp c
 		ON     o.cp_code = c.cp_code
+		ORDER BY o.ord_status
 	</select>
 	
 	<select id="selectOrderDetail" parameterType="String" resultType="map">
-	    SELECT o.ord_code AS ordCode,
-	           od.prd_name AS prdName,
-	           od.prd_code AS prdCode,
-	           od.ord_quantity AS ordQuantity,
-	           o.ord_status AS ordStatus
-	    FROM   ord o JOIN ord_detail od 
-	                   ON o.ord_code = od.ord_code
-	    WHERE  o.ord_code = #{ordCode}
+		WITH lackQuantity AS (
+		    SELECT 
+		        prd_code, 
+		        SUM(stc_quantity) AS stc_quantity
+		    FROM 
+		        prd_management
+		    GROUP BY 
+		        prd_code
+		)
+		SELECT 
+		    o.ord_code AS ordCode,
+		    od.prd_name AS prdName,
+		    od.prd_code AS prdCode,
+		    od.ord_quantity AS ordQuantity,
+		    o.ord_status AS ordStatus,
+		    GREATEST(od.ord_quantity - NVL(stc_quantity, 0), 0) AS lackQuantity, -- 음수일 경우 0으로 변경
+		    NVL(stc_quantity, 0) AS stc_quantity
+		FROM 
+		    ord o 
+		JOIN 
+		    ord_detail od ON o.ord_code = od.ord_code
+		LEFT OUTER JOIN 
+		    lackQuantity ON od.prd_code = lackQuantity.prd_code
+		WHERE 
+		    o.ord_code = #{ordCode}
 	</select>
-
+	
+	<select id="selectLackOrderDetail" parameterType="String" resultType="map">
+		    WITH lackQuantity AS (
+		    SELECT 
+		        prd_code, 
+		        SUM(stc_quantity) AS stc_quantity
+		    FROM 
+		        prd_management
+		    GROUP BY 
+		        prd_code
+			)
+		SELECT 
+		    o.ord_code AS ordCode,
+		    od.prd_name AS prdName,
+		    od.prd_code AS prdCode,
+		    od.ord_quantity AS ordQuantity,
+		    o.ord_status AS ordStatus,
+		    od.ord_quantity - NVL(stc_quantity, 0) AS lackQuantity,
+		    NVL(stc_quantity, 0) AS stc_quantity
+		FROM 
+		    ord o 
+		JOIN 
+		    ord_detail od ON o.ord_code = od.ord_code
+		LEFT OUTER JOIN 
+		    lackQuantity ON od.prd_code = lackQuantity.prd_code
+		WHERE 
+		    o.ord_code = #{ordCode}
+	</select>
+	
 	<!-- 제품관리 조회 -->
 	<select id="selectProductManagement" resultType="ProductVO">
 		SELECT   p.prd_name, 

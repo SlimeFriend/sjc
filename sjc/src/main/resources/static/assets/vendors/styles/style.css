@@ -536,6 +536,11 @@ p {
 	background-color: #a683eb
 }
 
+
+.bg-light-pink {
+    background-color: #ffcccc !important;
+}
+    
 .text-light-purple {
 	color: #a683eb
 }

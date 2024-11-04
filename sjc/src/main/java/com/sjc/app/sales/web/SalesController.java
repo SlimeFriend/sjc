@@ -83,6 +83,17 @@ public class SalesController {
 		return ordDetail;
 	}
 	
+	// 주문내역 상세페이지
+		@PostMapping("/getLackOrderDetail")
+		@ResponseBody
+		public List<Map<String, Object>> getLackOrderDetail(@RequestBody Map<String, String> requestData) {
+			String ordCode = requestData.get("ordCode");
+			
+			List<Map<String, Object>> lackOrdDetail = salesService.lackOrderDetail(ordCode);
+			
+			return lackOrdDetail;
+		}
+	
 
 	// 제품관리 페이지
 	@GetMapping("/productManagement")
