@@ -22,10 +22,16 @@ public interface SalesMapper {
 	// 주문내역
 	public List<OrderVO> selectOrder();
 	
+	// 특정 제품에 대한 총 주문량 조회
+	public Integer getTotalOrderQuantity(@Param("prdCode") String prdCode);
+    
+    // 특정 제품의 재고량 조회
+    public Integer getStockQuantity(@Param("prdCode") String prdCode);
+	
 	// 주문코드 불러오기
 	public String getOrdCode();
 	
-	// 주문코드 불러오기
+	// LOT코드 불러오기
 	public String getLot();
 	
 	// 주문상세
