@@ -28,7 +28,6 @@ tbody > tr {
 					<p style="font-size: 200%">설비 점검 목록</p>
 					<div>
 						<button type="button" class="btn btn-success">점검완료</button>
-						<button type="button" class="btn btn-success">점검이월</button>
 					</div>
 				</div>
 				<!-- 버튼을 우측 상단으로 이동 -->
@@ -89,26 +88,27 @@ tbody > tr {
 			});
 		});
 	</script>
-	<script>
+<script>
     $(document).ready(function () {
-        // 점검완료 버튼 클릭 시 이벤트 처리
+        // 점검완료 버튼 클릭 시
         $('.btn-success').on('click', function () {
             let today = new Date();
             let nextCheckDate = new Date();
-            nextCheckDate.setMonth(today.getMonth() + 3);
+            nextCheckDate.setMonth(today.getMonth() + 3);  // 3개월 후
 
-            let formattedToday = today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
-            let formattedNextCheckDate = nextCheckDate.toISOString().split('T')[0]; // 3개월 뒤
+            let formattedToday = today.toISOString().split('T')[0];  // yyyy-mm-dd
+            let formattedNextCheckDate = nextCheckDate.toISOString().split('T')[0];  // 3개월 후 날짜
 
             // 선택된 체크박스의 부모 행을 찾고 데이터를 업데이트
             $('input[type="checkbox"]:checked').each(function () {
                 let row = $(this).closest('tr');
                 let eqCode = row.find('td').eq(2).text().trim(); // 설비코드
-                row.find('td').eq(4).text(formattedToday); // 점검일자 업데이트
-                row.find('td').eq(5).text(formattedNextCheckDate); // 다음 점검일 업데이트
-                row.find('td').eq(6).text("완료"); // 점검유무 업데이트
 
-                // Ajax로 서버에 데이터 전송
+                row.find('td').eq(4).text(formattedToday);  // 점검일자
+                row.find('td').eq(5).text(formattedNextCheckDate);  // 다음 점검일
+                row.find('td').eq(6).text("점검완료");  // 점검유무
+
+                // AJAX로 서버에 데이터 전송하여 DB 업데이트
                 $.ajax({
                     type: "POST",
                     url: "/updateCheckStatus",
@@ -117,11 +117,11 @@ tbody > tr {
                         eqCode: eqCode,
                         eqCkDate: formattedToday,
                         eqNextChck: formattedNextCheckDate,
-                        eqChckOx: "완료"
+                        eqChckOx: "점검완료"
                     }),
                     success: function (response) {
                         alert("점검이 완료되었습니다.");
-                        // 점검 상세 페이지에 현재 데이터가 반영되도록 이동
+                        // equipInfo.html로 이동하여 최신 점검일자 확인
                         window.location.href = "/eqInfo?eqCode=" + eqCode;
                     },
                     error: function (error) {

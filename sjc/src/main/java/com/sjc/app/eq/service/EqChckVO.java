@@ -19,5 +19,5 @@ public class EqChckVO {
 	private String comm;		// 비고
 	
 	// 조인 정보 받아온 속성
-	private String eqName;
+	private String eqName;		  // 설비명
 }

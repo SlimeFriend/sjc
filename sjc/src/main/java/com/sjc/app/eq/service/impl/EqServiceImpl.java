@@ -146,6 +146,14 @@ public class EqServiceImpl implements EqService {
 	  map.put("result", isSuccessed);
 	  return map; 
 	}
+	
+	// 설비 점검 업데이트
+    @Override
+    @Transactional
+    public void updateCheckStatus(EqChckVO eqChckVO) {
+        eqMapper.updateCheckStatus(eqChckVO);
+		
+	}
 
 
 
