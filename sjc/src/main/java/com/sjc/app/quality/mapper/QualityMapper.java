@@ -56,7 +56,7 @@ public interface QualityMapper {
 	// 자재입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 	public List<InspectionVO> insertMtIn(InspectionVO inspectionVOs);
 	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
-	public void updateMtlOdBack(InspectionVO inspectionVO);
+	public int updateMtlOdBack(InspectionVO inspectionVO);
 
 	
 	

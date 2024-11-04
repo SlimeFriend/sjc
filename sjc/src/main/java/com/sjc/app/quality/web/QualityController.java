@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
+import com.sjc.app.security.service.LoginUserVO;
 
 @Controller
 public class QualityController {
@@ -76,6 +79,19 @@ public class QualityController {
 		@ResponseBody
 		@Transactional
 		public Map<String, Object> insertInspection(@RequestBody InspectionVO inspectionVO) {
+			
+			
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String id = null;
+            String name = null;
+            if (authentication.getPrincipal() instanceof LoginUserVO) {
+                LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
+                id = loginUserVO.getUserVO().getUserId();
+                name = loginUserVO.getUserVO().getUserName();
+            }
+			
+			
 
 			List<InspectionVO> insList;
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -136,10 +152,17 @@ public class QualityController {
 
 				newList.add(insVO);
 			}
+			List<InspectionVO> newInsList = new ArrayList<>();
+			for(InspectionVO vo : insList) {
+                vo.setUserId(Integer.parseInt(id));
+                vo.setUserName(name);
+                newInsList.add(vo);
+            }
 
-			map.put("insList", insList);
-			map.put("testList", testList);
-			map.put("newList", newList);
+//			map.put("insList", insList);
+            map.put("insList", newInsList);
+            map.put("testList", testList);
+            map.put("newList", newList);
 
 			return map;
 

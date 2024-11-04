@@ -582,7 +582,7 @@
 						        #{lot},
 						        #{prdCode},
 						        #{md},
-						        #{ed},
+						        ADD_MONTHS(SYSDATE, 6),
 						        #{inQuantity},
 						        SYSDATE,
 						        #{inOutType}
@@ -732,10 +732,15 @@
 
 <!--  // 입고검사완료페이지 - 반품처리 버튼 - mtl_od.mtl_od_status 반품 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
-		--UPDATE copy_mtl_od
 		UPDATE mtl_od
 		SET mtl_od_status = '반품'
-		WHERE mtl_od_code = #{mtlOdCode}
+		WHERE mtl_od_code = ( SELECT mtl_od_code
+                                FROM  mtl_od_detail
+                                WHERE mtl_od_detail_code = ( SELECT mtl_od_detail_code
+                                                             FROM   inspection
+                                                             WHERE ins_code =  #{insCode}
+                                                             )
+                                )
 	</update>
 <!--  // 완제품검사완료페이지 - 불량처리 버튼 - pdetail.status 반품 -->
 	<update id="updatePdBack" parameterType="InspectionVO">
