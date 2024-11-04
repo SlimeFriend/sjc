@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,8 +54,10 @@ public class OrderRequestController {
      */
     @GetMapping("/orderRequestDetails")
     @ResponseBody
-    public List<MtVO> showOrderRequestDetails(@RequestParam String mtlOdCode) {
-        return orderRequestService.getOrderRequestDetailsByOrderRequestCode(mtlOdCode);
+    public List<MtlOdVO> showOrderRequestDetails(@RequestParam String mtlOdCode) {
+        List<MtlOdVO> details = orderRequestService.getOrderRequestDetailsByOrderRequestCode(mtlOdCode);
+        details.forEach(detail -> System.out.println("상세 상태: " + detail.getMtlOdStatus())); // 상태 정보 확인을 위한 로그
+        return details;
     }
 
     /**
@@ -73,19 +76,30 @@ public class OrderRequestController {
      */
     @PostMapping("/orderRequest/submit")
     @ResponseBody // JSON 형식으로 응답 반환
-    public String submitOrderRequest(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> submitOrderRequest(@RequestBody Map<String, Object> payload) {
         String cpCode = (String) payload.get("cpCode");
-        String userId = (String) payload.get("userId");
+        Object userIdObj = payload.get("userId"); // userId를 Object로 받아 타입 검사
         List<Map<String, Object>> itemsData = (List<Map<String, Object>>) payload.get("items");
 
-        if (cpCode == null || userId == null || itemsData == null) {
+        // 필수 파라미터 검증
+        if (cpCode == null || userIdObj == null || itemsData == null) {
             throw new IllegalArgumentException("필수 파라미터가 누락되었습니다.");
+        }
+
+        // userId를 Integer로 변환
+        Integer userId;
+        if (userIdObj instanceof String) {
+            userId = Integer.parseInt((String) userIdObj);
+        } else if (userIdObj instanceof Integer) {
+            userId = (Integer) userIdObj;
+        } else {
+            throw new IllegalArgumentException("userId가 올바르지 않은 형식입니다.");
         }
 
         // 발주 요청 생성
         MtlOdVO orderRequest = new MtlOdVO();
         orderRequest.setCpCode(cpCode);
-        orderRequest.setUserId(Integer.parseInt(userId));
+        orderRequest.setUserId(userId);
         orderRequestService.insertOrderRequest(orderRequest);
 
         // 발주 코드 생성 후 가져오기
@@ -95,15 +109,26 @@ public class OrderRequestController {
         List<MtVO> items = itemsData.stream().map(itemData -> {
             MtVO item = new MtVO();
             item.setMtCode((String) itemData.get("mtCode"));
-            item.setQuantity((Integer) itemData.get("quantity"));
+
+            // quantity를 Integer로 변환
+            Object quantityObj = itemData.get("quantity");
+            if (quantityObj instanceof String) {
+                item.setQuantity(Integer.parseInt((String) quantityObj));
+            } else if (quantityObj instanceof Integer) {
+                item.setQuantity((Integer) quantityObj);
+            } else {
+                throw new IllegalArgumentException("quantity가 올바르지 않은 형식입니다.");
+            }
+
             item.setMtlOdCode(mtlOdCode);
             return item;
         }).collect(Collectors.toList());
 
         orderRequestService.insertOrderRequestDetails(items, mtlOdCode);
 
-        return "redirect:/orderRequestList";
+        return ResponseEntity.ok("발주 요청이 성공적으로 등록되었습니다.");
     }
+
 
 
     /**

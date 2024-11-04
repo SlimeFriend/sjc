@@ -18,4 +18,5 @@ public class MtInVO {
     private String comm;           // 비고
     private String lotNo;          // LOT 번호
     private String mtName;         // 자재 이름
+    private String mtlOdDetailCode;
 }

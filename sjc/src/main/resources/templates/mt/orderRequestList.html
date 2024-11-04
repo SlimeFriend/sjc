@@ -1,168 +1,334 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 목록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<meta charset="UTF-8">
+<title>발주 요청 목록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+/* tui-grid 선택 테두리 제거 */
+.tui-grid-layer-focus-border {
+    display: none !important;
+}
+</style>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>발주 요청 목록</h1>
-            
-            <!-- 발주 요청 등록 버튼 -->
-            <div class="text-right mb-3">
-                <a class="btn btn-primary" th:href="@{/orderRequestNew}">발주 요청 등록</a>
-            </div>
+	<div class="main-container">
+		<div class="container">
+			<h1>발주 요청 목록</h1>
 
-            <!-- 발주 요청 목록 그리드 -->
-            <div id="orderRequestGrid" style="width: 100%; height: 400px;"></div>
+			<!-- 기능 버튼들 -->
+			<div class="text-right mb-3">
+				<a class="btn btn-primary" th:href="@{/orderRequestNew}">발주 요청
+					등록</a>
+				<button class="btn btn-success" onclick="downloadExcel()">Excel
+					다운로드</button>
+				<button class="btn btn-warning" onclick="downloadPDF()">PDF
+					다운로드</button>
+				<button class="btn btn-secondary" onclick="printGrid()">프린트</button>
+			</div>
 
-            <h2>발주 상세내역</h2>
-            <!-- 발주 상세 내역 그리드 -->
-            <div id="orderDetailsGrid" style="width: 100%; height: 300px;"></div>
-        </div>
-    </div>
 
-    <script th:inline="javascript">
-        const orderRequests = /*[[${orderRequests}]]*/ [];
 
-        // 발주 요청 목록 그리드 설정
-        const orderRequestGrid = new tui.Grid({
-            el: document.getElementById('orderRequestGrid'),
-            data: orderRequests,
-            columns: [
-                { header: '업체 코드', name: 'cpCode', align: 'center' },
-                { header: '업체 명', name: 'cpName', align: 'center' },
-                { header: '발주 일자', name: 'mtlOdDate', align: 'center', formatter: 'date' },
-                { header: '상태', name: 'mtlOdStatus', align: 'center' },
-                { header: '총 금액', name: 'totalAmount', align: 'right' },
-                { header: '담당자', name: 'userName', align: 'center' },
-                {
-                    header: '상태변경', 
-                    name: 'statusChange', 
-                    align: 'center',
-                    formatter: 'listItemText',
-                    editor: {
-                        type: 'select',
-                        options: {
-                            listItems: [
-                                { text: '발주대기', value: '발주대기' },
-                                { text: '입고품질검사대기', value: '입고품질검사대기' },
-                             
-                            ]
-                        }
-                    }
-                },
-                {
-                    header: '작업', name: 'details', align: 'center',
-                    formatter: (item) => {
-                        const mtlOdCode = item.row.mtlOdCode;
-                        return `<button class="btn btn-info" onclick="showOrderDetails('${mtlOdCode}')">상세보기</button>`;
-                    }
-                },
-                {
-                    header: '삭제', name: 'delete', align: 'center',
-                    formatter: (item) => {
-                        const mtlOdCode = item.row.mtlOdCode;
-                        return `<button class="btn btn-danger btn-sm" onclick="deleteOrderRequest('${mtlOdCode}')">삭제</button>`;
-                    }
+			<!-- 발주 요청 목록 그리드 -->
+			<div id="orderRequestGrid" style="width: 100%; height: 400px;"></div>
+
+			<h2>발주 상세내역</h2>
+			<!-- 발주 상세 내역 그리드 -->
+			<div id="orderDetailsGrid" style="width: 100%; height: 300px;"></div>
+
+			<!-- 상태변경 모달 -->
+			<div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">상태 변경</h5>
+							<button type="button" class="close" onclick="closeModal()">
+								<span>&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<select id="statusSelect" class="form-control">
+								<option value="발주대기">발주대기</option>
+								<option value="입고품질검사대기">입고품질검사대기</option>
+
+							</select>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"
+								onclick="confirmStatusChange()">변경</button>
+							<button type="button" class="btn btn-secondary"
+								onclick="closeModal()">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+    const orderRequests = /*[[${orderRequests}]]*/ [];
+    let currentMtlOdCode = null;
+    let currentCpCode = null; // cpCode를 저장할 변수 추가
+
+    // 발주 요청 목록 그리드 설정
+    const orderRequestGrid = new tui.Grid({
+        el: document.getElementById('orderRequestGrid'),
+        data: orderRequests,
+        columns: [
+            { header: '업체 코드', name: 'cpCode', align: 'center' , hidden: true},
+            { header: '업체 명', name: 'cpName', align: 'center' },
+            { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
+            { header: '상태', name: 'mtlOdStatus', align: 'center' },
+            { header: '총 금액', name: 'totalAmount', align: 'right' },
+            { header: '담당자', name: 'userName', align: 'center' },
+            {
+                header: '상태변경', 
+                name: 'statusChange', 
+                align: 'center',
+                formatter: (item) => {
+                    const mtlOdCode = item.row.mtlOdCode;
+                    const cpCode = item.row.cpCode; // cpCode 가져오기
+                    return `<button class="btn btn-secondary" onclick="openStatusModal('${mtlOdCode}', '${cpCode}')">변경하기</button>`;
                 }
-            ]
-        });
-
-        // 상태 변경 이벤트 리스너
-        orderRequestGrid.on('afterChange', (ev) => {
-            if (ev.columnName === 'statusChange') {
-                const mtlOdCode = ev.instance.getValue(ev.rowKey, 'mtlOdCode');
-                const newStatus = ev.value;
-
-                // 상태 변경 함수 호출
-                changeStatus(mtlOdCode, newStatus);
+            },
+            {
+                header: '작업', name: 'details', align: 'center',
+                formatter: (item) => {
+                    const mtlOdCode = item.row.mtlOdCode;
+                    return `<button class="btn btn-info" onclick="showOrderDetails('${mtlOdCode}')">상세보기</button>`;
+                }
+            },
+            {
+                header: '삭제', name: 'delete', align: 'center',
+                formatter: (item) => {
+                    const mtlOdCode = item.row.mtlOdCode;
+                    return `<button class="btn btn-danger btn-sm" onclick="deleteOrderRequest('${mtlOdCode}')">삭제</button>`;
+                }
             }
+        ]
+   
+    });
+    
+    // Excel 다운로드 함수
+    function downloadExcel() {
+        const data = orderRequestGrid.getData();
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "OrderRequests");
+        XLSX.writeFile(workbook, "OrderRequests.xlsx");
+    }
+
+    // PDF 다운로드 함수
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const data = orderRequestGrid.getData();
+
+        const columns = [
+            { header: '업체 코드', dataKey: 'cpCode' },
+            { header: '업체 명', dataKey: 'cpName' },
+            { header: '발주 일자', dataKey: 'mtlOdDate' },
+            { header: '상태', dataKey: 'mtlOdStatus' },
+            { header: '총 금액', dataKey: 'totalAmount' },
+            { header: '담당자', dataKey: 'userName' }
+        ];
+
+        doc.autoTable({
+            columns: columns,
+            body: data,
+            startY: 10,
+            theme: 'grid'
         });
 
-        // 상태 변경 함수
-        function changeStatus(mtlOdCode, newStatus) {
-            fetch('/orderRequest/updateStatus', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `orderRequestCode=${encodeURIComponent(mtlOdCode)}&status=${encodeURIComponent(newStatus)}`
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('상태가 변경되었습니다.');
-                    if (newStatus === '입고품질검사완료') {
-                        const rowKey = orderRequestGrid.getRowKey(mtlOdCode);
-                        orderRequestGrid.removeRow(rowKey);
-                    }
-                } else {
-                    alert('상태 업데이트 중 오류 발생');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating status:', error);
-                alert('상태 업데이트 중 문제가 발생했습니다.');
-            });
-        }
+        doc.save("OrderRequests.pdf");
+    }
 
-        // 발주 요청 상세보기 함수
-        function showOrderDetails(mtlOdCode) {
-            fetch(`/orderRequestDetails?mtlOdCode=${encodeURIComponent(mtlOdCode)}`)
-                .then(response => response.json())
-                .then(data => {
-                    orderDetailsGrid.resetData(data.map(detail => ({
-                        ...detail,
-                        orderAmount: detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-'
-                    })));
-                })
-                .catch(error => console.error("Error fetching order details:", error));
-        }
+    // 프린트 함수
+    function printGrid() {
+        const data = orderRequestGrid.getData();
+        let printContent = `
+            <h1>발주 요청 목록</h1>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>업체 코드</th>
+                        <th>업체 명</th>
+                        <th>발주 일자</th>
+                        <th>상태</th>
+                        <th>총 금액</th>
+                        <th>담당자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(row => `
+                        <tr>
+                            <td>${row.cpCode}</td>
+                            <td>${row.cpName}</td>
+                            <td>${row.mtlOdDate}</td>
+                            <td>${row.mtlOdStatus}</td>
+                            <td>${row.totalAmount}</td>
+                            <td>${row.userName}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>`;
 
-        // 발주 요청 삭제 함수
-        function deleteOrderRequest(mtlOdCode) {
-            if (!confirm('정말로 삭제하시겠습니까?')) return;
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>발주 요청 목록</title></head><body>');
+        printWindow.document.write(printContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
 
-            fetch('/orderRequest/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `mtlOdCode=${encodeURIComponent(mtlOdCode)}`
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('발주 요청이 삭제되었습니다.');
+    // 모달 열기
+    function openStatusModal(mtlOdCode, cpCode) {
+        currentMtlOdCode = mtlOdCode;
+        currentCpCode = cpCode; // 현재 cpCode 저장
+        $('#statusModal').modal('show');
+    }
+
+    // 모달 닫기
+    function closeModal() {
+        $('#statusModal').modal('hide');
+    }
+
+ // 상태변경 확인
+    function confirmStatusChange() {
+        const newStatus = document.getElementById('statusSelect').value;
+        changeStatus(currentMtlOdCode, currentCpCode, newStatus);
+        closeModal();
+    }
+
+    // 상태 변경 함수
+    function changeStatus(mtlOdCode, cpCode, newStatus) {
+        fetch('/orderRequest/updateStatus', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `orderRequestCode=${encodeURIComponent(mtlOdCode)}&status=${encodeURIComponent(newStatus)}&cpCode=${encodeURIComponent(cpCode)}`
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('상태가 변경되었습니다.');
+                // 상세 목록 상태도 업데이트
+                updateDetailStatuses(mtlOdCode, newStatus);
+
+                // 상태가 '입고완료'일 경우 행을 제거
+                if (newStatus === '입고완료') {
                     const rowKey = orderRequestGrid.getRowKey(mtlOdCode);
                     orderRequestGrid.removeRow(rowKey);
                 } else {
-                    alert('삭제 중 오류 발생');
+                    // 상태 업데이트 및 데이터 리로드
+                    const updatedData = orderRequestGrid.getData().map(row => {
+                        if (row.mtlOdCode === mtlOdCode) {
+                            return { ...row, mtlOdStatus: newStatus };
+                        }
+                        return row;
+                    });
+                    orderRequestGrid.resetData(updatedData);
                 }
-            })
-            .catch(error => console.error('Error deleting order request:', error));
-        }
-
-        // 발주 상세 내역 그리드 설정
-        const orderDetailsGrid = new tui.Grid({
-            el: document.getElementById('orderDetailsGrid'),
-            data: [],
-            columns: [
-                { header: '자재 발주 상세 코드', name: 'mtlOdDetailCode', align: 'center' },
-                { header: '자재 코드', name: 'mtCode', align: 'center' },
-                { header: '자재 명', name: 'mtName', align: 'center' },
-                { header: '규격', name: 'specification', align: 'center' },
-                { header: '단가', name: 'unitPrice', align: 'right' },
-                { header: '수량', name: 'quantity', align: 'right' },
-                { header: '주문 금액', name: 'orderAmount', align: 'right' },
-                { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
-                { header: '상태', name: 'status', align: 'center' }
-            ]
+            } else {
+                return response.json().then(err => { throw new Error(err.message || '상태 업데이트 중 오류 발생'); });
+            }
+        })
+        .catch(error => {
+            console.error('Error updating status:', error);
+            alert('상태 업데이트 중 문제가 발생했습니다.');
         });
-    </script>
+    }
+
+    // 발주 상세 목록 상태 업데이트 함수
+    function updateDetailStatuses(mtlOdCode, newStatus) {
+        fetch('/orderRequest/updateDetailStatuses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `orderRequestCode=${encodeURIComponent(mtlOdCode)}&status=${encodeURIComponent(newStatus)}`
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("발주 상세 목록 상태가 성공적으로 업데이트되었습니다.");
+                showOrderDetails(mtlOdCode); // 상세 목록을 다시 로드하여 상태 반영
+            } else {
+                console.error("발주 상세 목록 상태 업데이트 중 오류 발생");
+            }
+        })
+        .catch(error => console.error("Error updating detail statuses:", error));
+    }
+
+    // 발주 요청 상세보기 함수
+  function showOrderDetails(mtlOdCode) {
+    fetch(`/orderRequestDetails?mtlOdCode=${encodeURIComponent(mtlOdCode)}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch order details");
+            return response.json();
+        })
+        .then(data => {
+            console.log("Order details fetched:", data); // 데이터 확인용
+            orderDetailsGrid.resetData(data.map(detail => ({
+                ...detail,
+                orderAmount: detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-'
+            })));
+        })
+        .catch(error => console.error("Error fetching order details:", error));
+}
+
+    // 발주 요청 삭제 함수
+  function deleteOrderRequest(mtlOdCode) {
+    if (!confirm('정말로 삭제하시겠습니까?')) return;
+
+    fetch('/orderRequest/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `mtlOdCode=${encodeURIComponent(mtlOdCode)}`
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('발주 요청이 삭제되었습니다.');
+            
+            // 페이지 새로고침
+            window.location.reload();
+        } else {
+            alert('삭제 중 오류 발생');
+        }
+    })
+    .catch(error => console.error('Error deleting order request:', error));
+}
+
+
+    // 발주 상세 내역 그리드 설정
+    const orderDetailsGrid = new tui.Grid({
+    el: document.getElementById('orderDetailsGrid'),
+    data: [],
+    columns: [
+        { header: '자재 발주 상세 코드', name: 'mtlOdDetailCode', align: 'center', hidden: true},
+        { header: '자재 코드', name: 'mtCode', align: 'center', hidden: true },
+        { header: '자재 명', name: 'mtName', align: 'center' },
+        { header: '규격', name: 'specification', align: 'center' },
+        { header: '단가', name: 'unitPrice', align: 'right' },
+        { header: '수량', name: 'quantity', align: 'right' },
+        { header: '주문 금액', name: 'orderAmount', align: 'right' },
+        { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
+        { header: '상태', name: 'mtlOdStatus', align: 'center' }
+    ]
+});
+    
+    
+</script>
 
 </body>
 </html>
+
+
