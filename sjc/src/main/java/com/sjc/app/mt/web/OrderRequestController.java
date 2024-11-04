@@ -72,6 +72,7 @@ public class OrderRequestController {
      * 발주 요청 등록 처리
      */
     @PostMapping("/orderRequest/submit")
+    @ResponseBody // JSON 형식으로 응답 반환
     public String submitOrderRequest(@RequestBody Map<String, Object> payload) {
         String cpCode = (String) payload.get("cpCode");
         String userId = (String) payload.get("userId");
@@ -81,16 +82,16 @@ public class OrderRequestController {
             throw new IllegalArgumentException("필수 파라미터가 누락되었습니다.");
         }
 
-        
+        // 발주 요청 생성
         MtlOdVO orderRequest = new MtlOdVO();
         orderRequest.setCpCode(cpCode);
         orderRequest.setUserId(Integer.parseInt(userId));
         orderRequestService.insertOrderRequest(orderRequest);
 
-       
+        // 발주 코드 생성 후 가져오기
         String mtlOdCode = orderRequest.getMtlOdCode();
 
-       
+        // 발주 상세 목록 생성
         List<MtVO> items = itemsData.stream().map(itemData -> {
             MtVO item = new MtVO();
             item.setMtCode((String) itemData.get("mtCode"));
@@ -103,6 +104,7 @@ public class OrderRequestController {
 
         return "redirect:/orderRequestList";
     }
+
 
     /**
      * 발주 요청 삭제 처리

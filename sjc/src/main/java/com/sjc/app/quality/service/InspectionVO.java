@@ -2,11 +2,14 @@ package com.sjc.app.quality.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
 public class InspectionVO {
 	private String insCode; // 품질검사 코드
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date insDate; // 품질검사 일자
 	private int userId; // 사용자 번호
 	private String userName; // 사용자 이름
@@ -40,6 +43,7 @@ public class InspectionVO {
 		
 	// MtlOdVO
 		private int mtlOdQuantity; //자재발주 수량
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private Date mtlOdDate;//자재발주 일자
 		private Date diliveryDate;//납기일
 		private int price;//금액
@@ -51,6 +55,7 @@ public class InspectionVO {
 	// MtInVO
 		private Date inputDate; //입고일
 		private Integer inquantity; //입고수량
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private Date ed; //유통기한
 		private String inCode; //입고코드
 		private String lotNo; //LOT번호

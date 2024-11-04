@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.eq.mapper.EqMapper;
 import com.sjc.app.eq.service.EqChckVO;
@@ -37,20 +38,39 @@ public class EqServiceImpl implements EqService {
 	
 	  // 설비 목록 수정
 	  
-	  @Override 
+//	  @Override 
+//	  public Map<String, Object> eqUpdate(EqVO eqVO) { 
+//		  
+//		  Map<String, Object> map = new HashMap<>();
+//	  
+//	  boolean isSuccessed = false;
+//	  
+//	  int result = eqMapper.updateEqInfo(eqVO);
+//	  
+//	  if(result == 1) { isSuccessed = true; }
+//	  
+//	  
+//	  map.put("result", isSuccessed);
+//	  return map; 
+//	  }
+	
+	  @Override
+	  @Transactional
 	  public Map<String, Object> eqUpdate(EqVO eqVO) { 
 		  
 		  Map<String, Object> map = new HashMap<>();
 	  
-	  boolean isSuccessed = false;
-	  
-	  int result = eqMapper.updateEqInfo(eqVO);
-	  
-	  if(result == 1) { isSuccessed = true; }
-	  
-	  
-	  map.put("result", isSuccessed);
-	  return map; 
+		  boolean isSuccessed = false;
+		  
+		  int result = eqMapper.updateEqInfo(eqVO);
+		  
+		  eqMapper.updateLine(eqVO);
+		  
+		  if(result == 1) { isSuccessed = true; }
+		  
+		  map.put("result", isSuccessed);
+		  
+		  return map; 
 	  }
 
 

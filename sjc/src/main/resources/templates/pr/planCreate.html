@@ -17,7 +17,7 @@
 				<form name="form"
 					method="post">
 					<div class="form-group">
-						<label>생산계획</label> 
+						<label>주문코드</label> 
 							<select name="oList" id="oList">
 								<option></option>
 								<th:block th:block th:each="list: ${oList}">
@@ -105,7 +105,7 @@
 			});
 			
 			
-			
+
 			
 			// 주문 select 바꿀경우 
 			ol.on('change', ()=>{
@@ -122,13 +122,7 @@
 				    	if(response.length>0){
 				        grid.resetData(response);
 				        
-				        response.forEach(item => {
 
-		                        const rowKey = item.prdCode;  // 각 행의 고유 키 사용
-		                        grid.setChecked(rowKey, true); // 해당 행 체크
-
-		                });
-				        
 				    	}
 				    	else{
 				    		grid.resetData(gridData);	
@@ -151,10 +145,12 @@
 		function sendCheckedRows() {
 		    const checkedRows = grid.getCheckedRows();
 
-		    if (checkedRows.length === 0) {
+		    if (checkedRows.length == 0) {
 		        alert('제품을 선택해주세요.');
 		        return;
 		    }
+		    
+
 
 		    // 폼 데이터를 직접 수집
 		    const formArr = $("form[name=form]").serializeArray();
@@ -169,6 +165,28 @@
 		        planVO: formObj,    // 폼 데이터 (주문 정보)
 		        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
 		    };
+		    
+
+		    
+		 	// 수량 체크
+		    for (let i = 0; i < checkedRows.length; i++) {
+		        const row = checkedRows[i];
+
+		        if (!row.ordQuantity || row.ordQuantity <= 0) {
+		            alert('체크된 제품의 수량을 입력해주세요.');
+		            return;
+		        }
+		    }
+		    
+		    if (!formObj.startDate) {
+		        alert('시작 일자를 설정해주세요');
+		        return;
+		    }
+		    
+		    if (!formObj.endDate) {
+		        alert('종료 일자를 설정해주세요');
+		        return;
+		    }
 
 		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    $.ajax({

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
 import com.sjc.app.quality.service.QualityService;
+import com.sjc.app.security.service.LoginUserVO;
 
 @Controller
 public class QualityController {
@@ -30,6 +33,27 @@ public class QualityController {
     	this.qualityService = qualityService;
     }
     
+    
+    
+    
+    
+    
+ // 품질검사등록모달 공통
+	// insDetail - insValue 업데이트
+	@PostMapping("insValueUpdate")
+	@ResponseBody
+	public List<InsDetailVO> insValueUpdate(@RequestBody List<InsDetailVO> insDetailVO) {
+		return qualityService.insValueUpdate(insDetailVO);
+	}
+
+
+    
+    
+    
+    
+    
+    
+// 입고    
     // 발주목록전체
     @GetMapping("incomingQualityWaitHistory")
     public String incomingQualityWaitHistory(Model model) {
@@ -49,36 +73,25 @@ public class QualityController {
     	
     	return mtlOdDetail;
     }
-//    // 품질검사상세페이지
-//	@PostMapping("/incomingTestReception")
-//	@ResponseBody
-//	public List<Map<String, Object>> getInspectionDetail(@RequestBody Map<String, String> requestData) {
-//		String mtlOdDetailCode = requestData.get("mtlOdDetailCode");
-//		
-//		List<Map<String, Object>> insDetail = qualityService.inspectionDetail(mtlOdDetailCode);
-//		
-//		return insDetail;
-//	}
-    
-        //검사기준목록
-//    @GetMapping("/incomingTestReception")
-//    public String testReceptionPage(Model model) {
-//    	
-//    	List<InspectionVO> testList = qualityService.testList();
-//    	List<InspectionVO> inspectionList = qualityService.inspectionList();
-//    	
-//    	model.addAttribute("tests", testList);
-//    	model.addAttribute("inspectionList", inspectionList);
-//    	model.addAttribute("InspectionVO", new InspectionVO());
-//    	
-//    	return "quality/incomingQualityWaitHistory";
-//    }
-//    
+
 		// 자재품질검사 모달창
 		@PostMapping("/incomingInspection")
 		@ResponseBody
 		@Transactional
 		public Map<String, Object> insertInspection(@RequestBody InspectionVO inspectionVO) {
+			
+			
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String id = null;
+            String name = null;
+            if (authentication.getPrincipal() instanceof LoginUserVO) {
+                LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
+                id = loginUserVO.getUserVO().getUserId();
+                name = loginUserVO.getUserVO().getUserName();
+            }
+			
+			
 
 			List<InspectionVO> insList;
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -90,8 +103,8 @@ public class QualityController {
 
 			} else {
 				// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-				 //qualityService.mtlOdStatusUpdate(inspectionVO);
-				 //qualityService.mtlOdDetailStatusUpdate(inspectionVO);
+				 qualityService.mtlOdStatusUpdate(inspectionVO);
+				 qualityService.mtlOdDetailStatusUpdate(inspectionVO);
 				// inspection 데이터 생성
 				qualityService.insertInspection(inspectionVO);
 				// inspection 데이터 출력
@@ -109,13 +122,13 @@ public class QualityController {
 
 			int countInsItem = qualityService.insItemCount(inspectionVO);
 
-			// 품질검사상세- 검사리스트 출력
+			// 자재입고검사완료페이지- 검사리스트 출력
 			testList = qualityService.testDetailSelect(inspectionVO);
 			if (countInsItem == 0) {
 
 				for (InspectionVO insVO : testList) {
 					insVO.setInsCode(insCode);
-					// 품질검사상세- insDetail 생성
+					// 자재입고검사완료페이지- insDetail 생성
 					qualityService.insertInsDetail(insVO);
 				}
 
@@ -123,7 +136,7 @@ public class QualityController {
 
 			InspectionVO insDetailVO = new InspectionVO();
 			insDetailVO.setInsCode(insCode);
-			// 품질검사상세- insDetail 데이터 출력
+			// 자재입고검사완료페이지- insDetail 데이터 출력
 			insDetailList = qualityService.insDetailList(insDetailVO);
 
 			List<InspectionVO> newList = new ArrayList<>();
@@ -134,25 +147,42 @@ public class QualityController {
 
 				insVO.setInsDetailCode(idVO.getInsDetailCode());
 				insVO.setInsCode(idVO.getInsCode());
+				insVO.setInsValue(idVO.getInsValue());
+				insVO.setInsResult(idVO.getInsResult());
 
 				newList.add(insVO);
 			}
+			List<InspectionVO> newInsList = new ArrayList<>();
+			for(InspectionVO vo : insList) {
+                vo.setUserId(Integer.parseInt(id));
+                vo.setUserName(name);
+                newInsList.add(vo);
+            }
 
-			map.put("insList", insList);
-			map.put("testList", testList);
-			map.put("newList", newList);
+//			map.put("insList", insList);
+            map.put("insList", newInsList);
+            map.put("testList", testList);
+            map.put("newList", newList);
 
 			return map;
 
 		}
+		// 품질검사 등록
+		@PostMapping("incomingQualityWaitHistory")
+		public List<InspectionVO> insUpdate(@RequestBody List<InspectionVO> insData) {
+			
+			
+			return qualityService.insUpdate(insData);
+		}
+
 
 		
-		// 품질검사상세 - insDetail - insValue 업데이트
-		@PostMapping("insValueUpdate")
-		@ResponseBody
-		public List<InsDetailVO> insValueUpdate(@RequestBody List<InsDetailVO> insDetailVO) {
-			return qualityService.insValueUpdate(insDetailVO);
-		}
+		
+		
+		
+		
+		
+		
 
 		// 자재입고검사완료페이지 - 조회
 		@GetMapping("incomingQualityDone")
@@ -162,7 +192,6 @@ public class QualityController {
 			return "quality/incomingQualityDone";
 		}
 		// 자재입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
-		//// 자재입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
 		// 자재입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 		@PostMapping("updateIncoming")
 		@ResponseBody
@@ -171,11 +200,16 @@ public class QualityController {
 			
 		}	
 		
+	    // 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
+	    @PostMapping("updateMtlOdBack")
+	    @ResponseBody
+	    public List<InspectionVO> updateMtlOdBack(@RequestBody List<InspectionVO> inspectionVOs) {
+	    	return qualityService.mtlOdBackUpdate(inspectionVOs);
+	    }
 		
 		
 		
-		
-		// 출고
+// 출고
 		// 완제품품질검사 대기목록1
 		@GetMapping("finishQualityWait")
 		public String pOrderSelect(Model model) {
@@ -255,6 +289,8 @@ public class QualityController {
 
 				insVO.setInsDetailCode(idVO.getInsDetailCode());
 				insVO.setInsCode(idVO.getInsCode());
+				insVO.setInsValue(idVO.getInsValue());
+				insVO.setInsResult(idVO.getInsResult());
 
 				pDInsDtlList.add(insVO);
 			}
@@ -266,13 +302,14 @@ public class QualityController {
 			return map;
 
 		}
-		// 완제품품질검사 - insDetail - insValue 업데이트
-		@PostMapping("finQualityInsUpdate")
-		@ResponseBody
-		public List<InsDetailVO> insValueUpdate2(@RequestBody List<InsDetailVO> insDetailVO) {
-			return qualityService.insValueUpdate2(insDetailVO);
+		// 완제품품질검사 등록
+		@PostMapping("insPdUpdate")
+		public List<InspectionVO> insPdUpdate(@RequestBody List<InspectionVO> insPdData) {
+			
+			
+			return qualityService.insPdUpdate(insPdData);
 		}
-		
+
 		
 		
 		
@@ -285,7 +322,21 @@ public class QualityController {
 			return "quality/outQualityDone";
 		}
 		
+		// 자재입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료
+		// 자재입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
+		@PostMapping("updateFinish")
+		@ResponseBody
+		public List<InspectionVO> upPOrdInPMan(@RequestBody List<InspectionVO> up) {
+			return qualityService.upPOrdInPMan(up);
+			
+		}	
 		
+	    // 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
+	    @PostMapping("updatePdBack")
+	    @ResponseBody
+	    public List<InspectionVO> pdBackUpdate(@RequestBody List<InspectionVO> pd) {
+	    	return qualityService.pdBackUpdate(pd);
+	    }
     
     
     
@@ -395,12 +446,7 @@ public class QualityController {
 //    public List<InspectionVO> updateMtlOdDone(@RequestBody List<InspectionVO> inspectionVOs) {
 //    	return qualityService.mtlOdMtOdUpdate(inspectionVOs);
 //    }	
-    // 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
-    @PostMapping("updateMtlOdBack")
-    @ResponseBody
-    public List<InspectionVO> updateMtlOdBack(@RequestBody List<InspectionVO> inspectionVOs) {
-    	return qualityService.mtlOdBackUpdate(inspectionVOs);
-    }
+
     
 //    // 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
 //    @PostMapping("updateIncoming")

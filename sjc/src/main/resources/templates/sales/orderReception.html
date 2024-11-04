@@ -35,7 +35,7 @@
 				
 				<div class="pd-20 card-box mb-20" style="width: 48%">
 					<h2 class="h5 mb-20">제품 선택</h2>
-					<div id="grid"></div>
+					<div id="grid"> </div>
 				</div>
 				
 				<!-- The Modal -->
@@ -145,26 +145,7 @@
 			        document.getElementById('cpInput').value = cpName; // 업체 이름
 				});
 				
-				grid.on('editingFinish', (ev) => {
-				    const { value } = ev; // 입력된 출고량
-				    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
-					const price = grid.getValue(rowKey, 'price');
-				    const quantity = grid.getValue(rowKey, 'ordQuantity');
-				    
-				    // 가격과 수량 검증
-				    if (isNaN(price) || price === '' || Number(price) < 0) {
-				        alert('가격은 숫자여야 하며 0보다 커야 합니다.');
-				        grid.setValue(rowKey, 'price', ''); // 가격 필드를 초기화
-				        return; // 함수 종료
-				    }
 
-				    if (isNaN(quantity) || quantity === '' || Number(quantity) < 0) {
-				        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
-				        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
-				        return; // 함수 종료
-				    }
-				    
-				});
 				
 			    // 현재 날짜 가져오기
 			    const today = new Date();

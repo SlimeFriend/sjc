@@ -26,9 +26,9 @@ public class StockServiceImpl implements StockService {
             List<MtInVO> lotDetails = stockMapper.getMaterialsByLotNo(material.getMtCode());
             material.setLotDetails(lotDetails);
 
-            // 로트별 수량을 합산하여 현재 재고 설정
-            int totalQuantity = lotDetails.stream().mapToInt(MtInVO::getInquantity).sum();
-            material.setCurrentStc(totalQuantity);
+//            // 로트별 수량을 합산하여 현재 재고 설정
+//            int totalQuantity = lotDetails.stream().mapToInt(MtInVO::getInquantity).sum();
+//            material.setCurrentStc(totalQuantity);
         }
 
         return materials;

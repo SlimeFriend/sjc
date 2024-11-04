@@ -3,16 +3,11 @@
       xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Content">
-
 <head>
     <meta charset="UTF-8">
     <title>발주 요청 등록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
 </head>
 
 <body>
@@ -25,117 +20,59 @@
                 <label for="cpCode">업체 선택</label>
                 <select name="cpCode" class="form-control" onchange="loadItemsForCpCode(this.value)">
                     <option value="">업체를 선택하세요</option>
-                    <!-- 자재 타입만 표시 -->
-                    <option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
-                            th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}">
-                    </option>
+                    <option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}" th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}"></option>
                 </select>
             </div>
 
-            <!-- 발주 품목 선택 -->
-            <h2>발주 품목 선택</h2>
-            <form th:action="@{/orderRequestForm}" method="post">
-                <input type="hidden" name="cpCode" id="selectedCpCode">
-
-                <!-- 담당자 ID 입력 필드 -->
-                <div class="form-group">
-                    <label for="userId">담당자 ID</label>
-                    <input type="text" name="userId" id="userId" class="form-control" placeholder="담당자 ID를 입력하세요" required>
-                </div>
-
-                <!-- 품목 목록 테이블 -->
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>품목명</th>
-                            <th>규격</th>
-                            <th>단가</th>
-                            <th>발주 수량 입력</th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemList"></tbody>
-                </table>
-
-                <button type="button" class="btn btn-primary" onclick="submitOrderRequest()">발주 요청 제출</button>
-            </form>
+            <!-- 발주 품목 선택 그리드 -->
+            <div id="itemGrid" style="width: 100%; height: 300px;"></div>
+            <button type="button" class="btn btn-primary mt-3" onclick="submitOrderRequest()">발주 요청 제출</button>
         </div>
     </div>
 
     <script>
-        // 발주 요청 제출 함수
-        function submitOrderRequest() {
-            const cpCode = document.getElementById("selectedCpCode").value;
-            const userId = document.getElementById("userId").value;
-            const items = [];
-
-            // 수량이 입력된 자재 항목을 배열에 추가
-            document.querySelectorAll("#itemList input").forEach(input => {
-                if (input.value) {
-                    const mtCode = input.name.split("_")[1];
-                    items.push({ mtCode: mtCode, quantity: parseInt(input.value) });
+        const itemGrid = new tui.Grid({
+            el: document.getElementById('itemGrid'),
+            data: [],
+            columns: [
+                { header: '품목명', name: 'mtName', align: 'center' },
+                { header: '규격', name: 'specification', align: 'center' },
+                { header: '단가', name: 'unitPrice', align: 'right' },
+                {
+                    header: '발주 수량 입력',
+                    name: 'quantity',
+                    editor: 'text',
+                    align: 'right'
                 }
-            });
+            ]
+        });
 
-            if (!cpCode || !userId || items.length === 0) {
-                alert("모든 필드를 채워주세요.");
-                return;
-            }
+        function loadItemsForCpCode(cpCode) {
+            fetch(`/getItemsForCpCode?cpCode=${encodeURIComponent(cpCode)}`)
+                .then(response => response.json())
+                .then(data => {
+                    itemGrid.resetData(data);
+                })
+                .catch(error => console.error("Error fetching items:", error));
+        }
 
-            // 서버에 발주 요청 데이터를 전송
+        function submitOrderRequest() {
+            const cpCode = document.querySelector("select[name='cpCode']").value;
+            const userId = document.getElementById("userId").value;
+            const items = itemGrid.getData().filter(item => item.quantity > 0);
+
             fetch('/orderRequest/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cpCode, userId, items })
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("서버에 요청을 보내는 중 오류가 발생했습니다.");
+                if (response.ok) {
+                    window.location.href = "/orderRequestList";
+                } else {
+                    alert("발주 요청 등록에 실패했습니다.");
                 }
-                window.location.href = "/orderRequestList";
-            })
-            .catch(error => {
-                console.error("Error submitting order request:", error);
-                alert("발주 요청 등록에 실패했습니다.");
             });
-        }
-
-        // 업체 선택 시 자재 목록을 로드하는 함수
-        function loadItemsForCpCode(cpCode) {
-            document.getElementById("selectedCpCode").value = cpCode;
-
-            // 업체 미선택 시 안내 메시지 출력
-            if (!cpCode) {
-                document.getElementById("itemList").innerHTML = "<tr><td colspan='4'>업체를 선택하세요.</td></tr>";
-                return;
-            }
-
-            // 선택된 업체의 자재 목록을 AJAX로 가져옴
-            fetch('/getItemsForCpCode?cpCode=' + encodeURIComponent(cpCode))
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch items for cpCode: " + cpCode);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    let itemList = document.getElementById("itemList");
-                    itemList.innerHTML = ''; // 기존 데이터를 초기화
-
-                    if (data.length === 0) {
-                        itemList.innerHTML = "<tr><td colspan='4'>발주 가능한 자재 정보가 없습니다.</td></tr>";
-                    } else {
-                        data.forEach(item => {
-                            let row = `<tr>
-                                <td>${item.mtName || '-'}</td>
-                                <td>${item.specification || '-'}</td>
-                                <td>${item.unitPrice || '-'}</td>
-                                <td><input type="number" name="quantity_${item.mtCode}" class="form-control" placeholder="수량 입력"></td>
-                            </tr>`;
-                            itemList.innerHTML += row;
-                        });
-                    }
-                })
-                .catch(error => console.error("Error fetching items for cpCode:", error));
         }
     </script>
 </body>

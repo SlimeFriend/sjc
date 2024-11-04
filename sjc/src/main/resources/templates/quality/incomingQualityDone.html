@@ -60,7 +60,7 @@
 				<div class="pb-20">
 					<div id="DataTables_Table_2_wrapper"
 						class="dataTables_wrapper dt-bootstrap4 no-footer">
-						<div class="dt-buttons btn-group flex-wrap">
+<!-- 						<div class="dt-buttons btn-group flex-wrap">
 
 							<button class="btn btn-secondary buttons-copy buttons-html5"
 								tabindex="0" aria-controls="DataTables_Table_2" type="button">
@@ -83,12 +83,13 @@
 							<label>Search:<input type="search"
 								class="form-control form-control-sm" placeholder="Search"
 								aria-controls="DataTables_Table_2"></label>
-						</div>
+						</div> -->
 
 
-
+<div class="pd-20 card-box mb-20" style="width: 100%;">
 						<button type="button" class="btn btn-primary" id="success1">입고처리</button>
 						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
+					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
 						<table
 							class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
 							id="DataTables_Table_2" role="grid">
@@ -100,38 +101,41 @@
 									<th>품질검사 상태</th>
 									<th>거래처코드</th>
 									<th>자재명</th>
-									<th>규격</th>
 									<th>검사수</th>
 									<th>합격수</th>
 									<th>합격여부</th>
+									<th>입고가능수량</th>
 									<th>자재발주코드</th>
 									<th>자재코드</th>
 									<th>직원번호</th>
+									<th>비고</th>
 								</tr>
 							</thead>
 							<tbody>
 								<th:block th:each="done : ${incomingQualityDones}">
 									<tr>
 										<td><input type=checkbox name=incomingQualityCheck></td>
-										<td class="table-plus">[[${done.insDate}]]</td>
+										<td class="table-plus">[[${#dates.format(done.insDate, "yyyy-MM-dd")}]]</td>
 										<td><h5 class="font-16">[[${done.insCode}]]</h5></td>
 										<td>[[${done.insStatus}]]</td>
 										<td>[[${done.cpCode}]]</td>
+										
 										<td>[[${done.mtName}]]</td>
-										<td>[[${done.specification}]]</td>
 										<td>[[${done.numberOfTests}]]</td>
 										<td>[[${done.numberOfPasses}]]</td>
 										<td>[[${done.totalPass}]]</td>
+										<td>[[${done.numberOfTotalPass}]]</td>
+										
 										<td>[[${done.mtlOdCode}]]</td>
 										<td>[[${done.mtCode}]]</td>
-										<td>[[${done.userId}]]</td>
+										<td>[[${#authentication.principal.authorities[1]}]]</td>
 										<td><input type="text" name="comm"></td>
 									</tr>
 								</th:block>
 							</tbody>
 						</table>
-						<div class="col-lg-12" id="ex3_Result1"></div>
-						<div class="col-lg-12" id="ex3_Result2"></div>
+						</div>
+						</div>
 					</div>
 				</div>
 				<!-- Export Datatable End -->
@@ -212,7 +216,7 @@
 			
 			var insCode = td.eq(2).text();
 			var cpCode = td.eq(4).text();
-			var numberOfPasses = Number(td.eq(8).text());
+			var numberOfTotalPass = Number(td.eq(9).text());
 			var mtlOdCode = td.eq(10).text();
 			var mtCode = td.eq(11).text();
 			var userId = td.eq(12).text();
@@ -222,7 +226,7 @@
 			//객체에 담기
 			obj["insCode"] = insCode;  	     		
 			obj["cpCode"] = cpCode;               					
-			obj["numberOfPasses"] = numberOfPasses;   
+			obj["numberOfTotalPass"] = numberOfTotalPass;   
 			obj["mtlOdCode"] = mtlOdCode;      					
 			obj["mtCode"] = mtCode;      	
 			obj["userId"] = userId; 
@@ -276,7 +280,7 @@
 
 			var item = {
 
-			mtlOdCode : td.eq(10).text()
+			mtlOdCode : td.eq(11).text()
 			};
 			
 			console.log(item);
