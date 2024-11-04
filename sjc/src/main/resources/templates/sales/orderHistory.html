@@ -3,6 +3,10 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	
+	<head>
+    	<title>주문내역</title>
+	</head>
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
@@ -24,13 +28,7 @@
 					        <div style="margin-right: 30px; display: flex; align-items: center;">
 					            <input type="radio" id="option2" name="option" value="출고완료" style="margin-right: 8px;">
 					            <label for="option2" style="margin-bottom: 0px;">출고완료</label>
-					        </div>
-					        
-					        <div style="display: flex; align-items: center;">
-					            <input type="radio" id="option3" name="option" value="재고부족" style="margin-right: 8px;">
-					            <label for="option3" style="margin-bottom: 0px;">재고부족</label>
-					        </div>
-					        
+					        </div>	        
 					    </div>
 					</div>
 					

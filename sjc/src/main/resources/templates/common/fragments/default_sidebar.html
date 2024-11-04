@@ -17,21 +17,17 @@
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
-					<li class="dropdown"><a href="javascript:;"
-						class="dropdown-toggle"> <span class="micon dw dw-house-1"></span><span
-							class="mtext">영업</span>
+					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"> <span class="micon dw dw-file"></span><span class="mtext">영업</span>
 					</a>
 						<ul class="submenu">
-							<li><a th:href="@{/orderReception}">주문접수</a></li>
-							<li><a th:href="@{/orderHistory}">주문내역</a></li>
-							<li><a th:href="@{/productOut}">출고관리</a></li>
-							<li><a th:href="@{/productManagement}">완제품 관리</a></li>
-							<li><a th:href="@{/inoutHistory}">입/출고 내역</a></li>
+							<li><a th:href="@{orderReception}">주문접수</a></li>
+							<li><a th:href="@{orderHistory}">주문내역</a></li>
+							<li><a th:href="@{productOut}">출고관리</a></li>
+							<li><a th:href="@{productManagement}">완제품 관리</a></li>
+							<li><a th:href="@{inoutHistory}">입/출고 내역</a></li>
 						</ul>
 					</li>
-					<li class="dropdown"><a href="javascript:;"
-						class="dropdown-toggle"> <span class="micon dw dw-edit2"></span><span
-							class="mtext">생산</span>
+					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"> <span class="micon dw dw-factory"></span><span class="mtext">생산</span>
 					</a>
 						<ul class="submenu">
 
@@ -43,38 +39,28 @@
 							<li><a href="pResult">생산 공정 실적</a></li>
 
 						</ul></li>
-					<li class="dropdown"><a href="javascript:;"
-						class="dropdown-toggle"> <span class="micon dw dw-library"></span><span
-							class="mtext">자재</span>
+					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"> <span class="micon dw dw-flow"></span><span class="mtext">자재</span>
 					</a>
 						<ul class="submenu">
-							<li><a th:href="@{/productionPlanList}">생산계획별 발주확인</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a th:href="@{/orderRequestList}">발주 등록, 관리</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a th:href="@{/mtInList}">입고 관리</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a th:href="@{/mtOutList}">출고 관리</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a th:href="@{/stock}">전체재고 관리</a></li>
+							<li><a th:href="@{productionPlanList}">생산계획별 발주확인</a></li>
+							<li><a th:href="@{orderRequestList}">발주 등록, 관리</a></li>
+							<li><a th:href="@{mtInList}">입고 관리</a></li>
+							<li><a th:href="@{mtOutList}">출고 관리</a></li>
+							<li><a th:href="@{stock}">전체재고 관리</a></li>
 						</ul></li>
 					<li class="dropdown"><a href="javascript:;"
-						class="dropdown-toggle"> <span class="micon dw dw-library"></span><span
+						class="dropdown-toggle"> <span class="micon dw dw-certificate-1"></span><span
 							class="mtext">품질</span>
 					</a>
 						<ul class="submenu">
-							<li><a th:href="@{/incomingQualityWaitInfo}">입고 검사 대기 목록1</a></li>
-							<li><a th:href="@{/incomingQualityWaitHistory}">자재 입고 검사 대기 목록2</a></li>
-							<li><a th:href="@{/incomingQualityDone}">입고 검사 완료 목록</a></li>
-							<li><a th:href="@{/finishQualityWait}">완제품 검사 대기 목록</a></li>
-							<li><a th:href="@{/outQualityDone}">완제품 검사 완료 목록</a></li>
+							<li><a th:href="@{incomingQualityWaitInfo}">입고 검사 대기 목록1</a></li>
+							<li><a th:href="@{incomingQualityWaitHistory}">자재 입고 검사 대기 목록2</a></li>
+							<li><a th:href="@{incomingQualityDone}">입고 검사 완료 목록</a></li>
+							<li><a th:href="@{finishQualityWait}">완제품 검사 대기 목록</a></li>
+							<li><a th:href="@{outQualityDone}">완제품 검사 완료 목록</a></li>
 						</ul></li>
 					<li class="dropdown"><a href="javascript:;"
-						class="dropdown-toggle"> <span class="micon dw dw-apartment"></span><span
+						class="dropdown-toggle"> <span class="micon dw dw-settings"></span><span
 							class="mtext">설비</span>
 					</a>
 						<ul class="submenu">
@@ -86,7 +72,7 @@
 							<li><a href="">실시간 모니터링</a></li>
 						</ul></li>
 					<li><a href="javascript:;" class="dropdown-toggle"> <span
-							class="micon dw dw-edit-2"></span><span class="mtext">기준정보</span>
+							class="micon dw dw-edit-1"></span><span class="mtext">기준정보</span>
 					</a>
 						<ul class="submenu">
 							<li><a th:href="@{infoPrdList}">제품 관리</a></li>
