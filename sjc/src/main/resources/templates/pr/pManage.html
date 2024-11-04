@@ -12,9 +12,13 @@
 
 <body>
     <div class="main-container">
+        <div class="pd-ltr-20">
         <h3>생산 공정</h3>
+        
         <button id="sBtn">생산 시작</button>
-        <table id="bl" class="table table-secondary table-hover">
+        <div class="pd-20 card-box mb-20">
+        <h2 class="h5 mb-20">생산지시 상세</h2>
+        <table id="bl" class="table table-hover">
             <thead>
                 <tr>
                 	<th>생산지시 상세코드</th>
@@ -44,8 +48,12 @@
                 </th:block>
             </tbody>
         </table>
-        <h3>필요 자재</h3>
-        <table id="detail-table" class="table table-secondary table-hover">
+        </div>
+        
+        
+        <div class="pd-20 card-box mb-20">
+        <h2 class="h5 mb-20">필요 자재</h2>
+        <table id="detail-table" class="table table-hover">
             <thead>
                 <tr>
                     <th>자재명</th>
@@ -55,8 +63,12 @@
             <tbody id="dbody"> 
             </tbody>
         </table>
-        <h3>진행 공정</h3>
-        <table id="dtable" class="table table-secondary table-hover">
+        </div>
+        
+        
+        <div class="pd-20 card-box mb-20">
+        <h2 class="h5 mb-20">진행 공정</h2>
+        <table id="dtable" class="table table-hover">
             <thead>
                 <tr>
                 	<th>순서</th>
@@ -75,6 +87,8 @@
             </tbody>
         </table>
     </div>
+    </div>
+    
     
     <script>
     const plan = document.getElementById('plan');

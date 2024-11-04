@@ -101,6 +101,9 @@ public interface PrdtMapper {
 	// 주문코드 선택 시 나올 주문 제품 
 	public List<ProductVO> ordPrd(String ordCode);
 	
-	
+	// 계획 클릭 시 나올 라인
 	public List<LinePrdVO> planL(String planCode);
+	
+	// 지시내리면 라인 사용 중 변경
+	void updateLine(LinePrdVO linePrdVO);
 }

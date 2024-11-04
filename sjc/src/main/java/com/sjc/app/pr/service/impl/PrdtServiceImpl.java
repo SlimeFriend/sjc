@@ -225,6 +225,7 @@ public class PrdtServiceImpl implements PrdtService {
 		if(pinresult > 0) {
 			linePrdList.forEach(lp -> {
 			     prdtMapper.insertDetail(lp, porderVO.getPorderCode());
+			     prdtMapper.updateLine(lp);
 			     });
 			        
 			        

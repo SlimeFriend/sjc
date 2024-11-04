@@ -72,32 +72,32 @@
 
 <script th:inline="javascript">
 	
-			let grid; 
+	let grid; 
 			
-			let mtgrid;
+	let mtgrid;
 			
-			let mtgridData;
+	let mtgridData;
 			
-			let plangrid;
+	let plangrid;
 			
-			let planData;
+	let planData;
 			
 			
-			document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function() {
 				
-				// 계획 select 
-				const pc = $('#planCode');
+		// 계획 select 
+		const pc = $('#planCode');
 				
-				// 라인 선택 데이터
-				const gridData = /*[[${linePrd}]]*/[];
+		// 라인 선택 데이터
+		const gridData = /*[[${linePrd}]]*/[];
 				
-				// 라인 선택 그리드
-				grid = new tui.Grid({
-					el : document.getElementById('grid'),
-					data : gridData,
-					scrollX : false,
-					scrollY : false,
-					columns : [ {
+		// 라인 선택 그리드
+		grid = new tui.Grid({
+			el : document.getElementById('grid'),
+				data : gridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
 						header : '라인',
 						name : 'lineCode',
 						align : 'center',
@@ -107,25 +107,32 @@
 						align : 'center',
 					}, {
 						header : '제품코드',
-						name : 'prdCode',
+					name : 'prdCode',
 						align : 'center',
 					},  {
 						header : '목표량',
 						name : 'want',
 						align : 'center',
 						editor:  'text'
-			            
-						
 					}, {
 						header : '지시량',
 						name : 'command',
 						align : 'center',
 						editor : 'text'
-			            
 					}, {
 						header : '사용 가능 여부',
 						name : 'use',
 						align : 'center',
+						formatter: (object, columnInfo) => {
+							
+	                		//return list[object.value];
+	                    	switch (object.value) {
+	                        	case 'Y': return '사용 가능';
+	                        	case 'N': return '사용 불가';
+	                        	case 'U': return '사용 중';                        	
+	                        	default: return '알 수 없음';
+	                    	}
+	                	}
 						
 					}],
 					rowHeaders : [ 'checkbox' ],
@@ -253,6 +260,15 @@
 					}
 				});
 				
+				grid.on('click', (ev) =>{
+					const rowIndex = ev.rowKey;
+					
+					const rowData = grid.getData()[rowIndex];
+					
+					if(rowData.use === 'N'){
+						alert('해당 라인은 사용 불가능 합니다.');
+					}
+				});
 				
 				grid.on('afterChange', (ev) => {
 			        const changedRows = ev.changes;
@@ -269,35 +285,34 @@
 			
 				
 				
-			function mtload(){
-				const checkedRows = grid.getCheckedRows();
-				  if(checkedRows.length == 0){
+				function mtload(){
+					const checkedRows = grid.getCheckedRows();
+				  	if(checkedRows.length == 0){
 			        	mtgrid.resetData([]);
 			        	return;
 			        }
-				fetch('/orderMt', {
-		            method: 'POST',
-		            headers: {
-		                'Content-Type': 'application/json' // JSON 형식으로 데이터 전송
-		            },
-		            body: JSON.stringify(checkedRows) // 데이터를 JSON으로 변환하여 전송
-		        })
-		        .then(response => {
-		            if (!response.ok) {
-		                throw new Error('네트워크 응답이 좋지 않습니다.');
-		            }
-		            return response.json(); // JSON 응답으로 변환
-		        })
-		        .then(data => {
+					fetch('/orderMt', {
+		            	method: 'POST',
+		            	headers: {
+		                	'Content-Type': 'application/json' // JSON 형식으로 데이터 전송
+		            	},
+		            	body: JSON.stringify(checkedRows) // 데이터를 JSON으로 변환하여 전송
+		        	})
+		        	.then(response => {
+		            	if (!response.ok) {
+		                	throw new Error('네트워크 응답이 좋지 않습니다.');
+		            	}
+		            	return response.json(); // JSON 응답으로 변환
+		        	})
+		        	.then(data => {
 		            
 		            	mtgrid.resetData(data);
-		           
-		            
-		        })
-		        .catch(error => {
-		            console.error('문제가 발생했습니다:', error);
-		        });
-			}
+
+		        	})
+		        	.catch(error => {
+		            	console.error('문제가 발생했습니다:', error);
+		        	});
+				}
 						
 	
 			
@@ -308,72 +323,9 @@
 		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
 		} */
 		
-		function sendCheckedRows() {
-		    const checkedRows = grid.getCheckedRows();
-		    const mtRows = mtgrid.getData();
-
-		    if (checkedRows.length === 0) {
-		        alert('라인을 선택해주세요.');
-		        return;
-		    }
-		    
-
-		    
-		 	// 수량 체크
-		    for (let i = 0; i < checkedRows.length; i++) {
-		        const row = checkedRows[i];
-
-		        if (!row.want || row.want <= 0) {
-		            alert('체크된 제품의 목표량을 입력해주세요.');
-		            return;
-		        }
-		        if (!row.command || row.command <= 0) {
-		            alert('체크된 제품의 지시량을 입력해주세요.');
-		            return;
-		        }
-		    }
-		 	
-		 	// 자재 수량 체크
-		    for (let mtRow of mtRows) {
-		        const requiredQuantity = mtRow.quantityRequired; // 필요한 수량
-		        const currentStock = mtRow.currentStc; // 재고량
-
-		        if (requiredQuantity > currentStock) {
-		            alert(`${mtRow.mtName}의 필요 수량(${requiredQuantity})이 재고량(${currentStock})보다 큽니다.`);
-		            return;
-		        }
-		    }
-
-		    // 폼 데이터를 직접 수집
-		    const formArr = $("form[name=form]").serializeArray();
-		    
-		    const formObj = {};
-		    $.each(formArr, function(idx, tag) {
-		    	formObj[tag.name] = tag.value;
-		    });
-
-		    // 폼 데이터와 체크된 그리드 데이터를 병합
-		    const payload = {
-		        porderVO: formObj,    // 폼 데이터 (주문 정보)
-		        linePrdVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
-		    };
-		    
-
-		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
-		    $.ajax({
-		        url: '/pOrder', // 서버에서 처리할 URL 경로
-		        type: 'POST',
-		        contentType: 'application/json', // JSON 형식으로 데이터 전송
-		        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
-		        success: function(response) {
-		            alert('생산지시가 생성되었습니다!');
-		            window.location.href = "pOrderList";
-		            console.log(response); // 서버에서 받은 응답 처리
-		        }
-		    });
-		}
+				
 		
-	});
+		});		// DOMContentLoaded
 			
 			function x(){
 				grid.getData().forEach((data, index) => {
@@ -383,7 +335,70 @@
 			    });
 			}
 		
+			function sendCheckedRows() {
+	   			const checkedRows = grid.getCheckedRows();
+	    		const mtRows = mtgrid.getData();
 
+	    		if (checkedRows.length === 0) {
+	        		alert('라인을 선택해주세요.');
+	       		return;
+	    		}
+	    
+
+	    
+	 			// 수량 체크
+	    		for (let i = 0; i < checkedRows.length; i++) {
+	        		const row = checkedRows[i];
+
+	        		if (!row.want || row.want <= 0) {
+	            		alert('체크된 제품의 목표량을 입력해주세요.');
+	            		return;
+	        		}
+	        		if (!row.command || row.command <= 0) {
+	            		alert('체크된 제품의 지시량을 입력해주세요.');
+	            		return;
+	        		}
+	    		}
+	 	
+	 			// 자재 수량 체크
+	    		for (let mtRow of mtRows) {
+	        		const requiredQuantity = mtRow.quantityRequired; // 필요한 수량
+	        		const currentStock = mtRow.currentStc; // 재고량
+
+	        		if (requiredQuantity > currentStock) {
+	            		alert(`${mtRow.mtName}의 필요 수량(${requiredQuantity})이 재고량(${currentStock})보다 큽니다.`);
+	            		return;
+	        		}
+	    		}
+
+	    		// 폼 데이터를 직접 수집
+	    		const formArr = $("form[name=form]").serializeArray();
+	    
+	    		const formObj = {};
+	    		$.each(formArr, function(idx, tag) {
+	    			formObj[tag.name] = tag.value;
+	    		});
+
+	    		// 폼 데이터와 체크된 그리드 데이터를 병합
+	    		const payload = {
+	        		porderVO: formObj,    // 폼 데이터 (주문 정보)
+	        		linePrdVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+	    		};
+	    
+
+	    		// 병합된 데이터를 서버로 전송 (AJAX 요청)
+	    		$.ajax({
+	        		url: '/pOrder', // 서버에서 처리할 URL 경로
+	        		type: 'POST',
+	        		contentType: 'application/json', // JSON 형식으로 데이터 전송
+	        		data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
+	        		success: function(response) {
+	            		alert('생산지시가 생성되었습니다!');
+	            		window.location.href = "pOrderList";
+	            		console.log(response); // 서버에서 받은 응답 처리
+	        		}
+	    		});
+			}
 		
 	
 
