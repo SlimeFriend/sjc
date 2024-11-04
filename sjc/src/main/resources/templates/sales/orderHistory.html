@@ -68,8 +68,7 @@
 					</div>
 				</form>
 			</div>
-			<div id="lackGridOrder" class="mb-20"></div>
-			<div id="gridOrder"></div>
+			<div id="gridOrder" class="mb-20"></div>
 			<div id="gridOrderDetail" style="display : none"></div>
 		</div>
 	</div>
@@ -87,7 +86,7 @@
 				el : document.getElementById('gridOrder'),
 				data : gridData,
 				scrollX : false,
-				scrollY : false,
+				scrollY : true,
 				columns : [ {
 					header : '주문코드',
 					name : 'ordCode',
@@ -114,10 +113,11 @@
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 10
-				}
+				bodyHeight: 200,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10 
+				},
 			});
 			
 			const gridModal = new tui.Grid({
