@@ -1,96 +1,78 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-layout:decorate="~{common/layouts/default_layout}"
-layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+	<!-- 페이징필요한사람 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-<title>생산관리 실적</title>
-</head>
-
-<body>
-    <div class="main-container">
-        <h3>생산지시</h3>
-        <table id="bl" class="table table-secondary table-hover">
-            <thead>
-                <tr>
-                    <th>생산지시 코드</th>
-                    <th>지시 일자</th>
-                    <th>시작 일자</th>
-                    <th>담당자</th>
-                    <th>비고</th>
-                </tr>
-            </thead>    
-            <tbody id="plan">
-                <th:block th:each="list: ${list}">
-                    <tr>
-                        <td th:text="${list.porderCode}"></td>
-                        <td>[[ ${list.porderDate} ]]</td>
-                        <td>[[ ${list.startDate} ]]</td>
-                        <td th:text="${list.userName}"></td>
-                        <td th:text="${list.comm}"></td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
-        <h3>생산지시 상세</h3>
-        <table id="detail-table" class="table table-secondary table-hover">
-            <thead>
-                <tr>
-                    <th>제품명</th>
-                    <th>목표량</th>
-                    <th>지시량</th>
-                    <th>생산량</th>
-                    <th>우선 순위</th>
-                    <th>비고</th>
-                </tr>
-            </thead>    
-            <tbody id="dbody">
-            </tbody>
-        </table>
-    </div>
-    
-    <script>
-        const plan = document.getElementById('plan');
-        const detailBody = document.getElementById('detail-body');
+	<div class="main-container">
+		<div class="pd-ltr-20">
+		<h3>생산지시 조회</h3>
+			<div class="pd-20 card-box mb-20"> 
+        		<h2 class="h5 mb-20">생산지시</h2>
+        		<div id="grid"></div>
+        	</div>
         
-        Array.from(plan.children).forEach((pl) => {
-            pl.addEventListener('click', (event) => {
-                const pCode = event.currentTarget.children[0].textContent;
-                
-                fetch('/pOList?porderCode=' + pCode)
-                    .then(function(resp) {
-                        if (!resp.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return resp.json();
-                    })
-                    .then(function(resp) {
-                        // 상세 테이블 내용 초기화
-                        dbody.innerHTML = '';
+        
+        	<div class="pd-20 card-box mb-20"> 
+        	<h2 class="h5 mb-20">생산지시 상세</h2>
+        		<div id="detail-grid"></div>
+        	</div>
+    	</div>
+    </div>
 
-                        // 받아온 데이터로 테이블 행 추가
-                        resp.forEach(item => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${item.prdName}</td>
-                                <td>${item.want}</td>
-                                <td>${item.command}</td>
-								<td>${item.output != null ? item.output : 0}</td> 
-								<td>${item.no}</td>
-                                <td>${item.comm}</td>
-                            `;
-                            dbody.appendChild(row);
-                        });
-                    })
-                    .catch(function(error) {
-                        console.error('fetch err');
-                    });
-            });
+    <script th:inline="javascript">
+    
+    const gridData = /*[[${list}]]*/[];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    	
+    	const grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            data: gridData, // 초기 데이터
+            columns: [
+                { header: '생산지시 코드', name: 'porderCode', align: 'center' },
+                { header: '지시 일자', name: 'porderDate', align: 'center' },
+                { header: '시작 일자', name: 'startDate', align: 'center' },
+                { header: '담당자', name: 'userName', align: 'center' },
+                { header: '비고', name: 'comm', align: 'center' }
+            ],
+            rowHeaders: ['rowNum'],
+            pageOptions: { useClient: true, perPage: 10 },
+            height: '300px'
         });
+
+
+
+        // 상세 그리드 초기화
+        const detailGrid = new tui.Grid({
+            el: document.getElementById('detail-grid'),
+            data: [],
+            columns: [
+                { header: '제품명', name: 'prdName', align: 'center' },
+                { header: '목표량', name: 'want', align: 'center' },
+                { header: '지시량', name: 'command', align: 'center' },
+                { header: '생산량', name: 'output', align: 'center' }
+            ],
+            rowHeaders: ['rowNum'],
+            height: '300px'
+        });
+
+        // 생산지시 클릭 시 상세 정보 로드
+        grid.on('click', (ev) => {
+            const selectedRow = ev.rowKey;
+            const selectedData = grid.getValue(selectedRow, 'porderCode'); // 선택한 행 데이터 가져오기
+            
+            fetch('/pOList?porderCode=' + selectedData)
+                .then(resp => resp.json())
+                .then(data => {
+                    detailGrid.resetData(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching detail data:', error);
+                });
+        });
+    });
     </script>
 </body>
-
-</html>

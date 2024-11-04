@@ -1,48 +1,69 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-layout:decorate="~{common/layouts/default_layout}"
-layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+	<!-- 페이징필요한사람 -->
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-<title>생산공정 실적</title>
-</head>
+	<div class="main-container">
+		<div class="pd-ltr-20">
+		<h3>생산공정실적 조회</h3>
+		
+			<div class="pd-20 card-box mb-20"> 
+        		<h2 class="h5 mb-20">생산공정실적</h2>
+        		<div id="grid"></div>
+        	</div>
+        
+        
 
-<body>
-    <div class="main-container">
-        <h3>생산공정 실적</h3>
-        <table id="bl" class="table table-secondary table-hover">
-            <thead>
-                <tr>
-                    <th>생산지시상세 코드</th>
-                    <th>공정명</th>
-                    <th>공정 일자</th>
-                    <th>설비코드</th>
-                    <th>투입량</th>
-                    <th>생산량</th>
-                    <th>담당자</th>
-                </tr>
-            </thead>    
-            <tbody id="plan">
-                <th:block th:each="list: ${list}">
-                    <tr>
-                        <td th:text="${list.pdetailCode}"></td>
-                        <td th:text="${list.processName}"></td>
-                        <td th:text="${list.processDate}"></td>
-                        <td>[[ ${list.eqCode} ]]</td>
-                        <td>[[ ${list.input} ]]</td>
-                        <td th:text="${list.output}"></td>
-                        <td th:text="${list.userName}"></td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
+    	</div>
     </div>
+
+    <script th:inline="javascript">
     
-    <script>
+    const gridData = /*[[${list}]]*/[];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    	
+    	const grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            data: gridData, // 초기 데이터
+            columns: [{ 
+            		header: '생산지시 상세코드', 
+                	name: 'pdetailCode',
+                	align: 'center'
+                }, { 
+                	header: '공정명',
+               	 	name: 'processName',
+             		align: 'center' 
+             	}, { 
+             		header: '공정 일자', 
+             		name: 'processDate',
+                	align: 'center' 
+                },{ 
+                	header: '설비코드', 
+                	name: 'userName',
+                    align: 'center' 
+                }, {
+                	header: '투입량', 
+                	name: 'input',
+                    align: 'center' 
+                },{ 
+                	header: '생산량', 
+                	name: 'output',
+                    align: 'center' 
+                },{ 
+                	header: '담당자', 
+                	name: 'userName',         	
+                	align: 'center' 
+                }
+            ],
+            rowHeaders: ['rowNum'],
+            pageOptions: { useClient: true, perPage: 10 },
+            height: '300px'
+        });
+
+    });
     </script>
 </body>
-
-</html>

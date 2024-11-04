@@ -100,4 +100,7 @@ public interface PrdtMapper {
 	
 	// 주문코드 선택 시 나올 주문 제품 
 	public List<ProductVO> ordPrd(String ordCode);
+	
+	
+	public List<LinePrdVO> planL(String planCode);
 }

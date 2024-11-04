@@ -273,13 +273,15 @@ where p.prd_code = #{prdCode}
 					end_date,
 					manager,
 					comm,
-					status)
+					status,
+					ord_code)
 	values (#{planCode},
 			#{startDate},
 			#{endDate},
 			#{manager},
 			#{comm},
-			'a1')
+			'a1',
+			#{ordCode})
 </insert>
 
 <!-- 계획상세 생성 -->
@@ -306,7 +308,7 @@ where p.prd_code = #{prdCode}
 
 <delete id="deletePlan" parameterType="String">
 	delete plan
-	where plan_code = #{planCode}
+	where plan_code = #{pCode}
 </delete>
 
 <!-- 지시 라인 제품 보여주기 -->
@@ -318,7 +320,7 @@ where p.prd_code = #{prdCode}
 		from line l
 		join prd p
 		on l.prd_code = p.prd_code
-		order by p.prd_code, l.use DESC, l.line_code
+		order by l.use DESC, p.prd_code, l.line_code
 </select>
 
 
@@ -438,4 +440,16 @@ where ord_code = #{ordCode}
 </select>
 
 
+<!-- 계획 클릭 시 가져올 라인 -->
+<select id="planL" resultType="LinePrdVO">
+select l.line_code,
+        d.prd_code,
+        d.prd_name,
+        l.use
+from plan_detail d
+join line l
+on d.prd_code = l.prd_code
+where d.plan_code = #{planCode} 
+order by l.use DESC, d.prd_code, l.line_code
+</select>
 </mapper>

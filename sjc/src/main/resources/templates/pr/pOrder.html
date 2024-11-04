@@ -113,25 +113,15 @@
 						header : '목표량',
 						name : 'want',
 						align : 'center',
-						editor: {
-			                type: 'text',
-			                // 조건에 따라 editor 사용 여부 설정
-			                options: {
-			                    disabled: true // 기본적으로 비활성화
-			                }
-			            }
+						editor:  'text'
+			            
 						
 					}, {
 						header : '지시량',
 						name : 'command',
 						align : 'center',
-						editor: {
-			                type: 'text',
-			                // 조건에 따라 editor 사용 여부 설정
-			                options: {
-			                    disabled: true // 기본적으로 비활성화
-			                }
-			            }
+						editor : 'text'
+			            
 					}, {
 						header : '사용 가능 여부',
 						name : 'use',
@@ -144,6 +134,14 @@
 						perPage : 10
 					}
 				});
+				
+				
+				x();
+			    
+				
+				    
+
+				
 				
 				// 필요 자재 그리드
 				mtgrid = new tui.Grid({
@@ -206,8 +204,27 @@
 					});
 					
 					$.ajax({
-						
-					})
+						url: 'planL',
+					    type: 'GET',
+					    data: {
+					        planCode : planCode 
+					    },
+					    success: function(response) {
+					    	if(response.length > 0 ){
+					        grid.resetData(response);
+					        
+					        x();
+						}else{
+							grid.resetData(gridData);
+							
+							x();
+						}
+					    },
+					    error: function(jqXHR, textStatus, errorThrown) {
+					        console.error('Error:', textStatus, errorThrown);
+					    }
+					});
+					
 				});
 				
 				plangrid = new tui.Grid({
@@ -244,6 +261,8 @@
 			        mtload();
 			    	
 				});
+				
+				
 
 				
 				
@@ -280,7 +299,7 @@
 		        });
 			}
 						
-		});
+	
 			
 			
 		// 체크된 행의 데이터를 가져오는 함수
@@ -354,9 +373,17 @@
 		    });
 		}
 		
+	});
+			
+			function x(){
+				grid.getData().forEach((data, index) => {
+			         if (data.use === 'N') {
+			             grid.disableRow(index);
+			         }
+			    });
+			}
 		
-		
-		
+
 		
 	
 

@@ -18,9 +18,9 @@
 					method="post">
 					<div class="form-group">
 						<label>주문코드</label> 
-							<select name="oList" id="oList">
+							<select name="ordCode" id="ordCode">
 								<option></option>
-								<th:block th:block th:each="list: ${oList}">
+								<th:block th:block th:each="list: ${ordCode}">
 									<option>[[ ${list} ]]</option>
 								</th:block>
 							</select>
@@ -67,7 +67,7 @@
 
 <script th:inline="javascript">
 			
-			const ol = $('#oList');
+			const ol = $('#ordCode');
 			
 			const gridData = /*[[${products}]]*/[];
 			
@@ -159,11 +159,14 @@
 		    $.each(formArr, function(idx, tag) {
 		    	formObj[tag.name] = tag.value;
 		    });
+		    
+		    //const ordCode = $("#oList option:selected").val();
 
 		    // 폼 데이터와 체크된 그리드 데이터를 병합
 		    const payload = {
 		        planVO: formObj,    // 폼 데이터 (주문 정보)
 		        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+		        //ordCode: ordCode
 		    };
 		    
 
