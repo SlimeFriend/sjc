@@ -269,7 +269,6 @@
 		
  	$("#failuer1").click(function(){
  		console.log("버튼 클릭됨");
- 		console.log("insCode : " + insCode);
 
 		var checkbox = $("input[name=incomingQualityCheck]:checked");
 		var data = [];
@@ -281,7 +280,7 @@
 
 			var item = {
 
-			mtlOdCode : td.eq(10).text()
+					insCode : td.eq(2).text()
 			};
 			
 			console.log(item);
