@@ -250,6 +250,45 @@ tbody>tr {
 	});
 
 	</script>
+	<script>
+	// 모달 창에서 수정 처리
+	$('#saveChanges').on('click', function(event) {
+	    event.preventDefault(); // 기본 폼 제출 방지
+
+	    const eqData = {
+	        eqCode: $('#eqCode').val(),
+	        eqName: $('#eqName').val(),
+	        eqMin: $('#eqMin').val(),
+	        eqMax: $('#eqMax').val(),
+	        use: $('input[name="use"]:checked').val()
+	    };
+
+	    // 사용여부가 "Y"로 선택되었는지 확인하여 업데이트 요청
+	    if (eqData.use === 'Y') {
+	        $.ajax({
+	            type: 'POST',
+	            url: '/updateUseStatus',
+	            contentType: 'application/json',
+	            data: JSON.stringify(eqData),
+	            success: function(response) {
+	                if (response.result) {
+	                    alert('사용여부가 "가동"으로 업데이트되었습니다.');
+	                    location.reload(); // 페이지 새로고침
+	                } else {
+	                    alert('업데이트에 실패했습니다.');
+	                }
+	            },
+	            error: function() {
+	                alert('서버 오류가 발생했습니다.');
+	            }
+	        });
+	    }
+
+	    // 모달 창 닫기
+	    $('#myModal').modal('hide');
+	});
+
+	</script>
 </body>
 
 </html>

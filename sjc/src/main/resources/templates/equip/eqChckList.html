@@ -6,7 +6,6 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -36,7 +35,8 @@ tbody > tr {
 					<div>
 						<p style="font-size: 100%">
 							<label style="font-size: 120%;">구분</label>&nbsp;&nbsp;&nbsp;&nbsp; 
-							<input type="radio" id="all" name="section" value="all"> <label>전체</label>&nbsp;&nbsp;
+							<input type="radio" id="all" name="section" value="all" checked> 
+							<label>전체</label>&nbsp;&nbsp;
 							<input type="radio" id="operating" name="section" value="op">
 							<label>가동</label>&nbsp;&nbsp; 
 							<input type="radio" id="nOperating" name="section" value="nOp"> <label>비가동</label>
@@ -81,15 +81,15 @@ tbody > tr {
 						</div>
 					</div>
 					<thead>
-						<form>
+						<form id="searchForm">
 							<label for="date">해당일자</label> 
-							<input type="date" id="startDate" name="startDate"> ~ <input type="date" id="endDate" name="endDate">
+							<input type="date" id="startDate" name="startDate"> ~ 
+							<input type="date" id="endDate" name="endDate">
 							<div>
-								<label for="eqName">설비명</label> 
-								<input type="text"  placeholder=""> 
-								<button>검색</button>
+								<label for="eqCode">설비코드 :</label> 
+								<input type="text" id="SearchEqCode" placeholder="설비코드"> 
+								<button type="button" id="searchBtn">검색</button>
 								<button type="reset">초기화</button>
-
 							</div>
 						</form>
 						<tr>
@@ -140,13 +140,14 @@ tbody > tr {
 								</div>
 								<div class="mb-3">
 									<label for="nOpTime" class="form-label">비가동 기간 :
-									</label> 시작<input type="datetime-local" id="startDate" name="startDate">
+									</label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate">
 											 <br />
-											 종료<input type="datetime-local" id="endDate" name="endDate">
+											 종료 <input type="datetime-local" id="modalEndDate" name="endDate">
 								</div>
 								<div class="mb-3">
 									<label for="reason" class="form-label">사유 :</label> 
 									<select id="reason" name="reason">
+										<option value="">선택
 										<option value="상시점검">상시점검
 										<option value="임시점검">임시점검
 										<option value="고장">고장
@@ -155,9 +156,10 @@ tbody > tr {
 								</div>
 								<div class="mb-3">
 									<label for="use" class="form-label">사용여부</label> 
-									<select name="use">
-										<option value="" selected>--선택
-										<option value="cannot">비가동
+									<select name="use" id="use">
+										<option value="" selected>선택
+										<option id="use" value="Y">가동
+										<option id="use" value="N">비가동
 									</select>
 								</div>
 							</form>
@@ -173,126 +175,141 @@ tbody > tr {
 		</div>
 	</div>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// tr 클릭 시 이벤트 설정
-			$('tbody > tr').on('click', function(event) {
-				let trTag = event.currentTarget; // tr 찾기
-				let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
-				let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
+<script>
+    $(document).ready(function() {
+        // 테이블 행 클릭 시 이벤트 설정
+        $('tbody > tr').on('click', function(event) {
+            let trTag = event.currentTarget;
+            let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
+            let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
 
-				// 모달의 input 필드에 값 설정
-				$('#eqCode').val(eqCode);
-				$('#eqName').val(eqName);
+            // 모달의 input 필드에 값 설정
+            $('#eqCode').val(eqCode);
+            $('#eqName').val(eqName);
 
-				// 모달 창 표시
-				$('#nOpModal').modal('show');
-			});
-		});
-	</script>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// 라디오 버튼 클릭 시 필터링 함수
-			$('input[name="section"]').on('change', function() {
-				let selectedValue = $('input[name="section"]:checked').val(); // 선택된 라디오 버튼의 값 가져오기
-				let rowCount = 1; // No. 재정렬을 위한 카운트 변수 초기화
-				
-	            // 첫 번째 테이블의 tbody에서만 필터링 적용
-	            $('table:first tbody tr').each(function() {
-	                let useStatus = $(this).children().eq(5).text().trim(); // '사용여부' 컬럼
+            // 선택된 행을 모달에 저장 (등록 시 업데이트 용도)
+            $('#nOpModal').data('selectedRow', $(this));
 
-					if (selectedValue === 'all') {
-						// '전체' 선택 시 모든 행을 보여줌
-						$(this).show();
-						$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
-					} else if (selectedValue === 'op') {
-						// '가동' 선택 시 '가동'인 행만 보여줌
-						if (useStatus === '가동') {
-							$(this).show();
-							$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
-						} else {
-							$(this).hide();
-						}
-					} else if (selectedValue === 'nOp') {
-						// '비가동' 선택 시 '비가동'인 행만 보여줌
-						if (useStatus === '비가동') {
-							$(this).show();
-							$(this).children().eq(0).text(rowCount++); // No. 컬럼 순차적으로 재정렬
-						} else {
-							$(this).hide();
-						}
-					}
-				});
-			});
-		});
-		
-		$(document).ready(function() {
-		    // 등록 버튼 클릭 시 이벤트 처리
-		    $('#modalSubmitBtn').on('click', function() {
-		        // 모달 창에서 입력된 데이터 가져오기
-		        let eqCode = $('#eqCode').val();
-		        let eqName = $('#eqName').val();
-		        let startDate = $('#nOpModal #startDate').val();
-		        let endDate = $('#nOpModal #endDate').val() || null;
-		        let reason = $('#reason').val();
-		        let use = $('#nOpModal select[name="use"]').val(); // 사용 여부 가져오기
+            // 모달 창 표시
+            $('#nOpModal').modal('show');
+        });
 
-		        // Ajax로 서버에 데이터 전송
-		        $.ajax({
-		            type: "POST",
-		            url: "/nOpRegister",
-		            contentType: "application/json",
-		            data: JSON.stringify({
-		                eqCode: eqCode,
-		                eqName: eqName,
-		                startDate: startDate,
-		                endDate: endDate,
-		                reason: reason,
-		                use: use
-		            }),
-		            success: function(response) {
-		                // 비가동 내역 테이블에 새로운 행 추가
-		                let rowCount = $('#nOpTableBody tr').length + 1;
-		                let newRow = `
-		                    <tr>
-		                        <td>${rowCount}</td>
-		                        <td>${response.eqChckOpcd}</td>
-		                        <td>${response.eqCode}</td>
-		                        <td>${response.eqName}</td>
-		                        <td>${response.reason}</td>
-		                        <td>${response.startDate}</td>
-		                        <td>${response.endDate ? response.endDate : '-'}</td>
-		                        <td>${use === 'can' ? '가동' : '비가동'}</td>
-		                    </tr>
-		                `;
-		                $('#nOpTableBody').append(newRow);
-		                
-		                // 첫 번째 테이블의 사용 여부 업데이트
-                let updatedStatus = use === 'can' ? '가동' : '비가동';
-                $('table:first tbody tr').each(function() {
-                    if ($(this).children().eq(1).text().trim() === eqCode) {
-                        $(this).children().eq(5).text(updatedStatus);
-                    }
-                });
-		                // 등록 완료 알림
-		                alert("등록이 완료되었습니다.");
+        // 사용 여부가 '가동'일 때 비가동 기간 및 사유 필드 비활성화
+        $('select[name="use"]').on('change', function() {
+            const useValue = $(this).val();
+            if (useValue === 'Y') {
+                $('#modalStartDate, #modalEndDate, #reason').prop('disabled', true);
+                $('#modalStartDate, #modalEndDate').val('');
+                $('#reason').val('');
+            } else {
+                $('#modalStartDate, #modalEndDate, #reason').prop('disabled', false);
+            }
+        });
 
-		                // 페이지 새로고침
-		                location.reload();
-		                
-		                // 모달 닫기 및 초기화
-		                $('#nOpModal').modal('hide');
-		                $('#NeqModal')[0].reset();
-		            },
+        // 모달창에서 '등록' 버튼 클릭 시 이벤트
+        $('#modalSubmitBtn').on('click', function() {
+            const eqCode = $('#eqCode').val();
+            const eqName = $('#eqName').val();
+            const useValue = $('#use').val();
+            const selectedRow = $('#nOpModal').data('selectedRow');
 
-		            error: function(error) {
-		                alert("등록 중 오류가 발생했습니다.");
-		                console.error(error);
-		            }
-		        });
-		    });
-		});
-	</script>
+            if (useValue === 'Y') {
+                // 첫 번째 테이블의 사용 여부를 '가동'으로 업데이트
+                selectedRow.find('td').eq(5).text('가동');
+                alert("설비가 '가동' 상태로 업데이트되었습니다.");
+                $('#nOpModal').modal('hide');
+                $('#NeqModal')[0].reset();
+                return; // '가동'일 때는 서버 전송 없이 종료
+            } 
+
+            // 비가동일 경우만 Ajax를 통해 서버에 전송
+            const startDate = $('#modalStartDate').val();
+            const endDate = $('#modalEndDate').val();
+            const reason = $('#reason').val();
+
+            $.ajax({
+                type: "POST",
+                url: "/nOpRegister",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    eqCode: eqCode,
+                    eqName: eqName,
+                    startDate: startDate,
+                    endDate: endDate,
+                    reason: reason,
+                    use: useValue
+                }),
+                success: function(response) {
+                    // 비가동 내역 테이블에 새로운 행 추가
+                    let rowCount = $('#nOpTableBody tr').length + 1;
+                    let newRow = `
+                        <tr>
+                            <td>${rowCount}</td>
+                            <td>${response.eqChckOpcd}</td>
+                            <td>${response.eqCode}</td>
+                            <td>${response.eqName}</td>
+                            <td>${response.reason || '-'}</td>
+                            <td>${response.startDate || '-'}</td>
+                            <td>${response.endDate || '-'}</td>
+                            <td>${useValue === 'Y' ? '가동' : '비가동'}</td>
+                        </tr>
+                    `;
+                    $('#nOpTableBody').append(newRow);
+
+                    // 첫 번째 테이블의 사용 여부 업데이트
+                    selectedRow.find('td').eq(5).text(useValue === 'Y' ? '가동' : '비가동');
+
+                    // 등록 완료 알림
+                    alert("등록이 완료되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                    $('#nOpModal').modal('hide');
+                    $('#NeqModal')[0].reset();
+                },
+                error: function(error) {
+                    alert("등록 중 오류가 발생했습니다.");
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+//모달창에서 '등록' 버튼 클릭 시 이벤트
+$('#modalSubmitBtn').on('click', function() {
+    const eqCode = $('#eqCode').val();
+    const useValue = $('#use').val();
+    const selectedRow = $('#nOpModal').data('selectedRow');
+
+    if (useValue === 'Y') {
+        // 사용여부가 '가동'일 경우만 서버로 업데이트 요청
+        $.ajax({
+            type: "POST",
+            url: "/updateUseStatus",
+            contentType: "application/json",
+            data: JSON.stringify({
+                eqCode: eqCode,
+                use: useValue
+            }),
+            success: function(response) {
+                if (response.result) {
+                    // 첫 번째 테이블의 사용 여부 업데이트
+                    selectedRow.find('td').eq(5).text('가동');
+                    alert("설비가 '가동' 상태로 업데이트되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("업데이트에 실패했습니다.");
+                }
+                $('#nOpModal').modal('hide');
+            },
+            error: function(error) {
+                alert("업데이트 중 오류가 발생했습니다.");
+                console.error(error);
+            }
+        });
+    }
+});
+
+</script>
 	
 
 

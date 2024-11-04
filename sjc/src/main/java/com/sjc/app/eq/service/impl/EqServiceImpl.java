@@ -129,6 +129,23 @@ public class EqServiceImpl implements EqService {
 	public void saveNonOperating(EqChckVO eqChckVO) {
 		eqMapper.insertNonOperating(eqChckVO);
 	}
+	
+	// 비가동 목록 "가동"으로 변경
+	@Override
+	  public Map<String, Object> updateEqChck(EqVO eqVO) {
+		  
+		  Map<String, Object> map = new HashMap<>();
+	  
+	  boolean isSuccessed = false;
+	  
+	  int result = eqMapper.updateEqChckInfo(eqVO);
+	  
+	  if(result == 1) { isSuccessed = true; }
+	  
+	  
+	  map.put("result", isSuccessed);
+	  return map; 
+	}
 
 
 

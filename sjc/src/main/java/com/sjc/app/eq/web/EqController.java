@@ -131,6 +131,13 @@ public class EqController {
 		return "equip/eqChckList";
 	}
 	
+	// 비가동 목록 "가동"으로 변경
+	  @PostMapping("updateUseStatus")
+	  @ResponseBody 
+	  public Map<String, Object> updateUseStatus(@RequestBody EqVO eqVO) {
+		  return eqService.updateEqChck(eqVO); 
+	  }
+	
 	// 설비 점검 목록 조회
 	@GetMapping("jgList")
 	public String jgList(Model model) {
@@ -148,6 +155,5 @@ public class EqController {
 	    eqService.saveNonOperating(eqChckVO);
 	    return eqChckVO;  // 저장된 데이터를 반환해 화면에서 바로 추가할 수 있게 함
 	}
-
 
 } // end of class
