@@ -52,7 +52,7 @@
 				</form>
 			</div>
 			<div id="gridOrder"></div>
-			<div id="gridOrderDetail" style="opacity : 0"></div>
+			<div id="gridOrderDetail"></div>
 
 			
 			<div class="modal" id="myModal">
@@ -334,29 +334,7 @@
 					perPage : 10
 				}
 			});
- 			
-/* 			 gridInspectionModal.on('click', (ev) => {
-			    const rowKey = ev.rowKey;
-			    const insCodeValue = gridInspectionModal.getValue(rowKey, 'insCode');
-			    
-			    if(insCodeValue) {
-			    	$.ajax({
-			    		url : '/incomingInspectionDetail',
-			    		type : 'POST',
-			    		contentType : 'application/json',
-			    		data : JSON.stringify({insCode : insCodeValue}),
-			    		success: function(response) {
-			    			console.log('Order details received:', response);
-			    			document.getElementById('modalInspectionDetail').style.opacity = 1;
-			    			gridInsDetailModal.resetData(response); 
-			    		},
-			    		error: function(xhr, status, error) {
-			    			console.error('error during request', error);
-			    		}
-			    	});
-			    }
-			    
-			});  */
+
 			
 			
 			
@@ -441,7 +419,7 @@
 	                console.log(requestData);
 	                
 	                $.ajax({
-	                    url: '/finQualityInsUpdate',
+	                    url: '/insValueUpdate',
 	                    type: 'POST',
 	                    contentType: 'application/json',
 	                    data: JSON.stringify(requestData),
@@ -457,46 +435,80 @@
 			});
 			
 			
- 			
-			
-			
-	/* 		
-			function sendTestResults() {
-			    const testResults = grid.getCheckedRows();
-
-			    if (checkedRows.length === 0) {
-			        alert('선택된 데이터가 없습니다.');
-			        return;
-			    }
-
-			    // 폼 데이터를 직접 수집
-			    const formArr = $("form[name=form]").serializeArray();
+			// gridInsDetailModal에서 데이터가 변경될 때마다 호출되는 함수
+			function updateTestCount() {
+			    const insDetailData = gridInsDetailModal.getData();
+			    const insCode = gridInsDetailModal.getValue(0, 'insCode'); // 현재 검사 코드 가져오기
+			    console.log('Current insCode:', insCode);
 			    
-			    const formObj = {};
-			    $.each(formArr, function(idx, tag) {
-			    	formObj[tag.name] = tag.value;
-			    });
-
-			    // 폼 데이터와 체크된 그리드 데이터를 병합
-			    const payload = {
-			        orderVO: formObj,    // 폼 데이터 (주문 정보)
-			        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
-			    };
-
-			    // 병합된 데이터를 서버로 전송 (AJAX 요청)
-			    $.ajax({
-			        url: '/orderReception', // 서버에서 처리할 URL 경로
-			        type: 'POST',
-			        contentType: 'application/json', // JSON 형식으로 데이터 전송
-			        data: JSON.stringify(payload), // 폼 데이터와 체크된 데이터를 JSON으로 변환하여 전송
-			        success: function(response) {
-			            alert('주문이 성공적으로 접수되었습니다!');
-			            window.location.href = "orderHistory";
-			            console.log(response); // 서버에서 받은 응답 처리
-			        }
-			    });
-			} */
+			    // insDetailCode에 대해 insValue가 null이 아닌 수 세기
+			    const countTest = insDetailData.filter(item => 
+			        									item.insCode === insCode 
+			        								 && item.insValue !== null 
+			        								 && item.insValue !== ''
+			    									).length;
+			    // insDetailCode에 대해 insResult가 null이 아니며 불합격이 아닌 수 세기
+			    const countPass = insDetailData.filter(item => 
+			        									item.insCode === insCode 
+			        								 && item.insResult !== null 
+			        								 && item.insResult !== ''
+			        								 && item.insResult !== '불합격'
+			    									).length;
+			    console.log('Count of valid passes:', countPass);
+			    // insDetailCode에 대해 insResult가 null이 아니며 불합격이 아닌 수 세기
+			    const countNonPass = insDetailData.filter(item => 
+			        									item.insCode === insCode 
+			        								 && item.insResult !== null 
+			        								 && item.insResult !== ''
+			        								 && item.insResult !== '합격'
+			    									).length;
+			    console.log('Count of valid nonPasses:', countNonPass);
+			    // totalPass 값 일치하는지 검증하기.
+			    const totalPass = (countTest === countPass) ? '합격' : '불합격';;
+			    // gridInspectionModal의 모든 데이터 가져오기
+			    const inspectionData = gridInspectionModal.getData();
+			 	// insCode로 해당 행의 인덱스 찾기
+			    const rowIndex = inspectionData.findIndex(item => item.insCode === insCode);
+			    
+			    if (rowIndex !== -1) {
+			        gridInspectionModal.setValue(rowIndex, 'numberOfTests', countTest); // 검사수 업데이트
+			        gridInspectionModal.setValue(rowIndex, 'numberOfPasses', countPass); // 합격수 업데이트
+			        gridInspectionModal.setValue(rowIndex, 'numberOfFailed', countNonPass); // 불합격수 업데이트
+			        gridInspectionModal.setValue(rowIndex, 'totalPass', totalPass); // 총합격여부 업데이트
+			    }
+			}
 			
+			
+			
+			// gridInsDetailModal에서 입력이 완료될 때마다 updateTestCount 호출
+			gridInsDetailModal.on('afterChange', (ev) => {
+				console.log('Data changed:', ev);
+			    updateTestCount();
+			});
+	    
+					    
+			let insData = [];
+					    
+			document.getElementById('registerBtn').addEventListener('click', () => {
+				const requestData = gridInspectionModal.getData();
+				console.log(requestData);    
+				$.ajax({
+					url: '/insPdUpdate',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(requestData),
+					success: function(response) {
+					alert("검사가 등록되었습니다.");
+					$('#myModal').modal('hide');
+					},
+					error: function(xhr, status, error) {
+					console.error('Error during request', error);
+					alert('검사 등록 중 오류가 발생했습니다.');
+					}
+				});
+			});  			
+			
+
 
 
 			

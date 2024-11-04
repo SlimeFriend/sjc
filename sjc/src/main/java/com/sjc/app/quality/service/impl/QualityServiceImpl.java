@@ -24,6 +24,29 @@ public class QualityServiceImpl implements QualityService{
 		this.qualityMapper = qualityMapper;
 	}
 	
+	
+	
+// 품질검사등록모달 공통
+	//insDetail - insValue 업데이트
+	@Override
+	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> list) {
+		
+		for(InsDetailVO insDetailVO : list) {
+			
+			qualityMapper.updateInsValue(insDetailVO);
+		}
+		
+		
+		return list;
+	}
+
+	
+	
+	
+	
+	
+//입고
+	// 자재입고품질검사 대기목록
 	// 발주목록전체
 	@Override
 	public List<InspectionVO> mtlOdList() {
@@ -77,34 +100,34 @@ public class QualityServiceImpl implements QualityService{
 	
 	
 		}
-	// 품질검사등록모달-inspection 데이터 갯수 카운트
+	// 자재품질검사등록모달-inspection 데이터 갯수 카운트
 	@Override
 	public int whetherInspection(InspectionVO inspectionVO) {
 		return qualityMapper.whetherInspection(inspectionVO);
 	}
-	// 품질검사등록모달-inspection 생성
+	// 자재품질검사등록모달-inspection 생성
 	@Transactional
 	@Override
 	public int insertInspection(InspectionVO inspectionVO) {
 		return qualityMapper.insertInspection(inspectionVO);
 	}
-	// 품질검사등록모달-inspection 데이터 출력
+	// 자재품질검사등록모달-inspection 데이터 출력
 	@Override
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO) {
 		return qualityMapper.selectInspection(inspectionVO);
 	}
-	// 품질검사상세-insDetail 데이터 갯수 카운트
+	// 자재품질검사등록모달-insDetail 데이터 갯수 카운트
 	@Override
 	public int insItemCount(InspectionVO inspectionVO) {
 		return qualityMapper.countInsItem(inspectionVO);
 	}
-	// 품질검사상세- insDetail 생성
+	// 자재품질검사등록모달- insDetail 생성
 	@Transactional
 	@Override
 	public int insertInsDetail(InspectionVO inspectionVO) {
 		return qualityMapper.insertInsDetail(inspectionVO);
 	}
-	// 품질검사상세- 검사리스트 출력
+	// 자재품질검사등록모달- 검사리스트 출력
 	@Override
 	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO) {
 		return qualityMapper.selectTestDetail(inspectionVO);
@@ -113,18 +136,29 @@ public class QualityServiceImpl implements QualityService{
 	public List<InspectionVO> insDetailList(InspectionVO inspectionVO) {
 		return qualityMapper.selectInsDetailList(inspectionVO);
 	}
-	// 품질검사상세 - insDetail - insValue 업데이트
+	//품질검사 등록
 	@Override
-	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> list) {
-		
-		for(InsDetailVO insDetailVO : list) {
-			
-			qualityMapper.updateInsValue(insDetailVO);
-		}
-		
-		
-		return list;
-	}	
+	public List<InspectionVO> insUpdate(List<InspectionVO> insData) {
+	    for (InspectionVO inspection : insData) {
+	        qualityMapper.updateIns(
+	            inspection.getUserId(),
+	            inspection.getUserName(),
+	            inspection.getNumberOfTests(),
+	            inspection.getNumberOfPasses(),
+	            inspection.getNumberOfFailed(),
+	            inspection.getTotalPass(),
+	            inspection.getInsCode());
+	        
+			// mtl_od.mtl_od_status 입고품질검사완료
+			qualityMapper.updateMtlOdSt(inspection);
+	    }
+	    return insData;
+	}
+
+	
+	
+	
+	
 	//검사기준목록
 	@Override
 	public List<InspectionVO> testList() {
@@ -151,11 +185,24 @@ public class QualityServiceImpl implements QualityService{
 		}
 		return list;
 	}
+	// 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
+	@Override
+	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> list) {
+	
+		for (InspectionVO inspectionVO : list) {
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
+			qualityMapper.updateMtlOdBack(inspectionVO);
+	
+		
+		}
+		return list;
+	}
+
 	
 	
 	
 	
-	// 출고
+// 출고
 	// 완제품품질검사 대기목록1
 	@Override
 	public List<InspectionVO> pOrderSelect() {
@@ -201,18 +248,25 @@ public class QualityServiceImpl implements QualityService{
 	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO) {
 		return qualityMapper.selectPDtlInsDList(inspectionVO);
 	}
-	// 완제품품질검사등록모달 - insDetail - insValue 업데이트
+	//품질검사 등록
 	@Override
-	public List<InsDetailVO> insValueUpdate2(List<InsDetailVO> list) {
-		
-		for(InsDetailVO insDetailVO : list) {
-			
-			qualityMapper.updateInsValue2(insDetailVO);
-		}
-		
-		
-		return list;
-	}	
+	public List<InspectionVO> insPdUpdate(List<InspectionVO> insPdData) {
+	    for (InspectionVO inspection : insPdData) {
+	        qualityMapper.updateIns(
+	            inspection.getUserId(),
+	            inspection.getUserName(),
+	            inspection.getNumberOfTests(),
+	            inspection.getNumberOfPasses(),
+	            inspection.getNumberOfFailed(),
+	            inspection.getTotalPass(),
+	            inspection.getInsCode());
+	        
+			// mtl_od.mtl_od_status 입고품질검사완료
+			qualityMapper.updatePdSt(inspection);
+	    }
+	    return insPdData;
+	}
+
 	
 	
 	
@@ -232,7 +286,31 @@ public class QualityServiceImpl implements QualityService{
 	
 	
 	
+	// 자재입고검사완료 조회페이지 - 입고처리 버튼
+	@Override
+	@Transactional 
+	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> up) {
+		
+		for (InspectionVO inspectionVO : up) {
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료
+			qualityMapper.updatePOrderDone(inspectionVO);
+			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
+			qualityMapper.insertPManage(inspectionVO);
+		}
+		return up;
+	}
+	// 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
+	@Override
+	public List<InspectionVO> pdBackUpdate(List<InspectionVO> pd) {
 	
+		for (InspectionVO inspectionVO : pd) {
+			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
+			qualityMapper.updatePdBack(inspectionVO);
+	
+		
+		}
+		return pd;
+	}
 	
 	
 	
@@ -359,29 +437,7 @@ public class QualityServiceImpl implements QualityService{
 		}
 		return list;
 	}
-	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
-	@Override
-	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> list) {
-	
-		for (InspectionVO inspectionVO : list) {
-			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
-			qualityMapper.updateMtlOdBack(inspectionVO);
-	
-		
-		}
-		return list;
-	}
-//	// 입고검사완료페이지 - 입고처리 버튼 - MtInVO로 post
-//	@Override
-//	public List<InspectionVO> mtInSelect(List<InspectionVO> inspectionVOs) {
-//		List<InspectionVO> list = new ArrayList<>();
-//		for (InspectionVO inspectionVO : inspectionVOs) {
-//		qualityMapper.selectMtIn(inspectionVO);
-//		list.add(inspectionVO);
-//		
-//	}
-//		return list;
-//	}
+
 
 
 

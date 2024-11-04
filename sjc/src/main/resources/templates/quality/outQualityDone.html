@@ -110,7 +110,7 @@
 									</tr>
 								</thead>
 <tbody>
-    <th:block th:each="done : ${incomingQualityDones}">
+    <th:block th:each="done : ${pDetailDones}">
         <tr>
             <td><input type=checkbox name=incomingQualityCheck></td>
             <td class="table-plus">[[${done.insDate}]]</td>
@@ -375,7 +375,7 @@
 		}
 		
 				$.ajax({
-			url: 'updateIncoming',
+			url: 'updateFinish',
 			method: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(list),
@@ -531,7 +531,7 @@
 		});
 		
 		$.ajax({
-			url: 'updateMtlOdBack',
+			url: 'updatePdBack',
 			method: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(data),
