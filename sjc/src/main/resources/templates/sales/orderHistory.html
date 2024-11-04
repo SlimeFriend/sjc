@@ -72,7 +72,6 @@
 			</div>
 			<div id="lackGridOrder" class="mb-20"></div>
 			<div id="gridOrder"></div>
-			<div id="lackGridOrderDetail" style="display : none"></div>
 			<div id="gridOrderDetail" style="display : none"></div>
 		</div>
 	</div>
@@ -83,7 +82,6 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			
-			const lackGridData = /*[[${lackOrd}]]*/[];
 			const gridData = /*[[${ord}]]*/[];
 			const gridModalData = /*[[${ordDetail}]]*/[];
 
@@ -124,12 +122,6 @@
 				}
 			});
 			
-			grid.getData().forEach(row => {
-			    if (row.ordStatus === '재고부족') {
-			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
-			    }
-			});
-			
 			const gridModal = new tui.Grid({
 				el : document.getElementById('gridOrderDetail'),
 				data : gridModalData,
@@ -163,6 +155,20 @@
 				}
 			});
 			
+			grid.getData().forEach(row => {
+			    if (row.ordStatus === '재고부족') {
+			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
+			    } else if (row.ordStatus === '계획반영') {
+			    	let ordCode = row.ordCode;
+			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-warning');
+	    		    gridModal.getData().forEach(row => {
+	    			    if (row.ordCode === ordCode) {
+	    			    	gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-warning');
+	    			    }
+	    			});
+			    }
+			});
+			
 			grid.on('click', (ev) => {
 			    const rowKey = ev.rowKey;
 			    const ordCodeValue = grid.getValue(rowKey, 'ordCode');
@@ -175,7 +181,6 @@
 			    		data : JSON.stringify({ordCode : ordCodeValue}),
 			    		success: function(response) {
 			    			console.log('Order details received:', response);
-			    			document.getElementById('lackGridOrderDetail').style.display = 'none';
 			    			document.getElementById('gridOrderDetail').style.display = 'block';
 			    			gridModal.resetData(response);
 			    			gridModal.refreshLayout();
