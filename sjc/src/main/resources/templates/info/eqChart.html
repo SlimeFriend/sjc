@@ -445,38 +445,74 @@ document.addEventListener('DOMContentLoaded', function() {
 	        }
 	    });	
 	}
-	
+	/*
 	function getChartData() {
 	    $.get('/getChartData', function(data) {
-	        // 새로운 카테고리
 	        const newCategory = data.categories[0];
 	        
-	        // 새로운 데이터 (성형기, 혼합기 값)
 	        const newData = [
 	            data.series[0].data[0],  // 성형기 값
 	            data.series[1].data[0]   // 혼합기 값
 	        ];
 	        
-	        // 차트에 데이터 추가
 	        lineChart.addData(newData, newCategory);
 	    });
 	}
-	
+	*/
+    function getChartData(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/getChartData?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+    	        const newCategory = data.categories[0];
+    	        
+    	        const newData = [
+    	            data.series[0].data[0],  // 성형기 값
+    	            data.series[1].data[0]   // 혼합기 값
+    	        ];
+    	        
+    	        lineChart.addData(newData, newCategory);                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }	
+	/*
 	function getEqLog() {
 	    $.get('/getEqLog', function(data) {
-	        // 새로운 카테고리
 	        const newCategory = data.categories[0];
 	        
-	        // 새로운 데이터 (성형기, 혼합기 값)
 	        const newData = [
 	            data.series[0].data[0],  // 성형기 값
 	            data.series[1].data[0]   // 혼합기 값
 	        ];
 	        
-	        // 차트에 데이터 추가
 	        lineChart.addData(newData, newCategory);
 	    });
-	}	
+	}
+	*/
+    function getEqLog(search = {}) {
+        const params = new URLSearchParams(search);
+        const url = `/getEqLog?${params.toString()}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+    	        const newCategory = data.categories[0];
+    	        
+    	        const newData = [
+    	            data.series[0].data[0],  // 성형기 값
+    	            data.series[1].data[0]   // 혼합기 값
+    	        ];
+    	        
+    	        lineChart.addData(newData, newCategory);                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }	
 
 });
 </script>
