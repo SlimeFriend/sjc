@@ -61,12 +61,14 @@
 		INSERT INTO ORD (ord_code, 
                  ord_date, 
                  dlv_req_date, 
-                 cp_code, 
+                 cp_code,
+                 ord_status, 
                  comm)
         VALUES ( #{ordCode}, 
                  SYSDATE,
                  #{dlvReqDate},
-                 #{cpCode}, 
+                 #{cpCode},
+                 #{ordStatus}, 
                  #{comm})
 	</insert>
 	
@@ -76,6 +78,19 @@
 	    VALUES ('ORDDETAIL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || ord_seq.NEXTVAL, 
 	    #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
+	
+	<select id="getTotalOrderQuantity" resultType="Integer">
+		SELECT COALESCE(SUM(od.ord_quantity), 0)
+		FROM   ord O JOIN ord_detail od
+					   ON o.ord_code = od.ord_code
+		WHERE  od.prd_code = #{prdCode}
+	</select>
+	
+	<select id="getStockQuantity" resultType="Integer">
+		SELECT COALESCE(SUM(stc_quantity), 0)
+		FROM   prd_management
+		WHERE  prd_code = #{prdCode}
+	</select>
 	
 	<!-- 주문내역 검색 기능 -->
 	<select id="searchOrder" resultType="orderVO">
