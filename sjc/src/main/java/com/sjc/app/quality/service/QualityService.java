@@ -8,7 +8,12 @@ import com.sjc.app.pr.service.PDetailVO;
 
 
 public interface QualityService {
-	//입고
+// 품질검사등록모달 공통
+	// insDetail - insValue 업데이트
+	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> insDetailVO);
+
+	
+//입고
 	// 자재입고품질검사 대기목록
 	// 발주목록전체
 	public List<InspectionVO> mtlOdList();
@@ -28,14 +33,15 @@ public interface QualityService {
 	// 자재품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> inspectionList(InspectionVO inspectionVO);
 	// 자재품질검사등록모달-insDetail 데이터 갯수 카운트
-	public int pDInsDCount(InspectionVO inspectionVO);
+	public int insItemCount(InspectionVO inspectionVO);
 	// 자재품질검사등록모달- insDetail 생성
-	public int pDtlInsDInsert(InspectionVO inspectionVO);
+	public int insertInsDetail(InspectionVO inspectionVO);
 	// 자재품질검사등록모달- 검사리스트 출력
-	public List<InspectionVO> pDtlTestSelect(InspectionVO inspectionVO);
-	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO);
-	// 자재품질검사등록모달 - insDetail - insValue 업데이트
-	public List<InsDetailVO> insValueUpdate2(List<InsDetailVO> insDetailVO);
+	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
+	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
+	// 품질검사등록
+	public List<InspectionVO> insUpdate(List<InspectionVO> insData);
+
 
 	
 	//검사기준목록
@@ -46,9 +52,11 @@ public interface QualityService {
 	// 자재입고검사완료  - 입고처리 버튼 - mtl_od.mtl_od_status 입고품질검사완료  
 	// 자재입고검사완료  - 입고처리 버튼 - mt_in으로 데이터 넣기
 	public List<InspectionVO> mtlOdMtInUpdateInsert(List<InspectionVO> inspectionVOs);
+	// 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
+	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs);
 	
 	
-	// 출고
+// 출고
 	// 완제품품질검사 대기목록1
 	public List<InspectionVO> pOrderSelect();
 	// 완제품품질검사 대기목록2
@@ -60,18 +68,16 @@ public interface QualityService {
 	// 완제품품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> pDtlInsSelect(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
-	public int insItemCount(InspectionVO inspectionVO);
+	public int pDInsDCount(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달- insDetail 생성
-	public int insertInsDetail(InspectionVO inspectionVO);
+	public int pDtlInsDInsert(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달- 검사리스트 출력
-	public List<InspectionVO> testDetailSelect(InspectionVO inspectionVO);
-	public List<InspectionVO> insDetailList(InspectionVO inspectionVO);
-	// 완제품품질검사등록모달 - insDetail - insValue 업데이트
-	public List<InsDetailVO> insValueUpdate(List<InsDetailVO> insDetailVO);
+	public List<InspectionVO> pDtlTestSelect(InspectionVO inspectionVO);
+	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO);
+	//완제품품질검사모달창 - pdetail.pdetail_code 완제품품질검사완료
+	public List<InspectionVO> insPdUpdate(List<InspectionVO> insPdData);
+	
 
-	
-	
-	
 	
 	
 	
@@ -82,6 +88,11 @@ public interface QualityService {
 	
 	// 제품출고검사완료 조회
 	public List<PDetailVO> outDoneInfoSelect();
+	// 완제품품질검완료페이지 - 입고처리 버튼 - porder.status 출고대기
+	// 완제품품질검완료페이지 - 입고처리 버튼 - prdManagement로 데이터 넣기
+	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> up);
+	// 완제품품질검완료페이지 - pdetail.status 반품
+	public List<InspectionVO> pdBackUpdate(List<InspectionVO> pd);
 	
 	
 	
@@ -121,8 +132,7 @@ public interface QualityService {
 	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs);
 	
-	// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
-	public List<InspectionVO> mtlOdBackUpdate(List<InspectionVO> inspectionVOs);
+
 	
 
 	
