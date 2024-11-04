@@ -1,6 +1,9 @@
 package com.sjc.app.mt.service;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +12,8 @@ public class MtlOdVO {
     // MTL_OD - 자재 발주 정보
     private String mtlOdCode;         // 자재 발주 코드
     private Integer mtlOdQuantity;    // 자재 발주 수량
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Asia/Seoul")
     private Date mtlOdDate;           // 자재 발주 일자
     private Date diliveryDate;        // 납기일
     private Integer price;            // 금액

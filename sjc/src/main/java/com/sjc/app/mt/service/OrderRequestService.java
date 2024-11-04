@@ -27,7 +27,8 @@ public interface OrderRequestService {
     void deleteOrderRequest(String orderRequestCode);
 
     // 발주 요청 코드로 발주 요청 세부 정보 조회
-    List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
+    List<MtlOdVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
+   
 
     // 업체 코드로 발주 요청 세부 정보 조회
     List<MtVO> getOrderRequestDetailsByCpCode(String cpCode);

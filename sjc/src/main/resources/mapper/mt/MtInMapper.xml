@@ -8,6 +8,7 @@
             MT_IN.LOT_NO AS lotNo,
             MT_IN.MTL_OD_CODE,
             MT.MT_CODE AS mtCode,
+            MTL_OD_DETAIL_CODE AS mtlOdDetailCode,
             MT.MT_NAME AS mtName,
             MT_IN.INQUANTITY AS inquantity,
             MT_IN.INPUT_DATE AS inputDate,
@@ -17,6 +18,7 @@
             MT_IN
         JOIN 
             MT ON MT_IN.MT_CODE = MT.MT_CODE
+            JOIN MTL_OD_DETAIL ON MT_IN.MTL_OD_CODE = MTL_OD_DETAIL.MTL_OD_CODE
         ORDER BY 
             MT_IN.LOT_NO
     </select>

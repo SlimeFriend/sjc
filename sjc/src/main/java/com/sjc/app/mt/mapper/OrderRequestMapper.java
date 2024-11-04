@@ -35,7 +35,7 @@ public interface OrderRequestMapper {
     void deleteOrderRequestDetails(String mtlOdCode);
 
     // 특정 발주 요청 코드로 발주 요청 상세 정보 조회
-    List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
+    List<MtlOdVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode);
 
     // 모든 업체 정보 조회
     List<CpVO> getAllCpInfo();

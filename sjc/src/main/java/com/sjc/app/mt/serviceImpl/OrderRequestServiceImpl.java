@@ -80,7 +80,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
      * 발주 요청 코드로 발주 요청 상세 정보 조회
      */
     @Override
-    public List<MtVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode) {
+    public List<MtlOdVO> getOrderRequestDetailsByOrderRequestCode(String orderRequestCode) {
         return orderRequestMapper.getOrderRequestDetailsByOrderRequestCode(orderRequestCode);
     }
 

@@ -19,7 +19,6 @@ public class MtVO {
     private Date updateDate;           // 재고 변동일
     private Integer currentStc;        // 현재 재고
   
-
     private Integer quantityRequired;  // 필요 수량
     private String prdName;            // 제품명
     private Integer totalRequired;     // 총 소요량
@@ -30,4 +29,5 @@ public class MtVO {
     private String mtlOdCode;          // 자재 발주 코드
     private String cpCode;             // 업체 코드
 
+    private String status;             // 상태 필드 추가
 }
