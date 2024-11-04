@@ -567,7 +567,7 @@
 	        SELECT 'PMG' || TO_CHAR(SYSDATE, 'YYYYMMDD') || LPAD(PRD_MANAGEMENT_SEQ.NEXTVAL, 4, '0') 
 	        FROM dual
 	    </selectKey>
-		    INSERT INTO mt_in (
+		    INSERT INTO prd_management (
 						        lot,
 						        prd_code, 
 						        md, 

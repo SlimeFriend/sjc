@@ -187,7 +187,7 @@
 	    function filterRows(status) {
 	        const rows = document.querySelectorAll('tbody > tr');
 	        rows.forEach(row => {
-	            const totalPassStatus = row.querySelector('td:nth-child(10)').innerText; // 9번째 열 (total_pass)
+	            const totalPassStatus = row.querySelector('td:nth-child(9)').innerText; // 9번째 열 (total_pass)
 	            if (status === '전체' || totalPassStatus === status) {
 	                row.style.display = ''; // 표시
 	            } else {
@@ -214,7 +214,7 @@
 
 			var obj = {};
 			
-			var insCode = td.eq(2).text();
+			var insCode = td.eq(3).text();
 			var cpCode = td.eq(4).text();
 			var numberOfTotalPass = Number(td.eq(9).text());
 			var mtlOdCode = td.eq(10).text();
@@ -269,6 +269,7 @@
 		
  	$("#failuer1").click(function(){
  		console.log("버튼 클릭됨");
+ 		console.log("insCode : " + insCode);
 
 		var checkbox = $("input[name=incomingQualityCheck]:checked");
 		var data = [];
@@ -280,7 +281,7 @@
 
 			var item = {
 
-			mtlOdCode : td.eq(11).text()
+			mtlOdCode : td.eq(10).text()
 			};
 			
 			console.log(item);

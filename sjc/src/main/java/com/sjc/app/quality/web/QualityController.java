@@ -169,6 +169,7 @@ public class QualityController {
 		}
 		// 품질검사 등록
 		@PostMapping("incomingQualityWaitHistory")
+		@ResponseBody
 		public List<InspectionVO> insUpdate(@RequestBody List<InspectionVO> insData) {
 			
 			
