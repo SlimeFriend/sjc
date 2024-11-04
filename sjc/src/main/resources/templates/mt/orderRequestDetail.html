@@ -1,88 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Content">
-
 <head>
     <title>발주 상세내역</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
 </head>
 
 <body>
     <h1>발주 상세내역</h1>
+    <div id="orderDetailsGrid" style="width: 100%; height: 400px;"></div>
+    <a href="/orderRequestList" class="btn btn-primary mt-3">발주 목록으로 돌아가기</a>
 
-    <!-- 발주 상세 내역 테이블 -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>자재 발주 상세 코드</th>
-                <th>자재 코드</th>
-                <th>자재 명</th>
-                <th>규격</th>
-                <th>단가</th>
-                <th>수량</th>
-                <th>주문 금액</th>
-                <th>발주 일자</th>
-                <th>상태</th>
-                <th>비고</th>
-            </tr>
-        </thead>
-        <tbody id="orderDetailsBody">
-            <!-- 발주 상세 항목을 반복 출력 -->
-            <tr th:each="detail : ${orderDetails}">
-                <td th:text="${detail.mtlOdDetailCode != null ? detail.mtlOdDetailCode : '-'}"></td>
-                <td th:text="${detail.mtCode != null ? detail.mtCode : '-'}"></td>
-                <td th:text="${detail.mtName != null ? detail.mtName : '-'}"></td>
-                <td th:text="${detail.specification != null ? detail.specification : '-'}"></td>
-                <td th:text="${detail.unitPrice != null ? detail.unitPrice : '-'}"></td>
-                <td th:text="${detail.quantity != null ? detail.quantity : '-'}"></td>
-                <td th:text="${detail.unitPrice != null && detail.quantity != null ? detail.unitPrice * detail.quantity : '-'}"></td>
-                <td th:text="${detail.mtlOdDate != null ? #dates.format(detail.mtlOdDate, 'yyyy-MM-dd') : '-'}"></td>
-                <td th:text="${detail.status != null ? detail.status : '발주대기'}"></td>
-                <td th:text="${detail.comm != null ? detail.comm : '-'}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <script th:inline="javascript">
+        const orderDetails = /*[[${orderDetails}]]*/ [];
 
-    <!-- 목록으로 돌아가는 버튼 -->
-    <a href="/orderRequestList" class="btn btn-primary">발주 목록으로 돌아가기</a>
-
-    <script>
-        // AJAX를 이용하여 발주 상세 내역을 불러오는 함수
-        function loadOrderDetails(cpCode) {
-            fetch(`/orderRequestDetails?cpCode=${encodeURIComponent(cpCode)}`)
-                .then(response => response.json())
-                .then(data => {
-                    let detailsTable = document.getElementById("orderDetailsBody");
-                    detailsTable.innerHTML = "";  // 기존 데이터를 초기화
-
-                    if (data.length === 0) {
-                        detailsTable.innerHTML = "<tr><td colspan='10'>발주 상세 내역이 없습니다.</td></tr>";
-                    } else {
-                        // 발주 상세 내역 테이블에 데이터 추가
-                        data.forEach(detail => {
-                            const orderAmount = detail.unitPrice && detail.quantity ? detail.unitPrice * detail.quantity : '-';
-                            const status = detail.status || '발주대기'; // 상태 기본값 설정
-                            detailsTable.innerHTML += `
-                                <tr>
-                                    <td>${detail.mtlOdDetailCode || '-'}</td>
-                                    <td>${detail.mtCode || '-'}</td>
-                                    <td>${detail.mtName || '-'}</td>
-                                    <td>${detail.specification || '-'}</td>
-                                    <td>${detail.unitPrice || '-'}</td>
-                                    <td>${detail.quantity || '-'}</td>
-                                    <td>${orderAmount}</td>
-                                    <td>${detail.mtlOdDate ? new Date(detail.mtlOdDate).toLocaleDateString() : '-'}</td>
-                                    <td>${status}</td>
-                                    <td>${detail.comm || '-'}</td>
-                                </tr>`;
-                        });
-                    }
-                })
-                .catch(error => console.error("Error fetching order details:", error));
-        }
+        const orderDetailsGrid = new tui.Grid({
+            el: document.getElementById('orderDetailsGrid'),
+            data: orderDetails,
+            columns: [
+                { header: '자재 발주 상세 코드', name: 'mtlOdDetailCode', align: 'center' },
+                { header: '자재 코드', name: 'mtCode', align: 'center' },
+                { header: '자재 명', name: 'mtName', align: 'center' },
+                { header: '규격', name: 'specification', align: 'center' },
+                { header: '단가', name: 'unitPrice', align: 'right' },
+                { header: '수량', name: 'quantity', align: 'right' },
+                {
+                    header: '주문 금액',
+                    name: 'orderAmount',
+                    align: 'right',
+                    formatter: item => item.value ? item.row.unitPrice * item.row.quantity : '-'
+                },
+                { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
+                { header: '상태', name: 'status', align: 'center' },
+                { header: '비고', name: 'comm', align: 'center' }
+            ]
+        });
     </script>
 </body>
 </html>

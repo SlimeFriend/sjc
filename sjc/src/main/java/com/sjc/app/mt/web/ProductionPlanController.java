@@ -38,7 +38,11 @@ public class ProductionPlanController {
      */
     @GetMapping("/getMaterialsByPlan")
     @ResponseBody
-    public List<MtVO> getMaterialsByPlan(@RequestParam String planCode) {
-        return materialService.getMaterialsByPlanCode(planCode);
+    public List<MtVO> getMaterialsByPlan(@RequestParam("planCode") String planCode) {
+        System.out.println("Requested planCode: " + planCode);
+        List<MtVO> materials = materialService.getMaterialsByPlanCode(planCode);
+        System.out.println("Fetched materials from service: " + materials);
+        return materials;
     }
+
 }

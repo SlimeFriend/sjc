@@ -22,38 +22,37 @@
             PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
     </select>
 
-    <!-- 특정 생산 계획 코드로 자재 조회 - 자재의 총 필요 수량을 계산하여 반환 -->
-    <select id="selectMaterialsByPlanCode" parameterType="String" resultMap="PlanMaterialResultMap">
-        SELECT 
-            p.PLAN_CODE,
-            bd.MT_CODE,
-            pd.PRD_NAME,
-            pd.QUANTITY,
-            m.MT_NAME,
-            m.CURRENT_STC,
-            m.SAFETY_STOCK,
-            SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
-        FROM 
-            PLAN p
-        JOIN 
-            PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
-        JOIN 
-            BOM b ON pd.PRD_CODE = b.PRD_CODE
-        JOIN 
-            B_DETAIL bd ON b.BOM_CODE = bd.BOM_CODE
-        JOIN 
-            MT m ON bd.MT_CODE = m.MT_CODE
-        WHERE 
-            p.PLAN_CODE = #{planCode}
-        GROUP BY 
-            p.PLAN_CODE, 
-            bd.MT_CODE,
-            pd.PRD_NAME,
-            pd.QUANTITY,
-            m.MT_NAME, 
-            m.CURRENT_STC, 
-            m.SAFETY_STOCK
-    </select>
+    <!-- 특정 제품 코드(prdCode)로 자재 조회 - 자재의 총 필요 수량을 계산하여 반환 -->
+<select id="selectMaterialsByPlanCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
+    SELECT
+        bd.MT_CODE,
+        m.MT_NAME,
+        SUM(pd.QUANTITY) AS QUANTITY,
+        (SELECT COALESCE(SUM(INQUANTITY), 0)
+         FROM MT_IN
+         WHERE MT_IN.MT_CODE = m.MT_CODE) AS CURRENT_STC,
+        m.SAFETY_STOCK,
+        SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
+    FROM
+        PLAN p
+    JOIN
+        PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
+    JOIN
+        BOM b ON pd.PRD_CODE = b.PRD_CODE
+    JOIN
+        B_DETAIL bd ON b.BOM_CODE = bd.BOM_CODE
+    JOIN
+        MT m ON bd.MT_CODE = m.MT_CODE
+    WHERE
+        p.PLAN_CODE = #{planCode}  <!-- planCode를 기준으로 조회 -->
+    GROUP BY
+        bd.MT_CODE,
+        m.MT_NAME,
+        m.SAFETY_STOCK,
+        m.MT_CODE
+    ORDER BY
+        m.MT_NAME
+</select>
 
     <!-- 자재 조회 결과 매핑 - selectMaterialsByPlanCode의 결과와 자재 정보를 MtVO 객체에 매핑 -->
     <resultMap id="PlanMaterialResultMap" type="com.sjc.app.mt.service.MtVO">

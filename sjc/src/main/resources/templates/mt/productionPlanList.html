@@ -1,128 +1,126 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 
 <head>
-    <meta charset="UTF-8">
-    <title>생산 계획 목록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .low-stock {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>생산 계획 목록</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<style>
+.low-stock {
+	color: red;
+	font-weight: bold;
+}
+</style>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>생산 계획 목록</h1>
+	<div class="main-container">
+		<div class="container">
+			<h1>생산 계획 목록</h1>
 
-            <!-- 생산 계획 목록 테이블 -->
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>선택</th>
-                        <th>생산계획코드</th>
-                        <th>제품명</th>
-                        <th>시작일자</th>
-                        <th>종료일자</th>
-                        <th>수량</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="plan : ${productionPlans}">
-                        <td><input type="radio" name="planRadio" class="plan-radio" th:value="${plan.planCode}" th:data-quantity="${plan.planDetails[0].quantity}" /></td>
-                        <td th:text="${plan.planCode}">생산계획 코드</td>
-                        <td><div th:each="detail : ${plan.planDetails}"><span th:text="${detail.prdName}">제품명</span><br/></div></td>
-                        <td th:text="${plan.startDate}">시작일자</td>
-                        <td th:text="${plan.endDate}">종료일자</td>
-                        <td><div th:each="detail : ${plan.planDetails}"><span th:text="${detail.quantity}">수량</span><br/></div></td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(productionPlans)}">
-                        <td colspan="6" class="text-center">등록된 생산 계획이 없습니다.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-right">
-                <button class="btn btn-primary" id="selectProductionPlans">선택</button>
-            </div>
+			<!-- 생산 계획 목록 Grid -->
+			<div id="productionPlanGrid" style="width: 100%; height: 300px;"></div>
 
-            <!-- 생산계획별 자재 재고 테이블 -->
-            <h2>생산계획별 자재재고</h2>
-            <table id="materialsTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>자재명</th>
-                        <th>요청수량</th>
-                        <th>현재재고</th>
-                        <th>안전재고</th>
-                        <th>총소요량</th>
-                        <th>부족수량</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:if="${#lists.isEmpty(materials)}">
-                        <td colspan="6" class="text-center">등록된 자재가 없습니다.</td>
-                    </tr>
-                    <tr th:each="material : ${materials}">
-                        <td th:text="${material.mtName}">자재명</td>
-                        <td th:text="${material.quantity}">요청수량</td>
-                        <td th:text="${material.currentStc}" class="current-stc">현재재고</td>
-                        <td th:text="${material.safetyStock}">안전재고</td>
-                        <td th:text="${material.totalRequired}">총소요량</td>
-                        <td th:text="${material.currentStc - material.totalRequired}"
-                            th:classappend="${(material.currentStc - material.totalRequired) < 0} ? 'low-stock' : ''">
-                            <span th:text="${material.currentStc - material.totalRequired} + ' ' + ((material.currentStc - material.totalRequired) < 0 ? '(부족)' : '(충분)')"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+			<h2 class="mt-4">자재 목록</h2>
+			<!-- 자재 목록 Grid -->
+			<div id="materialsGrid" style="width: 100%; height: 300px;"></div>
+		</div>
+	</div>
 
-    <script>
-    document.getElementById('selectProductionPlans').addEventListener('click', function () {
-        const selectedPlan = document.querySelector('.plan-radio:checked');
-        if (selectedPlan) {
-            const planCode = selectedPlan.value;
-            const requestedQuantity = selectedPlan.getAttribute('data-quantity');
+	<script th:inline="javascript">
+        // 타임리프 데이터를 JSON으로 변환
+        const productionPlans = /*[[${productionPlans}]]*/ [];
+        const materials = /*[[${materials}]]*/ [];
 
-         // 선택된 생산 계획에 따라 자재 정보를 가져옴
-            fetch(`/getMaterialsByPlan?planCode=${planCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    const materialsTableBody = document.querySelector('#materialsTable tbody');
-                    materialsTableBody.innerHTML = ''; 
+        // 데이터를 반복하여 제품명과 수량을 개별 행으로 표현
+        const expandedData = productionPlans.flatMap(plan => 
+            plan.planDetails.map(detail => ({
+                planCode: plan.planCode,
+                productName: detail.prdName,
+                quantity: detail.quantity,
+                startDate: plan.startDate,
+                endDate: plan.endDate,
+                prdCode: detail.prdCode
+            }))
+        );
 
-                    if (data.length === 0) {
-                        materialsTableBody.innerHTML = `<tr><td colspan="6" class="text-center">등록된 자재가 없습니다.</td></tr>`;
-                    } else {
-                        data.forEach(material => {
-                            const shortage = material.currentStc - material.totalRequired;
-                            const row = `<tr>
-                                <td>${material.mtName}</td>
-                                <td>${material.quantity}</td>
-                                <td class="current-stc">${material.currentStc}</td>
-                                <td>${material.safetyStock}</td>
-                                <td>${material.totalRequired}</td>
-                                <td class="${shortage < 0 ? 'low-stock' : ''}">${shortage} ${shortage < 0 ? '(부족)' : '(충분)'}</td>
-                            </tr>`;
-                            materialsTableBody.innerHTML += row;
-                        });
+     // Toast UI Grid 설정 및 데이터 로드
+        const productionPlanGrid = new tui.Grid({
+            el: document.getElementById('productionPlanGrid'),
+            data: expandedData,
+            columns: [
+                { header: '생산계획코드', name: 'planCode', align: 'center' },
+                { header: '제품명', name: 'productName', align: 'center' },
+                { header: '수량', name: 'quantity', align: 'right' },
+                { header: '시작일자', name: 'startDate', align: 'center' },
+                { header: '종료일자', name: 'endDate', align: 'center' }
+            ]
+        });
+
+        const materialsGrid = new tui.Grid({
+            el: document.getElementById('materialsGrid'),
+            data: [],
+            columns: [
+                { header: '자재명', name: 'mtName', align: 'center' },
+                { header: '요청수량', name: 'quantity', align: 'right' },
+                { header: '현재재고', name: 'currentStc', align: 'right' },
+                { header: '안전재고', name: 'safetyStock', align: 'right' },
+                { header: '총소요량', name: 'totalRequired', align: 'right' },
+                { 
+                    header: '부족수량', 
+                    name: 'shortage', 
+                    align: 'right',
+                    formatter: (item) => {
+                        const shortage = item.row.currentStc - item.row.totalRequired;
+                        return `<span class="${shortage < 0 ? 'low-stock' : ''}">${shortage} ${shortage < 0 ? '(부족)' : '(충분)'}</span>`;
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching materials:', error);
-                });
-        } else {
-            alert('생산 계획을 선택해 주세요.');
-        }
-    });
+                }
+            ]
+        });
+
+        // 행 클릭 이벤트 처리 - 클릭한 행의 planCode에 따라 자재 목록 업데이트
+        productionPlanGrid.on('click', (ev) => {
+            const rowKey = ev.rowKey;
+            const rowData = productionPlanGrid.getRow(rowKey);
+
+            if (rowData && rowData.planCode) {
+                const planCode = rowData.planCode;
+
+                // 기존 자재 목록 초기화
+                materialsGrid.resetData([]);
+
+                // 새로운 자재 목록 가져오기
+                fetch(`/getMaterialsByPlan?planCode=${encodeURIComponent(planCode)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Fetched materials for planCode:", planCode, data);  // 선택된 planCode와 데이터 확인
+                        // 자재 목록 업데이트
+                        materialsGrid.resetData(data.map(material => ({
+                            ...material,
+                            shortage: material.currentStc - material.totalRequired
+                        })));
+                    })
+                    .catch(error => {
+                        console.error('Error fetching materials:', error);
+                        alert(`Error fetching materials: ${error.message}`);
+                    });
+            }
+        });
+
+
     </script>
 </body>
 </html>
