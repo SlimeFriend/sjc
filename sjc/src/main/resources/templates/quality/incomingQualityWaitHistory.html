@@ -9,7 +9,7 @@
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			<h2 class="h2 mb-20">입고품질검사 대기 목록</h2>
-			<div class="pd-30 card-box mb-20">
+<!-- 			<div class="pd-30 card-box mb-20">
 				<form>
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
@@ -45,14 +45,16 @@
 							<input class="form-control" type="date">
 						</div>
 						<div class="col-sm-12 col-md-3">
-							<button class="btn btn-dark">조회</button>
+							<button class="btn btn-dark">저장</button>
 							<button class="btn btn-dark">초기화</button>
 						</div>
 					</div>
 				</form>
-			</div>
+			</div> -->
+			<h2 class="h5 mb-20">발주목록</h2>
 			<div id="gridOrder"></div>
-			<div id="gridOrderDetail" style="opacity : 0"></div>
+			<h2 class="h5 mb-20">발주상세목록</h2>
+			<div id="gridOrderDetail"></div>
 
 			
 			<div class="modal" id="myModal">
@@ -207,12 +209,6 @@
 					align : 'center',
 					resizable: true,
 				}, {
-					header : '발주상세상태',
-					name : 'mtlOdDetailStatus',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
 					header : '자재코드',
 					name : 'mtCode',
 					align : 'center',
@@ -261,8 +257,6 @@
 			});
 			
 			let mtlOdDetailCodeValue = "";
-			let mtName = "";
-		    let remainData = [];
 		    
 			
 		    griddetail.on('click', (ev) => {
@@ -552,7 +546,6 @@
 			});
 	    
 					    
-			let insData = [];
 					    
 			document.getElementById('registerBtn').addEventListener('click', () => {
 				const requestData = gridInspectionModal.getData();
