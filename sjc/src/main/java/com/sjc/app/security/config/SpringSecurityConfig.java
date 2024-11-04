@@ -39,7 +39,15 @@ public class SpringSecurityConfig {
 				//로그인페이지
 			    .loginPage("/logins")
 			    .loginProcessingUrl("/login")//스프링 시큐리티
-				.defaultSuccessUrl("/main"))
+				.defaultSuccessUrl("/main")
+                // 로그인 실패 처리
+                .failureUrl("/logins?error=true") // 실패시 이동할 URL
+                .failureHandler((request, response, exception) -> {
+                    String errorMessage = "아이디 또는 비밀번호가 올바르지 않습니다.";
+                    request.getSession().setAttribute("errorMessage", errorMessage);
+                    response.sendRedirect("/logins?error=true");
+                })
+				)
 		.logout(logout -> logout
 				.logoutSuccessUrl("/main")
 				.invalidateHttpSession(true)); // 로그아웃 시 세션 삭제
