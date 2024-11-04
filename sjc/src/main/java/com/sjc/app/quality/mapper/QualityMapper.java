@@ -16,7 +16,7 @@ public interface QualityMapper {
 	// insDetail - insValue 업데이트
 	public void updateInsValue (InsDetailVO insDetailVO);
 	// 품질검사등록
-	public int updateIns(@Param("userId") int userId, @Param("userName") String userName, @Param("numberOfTests") int numberOfTests, @Param("numberOfPasses") int numberOfPasses, @Param("numberOfFailed") int numberOfFailed, @Param("totalPass") String totalPass, @Param("insCode") String insCode);
+	public int updateIns(@Param("userId") int userId, @Param("userName") String userName, @Param("numberOfTests") int numberOfTests, @Param("numberOfPasses") int numberOfPasses, @Param("numberOfFailed") int numberOfFailed, @Param("totalPass") String totalPass, @Param("numberOfTotalPass") int numberOfTotalPass, @Param("insCode") String insCode);
 
 //입고
 	// 발주목록전체
