@@ -54,32 +54,32 @@ public class InfoUserController {
 //	public String userGrid() {
 //		return "user/listGridFetch";
 //	}
-	
+	// 사용자 관리 페이지 - 테스트
 	@GetMapping("infoUserListGridFetch")
 	public String infoUserListGridFetch() {
 		return "info/userListGridFetch";
 	}
-	
+	// 사용자 관리 페이지 - 테스트
 	@GetMapping("infoUserListGridUpdate")
 	public String infoUserListGridUpdate() {
 		return "info/userListGridUpdate";
 	}
-	
+	// 사용자 관리 페이지 - 테스트
 	@GetMapping("infoUserListGridApi")
 	public String infoUserListGridApi() {
 		return "info/userListGridApi";
 	}
-	
+	// 사용자 관리 페이지 - 테스트
 	@GetMapping("infoUserListGridApiInsert")
 	public String infoUserListGridApiInsert() {
 		return "info/userListGridApiInsert";
 	}
-	
+	// 사용자 관리 페이지 - 테스트
 	@GetMapping("infoUserListGrid")
 	public String infoUserListGrid() {
 		return "info/userListGrid";
 	}
-	
+	// 사용자 관리 페이지
 	@GetMapping("infoUserList")
 	public String infoUserList() {
 		return "info/userList";

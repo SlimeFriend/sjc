@@ -15,10 +15,14 @@ public class InfoPrdController {
 	InfoPrdController(InfoPrdService infoPrdService){
 		this.infoPrdService = infoPrdService;
 	}
-
+	// 제품 관리 페이지 - 테스트
 	@GetMapping("infoPrdListGridFetch")
 	public String infoPrdListGridFetch() {
 		return "info/prdListGridFetch";
 	}
-
+	// 제품 관리 페이지
+	@GetMapping("infoPrdList")
+	public String infoPrdList() {
+		return "info/prdList";
+	}
 }

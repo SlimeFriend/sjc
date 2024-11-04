@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class InfoProcessRestController {
 	
 	private final InfoProcessService processService;
-
+	// 공정 조회
 	@GetMapping("processes")
 	public List<ProcessVO> processList(ProcessVO processVO){
 		return processService.processList(processVO);

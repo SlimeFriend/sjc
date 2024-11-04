@@ -17,12 +17,12 @@ import lombok.RequiredArgsConstructor;
 public class InfoCpRestController {
 	
 	private final InfoCpService infoCpService;
-
+	// 업체 조회
 	@GetMapping("cps")
 	public List<CpVO> cpList(CpVO cpVO){
 		return infoCpService.cpList(cpVO);
 	}
-
+	// 업체 등록
     @PutMapping("cps")
     public List<CpVO> updateUsers(@RequestBody List<CpVO> cpVOs) {
         return infoCpService.modifyCps(cpVOs);

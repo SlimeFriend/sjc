@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoEqMapper">
+
+    <insert id="insertEqLog" parameterType="EqLogVO">
+        INSERT INTO test_eq_log (
+            eq_log_id
+            ,eq_name
+            ,eq_log_data
+            ,eq_log_date
+        ) VALUES (
+            seq_test_eq_log.nextval
+            ,#{eqName}
+            ,#{eqLogData}
+            ,SYSDATE
+        )
+    </insert>
+    
+    <select id="selectEqLog" resultType="Double" parameterType="EqLogVO">
+    SELECT 	eq_log_data
+    FROM	(
+        SELECT 
+            eq_log_id
+            ,eq_name
+            ,eq_log_data
+            ,eq_log_date
+        FROM test_eq_log
+        WHERE eq_name = #{eqName}
+        ORDER BY eq_log_date DESC
+    )
+    WHERE	ROWNUM = 1
+    </select>
+    
+    <select id="selectEqLogTime" resultType="String">
+    SELECT 	to_char(eq_log_date,'MM-dd HH:mm:ss')
+    FROM	(
+        SELECT 
+            eq_log_id
+            ,eq_name
+            ,eq_log_data
+            ,eq_log_date
+        FROM test_eq_log
+        ORDER BY eq_log_date DESC
+    )
+    WHERE	ROWNUM = 1
+    </select>
+	
+</mapper>

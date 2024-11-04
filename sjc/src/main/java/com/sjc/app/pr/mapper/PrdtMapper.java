@@ -94,4 +94,10 @@ public interface PrdtMapper {
 	public int insertDetail(@Param("linePrdVO") LinePrdVO linePrdVO,@Param("porderCode") String porderCode);
 	
 	public List<PlanDVO> planPrd(String planCode);
+	
+	// 생산 계획에 표시할 주문코드
+	public List<String> oList();
+	
+	// 주문코드 선택 시 나올 주문 제품 
+	public List<ProductVO> ordPrd(String ordCode);
 }

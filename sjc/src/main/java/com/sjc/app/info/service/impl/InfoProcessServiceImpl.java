@@ -25,6 +25,7 @@ public class InfoProcessServiceImpl implements InfoProcessService {
 		this.infoProcessMapper = infoProcessMapper;
 	}
 	
+	// 공정 조회
 	@Override
 	public List<ProcessVO> processList(ProcessVO processVO) {
 		return infoProcessMapper.selectProcessAllList(processVO);

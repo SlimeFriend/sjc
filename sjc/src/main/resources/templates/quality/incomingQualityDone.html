@@ -38,14 +38,14 @@
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
 				<div class="card-box mb-30">
-				
-				
-				
-				<div class="filter-buttons mb-3">
-    <button id="filter-pass" class="btn btn-secondary">합격</button>
-    <button id="filter-fail" class="btn btn-secondary">불합격</button>
-    <button id="filter-all" class="btn btn-secondary">전체</button>
-</div>
+
+
+
+					<div class="filter-buttons mb-3">
+						<button id="filter-pass" class="btn btn-secondary">합격</button>
+						<button id="filter-fail" class="btn btn-secondary">불합격</button>
+						<button id="filter-all" class="btn btn-secondary">전체</button>
+					</div>
 
 
 
@@ -54,102 +54,102 @@
 						<p style="font-size: 300%">입고검사 완료목록</p>
 
 
-				</div>
 					</div>
-					
-					<div class="pb-20">
-						<div id="DataTables_Table_2_wrapper"
-							class="dataTables_wrapper dt-bootstrap4 no-footer">
-							<div class="dt-buttons btn-group flex-wrap">
+				</div>
 
-								<button class="btn btn-secondary buttons-copy buttons-html5"
-									tabindex="0" aria-controls="DataTables_Table_2" type="button">
-									<span>Copy</span>
-								</button>
-								<button class="btn btn-secondary buttons-csv buttons-html5"
-									tabindex="0" aria-controls="DataTables_Table_2" type="button">
-									<span>CSV</span>
-								</button>
-								<button class="btn btn-secondary buttons-pdf buttons-html5"
-									tabindex="0" aria-controls="DataTables_Table_2" type="button">
-									<span>PDF</span>
-								</button>
-								<button class="btn btn-secondary buttons-print" tabindex="0"
-									aria-controls="DataTables_Table_2" type="button">
-									<span>Print</span>
-								</button>
-							</div>
-							<div id="DataTables_Table_2_filter" class="dataTables_filter">
-								<label>Search:<input type="search"
-									class="form-control form-control-sm" placeholder="Search"
-									aria-controls="DataTables_Table_2"></label>
-							</div>
+				<div class="pb-20">
+					<div id="DataTables_Table_2_wrapper"
+						class="dataTables_wrapper dt-bootstrap4 no-footer">
+						<div class="dt-buttons btn-group flex-wrap">
 
-
-
-						<button type="button" class="btn btn-primary" id="success1" >입고처리</button>
-						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
-							<table
-								class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
-								id="DataTables_Table_2" role="grid">
-								<thead>
-									<tr role="row">
-										<th class="table-plus datatable-nosort sorting_disabled"></th>
-										<th>품질검사 날짜</th>
-										<th>품질검사 코드</th>
-										<th>품질검사 상태</th>
-										<th>거래처코드</th>
-										<th>자재명</th>
-										<th>규격</th>
-										<th>검사수</th>
-										<th>합격수</th>
-										<th>합격여부</th>
-										<th>자재발주코드</th>
-										<th>자재코드</th>
-										<th>직원번호</th>
-									</tr>
-								</thead>
-<tbody>
-    <th:block th:each="done : ${incomingQualityDones}">
-        <tr>
-            <td><input type=checkbox name=incomingQualityCheck></td>
-            <td class="table-plus">[[${done.insDate}]]</td>
-            <td><h5 class="font-16">[[${done.insCode}]]</h5></td>
-            <td>[[${done.insStatus}]]</td>
-            <td>[[${done.cpCode}]]</td>
-            <td>[[${done.mtName}]]</td>
-            <td>[[${done.specification}]]</td>
-            <td>[[${done.numberOfTests}]]</td>
-            <td>[[${done.numberOfPasses}]]</td>
-            <td>[[${done.totalPass}]]</td>
-            <td>[[${done.mtlOdCode}]]</td>
-            <td>[[${done.mtCode}]]</td>
-            <td>[[${done.userId}]]</td>
-            <td><input type="text" name="comm"></td>
-        </tr>
-    </th:block>
-</tbody>
-							</table>
-							<div class="col-lg-12" id="ex3_Result1"></div>
-							<div class="col-lg-12" id="ex3_Result2"></div>
+							<button class="btn btn-secondary buttons-copy buttons-html5"
+								tabindex="0" aria-controls="DataTables_Table_2" type="button">
+								<span>Copy</span>
+							</button>
+							<button class="btn btn-secondary buttons-csv buttons-html5"
+								tabindex="0" aria-controls="DataTables_Table_2" type="button">
+								<span>CSV</span>
+							</button>
+							<button class="btn btn-secondary buttons-pdf buttons-html5"
+								tabindex="0" aria-controls="DataTables_Table_2" type="button">
+								<span>PDF</span>
+							</button>
+							<button class="btn btn-secondary buttons-print" tabindex="0"
+								aria-controls="DataTables_Table_2" type="button">
+								<span>Print</span>
+							</button>
 						</div>
+						<div id="DataTables_Table_2_filter" class="dataTables_filter">
+							<label>Search:<input type="search"
+								class="form-control form-control-sm" placeholder="Search"
+								aria-controls="DataTables_Table_2"></label>
+						</div>
+
+
+
+						<button type="button" class="btn btn-primary" id="success1">입고처리</button>
+						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
+						<table
+							class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
+							id="DataTables_Table_2" role="grid">
+							<thead>
+								<tr role="row">
+									<th class="table-plus datatable-nosort sorting_disabled"></th>
+									<th>품질검사 날짜</th>
+									<th>품질검사 코드</th>
+									<th>품질검사 상태</th>
+									<th>거래처코드</th>
+									<th>자재명</th>
+									<th>규격</th>
+									<th>검사수</th>
+									<th>합격수</th>
+									<th>합격여부</th>
+									<th>자재발주코드</th>
+									<th>자재코드</th>
+									<th>직원번호</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:each="done : ${incomingQualityDones}">
+									<tr>
+										<td><input type=checkbox name=incomingQualityCheck></td>
+										<td class="table-plus">[[${done.insDate}]]</td>
+										<td><h5 class="font-16">[[${done.insCode}]]</h5></td>
+										<td>[[${done.insStatus}]]</td>
+										<td>[[${done.cpCode}]]</td>
+										<td>[[${done.mtName}]]</td>
+										<td>[[${done.specification}]]</td>
+										<td>[[${done.numberOfTests}]]</td>
+										<td>[[${done.numberOfPasses}]]</td>
+										<td>[[${done.totalPass}]]</td>
+										<td>[[${done.mtlOdCode}]]</td>
+										<td>[[${done.mtCode}]]</td>
+										<td>[[${done.userId}]]</td>
+										<td><input type="text" name="comm"></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+						<div class="col-lg-12" id="ex3_Result1"></div>
+						<div class="col-lg-12" id="ex3_Result2"></div>
 					</div>
-					<!-- Export Datatable End -->
 				</div>
+				<!-- Export Datatable End -->
 			</div>
-			
-		
-			
-			
-			
-			
-			
 		</div>
 
 
 
- 	<!-- buttons for Export datatable -->
-<!-- 	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+
+
+
+
+	</div>
+
+
+
+	<!-- buttons for Export datatable -->
+	<!-- 	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
 	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
 	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
@@ -157,22 +157,11 @@
 	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script> -->
 	<!-- Datatable Setting js -->
-<!-- 	<script src="vendors/scripts/datatable-setting.js"></script> -->
+	<!-- 	<script src="vendors/scripts/datatable-setting.js"></script> -->
 </body>
 
 <script>
-/*   	document.addEventListener('DOMContentLoaded', function() {
 
-		//메타태그를 생성해서 메타태그를 가진 정보를 이용해서 값을 불러오는 코드.
- 		$('tbody > tr').on('click', function(event) {
-			let trTag = event.currentTarget;
-			let insCode = $(trTag).children().eq(1).text(); // tr태그 안에 있는 두 번째를 찾음.
-			let url = '/incomingQualityTestInfo?insCode=' + insCode;
-			location.href = url;
-
-		});
-
-	});   */ 
 	
 	
 	document.addEventListener('DOMContentLoaded', function() {
@@ -204,114 +193,7 @@
 	    }
 	    
 	    
-	    
-	    
-	    
-	    
-/* 	    		$("#success1").on('click', updateAjax);
-		console.log("버튼 클릭됨");
-		
-		function updateAjax(event){
-			// 1) 보낼 데이터 가져오기
-			let dataObj = getFormData();
-			// 2) AJAX
-			$.ajax("inspectionDoneUpdate", {
-				type : 'post', //method
-				//data : dataObj // 객체 => QueryString
-				
-				//JSON : @RequestBody 선언되어있을 때 이 방식.
-				contentType : 'application/json', 
-				data:JSON.stringify(dataObj)
-				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
-				/*beforeSend: function (xhr) {
-					xhr.setRequestHeader(csrfHeader, csrfToken);
-				}*/
-/* 			})
-			.done((result)=>{
-				console.log(result);
-			})
-			.done((data)=>{
-				//return 'result : ' + data.result;
-				if(data.result){
-					alert('성공적으로 수정되었습니다.');
-					
-				}else{
-					alert('수정되지 않았습니다.');
-				}
-			})
-			.fail((err)=>console.log(err));
-		}  */
-		
-/* 		function getFormData(){
-			
-			let formAry1 = $("input[name=incomingQualityCheck]:checked").serializeArray();
-			console.log(formAry1);
-			let formObj1 = {};
-			console.log(formObj1);
-			$.each(formAry1, function(idx, tag){
-				// tag) { name : "employeeId", value : "100"} 
-				formObj1[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
-												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
-				// formObj["employeeId"] = "100";
-			});
-			
-			return formObj1;
-			
-		} */
-		
-/* 		
-		
-				$("#success1").on('click', updateAjax);
-		console.log("버튼 클릭됨"); */
-		
-/* 		function updateAjax(event){
-			// 1) 보낼 데이터 가져오기
-			let dataObj = getFormData();
-			// 2) AJAX
-			$.ajax("mtlOdDoneUpdate", {
-				type : 'post', //method
-				//data : dataObj // 객체 => QueryString
-				
-				//JSON : @RequestBody 선언되어있을 때 이 방식.
-				contentType : 'application/json', 
-				data:JSON.stringify(dataObj)
-				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
-				/*beforeSend: function (xhr) {
-					xhr.setRequestHeader(csrfHeader, csrfToken);
-				}*/
-/* 			})
-			.done((result)=>{
-				console.log(result);
-			})
-			.done((data)=>{
-				//return 'result : ' + data.result;
-				if(data.result){
-					alert('성공적으로 수정되었습니다.');
-					
-				}else{
-					alert('수정되지 않았습니다.');
-				}
-			})
-			.fail((err)=>console.log(err));
-		} */ 
-		
-/* 		
-		function getFormData(){
-			
-			let formAry2 = $("input[name=incomingQualityCheck]:checked").serializeArray();
-			console.log(formAry2);
-			let formObj2 = {};
-			console.log(formObj2);
-			$.each(formAry2, function(idx, tag){
-				// tag) { name : "employeeId", value : "100"} 
-				formObj[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
-												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
-				// formObj["employeeId"] = "100";
-			});
-			
-			return formObj2;
-			
-		} */
+
 
  	$("#success1").click(function(){
  		console.log("버튼 클릭됨");
@@ -326,24 +208,6 @@
 			var tr = $(this).closest("tr")
 			var td = tr.children();
 
-			/* var item = {
-			//insDate : td.eq(1).text(),
-			insCode : td.eq(2).text(),
-			//insStatus : td.eq(3).text(),
-			cpCode : td.eq(4).text(),
-			//mtName : td.eq(5).text(),
-			//specification : td.eq(6).text(),
-			//numberOfTests : td.eq(7).text(),
-			numberOfPasses : td.eq(8).text(),
-			//totalPass : td.eq(9).text(),
-			mtlOdCode : td.eq(10).text(),
-			mtCode : td.eq(11).text(),
-			userId : td.eq(12).text()
-			};
-			
-			console.log(item);
-
-			data.push(item); */
 			var obj = {};
 			
 			var insCode = td.eq(2).text();
@@ -392,112 +256,11 @@
 		})
 		 .fail(err => console.log(err))
 		});
-
-		
-
-		
-/*  		function makeData(){
-			let dataAry = data.serializeArray();
-			console.log(dataAry);
-			
-			let dataObj = {};
-			$.each(dataAry, function(idx, tag){
-				dataObj["insCode"] = insCode; 
-				dataObj["cpCode"] = cpCode;
-				dataObj["numberOfPasses"] = numberOfPasses; 
-				dataObj["mtlOdCode"] = mtlOdCode;
-				dataObj["mtCode"] = mtCode;
-				dataObj["userId"] = userId;
-				dataObj["comm"] = comm;  
-			});
-			return dataObj;
-		}  */
-/* 		$.ajax({
-  			url : 'insertMtIn',
-  			method : 'post',
-  			contentType : 'application/json',
-  			data : JSON.stringify(list)
-  		}) */
-  		 /* .done(datas => {
-  			 if(datas.result) {
-  				 let successCnt = datas.total - datas.empList.length;
-  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
-  				 alert(msg);
-  			 }
-  		 }) */
   		
 		
  	});
 		
 	
-		
-		
-		
- 	/* function makeData(){
-  		let flag = true;
-  		let list = [];
-  		
-		//체크한 행만 전송할 데이터 만들기. 은행계좌가 입력된 경우만 포함함.
-  		$("input[name='incomingQualityCheck']:checked").each(function(i, checkbox){
-  			var tr = $(checkbox).parent().parent();
-			var td = $(tr).children();
-			var obj = {};
-			
-			var insCode = td.eq(2).text();
-			var cpCode = td.eq(4).text();
-			var numberOfPasses = Number(td.eq(8).text());
-			var mtlOdCode = td.eq(10).text();
-			var mtCode = td.eq(11).text();
-			var userId = td.eq(12).text();
-			var comm = td.eq(13).find("input").val();
-			
-						
-			//객체에 담기
-			obj["insCode"] = insCode;
-			obj["cpCode"] = cpCode; 
-			obj["numberOfPasses"] = numberOfPasses;
-			obj["mtlOdCode"] = mtlOdCode;
-			obj["mtCode"] = mtCode;
-			obj["userId"] = userId;
-			obj["comm"] = comm;
-			
-			//목록에 담기
-			list.push(obj);
-  		});
-	
-		//객체를 string으로 변환
-  		console.log(JSON.stringify(list));
-		if(flag == false) {
-			return;
-		}
-  		//ajax 호출 
-  		$.ajax({
-  			url : 'insertMtIn',
-  			method : 'post',
-  			contentType : 'application/json',
-  			data : JSON.stringify(list)
-  		})
-  		 /* .done(datas => {
-  			 if(datas.result) {
-  				 let successCnt = datas.total - datas.empList.length;
-  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
-  				 alert(msg);
-  			 }
-  		 }) */
-  	/*	 .fail(err => console.log(err)) */
-  		
-
-  	/*}	*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
  	$("#failuer1").click(function(){
@@ -512,15 +275,7 @@
 			var td = tr.children();
 
 			var item = {
-			//insDate : td.eq(1).text(),
-			//insCode : td.eq(2).text(),
-			//insStatus : td.eq(3).text(),
-			//cpCode : td.eq(4).text(),
-			//mtName : td.eq(5).text(),
-			//specification : td.eq(6).text(),
-			//numberOfTests : td.eq(7).text(),
-			//numberOfPasses : td.eq(8).text(),
-			//totalPass : td.eq(9).text(),
+
 			mtlOdCode : td.eq(10).text()
 			};
 			

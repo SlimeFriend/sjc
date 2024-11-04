@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class InfoLineRestController {
 	
 	private final InfoLineService lineService;
-
+	// 라인 조회
 	@GetMapping("lines")
 	public List<LineVO> lineList(LineVO lineVO){
 		return lineService.lineList(lineVO);

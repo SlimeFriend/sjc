@@ -1,6 +1,5 @@
 package com.sjc.app.info.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,44 +36,37 @@ public class InfoUserServiceImpl implements InfoUserService {
 		//this.registry = registry;
 	}
 	
+	// 사용자 조회
 	@Override
 	public List<InfoUserVO> userList(InfoUserVO userVO) {
 		return userMapper.selectUserAllList(userVO);
 	}
 	
+	// 사용자 수정
     @Override
     @Transactional
     public List<InfoUserVO> modifyUsers(List<InfoUserVO> InfoUserVOs) {
     	
-        //List<InfoUserVO> savedUsers = new ArrayList<>();
-
         for (InfoUserVO userVO : InfoUserVOs) {
-            try {
-                int userUpdateCount = userMapper.updateUser(userVO);
-                if (userUpdateCount == 0) {
-//            		String password = "1234";
-                	String password = userVO.getPassword();
-            		userVO.setPassword(passwordEncoder.encode(password));	                	
-                    userMapper.insertUser(userVO);
-                }
+            int userUpdateCount = userMapper.updateUser(userVO);
+            // 사용자 없으면 등록
+            if (userUpdateCount == 0) {
+            	String password = userVO.getPassword();
+            	// 비밀번호 암호화
+        		userVO.setPassword(passwordEncoder.encode(password));	                	
+                userMapper.insertUser(userVO);
+            }
 
-                int roleUpdateCount = userMapper.updateUserRole(userVO);
-                if (roleUpdateCount == 0) {
-                    userMapper.insertUserRole(userVO);
-                }
-
-//                InfoUserVO savedInfoUserVO = userMapper.getUserById(userVO.getUserId());
-//                savedUsers.add(savedInfoUserVO);
-
-            } catch (Exception e) {
-                log.error("error : " , e);
+            int roleUpdateCount = userMapper.updateUserRole(userVO);
+            // 권한 없으면 등록
+            if (roleUpdateCount == 0) {
+                userMapper.insertUserRole(userVO);
             }
         }
-
-//        return savedUsers;
         return InfoUserVOs;
     }
     
+    // 사용자 등록
     @Override
     @Transactional
     public InfoUserVO insertUser(InfoUserVO userVO) {
@@ -83,6 +75,7 @@ public class InfoUserServiceImpl implements InfoUserService {
         return userMapper.getUserById(userVO.getUserId());
     }
 
+    // 사용자 삭제
     @Override
     @Transactional
     public List<String> deleteUsers(List<String> userIds) {
@@ -91,15 +84,17 @@ public class InfoUserServiceImpl implements InfoUserService {
         return userIds;
     }
     
+    // 오라클 프로시저 : 사용자, 권한 삭제
     @Override
     @Transactional
     public List<String> deleteUsersProcedure(List<String> userIds) {
+    	// 파라미터를 List -> String으로 변환
     	String stringUserIds = String.join(",", userIds);
     	userMapper.deleteUsersProcedure(stringUserIds);        
     	return userIds;
     }
     
-    
+    // 사용자 복사 - 테스트용
     @Override
     @Transactional
     public List<String> copyUsers(List<String> userIds) {
@@ -111,16 +106,19 @@ public class InfoUserServiceImpl implements InfoUserService {
         return userIds;
     }
     
+    // 사용자 복사 조회 - 테스트용
 	@Override
 	public List<InfoCopyLogVO> copyLogList() {
 		return userMapper.selectCopyLogAllList();
 	}
 	
+	// 사용자 복사 상세 조회 - 테스트용
 	@Override
 	public List<InfoCopyDetailVO> copyDetailList() {
 		return userMapper.selectCopyDetailAllList();
 	}
-
+	
+	// 그리드 API용 사용자 정보, 페이징, 결과 조회
     @Override
     public Map<String, Object> getUserListResponse(InfoUserVO infoUserVO) {
         List<InfoUserVO> users = getUserList(infoUserVO);
@@ -141,6 +139,7 @@ public class InfoUserServiceImpl implements InfoUserService {
         return response;
     }
 
+	// 그리드 API용 사용자 정보 조회
     public List<InfoUserVO> getUserList(InfoUserVO infoUserVO) {
     	int page = infoUserVO.getPage();
     	int perPage = infoUserVO.getPerPage();
@@ -160,10 +159,12 @@ public class InfoUserServiceImpl implements InfoUserService {
 //        return userMapper.selectUserList(params);
 //    }
 
+	// 그리드 API용 사용자 수 조회
     public int getTotalUserCount(InfoUserVO infoUserVO) {
         return userMapper.countUserList(convertVoToMap(infoUserVO));
     }
 
+	// 그리드 VO -> Map
     public Map<String, Object> convertVoToMap(InfoUserVO infoUserVO) {
         Map<String, Object> map = new HashMap<>();
         map.put("userId", infoUserVO.getUserId());
