@@ -138,6 +138,7 @@ public class QualityServiceImpl implements QualityService{
 	}
 	//품질검사 등록
 	@Override
+	@Transactional
 	public List<InspectionVO> insUpdate(List<InspectionVO> insData) {
 	    for (InspectionVO inspection : insData) {
 	        qualityMapper.updateIns(
@@ -147,6 +148,7 @@ public class QualityServiceImpl implements QualityService{
 	            inspection.getNumberOfPasses(),
 	            inspection.getNumberOfFailed(),
 	            inspection.getTotalPass(),
+	            inspection.getNumberOfTotalPass(),
 	            inspection.getInsCode());
 	        
 			// mtl_od.mtl_od_status 입고품질검사완료
@@ -259,6 +261,7 @@ public class QualityServiceImpl implements QualityService{
 	            inspection.getNumberOfPasses(),
 	            inspection.getNumberOfFailed(),
 	            inspection.getTotalPass(),
+	            inspection.getNumberOfTotalPass(),
 	            inspection.getInsCode());
 	        
 			// mtl_od.mtl_od_status 입고품질검사완료

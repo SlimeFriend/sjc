@@ -104,9 +104,11 @@
 									<th>검사수</th>
 									<th>합격수</th>
 									<th>합격여부</th>
+									<th>입고가능수량</th>
 									<th>자재발주코드</th>
 									<th>자재코드</th>
 									<th>직원번호</th>
+									<th>비고</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -117,14 +119,17 @@
 										<td><h5 class="font-16">[[${done.insCode}]]</h5></td>
 										<td>[[${done.insStatus}]]</td>
 										<td>[[${done.cpCode}]]</td>
+										
 										<td>[[${done.mtName}]]</td>
 										<td>[[${done.specification}]]</td>
 										<td>[[${done.numberOfTests}]]</td>
 										<td>[[${done.numberOfPasses}]]</td>
 										<td>[[${done.totalPass}]]</td>
+										
+										<td>[[${done.numberOfTotalPass}]]</td>
 										<td>[[${done.mtlOdCode}]]</td>
 										<td>[[${done.mtCode}]]</td>
-										<td>[[${done.userId}]]</td>
+										<td>[[${#authentication.principal.authorities[1]}]]</td>
 										<td><input type="text" name="comm"></td>
 									</tr>
 								</th:block>
@@ -212,17 +217,17 @@
 			
 			var insCode = td.eq(2).text();
 			var cpCode = td.eq(4).text();
-			var numberOfPasses = Number(td.eq(8).text());
-			var mtlOdCode = td.eq(10).text();
-			var mtCode = td.eq(11).text();
-			var userId = td.eq(12).text();
-			var mtInComm = td.eq(13).find("input").val();
+			var numberOfTotalPass = Number(td.eq(10).text());
+			var mtlOdCode = td.eq(11).text();
+			var mtCode = td.eq(12).text();
+			var userId = td.eq(13).text();
+			var mtInComm = td.eq(14).find("input").val();
 			
 						
 			//객체에 담기
 			obj["insCode"] = insCode;  	     		
 			obj["cpCode"] = cpCode;               					
-			obj["numberOfPasses"] = numberOfPasses;   
+			obj["numberOfTotalPass"] = numberOfTotalPass;   
 			obj["mtlOdCode"] = mtlOdCode;      					
 			obj["mtCode"] = mtCode;      	
 			obj["userId"] = userId; 

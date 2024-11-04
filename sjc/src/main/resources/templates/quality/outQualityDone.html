@@ -124,7 +124,7 @@
             <td>[[${done.totalPass}]]</td>
             <td>[[${done.mtlOdCode}]]</td>
             <td>[[${done.mtCode}]]</td>
-            <td>[[${done.userId}]]</td>
+            <td>[[${#authentication.principal.authorities[1]}]]</td>
             <td><input type="text" name="comm"></td>
         </tr>
     </th:block>

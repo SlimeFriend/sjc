@@ -143,26 +143,12 @@
 		        ins_code
 		        , ins_date
 		        , ins_status
-		        --, user_id
-		        --, user_name
-		        --, number_of_tests
-		        --, number_of_passes
-		        --, number_of_failed
-		        --, number_of_total_pass
-		        --, total_pass
 		        , mtl_od_detail_code
 		    )
 		    VALUES ( 
 		    		#{insCode}
 		        	, SYSDATE
 		        	, '검사중'
-		        	--, #{userId}
-		        	--, #{userName}
-		        	--, #{numberOfTests}
-		        	--, #{numberOfPasses}
-		        	--, #{numberOfFailed}
-		        	--, #{numberOfTotalPass}
-		        	--, #{totalPass}
 		        	, #{mtlOdDetailCode}
 		    )
 	</insert>
@@ -202,18 +188,21 @@
 	</insert>
 <!-- 자재품질검사등록모달-inspection 데이터 출력 -->
 	<select id="selectInspection" resultType="InspectionVO">
-			SELECT i.ins_code
-			        , i.ins_date
-			        , i.ins_status
-			        , i.user_id
-			        , i.user_name
-			        , i.number_of_tests
-			        , i.number_of_passes
-			        , i.number_of_failed
-			        , i.number_of_total_pass
-			        , i.total_pass
-			        , i.mtl_od_detail_code
-			 FROM inspection i
+			SELECT i.ins_code 					AS "insCode"
+			        , i.ins_date 				AS "insDate"
+			        , i.ins_status 				AS "insStatus"
+			        , i.user_id 				AS "userId"
+			        , i.user_name 				AS "userName"
+			        , i.number_of_tests 		AS "numberOfTests"
+			        , i.number_of_passes 		AS "numberOfPasses"
+			        , i.number_of_failed 		AS "numberOfFailed"
+			        , i.number_of_total_pass 	AS "numberOfTotalPass"
+			        , i.total_pass 				AS "totalPass"
+			        , i.mtl_od_detail_code 		AS "mtlOdDetailCode"
+			        , mod.quantity 				AS "mtlOdDetailQuantity"
+			 FROM 	inspection i
+			 JOIN	mtl_od_detail mod
+			 ON		mod.mtl_od_detail_code = i.mtl_od_detail_code
 	         WHERE i.mtl_od_detail_code = #{mtlOdDetailCode}
 	</select>
 <!-- 완제품품질검사등록모달-inspection 데이터 출력 -->
@@ -355,6 +344,7 @@
 			    , number_of_passes = #{numberOfPasses}
 			    , number_of_failed = #{numberOfFailed}
 			    , total_pass = #{totalPass}
+			    , number_of_total_pass = #{numberOfTotalPass}
 		WHERE 	ins_code = #{insCode}
 	</update>
 	
@@ -463,21 +453,22 @@
 	<!-- 완료목록페이지 -->
 	<!-- 입고 -->
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
-		SELECT i.ins_date
-		        , i.ins_code
-		        , i.ins_status
-		        , cmo.mtl_od_status
-		        , cmod.mtl_od_detail_status
-		        , cm.mt_name
-		        , cm.specification
-		        , i.number_of_tests
-		        , i.number_of_passes
-		        , i.total_pass
-		        , cmo.mtl_od_code
-		        , cmod.mtl_od_detail_code
-		        , cm.mt_code
-		        , i.user_id
-		        , cmo.cp_code
+		SELECT i.ins_date	AS "insDate"
+		        , i.ins_code	AS "insCode"
+		        , i.ins_status	AS "insStatus"
+		        , cmo.mtl_od_status	AS "mtlOdStatus"
+		        , cmod.mtl_od_detail_status	AS "mtlOdDetailStatus"
+		        , cm.mt_name	AS "mtName"
+		        , cm.specification	AS "specification"
+		        , i.number_of_tests	AS "numberOfTests"
+		        , i.number_of_passes	AS "numberOfPasses"
+		        , i.number_of_total_pass	AS "numberOfTotalPass"
+		        , i.total_pass	AS "totalPass"
+		        , cmo.mtl_od_code	AS "mtlOdCode"
+		        , cmod.mtl_od_detail_code	AS "mtlOdDetailCode"
+		        , cm.mt_code	AS "mtCode"
+		        , i.user_id	AS "userId"
+		        , cmo.cp_code	AS "cpCode"
 		FROM    mt cm
 		JOIN    mtl_od_detail cmod
 		ON      cmod.mt_code = cm.mt_code
@@ -517,7 +508,7 @@
 						    )
 		    VALUES 			(
 						        SYSDATE,
-						        #{numberOfPasses},
+						        #{numberOfTotalPass},
 						        ADD_MONTHS(SYSDATE, 6),
 						        #{inCode},
 						        #{userId},
@@ -543,18 +534,22 @@
 	
 	<!-- 완제품품질검사 완료목록 -->
 	<select id="selectOutDoneInfo" resultType="PDetailVO">
-		SELECT    *      
---p.unit_price
---				, i.ins_date
---		        , i.ins_code
---		        , i.ins_status
---				, i.number_of_tests
---				, i.number_of_passes
---				, i.total_pass
---				, i.user_id
+		SELECT  p.prd_code
+                , p.prd_name
+                , pd.pdetail_code
+                , pd.output
+                , pd.no
+                , pr.process_date
+				, i.ins_date
+		        , i.ins_code
+		        , i.ins_status
+				, i.number_of_passes
+				, i.user_id
 		FROM	prd p
 		JOIN	pdetail	pd
 		ON		pd.prd_code = p.prd_code
+        JOIN    presult pr
+        ON      pr.pdetail_code = pd.pdetail_code
 		JOIN	inspection i
 		ON		pd.pdetail_code = i.pdetail_code
 		WHERE	i.ins_status = '검사완료'
@@ -577,10 +572,8 @@
 						        prd_code, 
 						        md, 
 						        ed, 
-						        in_quantity, 
-						        out_quantity, 
-						        ins_code, 
-						        stc_quantity, 
+						        in_quantity,
+						        ins_code,
 						        in_date, 
 						        in_out_type
 						    )
@@ -591,8 +584,6 @@
 						        #{md},
 						        #{ed},
 						        #{inQuantity},
-						        #{outQuantity},
-						        #{stcQuantity},
 						        SYSDATE,
 						        #{inOutType}
 						    )
