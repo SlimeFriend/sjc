@@ -10,7 +10,7 @@
 		<div class="pd-ltr-20">
 		<h3>생산지시 조회</h3>
 			<div class="pd-20 card-box mb-20"> 
-        		<h2 class="h5 mb-20">생산지시</h2>
+        		<h2 class="h5 mb-20">생산공정</h2>
         		<div id="grid"></div>
         	</div>
         
@@ -33,9 +33,12 @@
             data: gridData, // 초기 데이터
             columns: [
                 { header: '생산지시 코드', name: 'porderCode', align: 'center' },
-                { header: '지시 일자', name: 'porderDate', align: 'center' },
-                { header: '시작 일자', name: 'startDate', align: 'center' },
-                { header: '담당자', name: 'userName', align: 'center' },
+                { header: '생산상세 코드', name: 'pdetailCode', align: 'center' },
+                { header: '제품명', name: 'prdName', align: 'center' },
+                { header: '라인', name: 'lineCode', align: 'center' },
+                { header: '목표량', name: 'want', align: 'center' },
+                { header: '지시량', name: 'command', align: 'center' },              
+                { header: '생산량', name: 'output', align: 'center' },              
                 { header: '상태', name: 'status', align: 'center', 
                 	formatter: (object, columnInfo) => {
                 	
@@ -49,8 +52,7 @@
                     	}
                 	}
                 
-                },
-                { header: '비고', name: 'comm', align: 'center' }
+                }
             ],
             rowHeaders: ['rowNum'],
             pageOptions: { useClient: true, perPage: 10 },
@@ -64,10 +66,16 @@
             el: document.getElementById('detail-grid'),
             data: [],
             columns: [
-                { header: '제품명', name: 'prdName', align: 'center' },
-                { header: '목표량', name: 'want', align: 'center' },
-                { header: '지시량', name: 'command', align: 'center' },
-                { header: '생산량', name: 'output', align: 'center' }
+                { header: '순서', name: 'prdName', align: 'center' },
+                { header: '공정명', name: 'want', align: 'center' },
+                { header: '설비명', name: 'command', align: 'center' },
+                { header: '가동상태', name: 'output', align: 'center' },
+                { header: '시작시간', name: 'output', align: 'center' },
+                { header: '종료시간', name: 'output', align: 'center' },
+                { header: '투입량', name: 'output', align: 'center' },
+                { header: '불량량', name: 'output', align: 'center' },
+                { header: '생산량', name: 'output', align: 'center' },
+                { header: '담당자', name: 'output', align: 'center' }
             ],
             rowHeaders: ['rowNum'],
             height: '300px'

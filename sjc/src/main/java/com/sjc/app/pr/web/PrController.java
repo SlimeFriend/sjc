@@ -291,6 +291,7 @@ public class PrController {
 		return prdtService.ordPrd(ordCode);
 	}
 	
+	// 계획 클릭시 나올 라인
 	@GetMapping("planL")
 	@ResponseBody
 	public List<LinePrdVO> planL(@RequestParam String planCode){
