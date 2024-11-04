@@ -34,6 +34,9 @@ public interface EqService {
 	
 	// 비가동 목록 등록
 	void saveNonOperating(EqChckVO eqChckVO);
+	
+	// 비가동 목록 "가동"으로 변경
+	public Map<String, Object> updateEqChck(EqVO eqVO);
 
 }
 

@@ -95,6 +95,13 @@ from    eq
 	WHERE eq_code = #{eqCode}
 </update>
 
+<!-- 설비 비가동 목록 "가동" 수정 -->
+<update id="updateEqChckInfo" parameterType="EqVO">
+	UPDATE eq
+	SET use = #{use}
+	WHERE eq_code = #{eqCode}
+</update>
+
 <!-- 삭제 -->
 <delete id="deleteEqInfo" parameterType="String">
 	DELETE from eq

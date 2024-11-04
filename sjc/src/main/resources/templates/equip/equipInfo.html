@@ -117,10 +117,8 @@
 						<div class="mb-3">
 							<label for="lineCode">라인코드</label> 
 							<select id="lineCode" name="lineCode" class="form-control">
-								<option value="Line_1">Line_1</option>
-								<option value="Line_2">Line_2</option>
-								<option value="Line_3">Line_3</option>
-								<option value="Line_4">Line_4</option>
+								<option value="L01">L01</option>
+								<option value="L02">L02</option>
 							</select>
 						</div>
                         <div class="mb-3">
@@ -254,6 +252,41 @@
             $('#deleteConfirmModal').modal('hide');
         });
     });
+    </script>
+    <script>
+ // 모달 창에서 수정 처리
+    $('#saveChanges').on('click', function () {
+        const eqData = {
+            eqCode: $('#eqCode').val(),
+            eqMdnm: $('#eqMdnm').val(),
+            eqMdno: $('#eqMdno').val(),
+            eqLocation: $('#eqLocation').val(),
+            use: $('input[name="use"]:checked').val()
+        };
+
+        if (eqData.use === 'Y') {
+            $.ajax({
+                type: 'POST',
+                url: '/updateUseStatus',
+                contentType: 'application/json',
+                data: JSON.stringify(eqData),
+                success: function (response) {
+                    if (response.result) {
+                        alert('설비 사용여부가 "가동"으로 업데이트되었습니다.');
+                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 상세 페이지로 이동
+                    } else {
+                        alert('업데이트에 실패했습니다.');
+                    }
+                },
+                error: function () {
+                    alert('서버 오류가 발생했습니다.');
+                }
+            });
+        }
+
+        $('#modifyModal').modal('hide');
+    });
+
     </script>
 </body>
 </html>
