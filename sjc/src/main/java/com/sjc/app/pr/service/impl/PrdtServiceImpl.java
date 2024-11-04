@@ -138,9 +138,11 @@ public class PrdtServiceImpl implements PrdtService {
 		String nextId = prdtMapper.getPlanCode();
 		String planCode = String.valueOf(nextId);
 		
+		
 		// 생산계획 
 		PlanVO planVO = cplanVO.getPlanVO();
 		planVO.setPlanCode(planCode);
+		
 		int pinresult = prdtMapper.insertPlan(planVO);
 		
 		
@@ -248,5 +250,11 @@ public class PrdtServiceImpl implements PrdtService {
 	public List<ProductVO> ordPrd(String ordCode) {
 		// TODO Auto-generated method stub
 		return prdtMapper.ordPrd(ordCode);
+	}
+
+	@Override
+	public List<LinePrdVO> planL(String planCode) {
+		// TODO Auto-generated method stub
+		return prdtMapper.planL(planCode);
 	}
 }

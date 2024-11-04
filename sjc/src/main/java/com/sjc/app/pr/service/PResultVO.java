@@ -1,5 +1,11 @@
 package com.sjc.app.pr.service;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,7 +16,9 @@ public class PResultVO {
 	private String endTime;			// 종료 시간
 	private Integer output;			// 생산량
 	private Integer err;			// 불량량
-	private String processDate;		// 공정 일자
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date processDate;		// 공정 일자
 	private String eqCode;			// 설비 이름
 	private String processName;		// 공정 이름
 	private Integer manager;			// 담당자

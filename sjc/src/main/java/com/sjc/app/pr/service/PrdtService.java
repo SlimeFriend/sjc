@@ -79,4 +79,6 @@ public interface PrdtService {
 	
 	// 주문 클릭시 가져올 완제품
 	public List<ProductVO> ordPrd(String ordCode);
+	
+	public List<LinePrdVO> planL(String planCode);
 }

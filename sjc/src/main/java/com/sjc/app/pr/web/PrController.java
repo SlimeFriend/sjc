@@ -45,6 +45,9 @@ public class PrController {
 	@GetMapping("planList")
 	public String planList(Model model) {
 		
+		List<PlanVO> list = prdtService.planList();
+		
+		model.addAttribute("list", list);
 		
 		return "pr/planList";
 	}
@@ -67,7 +70,7 @@ public class PrController {
 
 		model.addAttribute("products", productList);
 		
-		model.addAttribute("oList", oList);
+		model.addAttribute("ordCode", oList);
 		
 		return "pr/planCreate";
 	}
@@ -286,5 +289,12 @@ public class PrController {
 	public List<ProductVO> ordPrd(@RequestParam String ordCode){
 		
 		return prdtService.ordPrd(ordCode);
+	}
+	
+	@GetMapping("planL")
+	@ResponseBody
+	public List<LinePrdVO> planL(@RequestParam String planCode){
+		
+		return prdtService.planL(planCode);
 	}
 }
