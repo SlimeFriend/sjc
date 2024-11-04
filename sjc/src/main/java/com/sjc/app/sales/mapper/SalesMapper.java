@@ -23,7 +23,7 @@ public interface SalesMapper {
 	public List<OrderVO> selectOrder();
 	
 	// 특정 제품에 대한 총 주문량 조회
-	public Integer getTotalOrderQuantity(@Param("prdCode") String prdCode);
+	public Integer getTotalOrderQuantity(@Param("prdCode") String prdCode, String ordCode);
     
     // 특정 제품의 재고량 조회
     public Integer getStockQuantity(@Param("prdCode") String prdCode);
@@ -39,6 +39,9 @@ public interface SalesMapper {
 	
 	// 주문상세 테이블
 	public List<Map<String, Object>> selectOrderDetail(String ordCode);
+	
+	// 재고부족 상세 테이블
+	public List<Map<String, Object>> selectLackOrderDetail(String ordCode);
 	
 	// 제품 테이블
 	public List<ProductVO> selectProduct();
@@ -74,5 +77,7 @@ public interface SalesMapper {
 	// 입/출고 내역 검색 프로세스
 	public List<PrdManagementVO> inSearch(String prdName, String inStartDate, String inEndDate);
 	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate);
+
+	public int updateOrdStatus(@Param("ordStatus") String ordStatus, @Param("ordCode") String ordCode);
 	
 }

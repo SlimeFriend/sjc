@@ -26,4 +26,5 @@ public class OrderVO {
 	private String cpCode;
 	private String cpName;
 	private Integer ordQuantity;
+	private Integer lackQuantity;
 }

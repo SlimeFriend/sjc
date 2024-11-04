@@ -43,4 +43,6 @@ public interface SalesService {
 	
 	public List<Map<String, Object>> productDetail(String prdCode);
 
+	public List<Map<String, Object>> lackOrderDetail(String ordCode);
+
 }

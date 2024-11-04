@@ -11,6 +11,7 @@ import lombok.Data;
 
 @Data
 public class ProductVO {
+	private String ordCode;
 	private String prdCode;
 	private String prdName;
 	private String description;
@@ -21,6 +22,7 @@ public class ProductVO {
 	private Integer stcQuantity;
 	private Integer unitPrice;
 	private Integer ordQuantity;
+	private Integer lackQuantity;
 	private Integer price;
 	private String bomCode;
 	
