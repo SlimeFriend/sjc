@@ -291,10 +291,38 @@
 		
 		function sendCheckedRows() {
 		    const checkedRows = grid.getCheckedRows();
+		    const mtRows = mtgrid.getData();
 
 		    if (checkedRows.length === 0) {
-		        alert('제품을 선택해주세요.');
+		        alert('라인을 선택해주세요.');
 		        return;
+		    }
+		    
+
+		    
+		 	// 수량 체크
+		    for (let i = 0; i < checkedRows.length; i++) {
+		        const row = checkedRows[i];
+
+		        if (!row.want || row.want <= 0) {
+		            alert('체크된 제품의 목표량을 입력해주세요.');
+		            return;
+		        }
+		        if (!row.command || row.command <= 0) {
+		            alert('체크된 제품의 지시량을 입력해주세요.');
+		            return;
+		        }
+		    }
+		 	
+		 	// 자재 수량 체크
+		    for (let mtRow of mtRows) {
+		        const requiredQuantity = mtRow.quantityRequired; // 필요한 수량
+		        const currentStock = mtRow.currentStc; // 재고량
+
+		        if (requiredQuantity > currentStock) {
+		            alert(`${mtRow.mtName}의 필요 수량(${requiredQuantity})이 재고량(${currentStock})보다 큽니다.`);
+		            return;
+		        }
 		    }
 
 		    // 폼 데이터를 직접 수집
@@ -310,6 +338,7 @@
 		        porderVO: formObj,    // 폼 데이터 (주문 정보)
 		        linePrdVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
 		    };
+		    
 
 		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    $.ajax({

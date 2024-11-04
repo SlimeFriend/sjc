@@ -425,7 +425,7 @@ group by l.prd_code, l.prd_name, l.quantity, l.plan_detail_code, p.start_date, p
 <select id="oList" resultType="String">
 select ord_code
 from ord
-where ord_status = '주문접수'
+where ord_status = '재고부족'
 </select>
 
 <!-- 주문 클릭 시 가져올 제품 -->
