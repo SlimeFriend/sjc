@@ -35,5 +35,7 @@ public interface EqMapper {
 	
 	// 비가동 내역 등록
 	void insertNonOperating(EqChckVO eqChckVO);
-
+	
+	// 라인 수정
+	int updateLine(EqVO eqVO);	
 }

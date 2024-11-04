@@ -70,6 +70,14 @@ from    eq
   			)
 </insert>
 
+<!-- 라인 수정 -->
+<update id="updateLine" parameterType="EqVO">
+	UPDATE	line
+	SET
+		   use = #{use}
+	WHERE line_code = #{lineCode}
+</update>
+
 <!-- 설비목록 수정 -->
 <update id="updateEqInfo" parameterType="EqVO">
 	UPDATE eq
