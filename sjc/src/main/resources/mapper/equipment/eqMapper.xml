@@ -242,5 +242,13 @@ from    eq
     					, #{endDate})
 </insert>
 
+<update id="updateCheckStatus" parameterType="EqChckVO">
+    UPDATE eq_chck
+    SET 
+          eq_nextchck = #{eqNextChck}
+        , eq_chckox = #{eqChckOx}
+    WHERE eq_code = #{eqCode}
+</update>
+
 
 </mapper>

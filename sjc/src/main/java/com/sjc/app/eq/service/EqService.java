@@ -37,6 +37,9 @@ public interface EqService {
 	
 	// 비가동 목록 "가동"으로 변경
 	public Map<String, Object> updateEqChck(EqVO eqVO);
+	
+	// 점검 상태 업데이트
+	public void updateCheckStatus(EqChckVO eqChckVO);
 
 }
 

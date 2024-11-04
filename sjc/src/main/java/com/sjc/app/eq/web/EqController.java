@@ -147,6 +147,14 @@ public class EqController {
 		return "equip/eqJumgum";
 	}
 	
+	// 설비 점검 업데이트
+    @PostMapping("/updateCheckStatus")
+    @ResponseBody
+    public String updateCheckStatus(@RequestBody EqChckVO eqChckVO) {
+        eqService.updateCheckStatus(eqChckVO);
+        return "success";
+    }
+	
 	@PostMapping("nOpRegister")
 	@ResponseBody
 	public EqChckVO registerNonOperating(@RequestBody EqChckVO eqChckVO) {
