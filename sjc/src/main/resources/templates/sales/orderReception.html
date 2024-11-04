@@ -5,7 +5,11 @@
 	layout:fragment="Content">
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-
+	
+	<head>
+    	<title>주문접수</title>
+	</head>
+	
 	<div class="main-container">
 		<div class="pd-20">
 			<h2 class="h2 mb-20">주문접수</h2>
@@ -109,6 +113,20 @@
 					}, 
 				});
 				
+				grid.on('editingFinish', (ev) => {
+				    const { value, rowKey, columnName } = ev;
+
+				    // 편집 중인 셀 값 유효성 검사
+				    if ((columnName === 'price' || columnName === 'ordQuantity') && (isNaN(value) || Number(value) <= 0)) {
+				        alert(`${columnName === 'price' ? '가격' : '수량'}에 올바른 값을 입력해주세요.`);
+				        grid.setValue(rowKey, columnName, ''); // 잘못된 값 초기화
+				        return;
+				    }
+				    
+				});
+
+			
+				
 				modalGrid = new tui.Grid({
 					el : document.getElementById('cpList'),
 					data : modalGridData,
@@ -202,20 +220,7 @@
 		        alert('제품을 선택해주세요.');
 		        return;
 		    }
-		    
-		 	// 가격과 수량 유효성 검사
-		    for (let i = 0; i < checkedRows.length; i++) {
-		        const row = checkedRows[i];
-		        if (!row.price || row.price <= 0) {
-		            alert('체크된 제품의 가격을 입력해주세요.');
-		            return;
-		        }
-		        if (!row.ordQuantity || row.ordQuantity <= 0) {
-		            alert('체크된 제품의 수량을 입력해주세요.');
-		            return;
-		        }
-		    }
-
+		 	
 		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    const payload = {
 		        orderVO: formObj,    // 폼 데이터 (주문 정보)
