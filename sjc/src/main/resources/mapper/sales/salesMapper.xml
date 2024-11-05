@@ -117,17 +117,18 @@
 	        AND o.ord_date <![CDATA[>=]]> TO_DATE(#{orderStartDate}, 'YYYY-MM-DD')
 	    </if>
 	    <if test="orderEndDate != null and orderEndDate != ''">
-	        AND o.ord_date <![CDATA[<=]]> TO_DATE(#{orderEndDate}, 'YYYY-MM-DD')
+	        AND o.ord_date <![CDATA[<=]]> TO_DATE(#{orderEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    <if test="deliveryStartDate != null and deliveryStartDate != ''">
 	        AND o.dlv_req_date <![CDATA[>=]]> TO_DATE(#{deliveryStartDate}, 'YYYY-MM-DD')
 	    </if>
 	    <if test="deliveryEndDate != null and deliveryEndDate != ''">
-	        AND o.dlv_req_date <![CDATA[<=]]> TO_DATE(#{deliveryEndDate}, 'YYYY-MM-DD')
+	        AND o.dlv_req_date <![CDATA[<=]]> TO_DATE(#{deliveryEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    <if test="orderStatus != null and orderStatus != ''">
         	AND o.ord_status = #{orderStatus}
     	</if>
+    	ORDER BY o.ord_status
 	</select>
 
 	<!-- 주문내역 조회 -->
@@ -160,7 +161,7 @@
 		    od.prd_code AS prdCode,
 		    od.ord_quantity AS ordQuantity,
 		    o.ord_status AS ordStatus,
-		    GREATEST(od.ord_quantity - NVL(stc_quantity, 0), 0) AS lackQuantity, -- 음수일 경우 0으로 변경
+		    GREATEST(od.ord_quantity - NVL(stc_quantity, 0), 0) AS lackQuantity,
 		    NVL(stc_quantity, 0) AS stc_quantity
 		FROM 
 		    ord o 
@@ -336,10 +337,10 @@
 	        AND p.prd_name LIKE '%' || #{prdName} || '%'
 	    </if>
 	    <if test="inStartDate != null and inStartDate != ''">
-	        AND pm.in_date <![CDATA[>=]]> TO_DATE(#{inStartDate}, 'YYYY-MM-DD')
+	        AND pm.in_date <![CDATA[>=]]> TO_DATE(#{inStartDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    <if test="inEndDate != null and inEndDate != ''">
-	        AND pm.in_date <![CDATA[<=]]> TO_DATE(#{inEndDate}, 'YYYY-MM-DD')
+	        AND pm.in_date <![CDATA[<=]]> TO_DATE(#{inEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	</select>
 	
@@ -361,10 +362,10 @@
 	        AND poh.cp_name LIKE '%' || #{cpName} || '%'
 	    </if>
 	    <if test="outStartDate != null and outStartDate != ''">
-	        AND poh.out_date <![CDATA[>=]]> TO_DATE(#{outStartDate}, 'YYYY-MM-DD')
+	        AND poh.out_date <![CDATA[>=]]> TO_DATE(#{outStartDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    <if test="outEndDate != null and outEndDate != ''">
-	        AND poh.out_date <![CDATA[<=]]> TO_DATE(#{outEndDate}, 'YYYY-MM-DD')
+	        AND poh.out_date <![CDATA[<=]]> TO_DATE(#{outEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    ORDER BY    poh.ord_code
 	</select>
