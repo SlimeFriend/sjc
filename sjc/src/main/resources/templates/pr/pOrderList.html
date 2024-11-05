@@ -161,6 +161,7 @@
         	        porderCode : porderCode
     	    }
         	console.log(porderCode);
+        	
         	$.ajax({
         	    url: 'deleteOrder', // 요청할 URL
         	    type: 'POST', // HTTP 요청 방식
@@ -171,7 +172,7 @@
         	        if(response == 1){
         	        	alert('삭제 완료');
         	        	
-        	        	fetchPlans('a');
+        	        	performSearch();
         	        }
         	    },
         	    error: function(xhr, status, error) {
