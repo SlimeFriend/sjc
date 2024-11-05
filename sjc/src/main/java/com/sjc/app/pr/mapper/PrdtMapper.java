@@ -108,5 +108,29 @@ public interface PrdtMapper {
 	void updateLine(LinePrdVO linePrdVO);
 	
 	// 계획 검색
-	public List<PlanVO> searchPlan(PlanVO planVO);
+	public List<PlanVO> searchPlan(String planCode, String startDate, String endDate, String status);
+	
+	// 지시 검색
+	public List<POrderVO> searchOrders(String porderCode, String startDate, String endDate, String status);
+	
+	// 삭제할 지시의 상세코드 찾기
+	public List<String> findD(String porderCode);
+	
+	// 생산 공정 실적 삭제
+	public int deleteResult(String pdetailCode);
+	
+	// 생산 지시 상세 삭제
+	public int deleteDetail(String porderCode);
+	
+	// 생산 지시 삭제
+	public int deleteOrder(String porderCode);
+	
+	// 생산 지시에 연결된 계획 코드
+	public String searchOrderPlan(String porderCode);
+	
+	// 계획코드가 가진 생산지시수
+	public int countOrder(String planCode);
+	
+	// 계획코드 상태 변경
+	public int updatePlanS(String planCode);
 }
