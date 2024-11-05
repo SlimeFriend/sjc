@@ -117,7 +117,8 @@ tbody > tr {
 				</table>
 			</div>
 			<!-- The Modal -->
-			<div class="modal" id="nOpModal">
+		    <div class="modal fade" id="nOpModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+			
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<!-- Modal Header -->
@@ -128,23 +129,23 @@ tbody > tr {
 						<!-- Modal body -->
 						<div class="modal-body">
 							<form id="NeqModal" action="">
-								<div class="mb-3">
+								<div class="mb-3 form-group">
 									<label for="eqCode" class="form-label">설비코드 :</label> 
-									<input type="text" id="eqCode" name="eqCode" value="" readonly>
+									<input type="text" id="eqCode" name="eqCode" value="" readonly class="form-control">
 								</div>
 								<div class="mb-3">
 									<label for="eqName" class="form-label">설비명 :</label> 
-									<input type="text" id="eqName" name="eqName" value="" readonly>
+									<input type="text" id="eqName" name="eqName" value="" readonly class="form-control">
 								</div>
 								<div class="mb-3">
 									<label for="nOpTime" class="form-label">비가동 기간 :
-									</label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate">
+									</label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate" class="form-control">
 											 <br />
-											 종료 <input type="datetime-local" id="modalEndDate" name="endDate">
+											 종료 <input type="datetime-local" id="modalEndDate" name="endDate" class="form-control">
 								</div>
 								<div class="mb-3">
 									<label for="reason" class="form-label">사유 :</label> 
-									<select id="reason" name="reason">
+									<select id="reason" name="reason" class="form-control">
 										<option value="">선택
 										<option value="상시점검">상시점검
 										<option value="임시점검">임시점검
@@ -154,7 +155,7 @@ tbody > tr {
 								</div>
 								<div class="mb-3">
 									<label for="use" class="form-label">사용여부</label> 
-									<select name="use" id="use">
+									<select name="use" id="use" class="form-control">
 										<option value="" selected>선택
 										<option id="use" value="Y">가동
 										<option id="use" value="N">비가동
