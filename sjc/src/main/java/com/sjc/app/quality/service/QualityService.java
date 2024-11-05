@@ -46,6 +46,8 @@ public interface QualityService {
 	
 	//검사기준목록
 	public List<InspectionVO> testList();
+	//검사기준목록
+	public List<InspectionVO> testList2();
 	
 	// 자재입고검사완료 - 조회
 	public List<InspectionVO> incomingDoneInfo();
@@ -61,6 +63,10 @@ public interface QualityService {
 	public List<InspectionVO> pOrderSelect();
 	// 완제품품질검사 대기목록2
 	public List<Map<String, Object>> pDetailSelect(String porderCode);
+	// 검사대기->검사중 - updatePOrderStatus, updatePDetailStatus
+	Map<String, Object> pOrderStatusUpdate(InspectionVO inspectionVO);
+	Map<String, Object> pDetailStatusUpdate(InspectionVO inspectionVO);
+	
 	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
 	public int pDtlInsCnt(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달-inspection 생성
@@ -87,7 +93,7 @@ public interface QualityService {
 	
 	
 	// 제품출고검사완료 조회
-	public List<PDetailVO> outDoneInfoSelect();
+	public List<InspectionVO> outDoneInfoSelect();
 	// 완제품품질검완료페이지 - 입고처리 버튼 - porder.status 출고대기
 	// 완제품품질검완료페이지 - 입고처리 버튼 - prdManagement로 데이터 넣기
 	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> up);
@@ -131,6 +137,8 @@ public interface QualityService {
 	//public List<InspectionVO> mtlOdDoneUpdate(List<InspectionVO> inspectionVO);
 	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public List<InspectionVO> inspectionDoneUpdate(List<InspectionVO> inspectionVOs);
+
+
 	
 
 	

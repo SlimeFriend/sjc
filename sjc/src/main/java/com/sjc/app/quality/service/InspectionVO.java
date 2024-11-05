@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -108,6 +110,17 @@ public class InspectionVO {
 	    private Integer planDetailNo;                // 우선순위
 	    private String planDetailComm;            // 비고
 	    private String planCode;        // 생산코드
+	    
+	    
+	    
+	   // PResultVO 
+	    	private String presultCode;		// 생산공정실적 코드
+	    	private String startTime;		// 시작 시간
+	    	private String endTime;			// 종료 시간
+	    	private Integer err;			// 불량량
+	    	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	    	private Date processDate;		// 공정 일자
 	    
 
 }

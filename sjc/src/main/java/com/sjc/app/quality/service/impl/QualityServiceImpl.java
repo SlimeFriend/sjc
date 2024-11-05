@@ -166,6 +166,11 @@ public class QualityServiceImpl implements QualityService{
 	public List<InspectionVO> testList() {
 		return qualityMapper.selectTest();
 	}
+	//검사기준목록
+	@Override
+	public List<InspectionVO> testList2() {
+		return qualityMapper.selectTest2();
+	}
 	
 	// 자재입고검사완료 조회페이지
 	@Override
@@ -215,6 +220,45 @@ public class QualityServiceImpl implements QualityService{
 	public List<Map<String, Object>> pDetailSelect(String porderCode) {
 		return qualityMapper.selectPDetail(porderCode);
 	}
+	
+	// 검사대기->검사중 - updatePOrderStatus, updatePDetailStatus
+	@Override
+	public Map<String, Object> pOrderStatusUpdate(InspectionVO inspectionVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = qualityMapper.updatePOrderStatus(inspectionVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("target", inspectionVO);
+		
+		return map;
+	
+	}
+	
+	@Override
+	public Map<String, Object> pDetailStatusUpdate(InspectionVO inspectionVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result = qualityMapper.updatePDetailStatus(inspectionVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("target", inspectionVO);
+		
+		return map;
+	
+	
+		}
+	
 	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
 	@Override
 	public int pDtlInsCnt(InspectionVO inspectionVO) {
@@ -233,13 +277,13 @@ public class QualityServiceImpl implements QualityService{
 	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
 	@Override
 	public int pDInsDCount(InspectionVO inspectionVO) {
-		return qualityMapper.countPDInsD(inspectionVO);
+		return qualityMapper.countInsItem2(inspectionVO);
 	}
 	// 완제품품질검사등록모달- insDetail 생성
 	@Transactional
 	@Override
 	public int pDtlInsDInsert(InspectionVO inspectionVO) {
-		return qualityMapper.insertPDtlInsD(inspectionVO);
+		return qualityMapper.insertInsDetail(inspectionVO);
 	}
 	// 완제품품질검사등록모달- 검사리스트 출력
 	@Override
@@ -248,7 +292,7 @@ public class QualityServiceImpl implements QualityService{
 	}
 	@Override
 	public List<InspectionVO> pDtlInsDListSelect(InspectionVO inspectionVO) {
-		return qualityMapper.selectPDtlInsDList(inspectionVO);
+		return qualityMapper.selectInsDetailList(inspectionVO);
 	}
 	//품질검사 등록
 	@Override
@@ -266,6 +310,7 @@ public class QualityServiceImpl implements QualityService{
 	        
 			// mtl_od.mtl_od_status 입고품질검사완료
 			qualityMapper.updatePdSt(inspection);
+			qualityMapper.updatePoSt(inspection);
 	    }
 	    return insPdData;
 	}
@@ -281,8 +326,8 @@ public class QualityServiceImpl implements QualityService{
 	
 	// 제품출고검사완료 조회
 	@Override
-	public List<PDetailVO> outDoneInfoSelect() {
-		return qualityMapper.selectOutDoneInfo();
+	public List<InspectionVO> outDoneInfoSelect() {
+		return qualityMapper.selectOutDoneInfo2();
 	}
 	
 	
