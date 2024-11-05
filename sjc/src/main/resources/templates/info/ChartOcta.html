@@ -61,9 +61,9 @@
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">라인 별 설비 수</h2>
+		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="columnChartEq"></div>
+	                        <div id=""></div>
 	                    </div>
 	                </div>
 	            </div>
@@ -73,23 +73,23 @@
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
 	                    <div class="chart-wrapper">
-	                        <div id="pieChartEq	"></div>
+	                        <div id="pieChartEqChck"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="columnChartRight"></div>
+	                        <div id="columnChartEq"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
 	                        <div id="pieChartLeft"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartRight"></div>
 	                    </div>
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        }
 	    };
 	  
-	    const pieChartLeft = new toastui.Chart.pieChart({ 
+	    const pieChartLeft11 = new toastui.Chart.pieChart({ 
 	        el: document.getElementById('pieChartLeft'),
 	        data: pieChartData, 
 	        options: options
@@ -318,6 +318,66 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	    return { width: chartWidth, height: chartHeight };
 	}
+	
+	function getChartEqChck() {
+		$.ajax({
+		    url: 'getChartEqChck',
+		    type: 'GET',
+		    success: function(response) {
+		    	const pieChartData = {
+		    		    categories: ['가동율'],
+		    		    series: []
+		    		};
+			    const { width, height } = getChartSize();
+			    
+			    const options = {
+				        chart: { 
+				            width: width,
+				            height: height,
+				        },
+				        series: {
+				            dataLabels: {
+				                visible: true,
+				                pieSeriesName: {
+				                    visible: true
+				                }
+				            }
+				        },
+				        legend: {
+				            align: 'bottom'
+				        },
+				        theme: {
+				            chart: {
+				                fontFamily: 'Arial'
+				            }
+				        },
+				        exportMenu: {
+				            visible: false
+				        },
+				        tooltip: {
+				            formatter: (value) => `${value}개`,
+			            },					        
+				    };
+			    
+				response.forEach(item => {
+				    pieChartData.series.push({
+				        name: item.eqStatus,
+				        data: Number(item.eqCount)
+				    });
+				});
+			    const pieChartEqChck = new toastui.Chart.pieChart({ 
+			        el: document.getElementById('pieChartEqChck'),
+			        data: pieChartData, 
+			        options: options
+			    });		        
+			    
+		    },
+		    error: function(xhr, status, error) {
+		        console.error(error);
+		    }
+		});
+	}
+	getChartEqChck();
 	
 	function getChartOrd() {
 		$.ajax({

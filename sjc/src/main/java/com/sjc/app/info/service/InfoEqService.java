@@ -11,4 +11,6 @@ public interface InfoEqService {
     ChartDataVO getEqLog();
 	// 설비 조회
 	public List<EqDTO> getEq();    
+	// 설비 가동율 조회
+	public List<EqDTO> getEqChck();    
 }

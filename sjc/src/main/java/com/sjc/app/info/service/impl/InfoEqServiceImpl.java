@@ -106,10 +106,16 @@ public class InfoEqServiceImpl implements InfoEqService {
 		return chartData;
 	}
 
-	// 주문 조회
+	// 설비 조회
 	@Override
 	public List<EqDTO> getEq() {
 		return infoEqMapper.selectEqCount();
+	}
+	
+	// 설비 가동율 조회
+	@Override
+	public List<EqDTO> getEqChck() {
+		return infoEqMapper.selectEqChckCount();
 	}	
 	
 }

@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 public class EqDTO extends EqVO{
 	private String eqCount;
+	private String eqStatus;
 
 }
