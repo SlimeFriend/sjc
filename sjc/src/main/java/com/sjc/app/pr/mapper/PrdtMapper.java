@@ -106,4 +106,7 @@ public interface PrdtMapper {
 	
 	// 지시내리면 라인 사용 중 변경
 	void updateLine(LinePrdVO linePrdVO);
+	
+	// 계획 검색
+	public List<PlanVO> searchPlan(PlanVO planVO);
 }

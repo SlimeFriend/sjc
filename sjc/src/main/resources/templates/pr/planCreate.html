@@ -120,8 +120,13 @@
 				    success: function(response) {
 				    	if(response.length>0){
 				        grid.resetData(response);
+				        grid.getData().forEach((row, index) => {
+	                        grid.check(index, true);  // 해당 행의 체크박스 체크
+	                        grid.disableRow(index);
+	                        
+	                    });
 				        
-
+				        
 				    	}
 				    	else{
 				    		grid.resetData(gridData);	

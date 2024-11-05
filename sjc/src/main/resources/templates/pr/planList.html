@@ -11,15 +11,51 @@
 		<h3>생산계획 조회</h3>
 		
 		<div class="pd-20 card-box mb-20"> 
-        	<input name="btn" type="radio" value="a" id="all" checked>
-            <label for="all">전체</label>
-            <input name="btn" type="radio" value="a1" id="no">
-            <label for="no">미이행</label>
-            <input name="btn" type="radio" value="a2" id="ing">
-            <label for="ing">진행중</label>
-            <input name="btn" type="radio" value="a3" id="com">
-            <label for="com">완료</label>
-            
+		
+
+            <form>
+           <div class="form-group row">
+			<label class="col-sm-12 col-md-1 col-form-label">진행상황</label>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+        		<input name="option" type="radio" value="a" id="all" checked style="margin-right: 8px;">
+            	<label for="all" style="margin-bottom: 0px;">전체</label>
+        	</div>
+        	<div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="a1" id="no" style="margin-right: 8px;">
+            	<label for="no" style="margin-bottom: 0px;">대기</label>
+            </div>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="a2" id="ing" style="margin-right: 8px;">
+            	<label for="ing" style="margin-bottom: 0px;">진행중</label>
+            </div>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="a3" id="com" style="margin-right: 8px;">
+            	<label for="com" style="margin-bottom: 0px;">완료</label>
+            </div>
+           </div>
+            <div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">계획코드</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="planCode" type="text" placeholder="계획코드" oninput="performSearch()">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">계획일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="startDate" type="date" oninput="performSearch()">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="endDate" type="date" oninput="performSearch()">
+						</div>
+					</div>
+
+					
+            </form> 
             
        		<div class="text-right">
        			<button class="btn btn-danger mr-3" id='dbtn' name='dbtn' disabled='true'>삭제</button>
@@ -45,13 +81,14 @@
     <script th:inline="javascript">
     const be = document.getElementsByName('btn');
     const dbtn = document.getElementById('dbtn');
+    let grid;
     let pCode = '';
     let selectedRow;
     
     document.addEventListener('DOMContentLoaded', function() {
     const gridData = /*[[${list}]]*/[];
     	
-    	const grid = new tui.Grid({
+    	grid = new tui.Grid({
             el: document.getElementById('grid'),
             data: gridData, // 초기 데이터
             columns: [
@@ -116,7 +153,7 @@
                     console.error('Error fetching detail data:', error);
                 });
         });
-        
+        /*        
         Array.from(be).forEach((b) => {
             b.addEventListener('change', (event) => {
             	dbtn.disabled = true;
@@ -124,7 +161,7 @@
                 fetchPlans(val);
             });
         });
-        
+                
         const fetchPlans = (status) => {
             fetch('/planListS?status=' + status)
                 .then(resp => {
@@ -147,7 +184,7 @@
                 fetchPlans(val);
             });
         });
-        
+*/       
         dbtn.addEventListener('click', function(){
         	console.log('as');
         	pCode = grid.getValue(selectedRow, 'planCode');
@@ -174,5 +211,43 @@
         });
         
     });
+    
+	const radioButtons = document.querySelectorAll('input[name="option"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            performSearch(); // 여기에서 원하는 함수를 호출
+        });
+    });
+	
+	function performSearch() {
+	    const planCode = document.getElementById('planCode').value;
+	    const startDate = document.getElementById('startDate').value;
+	    const endDate = document.getElementById('endDate').value;
+
+	    const selectedOption = document.querySelector('input[name="option"]:checked');
+	    const status = selectedOption ? selectedOption.value : null; // 선택된 값이 없을 경우 null 처리
+
+	    
+	    const searchCriteria = {
+	        planCode: planCode,
+	        startDate: startDate,
+	        endDate: endDate,
+	        status: status
+	    };
+
+	    $.ajax({
+	        url: '/searchPlan',
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: JSON.stringify(searchCriteria),
+	        success: function(response) {
+	            grid.resetData(response);
+	
+	        },
+	        error: function(xhr, status, error) {
+	            console.error('Error fetching search results:', error);
+	        }
+	    });
+	}
     </script>
 </body>

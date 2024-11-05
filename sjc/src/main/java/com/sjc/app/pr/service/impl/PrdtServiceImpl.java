@@ -258,4 +258,10 @@ public class PrdtServiceImpl implements PrdtService {
 		// TODO Auto-generated method stub
 		return prdtMapper.planL(planCode);
 	}
+
+	@Override
+	public List<PlanVO> searchPlan(PlanVO planVO) {
+		// TODO Auto-generated method stub
+		return prdtMapper.searchPlan(planVO);
+	}
 }
