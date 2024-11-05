@@ -156,7 +156,7 @@ public class EqServiceImpl implements EqService {
         EqVO eqVO = new EqVO();
         eqVO.setEqCkDate(eqChckVO.getEqCkDate());
         eqVO.setEqCode(eqChckVO.getEqCode());
-        eqMapper.updateEqInfo(eqVO);
+        eqMapper.updateEqInfoJumgum(eqVO);
 	}
 
 
