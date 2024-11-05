@@ -9,147 +9,165 @@
 <title>설비 등록</title>
 </head>
 <style>
-.form-container {
-	background-color: #fff;
-	padding: 10px; /* 패딩 줄이기 */
-	border-radius: 8px;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 그림자 감소 */
-	width: 250px; /* 전체 크기 줄이기 */
-	margin: 10px auto; /* 상하 여백 줄이기 */
+/* 기본 스타일 */
+.card-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
 }
 
-.form-container div {
-	margin-bottom: 5px; /* 필드 사이의 간격 줄이기 */
-}
-
+/* 레이블 스타일 */
 label {
-	display: block;
-	margin-bottom: 1px; /* 레이블과 입력 필드 간격 줄이기 */
-	font-weight: bold; /* 글자 굵기 조절 */
-	font-size: 12px; /* 글자 크기 줄이기 */
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
-input[type="text"], input[type="date"], input[type="file"] {
-	width: 20%;
-	padding: 3px; /* 입력 필드 안쪽 여백 줄이기 */
-	margin-top: 3px; /* 입력 필드와 레이블 사이 간격 줄이기 */
-	border-radius: 4px; /* 모서리 둥글기 조절 */
+/* 입력 필드 공통 스타일 */
+input[type="text"], 
+input[type="date"], 
+input[type="file"],
+select {
+    width: 100%; /* 수정: 전체 너비로 변경 */
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
 }
 
-button {
-	width: 10%;
-	padding: 8px; /* 버튼 크기 줄이기 */
-	border-radius: 4px;
-	cursor: pointer;
-	margin-top: 8px; /* 버튼과 필드 간격 줄이기 */
+/* 온도 입력 필드 */
+.temp-fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-#eqMin {
-	width: 9.2%;
+#eqMin, #eqMax {
+    width: 100px;  /* 수정: 고정 너비 지정 */
 }
 
-#eqMax {
-	width: 9.2%;
-}
-
+/* 버튼 그룹 */
 .button-group {
-	display: flex;
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 8px 20px;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* form-control 수정 */
+.form-control {
+    width: 100%;  /* 수정: 전체 너비 사용 */
+}
+
+/* 라디오 버튼 그룹 */
+.radio-group {
+    margin-bottom: 15px;
+}
+
+/* select 박스 스타일링 */
+select {
+    background-color: white;
 }
 </style>
 <body>
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<p style="font-size: 300%">설비 등록</p>
 			<div class="card-box pd-20 mb-30">
-				<p style="font-size: 200%">설비 등록</p>
-				<div class="d-flex justify-content-between align-items-center mb-20">
-					<form th:action="@{/eqInsert}" name="insertForm" method="post"
-						class="form-control">
-						<div>
-							<label for="eqMdnm">모델명(필수)</label> <input type="text"
-								id="eqMdnm" name="eqMdnm">
-						</div>
-						<!-- 			<div>
-                <label for="eqCode" >설비코드</label>
-                <input type="hidden" id="eqCode" name="eqCode">
-            </div> -->
-						<div>
-							<label for="eqMdno">모델번호</label> <input type="text" id="eqMdno"
-								name="eqMdno">
-						</div>
-						<div>
-							<label for="use">사용여부</label> 
-							<input type="radio" name="use" value="Y">사용 가능
-							&nbsp
-							<input type="radio" name="use" value="N">사용 불가
-						</div>
-						<div>
-							<label for="eqType">설비구분</label> 
-							<select id="eqName" name="eqName">
-								<option value="">선택</option>
-								<optgroup id="" label="배합기" data-type='d1'>
+				<h2 class="mb-4">설비 등록</h2>
+				<form th:action="@{/eqInsert}" name="insertForm" method="post">
+					<div>
+						<label for="eqMdnm">모델명(필수)</label>
+						<input type="text" id="eqMdnm" name="eqMdnm">
+					</div>
+					<div>
+						<label for="eqMdno">모델번호</label>
+						<input type="text" id="eqMdno" name="eqMdno">
+					</div>
+					<div class="radio-group">
+						<label for="use">사용여부</label>
+						<input type="radio" name="use" value="Y">사용 가능
+						&nbsp;
+						<input type="radio" name="use" value="N">사용 불가
+					</div>
+					<div>
+						<label for="eqType">설비구분</label>
+						<select id="eqName" name="eqName">
+							<option value="">선택</option>
+							<optgroup id="" label="배합기" data-type='d1'>
 								<option value="바 배합기">바 배합기</option>
 								<option value="콘 배합기">콘 배합기</option>
-								</optgroup>
-								<optgroup label="성형기" data-type='d2'>
+							</optgroup>
+							<optgroup label="성형기" data-type='d2'>
 								<option value="바 성형기">바 성형기</option>
 								<option value="콘 성형기">콘 성형기</option>
-								</optgroup>
-								<optgroup label="냉각기" data-type='d3'>
+							</optgroup>
+							<optgroup label="냉각기" data-type='d3'>
 								<option value="바 냉각기">바 냉각기</option>
 								<option value="콘 냉각기">콘 냉각기</option>
-								</optgroup>
-								<optgroup label="포장기" data-type='d4'>
+							</optgroup>
+							<optgroup label="포장기" data-type='d4'>
 								<option value="바 포장기">바 포장기</option>
 								<option value="콘 포장기">콘 포장기</option>
-								</optgroup>
-							</select>
-							<input type="hidden" name="eqType">
+							</optgroup>
+						</select>
+						<input type="hidden" name="eqType">
+					</div>
+					<div>
+						<label for="eqPeriod">점검주기</label>
+						<input type="text" id="eqPeriod" placeholder="3개월" readonly>
+					</div>
+					<div>
+						<label for="eqTemp">가용온도</label>
+						<div class="temp-fields">
+							<input type="text" id="eqMin" name="eqMin" placeholder="최저">
+							<span>~</span>
+							<input type="text" id="eqMax" name="eqMax" placeholder="최고">
 						</div>
-						<div>
-
-							<label for="eqPeriod">점검주기</label> <input type="text"
-								id="eqPeriod" placeholder="3개월" readonly>
-						</div>
-						<div>
-							<label for="eqTemp">가용온도</label> <input type="text" id="eqMin"
-								name="eqMin" placeholder="최저"> ~ <input type="text"
-								id="eqMax" name="eqMax" placeholder="최고">
-						</div>
-						<div>
-							<label for="manager">담당자</label> <input type="text" id="manager"
-								name="manager">
-						</div>
-						<div>
-							<label for="eqLocation">설비위치</label> 
-							<select id="eqLocation" name="eqLocation">
-								<option value="">선택</option>
-								<option value="공장_1">공장_1</option>
-								<option value="공장_2">공장_2</option>
-								<option value="공장_3">공장_3</option>
-								<option value="공장_4">공장_4</option>
-							</select>
-						</div>
-						<div>
-							<label for="lineCode">라인코드</label> 
-							<select id="lineCode" name="lineCode">
-								<option value="">선택</option>
-								<option value="L01">L01</option>
-								<option value="L02">L02</option>
-							</select>
-						</div>
-						<div>
-							<label for="eqImg">설비사진</label> 
-							<input type="file" id="eqImg" name="eqImg">
-						</div>
-
-						<div class="button-group">
-							<button type="reset">초기화</button>
-							<button type="submit">등록</button>
-						</div>
-
-					</form>
-				</div>
+					</div>
+					<div>
+						<label for="manager">담당자</label>
+						<input type="text" id="manager" name="manager">
+					</div>
+					<div>
+						<!--
+						<label for="eqLocation">설비위치</label>
+						<select id="eqLocation" name="eqLocation">
+							<option value="">선택</option>
+							<option value="공장_1">공장_1</option>
+							<option value="공장_2">공장_2</option>
+							<option value="공장_3">공장_3</option>
+							<option value="공장_4">공장_4</option>
+						</select>
+						 -->
+					</div>
+					<div>
+						<label for="lineCode">라인코드</label>
+						<select id="lineCode" name="lineCode">
+							<option value="">선택</option>
+							<option value="L01">L01</option>
+							<option value="L02">L02</option>
+						</select>
+					</div>
+					<div>
+						<label for="eqImg">설비사진</label>
+						<input type="file" id="eqImg" name="eqImg">
+					</div>
+					<div class="button-group">
+						<button type="reset">초기화</button>
+						<button type="submit">등록</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
