@@ -158,6 +158,11 @@ public class EqServiceImpl implements EqService {
         eqVO.setEqCode(eqChckVO.getEqCode());
         eqMapper.updateEqInfoJumgum(eqVO);
 	}
+    
+@Override
+    public int selectEqChckOx(EqVO eqVO) {
+    	return eqMapper.selectEqChckOx(eqVO);
+    }
 
 
 

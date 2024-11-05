@@ -41,5 +41,9 @@ public interface EqService {
 	// 점검 상태 업데이트
 	public void updateCheckStatus(EqChckVO eqChckVO);
 
+	// 점검 상
+	public int selectEqChckOx(EqVO eqVO);
+
+
 }
 

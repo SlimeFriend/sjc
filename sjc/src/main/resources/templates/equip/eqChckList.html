@@ -94,6 +94,7 @@ tbody > tr {
 							<th>설비코드</th>
 							<th>설비명</th>
 							<th>사유</th>
+							<th>점검유무</th>
 							<th>시작날짜</th>
 							<th>종료날짜</th>
 						</tr>
@@ -106,6 +107,7 @@ tbody > tr {
 								<td>[[${wait.eqCode}]]</td>
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.reason}]]</td>
+								<td>[[${wait.eqChckOx}]]</td>
 								<td>[[ ${ #dates.format(wait.startDate, "yyyy-MM-dd HH:mm" )}
 									]]</td>
 								<td>[[ ${ #dates.format(wait.endDate, "yyyy-MM-dd HH:mm" )} ]]</td>
@@ -178,16 +180,36 @@ tbody > tr {
             let trTag = event.currentTarget;
             let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
             let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
-
-            // 모달의 input 필드에 값 설정
-            $('#eqCode').val(eqCode);
-            $('#eqName').val(eqName);
-
-            // 선택된 행을 모달에 저장 (등록 시 업데이트 용도)
-            $('#nOpModal').data('selectedRow', $(this));
-
-            // 모달 창 표시
-            $('#nOpModal').modal('show');
+            
+            const payload ={
+            		eqCode : eqCode
+            }
+            
+       	    $.ajax({
+       	        url: 'getEqChckOx',
+       	        type: 'POST',
+       	        contentType: 'application/json',
+       	        data: JSON.stringify(payload),
+       	        success: function(response) {
+       	        	if(response){
+       	        		alert("이미 비가동 등록 되어 있습니다.")
+       	        	}
+       	        	else{
+			            // 모달의 input 필드에 값 설정
+			            $('#eqCode').val(eqCode);
+			            $('#eqName').val(eqName);
+			
+			            // 선택된 행을 모달에 저장 (등록 시 업데이트 용도)
+			            $('#nOpModal').data('selectedRow', $(this));
+			
+			            // 모달 창 표시
+			            $('#nOpModal').modal('show');
+       	        		
+       	        	}
+       	            //console.log(response);
+       	            return false;
+       	        }
+       	    });	
         });
 
         // 사용 여부가 '가동'일 때 비가동 기간 및 사유 필드 비활성화
