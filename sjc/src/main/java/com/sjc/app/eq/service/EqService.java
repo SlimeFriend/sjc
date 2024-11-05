@@ -43,6 +43,9 @@ public interface EqService {
 
 	// 점검 상
 	public int selectEqChckOx(EqVO eqVO);
+	
+	// 비가동 내역 검색
+	public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate);
 
 
 }
