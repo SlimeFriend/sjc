@@ -32,20 +32,17 @@
 						</div>
 						
 						<div style="display: flex; justify-content: flex-end;">
-							<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">주문접수</button>
+							<button class="btn" type="button" onclick="sendCheckedRows()" style="background-color: #0b132b; color: #ffffff;">주문접수</button>
 						</div>
 					</form>
 				</div>
 				
 				<div class="pd-20 card-box mb-20" style="width: 48%; display: flex; flex-direction: column;">
 					<h2 class="h5 mb-20">제품 선택</h2>
-					<div id="grid" style="flex-grow: 1;"> </div>
-					<div>
-						<h2 class="h4 mb-10">주문금액 : <span id="totalPrice"></span></h2>
-					</div>
+					<div id="grid"></div>
 				</div>
 				
-				<!-- The Modal -->
+			<!-- The Modal -->
 			<div class="modal" id="myModal">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content">
@@ -98,18 +95,8 @@
 						name : 'unitPrice',
 						align : 'center',
 					}, {
-						header : '가격',
-						name : 'price',
-						align : 'center',
-						editor: 'text',
-					}, {
 						header : '수량',
 						name : 'ordQuantity',
-						align : 'center',
-						editor: 'text',
-					}, {
-						header : '총 가격',
-						name : 'totalPrice',
 						align : 'center',
 						editor: 'text',
 					}, ],
@@ -188,8 +175,6 @@
 			        document.getElementById('cpCode').value = cpCode; // 업체 코드
 			        document.getElementById('cpInput').value = cpName; // 업체 이름
 				});
-				
-
 				
 			    // 현재 날짜 가져오기
 			    const today = new Date();
