@@ -301,7 +301,29 @@ public class PrController {
 	
 	@PostMapping("searchPlan")
 	@ResponseBody
-	public List<PlanVO> searchPlan(@RequestBody PlanVO planVO){
-		return prdtService.searchPlan(planVO);
+	public List<PlanVO> searchPlan(@RequestBody Map<String, Object> request){
+		String planCode = (String) request.get("planCode");
+	    String startDate = (String) request.get("startDate");
+	    String endDate = (String) request.get("endDate");
+	    String status = (String) request.get("status");
+		return prdtService.searchPlan(planCode, startDate, endDate, status);
+	}
+	
+	@PostMapping("searchOrders")
+	@ResponseBody
+	public List<POrderVO> searchOrders(@RequestBody Map<String, Object> request){
+		String porderCode = (String) request.get("porderCode");
+	    String startDate = (String) request.get("startDate");
+	    String endDate = (String) request.get("endDate");
+	    String status = (String) request.get("status");
+		return prdtService.searchOrders(porderCode, startDate, endDate, status);
+	}
+	
+	@PostMapping("deleteOrder")
+	@ResponseBody
+	public int deleteOrder(@RequestBody Map<String, Object> request) {
+		String porderCode = (String) request.get("porderCode");
+		
+		return prdtService.deleteOrder(porderCode);
 	}
 }

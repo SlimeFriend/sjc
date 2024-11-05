@@ -83,5 +83,11 @@ public interface PrdtService {
 	public List<LinePrdVO> planL(String planCode);
 	
 	// 계획 검색 기능
-	public List<PlanVO> searchPlan(PlanVO planVO);
+	public List<PlanVO> searchPlan(String planCode, String startDate, String endDate, String status);
+	
+	// 지시 검색
+	public List<POrderVO> searchOrders(String porderCode, String startDate, String endDate, String status);
+	
+	// 지시 삭제
+	public int deleteOrder(String porderCode);
 }

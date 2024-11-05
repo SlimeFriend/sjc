@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.pr.mapper.PrdtMapper;
@@ -260,8 +261,40 @@ public class PrdtServiceImpl implements PrdtService {
 	}
 
 	@Override
-	public List<PlanVO> searchPlan(PlanVO planVO) {
+	public List<PlanVO> searchPlan(String planCode, String startDate, String endDate, String status) {
 		// TODO Auto-generated method stub
-		return prdtMapper.searchPlan(planVO);
+		return prdtMapper.searchPlan(planCode, startDate, endDate, status);
+	}
+
+	@Override
+	public List<POrderVO> searchOrders(String porderCode, String startDate, String endDate, String status) {
+		// TODO Auto-generated method stub
+		return prdtMapper.searchOrders(porderCode, startDate, endDate, status);
+	}
+
+	@Transactional
+	@Override
+	public int deleteOrder(String porderCode) {
+		// 지시 상세 
+		List<String> pdCode = prdtMapper.findD(porderCode);
+		// result 삭제
+		pdCode.forEach(pc ->{
+			prdtMapper.deleteResult(pc);
+		});
+		
+		// 상세 삭제
+		prdtMapper.deleteDetail(porderCode);
+		
+		
+		// 지시 연결 플랜 체크
+		String planCode = prdtMapper.searchOrderPlan(porderCode);
+		
+		// 계획 연결된 지시숫자체크
+		if(prdtMapper.countOrder(planCode) == 1) {
+			prdtMapper.updatePlanS(planCode);
+		}
+		
+		
+		return prdtMapper.deleteOrder(porderCode);
 	}
 }

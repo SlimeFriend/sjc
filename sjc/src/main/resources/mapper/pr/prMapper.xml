@@ -454,15 +454,15 @@ where d.plan_code = #{planCode}
 order by l.use DESC, d.prd_code, l.line_code
 </select>
 
-<!-- 지시 생성 시 선택 라인 상태 변경 -->
-<update id="updateLine" parameterType="LinePrdVO">
-update line
-set use = 'U'
-where line_code = #{lineCode}
-</update>
+	<!-- 지시 생성 시 선택 라인 상태 변경 -->
+	<update id="updateLine" parameterType="LinePrdVO">
+		update line
+		set use = 'U'
+		where line_code = #{lineCode}
+	</update>
 
-<!-- 계획 검색 -->
-<select id="searchPlan" resultType="planVO">
+	<!-- 계획 검색 -->
+	<select id="searchPlan" resultType="planVO">
 	    SELECT p.plan_code,
 	    		p.start_date,
 	    		p.end_date,
@@ -477,13 +477,84 @@ where line_code = #{lineCode}
 	        AND p.plan_code LIKE '%' || #{planCode} || '%'
 	    </if>
 	    <if test="startDate != null and startDate != ''">
-	        AND o.start_date <![CDATA[>=]]> #{startDate}
-	    </if>
+	        AND p.start_date <![CDATA[>=]]> TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	    </if> 
 	    <if test="endDate != null and endDate != ''">
-	        AND p.end_date <![CDATA[<=]]> #{endDate}
+	        AND p.end_date <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
 	    </if>
 	    <if test="status != null and status != ''">
         	AND status like #{status}||'%'
     	</if>
 	</select>
+	
+	<select id="searchOrders" resultType="porderVO">
+	    SELECT p.porder_code,
+	    		p.start_date,
+	    		p.porder_date,
+	    		u.user_name,
+	    		p.status,
+	    		p.comm
+	    FROM   porder p
+	    JOIN sjc_user u
+	    ON p.manager = u.user_id
+	    WHERE 1 = 1
+	    <if test="porderCode != null and porderCode != ''">
+	        AND p.porder_code LIKE '%' || #{porderCode} || '%'
+	    </if>
+	    <if test="startDate != null and startDate != ''">
+	        AND p.porder_date <![CDATA[>=]]> TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	    </if> 
+	    <if test="endDate != null and endDate != ''">
+	        AND p.porder_date <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+	    </if>
+	    <if test="status != null and status != ''">
+	    	<if test="status == 'b3'">
+	    		AND status = 'b3' OR status = '완제품품질검사중' OR status = '완제품품질검사완료'
+	    	</if>
+	    	<if test="status != 'b3'">
+        	AND status like #{status}||'%'
+	    	
+	    	</if>
+    	</if>
+    	
+	</select>
+	
+	<select id="findD" parameterType="String" resultType="String">
+		select pdetail_code
+		from pdetail
+		where porder_code = #{porderCode}
+	</select>
+	
+	<delete id="deleteResult" parameterType="String">
+		delete presult
+		where pdetail_code = #{pdetailCode}
+	</delete>
+	
+	<delete id="deleteDetail" parameterType="String">
+		delete pdetail
+		where porder_code = #{porderCode}
+	</delete>
+
+	<delete id="deleteOrder" parameterType="String">
+		delete porder
+		where porder_code = #{porderCode}
+	</delete>
+	
+	<select id="searchOrderPlan" parameterType="String" resultType="String">
+		select plan_code
+		from porder
+		where porder_code = #{porderCode}
+	</select>
+	
+	<select id="countOrder" parameterType="String" resultType="int">
+		select count(porder_code)
+		from porder
+		where plan_code = #{planCode}
+	</select>
+	
+	<update id="updatePlanS" parameterType="String">
+		update plan
+		set status = 'a1'
+		where plan_code = #{planCode}
+	</update>
 </mapper>
