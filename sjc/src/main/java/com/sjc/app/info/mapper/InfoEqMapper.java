@@ -14,5 +14,7 @@ public interface InfoEqMapper {
 	String selectEqLogTime();
 	// 설비 조회
 	List<EqDTO> selectEqCount();
+	// 설비 가동,비가동,점검 조회
+	List<EqDTO> selectEqChckCount();
 
 }

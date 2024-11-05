@@ -31,10 +31,14 @@ public class InfoEqRestController {
     public ChartDataVO getEqLog() {
     	return infoEqService.getEqLog();
     }
-    
 	// 설비 조회
 	@GetMapping("getChartEq")
 	public List<EqDTO> getChartEq(){
 		return infoEqService.getEq();
+	}
+	// 설비 가동율 조회
+	@GetMapping("getChartEqChck")
+	public List<EqDTO> getChartEqChck(){
+		return infoEqService.getEqChck();
 	}    
 }

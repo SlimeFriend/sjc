@@ -53,4 +53,23 @@
 		GROUP BY line_code, eq_type
 		ORDER BY line_code, eq_type
 	</select>	
+	
+	<select id="selectEqChckCount" resultType="EqDTO">
+	
+		SELECT 
+		   CASE 
+		       WHEN USE = 'Y' THEN '가동'
+		       WHEN USE = 'N' THEN '비가동'
+		   END as eq_status,
+		   COUNT(1) as eq_count
+		FROM eq
+		WHERE USE IN ('Y', 'N')
+		GROUP BY 
+		   CASE 
+		       WHEN USE = 'Y' THEN '가동'
+		       WHEN USE = 'N' THEN '비가동'
+		   END
+		ORDER BY eq_status
+	 
+	</select>	
 </mapper>

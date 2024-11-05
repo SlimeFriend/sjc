@@ -20,4 +20,9 @@ public class InfoEqController {
 	public String infoEqChartQuintuple() {
 		return "info/eqChartQuintuple";
 	}
+	// 설비 차트
+	@GetMapping("infoEqChartQuarter")
+	public String infoEqChartQuarter() {
+		return "info/eqChartQuarter";
+	}
 }
