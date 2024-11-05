@@ -13,29 +13,31 @@
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 	<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
 	<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
-<style>
-	.chart-container {
-	    width: 100%;
-	    max-width: 100%;
-	    overflow-x: auto;
-	}
-	.chart-wrapper {
-	    position: relative;
-	    width: 100%;
-	    min-height: 250px;
-	    margin: 0 auto;
-	}
-		
-	#pieChart {
-	    margin: 0 auto;
-	}
 	
-	@media (max-width: 768px) {
-	    .chart-wrapper {
-	        min-height: 250px;
-	    }
-	}
-</style></head>
+	<style>
+		.chart-container {
+		    width: 100%;
+		    max-width: 100%;
+		    overflow-x: auto;
+		}
+		.chart-wrapper {
+		    position: relative;
+		    width: 100%;
+		    min-height: 250px;
+		    margin: 0 auto;
+		}
+			
+		#pieChart {
+		    margin: 0 auto;
+		}
+		
+		@media (max-width: 768px) {
+		    .chart-wrapper {
+		        min-height: 250px;
+		    }
+		}
+	</style>
+</head>
 <body>
 <div class="main-container">
     <div class="pd-ltr-20">
@@ -44,8 +46,6 @@
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
-	            		
-		            	
 	                    <div class="chart-wrapper">
 	                        <div id="pieChartLeft"></div>
 	                    </div>
@@ -65,8 +65,8 @@
 		            
 			                <div>
 			            		<h2 class="h5 mb-20">실시간 온도 모니터링</h2>
-			            		
 			                </div>
+			                
 							<div class="row mb-3">
 							    <div class="col">
 							        <div class="btn-group" role="group">
@@ -406,7 +406,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	    }
 	    console.log(isStart);
 	});
-	
 	
 	let intervalId = null; // 인터벌 버튼
 	

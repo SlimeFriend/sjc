@@ -10,9 +10,10 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">완제품 입/출고 내역</h2>
+			<h2 class="h2 mb-20">입/출고 내역</h2>
 			<div class="pd-30 card-box mb-20">
 				<div class="d-flex justify-content-between align-items-start">
 					<div style="flex-grow:1" id="inInput">
@@ -71,8 +72,8 @@
 					
 					<div class="mb-20 d-flex flex-column align-items-end">
 						<div>
-							<button class="btn btn-danger" id="inButton">입고</button>
-							<button class="btn btn-primary" id="outButton">출고</button>
+							<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
+							<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
 						</div>
 					</div>
 				</div>
@@ -169,23 +170,38 @@
 				}
 			});
 			
-			// 입고 버튼 클릭 이벤트
-	        document.getElementById('inButton').addEventListener('click', function() {
-	            inGrid.style.display = 'block'; // 입고 그리드 보이기
-	            outGrid.style.display = 'none'; // 출고 그리드 숨기기
-	            inInput.style.display = 'block';
-	            outInput.style.display = 'none';
-	            iGrid.refreshLayout();
-	        });
+			// 초기 버튼 스타일 설정 함수
+		    function setButtonStyles(activeButton, inactiveButton) {
+		        activeButton.style.backgroundColor = '#0b132b';
+		        activeButton.style.color = '#ffffff';
+		        inactiveButton.style.backgroundColor = '#ffffff';
+		        inactiveButton.style.color = '#0b132b';
+		        inactiveButton.style.border = '1px solid #0b132b';
+		    }
 
-	        // 출고 버튼 클릭 이벤트
-	        document.getElementById('outButton').addEventListener('click', function() {
-	            outGrid.style.display = 'block'; // 출고 그리드 보이기
-	            inGrid.style.display = 'none'; // 입고 그리드 숨기기
-	            inInput.style.display = 'none';
-	            outInput.style.display = 'block';
-	            oGrid.refreshLayout();
-	        });
+		    // 입고 버튼 클릭 이벤트
+		    document.getElementById('inButton').addEventListener('click', function() {
+		        inGrid.style.display = 'block'; // 입고 그리드 보이기
+		        outGrid.style.display = 'none'; // 출고 그리드 숨기기
+		        inInput.style.display = 'block';
+		        outInput.style.display = 'none';
+		        iGrid.refreshLayout();
+
+		        // 버튼 스타일 업데이트
+		        setButtonStyles(this, document.getElementById('outButton'));
+		    });
+
+		    // 출고 버튼 클릭 이벤트
+		    document.getElementById('outButton').addEventListener('click', function() {
+		        outGrid.style.display = 'block'; // 출고 그리드 보이기
+		        inGrid.style.display = 'none'; // 입고 그리드 숨기기
+		        inInput.style.display = 'none';
+		        outInput.style.display = 'block';
+		        oGrid.refreshLayout();
+
+		        // 버튼 스타일 업데이트
+		        setButtonStyles(this, document.getElementById('inButton'));
+		    });
 		});
 		
 		function inSearch() {

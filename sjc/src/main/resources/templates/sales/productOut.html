@@ -6,6 +6,23 @@
 	
 	<head>
     	<title>출고관리</title>
+    	<style>
+    		#submitBtn {
+    			border: 1px solid #0b132b; 
+    			color: #0b132b;
+    		}
+    		
+    		#cancelBtn {
+    			border: 1px solid #0b132b; 
+    			color: #0b132b;
+    		}
+    		
+	    	#submitBtn:hover,
+			#cancelBtn:hover {
+	    		background-color: #0b132b;
+	    		color: #ffffff;
+			}
+    	</style>
 	</head>
 
 	<!-- 페이징 필요하신분 -->
@@ -36,8 +53,8 @@
 						</div>
 						<!-- Modal footer -->
 						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-primary" id="submitBtn">등록</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">취소</button>
+							<button type="button" class="btn" id="submitBtn">등록</button>
+							<button type="button" class="btn" data-dismiss="modal" id="cancelBtn">취소</button>
 						</div>
 					</div>
 				</div>
@@ -71,7 +88,7 @@
 				el : document.getElementById('gridOrder'),
 				data : gridData,
 				scrollX : false,
-				scrollY : false,
+				scrollY : true,
 				columns : [ {
 					header : '주문코드',
 					name : 'ordCode',
@@ -94,10 +111,11 @@
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 10
-				}
+				bodyHeight: 200,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10 
+				},
 			});
 			
 			function fetchGrid() {
@@ -346,7 +364,6 @@
 			    const productName = productLotGrid.getValue(rowKey, 'PRD_NAME'); // 제품명 가져오기
 			    const lotOutQuantity = productLotGrid.getValue(rowKey, 'OUT_QUANTITY');
 			    
-
 			    // 출고량을 해당 행에 설정
 			    productLotGrid.setValue(rowKey, 'OUT_QUANTITY', value);
 			    
@@ -511,7 +528,6 @@
 			 	// 그리드 레이아웃 새로고침
 			    productLotGrid.refreshLayout();
 			});
-
 
 		});
 	</script>
