@@ -9,12 +9,12 @@
     <title>전체 재고 관리</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-          <style>
-/* tui-grid 선택 테두리 제거 */
-.tui-grid-layer-focus-border {
-    display: none !important;
-}
-</style>
+    <style>
+        /* tui-grid 선택 테두리 제거 */
+        .tui-grid-layer-focus-border {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <div class="main-container">
@@ -195,7 +195,10 @@
                     success: function (response) {
                         $('#adjustStockModal').modal('hide');
                         var mtCode = $('#mtCode').val();
-                        updateStockTable(mtCode); // 재고 테이블 갱신
+
+                        // 전체 재고 목록과 상세 재고 테이블 갱신
+                        updateStockList(); // 전체 재고 목록 갱신
+                        updateStockTable(mtCode); // 상세 재고 테이블 갱신
                     },
                     error: function (error) {
                         console.log('재고 조정에 실패했습니다.');
@@ -204,9 +207,23 @@
             });
         });
 
-     // 선택된 자재의 상세 재고 테이블을 갱신
+        // 전체 재고 목록 갱신
+        function updateStockList() {
+            $.ajax({
+                url: '/stock', // 전체 재고 목록을 가져오는 URL
+                method: 'GET',
+                success: function (data) {
+                    // 페이지 전체가 아닌 재고 목록 테이블만 갱신하도록 지정된 영역을 업데이트
+                    $('.container').html($(data).find('.container').html());
+                },
+                error: function (error) {
+                    console.log('재고 목록 갱신에 실패했습니다.');
+                }
+            });
+        }
+
+        // 선택된 자재의 상세 재고 테이블을 갱신
         function updateStockTable(mtCode) {
-            event.preventDefault();
             $.ajax({
                 url: '/stock/' + mtCode + '/lots',
                 method: 'GET',

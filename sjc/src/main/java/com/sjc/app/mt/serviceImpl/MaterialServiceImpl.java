@@ -16,14 +16,11 @@ public class MaterialServiceImpl implements MaterialService {
     private MaterialMapper materialMapper;
 
     /**
-     * 모든 자재 목록을 페이징하여 조회합니다.
+     * 모든 자재 목록을 조회하여 반환합니다.
      */
     @Override
     public List<MtVO> getAllMaterials() {
-        int limit = 8;   // 페이지당 데이터 개수
-        int offset = 0;   // 기본값 (첫 페이지)
-
-        return materialMapper.selectAllMaterials(limit, offset);
+        return materialMapper.selectAllMaterials();
     }
 
     /**
@@ -48,13 +45,5 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public List<MtVO> getMaterialsByPlanCode(String planCode) {
         return materialMapper.selectMaterialsByPlanCode(planCode);
-    }
-    
-    /**
-     * 페이징 적용된 자재 목록을 조회합니다.
-     */
-    @Override
-    public List<MtVO> getAllMaterialsWithPaging(int limit, int offset) {
-        return materialMapper.selectAllMaterials(limit, offset);
     }
 }

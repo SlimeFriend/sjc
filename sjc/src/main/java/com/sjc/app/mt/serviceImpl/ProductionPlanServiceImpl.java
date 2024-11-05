@@ -20,14 +20,11 @@ public class ProductionPlanServiceImpl implements ProductionPlanService {
     }
 
     /**
-     * 모든 생산 계획을 페이징하여 조회합니다.
+     * 모든 생산 계획 조회
      */
     @Override
     public List<PlanVO> getAllProductionPlans() {
-        int limit = 8;   // 페이지당 데이터 개수
-        int offset = 0;   // 기본값 (첫 페이지)
-
-        return productionPlanMapper.selectAllProductionPlans(limit, offset);
+        return productionPlanMapper.selectAllProductionPlans();
     }
 
     /**
@@ -36,13 +33,5 @@ public class ProductionPlanServiceImpl implements ProductionPlanService {
     @Override
     public List<MtVO> getMaterialsByPlanCode(String planCode) {
         return productionPlanMapper.selectMaterialsByPlanCode(planCode);
-    }
-    
-    /**
-     * 페이징 적용된 생산 계획 목록 조회
-     */
-    @Override
-    public List<PlanVO> getAllProductionPlansWithPaging(int limit, int offset) {
-        return productionPlanMapper.selectAllProductionPlans(limit, offset);
     }
 }
