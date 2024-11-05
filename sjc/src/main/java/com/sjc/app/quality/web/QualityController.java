@@ -236,6 +236,21 @@ public class QualityController {
 		@Transactional
 		public Map<String, Object> insertInsPDtl(@RequestBody InspectionVO inspectionVO) {
 
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String id = null;
+            String name = null;
+            if (authentication.getPrincipal() instanceof LoginUserVO) {
+                LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
+                id = loginUserVO.getUserVO().getUserId();
+                name = loginUserVO.getUserVO().getUserName();
+            }
+						
+			
+			
+			
+			
+			
 			List<InspectionVO> pDInsList;
 			Map<String, Object> map = new HashMap<String, Object>();
 
@@ -244,15 +259,15 @@ public class QualityController {
 			if (countIns == 0) {
 
 			
-				// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-				// qualityService.mtlOdStatusUpdate(inspectionVO);
-				// qualityService.mtlOdDetailStatusUpdate(inspectionVO);
+				// 검사대기->검사중 - updatePOrderStatus, updatePDetailStatus
+				 qualityService.pOrderStatusUpdate(inspectionVO);
+				 qualityService.pDetailStatusUpdate(inspectionVO);
 				// inspection 데이터 생성
 				qualityService.dtlInsInsert(inspectionVO);
-				// inspection 데이터 출력
-				//pDInsList = qualityService.pDtlInsSelect(inspectionVO);
+//				pDInsList = qualityService.pDtlInsSelect(inspectionVO);
 
 			}
+			// inspection 데이터 출력
 			pDInsList = qualityService.pDtlInsSelect(inspectionVO);
 			String insCode = null;
 			for (InspectionVO insVO : pDInsList) {
@@ -295,8 +310,14 @@ public class QualityController {
 
 				pDInsDtlList.add(insVO);
 			}
+			List<InspectionVO> newpDInsList = new ArrayList<>();
+			for(InspectionVO vo : pDInsList) {
+                vo.setUserId(Integer.parseInt(id));
+                vo.setUserName(name);
+                newpDInsList.add(vo);
+            }
 
-			map.put("pDInsList", pDInsList);
+			map.put("pDInsList", newpDInsList);
 			map.put("testList", testList);
 			map.put("pDInsDtlList", pDInsDtlList);
 
@@ -304,7 +325,8 @@ public class QualityController {
 
 		}
 		// 완제품품질검사 등록
-		@PostMapping("insPdUpdate")
+		@PostMapping("finishQualityWait")
+		@ResponseBody
 		public List<InspectionVO> insPdUpdate(@RequestBody List<InspectionVO> insPdData) {
 			
 			
@@ -318,7 +340,7 @@ public class QualityController {
 		// 제품출고검사완료페이지
 		@GetMapping("outQualityDone")
 		public String outDoneInfoSelect(Model model) {
-			List<PDetailVO> pDetailDones = qualityService.outDoneInfoSelect();
+			List<InspectionVO> pDetailDones = qualityService.outDoneInfoSelect();
 			model.addAttribute("pDetailDones", pDetailDones);
 			return "quality/outQualityDone";
 		}

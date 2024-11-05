@@ -45,6 +45,8 @@ public interface QualityMapper {
 	
 	//검사기준목록
 	public List<InspectionVO> selectTest();
+	//검사기준목록
+	public List<InspectionVO> selectTest2();
 	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public void updateMtlOdSt(InspectionVO inspectionVO);
 	
@@ -66,6 +68,11 @@ public interface QualityMapper {
 	public List<InspectionVO> selectPOrder();
 	// 완제품품질검사 대기목록2
 	public List<Map<String, Object>> selectPDetail(String porderCode);
+
+	// 검사대기->검사중 - updatePOrderStatus, updatePDetailStatus
+	public int updatePDetailStatus(InspectionVO inspectionVO);
+	public int updatePOrderStatus(InspectionVO inspectionVO);
+	
 	// 완제품품질검사등록모달-inspection 데이터 갯수 카운트
 	public int cntPDtlIns(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달-inspection 생성
@@ -73,18 +80,19 @@ public interface QualityMapper {
 	// 완제품품질검사등록모달-inspection 데이터 출력
 	public List<InspectionVO> selectPDtlIns(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달-insDetail 데이터 갯수 카운트
-	public int countPDInsD(InspectionVO inspectionVO);
-	// 완제품품질검사등록모달- insDetail 생성
-	public int insertPDtlInsD(InspectionVO inspectionVO);
+	public int countInsItem2(InspectionVO inspectionVO);
+//	// 완제품품질검사등록모달- insDetail 생성
+//	public int insertInsDetail(InspectionVO inspectionVO);
 	// 완제품품질검사등록모달- 검사리스트 출력
 	public List<InspectionVO> selectPDtlTest(InspectionVO inspectionVO);
-	public List<InspectionVO> selectPDtlInsDList(InspectionVO inspectionVO);
+//	public List<InspectionVO> selectInsDetailList(InspectionVO inspectionVO);
 	// 완제품품질검사모달창 - pdetail.pdetail_code 완제품품질검사완료
 	public int updatePdSt(InspectionVO inspectionVO);
+	public int updatePoSt(InspectionVO inspectionVO);
 
 	
 	// 완제품품질검완료페이지 조회
-	public List<PDetailVO> selectOutDoneInfo();
+	public List<InspectionVO> selectOutDoneInfo2();
 	// 완제품품질검완료페이지 - 입고처리 버튼 - porder.status 출고대기
 	public int updatePOrderDone(InspectionVO inspectionVO);
 	// 완제품품질검완료페이지 - 입고처리 버튼 - prdManagement로 데이터 넣기
@@ -133,11 +141,14 @@ public interface QualityMapper {
 	
 	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
 	public int updateInspectionDone(InspectionVO inspectionVO);
+	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
+	public int updateInspectionDone2(InspectionVO inspectionVO);
 
 
 	//public int updateMtlOdDone(@Param("mtlOdStatus")String mtlOdStatus, InspectionVO inspectionVO);
 
 	public void insertMtInInfo(InspectionVO inspectionVO);
+
 
 
 
