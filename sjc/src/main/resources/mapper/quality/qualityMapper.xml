@@ -480,6 +480,11 @@
 		JOIN    sjc_user u
 		ON      u.user_id = po.manager
 		WHERE   po.status = 'b3'
+		OR		(
+        			po.status = '완제품품질검사중'
+        			and     
+        			pd.status = 'b3'
+        		)
 		GROUP BY po.porder_code
 	</select>
 	<!-- 완제품품질검사 대기목록2(porder_code) -->
@@ -504,7 +509,8 @@
 		SET status = '완제품품질검사중'
 		WHERE porder_code = (SELECT porder_code
 							 FROM pdetail
-							 WHERE pdetail_code = #{pdetailCode							)
+							 WHERE pdetail_code = #{pdetailCode}
+							 )
 	</update>
 	
 	<update id="updatePDetailStatus">
@@ -654,7 +660,7 @@
 		        and po.status not in ('반품', '입고완료')
 	</select>
 	<!-- 완제품품질검사 완료목록 2 -->
-	<select id="selectOutDoneInfo2" resultType="InspectionVO">
+<!-- 	<select id="selectOutDoneInfo2" resultType="InspectionVO">
 		SELECT   i.ins_date			        AS "insDate"
 		        , i.ins_status	            AS "insStatus"
                 , i.number_of_tests 	    AS "numberOfTests"
@@ -682,11 +688,39 @@
 		AND     po.status = '완제품품질검사완료'
 		AND     pd.status not in ('불량', '출고대기')
 	</select>
+ -->	
+ <select id="selectOutDoneInfo2" resultType="InspectionVO">
+		SELECT   i.ins_date			        AS "insDate"
+		        , i.ins_status	            AS "insStatus"
+                , i.number_of_tests 	    AS "numberOfTests"
+		        , i.number_of_passes	    AS "numberOfPasses"
+		        , i.number_of_total_pass    AS "numberOfTotalPass"
+		        , i.total_pass	            AS "totalPass"
+		        , i.user_id	                AS "userId"
+                , i.ins_code	            AS "insCode"
+                , p.prd_code	            AS "prdCode"
+		        , p.prd_name	            AS "prdName"
+		        , pd.pdetail_code	        AS "pdetailCode"
+		        , pd.status	                AS "pdetailStatus"
+                , pd.output	                AS "output"
+                , po.start_date           	AS "startDate"
+
+        FROM    prd p
+        JOIN    pdetail pd
+        ON      p.prd_code = pd.prd_code
+        JOIN    porder po
+        ON      pd.porder_code = po.porder_code
+        JOIN    inspection i
+        ON      pd.pdetail_code = i.pdetail_code
+		WHERE   i.ins_status = '검사완료'
+               AND     po.status = '완제품품질검사완료'
+               AND     pd.status not in ('불량', '출고대기')
+	</select>
 	<!--  // 완제품품질검사완료페이지 - 입고처리 버튼 - pdetail.status 출고대기 -->
 	<update id="updatePOrderDone" parameterType="InspectionVO">
 		UPDATE pdetail
 		SET status = '출고대기'
-		WHERE pdetail_code = #{pDetailCode}
+		WHERE pdetail_code = #{pdetailCode}
 	</update>
 	
 	<insert id="insertPManage" parameterType="InspectionVO">
@@ -697,21 +731,21 @@
 		    INSERT INTO prd_management (
 						        lot,
 						        prd_code, 
-						        md, 
+						        md,
 						        ed, 
 						        in_quantity,
 						        ins_code,
-						        in_date, 
+						        in_date
 						    )
 		    VALUES 			(
 						        
 						        #{lot},
 						        #{prdCode},
-						        #{processDate},
+						        #{startDate},
 						        ADD_MONTHS(SYSDATE, 6),
-						        #{inQuantity},
+						        #{inQ},
 						        #{insCode},
-						        SYSDATE,
+						        SYSDATE
 						    )
 	</insert>
 
@@ -725,7 +759,7 @@
 	<update id="updateInspectionDone2" parameterType="InspectionVO">
 		UPDATE inspection
 		SET ins_status = '검사완료'
-		WHERE pdetail_code = #{pDetailCode}
+		WHERE pdetail_code = #{pdetailCode}
 	</update>
 
 <!--  // 완제품품질검사완료페이지 - 불량처리 버튼 - pdetail.status 반품 -->

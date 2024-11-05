@@ -349,16 +349,16 @@ public class QualityController {
 		// 자재입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 		@PostMapping("updateFinish")
 		@ResponseBody
-		public List<InspectionVO> upPOrdInPMan(@RequestBody List<InspectionVO> up) {
-			return qualityService.upPOrdInPMan(up);
+		public List<InspectionVO> upPOrdInPMan(@RequestBody List<InspectionVO> inspectionVO) {
+			return qualityService.upPOrdInPMan(inspectionVO);
 			
 		}	
 		
 	    // 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
 	    @PostMapping("updatePdBack")
 	    @ResponseBody
-	    public List<InspectionVO> pdBackUpdate(@RequestBody List<InspectionVO> pd) {
-	    	return qualityService.pdBackUpdate(pd);
+	    public List<InspectionVO> pdBackUpdate(@RequestBody List<InspectionVO> inspectionVO) {
+	    	return qualityService.pdBackUpdate(inspectionVO);
 	    }
     
     

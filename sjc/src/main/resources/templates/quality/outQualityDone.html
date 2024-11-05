@@ -98,14 +98,17 @@
 										<th>품질검사 날짜</th>
 										<th>품질검사 코드</th>
 										<th>품질검사 상태</th>
-										<th>거래처코드</th>
-										<th>자재명</th>
-										<th>규격</th>
+										<th>제품코드</th>
+										
+										<th>제품명</th>
+										<th>생산일자</th>
 										<th>검사수</th>
 										<th>합격수</th>
 										<th>합격여부</th>
-										<th>자재발주코드</th>
-										<th>자재코드</th>
+										
+										<th>생산지시상세코드</th>
+										<th>생산지시상세상태</th>
+										<th>입고가능수량</th>
 										<th>직원번호</th>
 									</tr>
 								</thead>
@@ -113,22 +116,21 @@
     <th:block th:each="done : ${pDetailDones}">
         <tr>
             <td><input type=checkbox name=incomingQualityCheck></td>
-            <td class="table-plus">[[${done.insDate}]]</td>
+            <td class="table-plus">[[${#dates.format(done.insDate, "yyyy-MM-dd")}]]</td>
             <td><h5 class="font-16">[[${done.insCode}]]</h5></td>
             <td>[[${done.insStatus}]]</td>
             <td>[[${done.prdCode}]]</td>
             
             <td>[[${done.prdName}]]</td>
-            <td>[[${done.processDate}]]</td>
+            <td>[[${#dates.format(done.startDate, "yyyy-MM-dd")}]]</td>
             <td>[[${done.numberOfTests}]]</td>
             <td>[[${done.numberOfPasses}]]</td>
             <td>[[${done.totalPass}]]</td>
             
             <td>[[${done.pdetailCode}]]</td>
-            <td>[[${done.pdetailStatus]}]]</td>
-            <td>[[${done.porderCode]}]]</td>
+            <td>[[${done.pdetailStatus}]]</td>
+            <td>[[${done.numberOfTotalPass}]]</td>
             <td>[[${#authentication.principal.authorities[1]}]]</td>
-            <td><input type="text" name="comm"></td>
         </tr>
     </th:block>
 </tbody>
@@ -207,114 +209,7 @@
 	    }
 	    
 	    
-	    
-	    
-	    
-	    
-/* 	    		$("#success1").on('click', updateAjax);
-		console.log("버튼 클릭됨");
-		
-		function updateAjax(event){
-			// 1) 보낼 데이터 가져오기
-			let dataObj = getFormData();
-			// 2) AJAX
-			$.ajax("inspectionDoneUpdate", {
-				type : 'post', //method
-				//data : dataObj // 객체 => QueryString
-				
-				//JSON : @RequestBody 선언되어있을 때 이 방식.
-				contentType : 'application/json', 
-				data:JSON.stringify(dataObj)
-				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
-				/*beforeSend: function (xhr) {
-					xhr.setRequestHeader(csrfHeader, csrfToken);
-				}*/
-/* 			})
-			.done((result)=>{
-				console.log(result);
-			})
-			.done((data)=>{
-				//return 'result : ' + data.result;
-				if(data.result){
-					alert('성공적으로 수정되었습니다.');
-					
-				}else{
-					alert('수정되지 않았습니다.');
-				}
-			})
-			.fail((err)=>console.log(err));
-		}  */
-		
-/* 		function getFormData(){
-			
-			let formAry1 = $("input[name=incomingQualityCheck]:checked").serializeArray();
-			console.log(formAry1);
-			let formObj1 = {};
-			console.log(formObj1);
-			$.each(formAry1, function(idx, tag){
-				// tag) { name : "employeeId", value : "100"} 
-				formObj1[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
-												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
-				// formObj["employeeId"] = "100";
-			});
-			
-			return formObj1;
-			
-		} */
-		
-/* 		
-		
-				$("#success1").on('click', updateAjax);
-		console.log("버튼 클릭됨"); */
-		
-/* 		function updateAjax(event){
-			// 1) 보낼 데이터 가져오기
-			let dataObj = getFormData();
-			// 2) AJAX
-			$.ajax("mtlOdDoneUpdate", {
-				type : 'post', //method
-				//data : dataObj // 객체 => QueryString
-				
-				//JSON : @RequestBody 선언되어있을 때 이 방식.
-				contentType : 'application/json', 
-				data:JSON.stringify(dataObj)
-				// JSON.stringify와 application/json는 한 몸. 함께 움직인다.
-				/*beforeSend: function (xhr) {
-					xhr.setRequestHeader(csrfHeader, csrfToken);
-				}*/
-/* 			})
-			.done((result)=>{
-				console.log(result);
-			})
-			.done((data)=>{
-				//return 'result : ' + data.result;
-				if(data.result){
-					alert('성공적으로 수정되었습니다.');
-					
-				}else{
-					alert('수정되지 않았습니다.');
-				}
-			})
-			.fail((err)=>console.log(err));
-		} */ 
-		
-/* 		
-		function getFormData(){
-			
-			let formAry2 = $("input[name=incomingQualityCheck]:checked").serializeArray();
-			console.log(formAry2);
-			let formObj2 = {};
-			console.log(formObj2);
-			$.each(formAry2, function(idx, tag){
-				// tag) { name : "employeeId", value : "100"} 
-				formObj[tag.name] = tag.value; // 이 코드는 JQueary가 아닌 자바스크립트꺼임
-												// 원래대로하면 너무 복잡해져서 변수가 가진 값을 필드명에 강제로 집어넣는 것.
-				// formObj["employeeId"] = "100";
-			});
-			
-			return formObj2;
-			
-		} */
+
 
  	$("#success1").click(function(){
  		console.log("버튼 클릭됨");
@@ -322,51 +217,26 @@
 		var checkbox = $("input[name=incomingQualityCheck]:checked");
 		let flag = true;
   		let list = [];
-		//var data = [];
 
 		checkbox.each(function(i){
 
 			var tr = $(this).closest("tr")
 			var td = tr.children();
 
-			/* var item = {
-			//insDate : td.eq(1).text(),
-			insCode : td.eq(2).text(),
-			//insStatus : td.eq(3).text(),
-			cpCode : td.eq(4).text(),
-			//mtName : td.eq(5).text(),
-			//specification : td.eq(6).text(),
-			//numberOfTests : td.eq(7).text(),
-			numberOfPasses : td.eq(8).text(),
-			//totalPass : td.eq(9).text(),
-			mtlOdCode : td.eq(10).text(),
-			mtCode : td.eq(11).text(),
-			userId : td.eq(12).text()
-			};
-			
-			console.log(item);
 
-			data.push(item); */
 			var obj = {};
 			
+			var prdCode = td.eq(4).text();
+			var startDate = td.eq(6).text();
+			var inQ = Number(td.eq(12).text());
 			var insCode = td.eq(2).text();
-			var cpCode = td.eq(4).text();
-			var numberOfPasses = Number(td.eq(8).text());
-			var mtlOdCode = td.eq(10).text();
-			var mtCode = td.eq(11).text();
-			var userId = td.eq(12).text();
-			var mtInComm = td.eq(13).find("input").val();
-			
 						
 			//객체에 담기
-			obj["insCode"] = insCode;  	     		
-			obj["cpCode"] = cpCode;               					
-			obj["numberOfPasses"] = numberOfPasses;   
-			obj["mtlOdCode"] = mtlOdCode;      					
-			obj["mtCode"] = mtCode;      	
-			obj["userId"] = userId; 
-			obj["mtInComm"] = mtInComm;
-			
+			obj["prdCode"] = prdCode;  	     		
+			obj["startDate"] = startDate;               					
+			obj["inQ"] = inQ;   
+			obj["insCode"] = insCode;      					
+
 			//목록에 담기
 			list.push(obj);
 			});
@@ -384,123 +254,26 @@
 			data: JSON.stringify(list),
 			success: function(response){
 				console.log('입고성공', response);
+				alert('입고성공', response);
 				
 				location.reload();
 			},
 			
 			error: function(xhr, status, error){
 				console.error('입고 실패', error);
+				alert('입고 실패', error);
 			}
 		
 		})
 		 .fail(err => console.log(err))
 		});
 
-		
-
-		
-/*  		function makeData(){
-			let dataAry = data.serializeArray();
-			console.log(dataAry);
-			
-			let dataObj = {};
-			$.each(dataAry, function(idx, tag){
-				dataObj["insCode"] = insCode; 
-				dataObj["cpCode"] = cpCode;
-				dataObj["numberOfPasses"] = numberOfPasses; 
-				dataObj["mtlOdCode"] = mtlOdCode;
-				dataObj["mtCode"] = mtCode;
-				dataObj["userId"] = userId;
-				dataObj["comm"] = comm;  
-			});
-			return dataObj;
-		}  */
-/* 		$.ajax({
-  			url : 'insertMtIn',
-  			method : 'post',
-  			contentType : 'application/json',
-  			data : JSON.stringify(list)
-  		}) */
-  		 /* .done(datas => {
-  			 if(datas.result) {
-  				 let successCnt = datas.total - datas.empList.length;
-  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
-  				 alert(msg);
-  			 }
-  		 }) */
   		
 		
  	});
 		
 	
-		
-		
-		
- 	/* function makeData(){
-  		let flag = true;
-  		let list = [];
-  		
-		//체크한 행만 전송할 데이터 만들기. 은행계좌가 입력된 경우만 포함함.
-  		$("input[name='incomingQualityCheck']:checked").each(function(i, checkbox){
-  			var tr = $(checkbox).parent().parent();
-			var td = $(tr).children();
-			var obj = {};
-			
-			var insCode = td.eq(2).text();
-			var cpCode = td.eq(4).text();
-			var numberOfPasses = Number(td.eq(8).text());
-			var mtlOdCode = td.eq(10).text();
-			var mtCode = td.eq(11).text();
-			var userId = td.eq(12).text();
-			var comm = td.eq(13).find("input").val();
-			
-						
-			//객체에 담기
-			obj["insCode"] = insCode;
-			obj["cpCode"] = cpCode; 
-			obj["numberOfPasses"] = numberOfPasses;
-			obj["mtlOdCode"] = mtlOdCode;
-			obj["mtCode"] = mtCode;
-			obj["userId"] = userId;
-			obj["comm"] = comm;
-			
-			//목록에 담기
-			list.push(obj);
-  		});
 	
-		//객체를 string으로 변환
-  		console.log(JSON.stringify(list));
-		if(flag == false) {
-			return;
-		}
-  		//ajax 호출 
-  		$.ajax({
-  			url : 'insertMtIn',
-  			method : 'post',
-  			contentType : 'application/json',
-  			data : JSON.stringify(list)
-  		})
-  		 /* .done(datas => {
-  			 if(datas.result) {
-  				 let successCnt = datas.total - datas.empList.length;
-  				 let msg = '총 ' + successCnt + '/' + datas.total + ' 건이 처리되었습니다.';
-  				 alert(msg);
-  			 }
-  		 }) */
-  	/*	 .fail(err => console.log(err)) */
-  		
-
-  	/*}	*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
  	$("#failuer1").click(function(){
@@ -515,15 +288,7 @@
 			var td = tr.children();
 
 			var item = {
-			//insDate : td.eq(1).text(),
-			//insCode : td.eq(2).text(),
-			//insStatus : td.eq(3).text(),
-			//cpCode : td.eq(4).text(),
-			//mtName : td.eq(5).text(),
-			//specification : td.eq(6).text(),
-			//numberOfTests : td.eq(7).text(),
-			//numberOfPasses : td.eq(8).text(),
-			//totalPass : td.eq(9).text(),
+
 			mtlOdCode : td.eq(10).text()
 			};
 			
