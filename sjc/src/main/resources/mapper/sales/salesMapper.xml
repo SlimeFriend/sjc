@@ -306,6 +306,7 @@
        SELECT pm.lot,
               p.prd_name,
               pm.in_date,
+              pm.ed,
               pm.in_quantity
        FROM   prd_management pm JOIN prd p
                                   ON pm.prd_code = p.prd_code
