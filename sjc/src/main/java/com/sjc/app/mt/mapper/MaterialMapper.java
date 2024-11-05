@@ -1,12 +1,15 @@
 package com.sjc.app.mt.mapper;
 
-import com.sjc.app.mt.service.MtVO;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.sjc.app.mt.service.MtVO;
 
 public interface MaterialMapper {
 
     // 모든 자재 목록 조회
-    List<MtVO> selectAllMaterials();
+	 List<MtVO> selectAllMaterials(@Param("limit") int limit, @Param("offset") int offset);
 
     // 특정 자재 조회 (자재 코드로 조회)
     MtVO selectMaterialById(String mtCode);

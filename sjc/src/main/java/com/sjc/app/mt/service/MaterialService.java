@@ -29,4 +29,7 @@ public interface MaterialService {
      * @return 해당 생산 계획에 필요한 자재 목록
      */
     List<MtVO> getMaterialsByPlanCode(String planCode); 
+    
+    // 페이징 적용된 자재 목록 조회
+    List<MtVO> getAllMaterialsWithPaging(int limit, int offset);
 }
