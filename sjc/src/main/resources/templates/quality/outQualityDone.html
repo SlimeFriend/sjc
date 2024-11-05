@@ -122,7 +122,7 @@
             <td>[[${done.prdCode}]]</td>
             
             <td>[[${done.prdName}]]</td>
-            <td>[[${#dates.format(done.processDate, "yyyy-MM-dd")}]]</td>
+            <td>[[${#dates.format(done.startDate, "yyyy-MM-dd")}]]</td>
             <td>[[${done.numberOfTests}]]</td>
             <td>[[${done.numberOfPasses}]]</td>
             <td>[[${done.totalPass}]]</td>
@@ -227,13 +227,13 @@
 			var obj = {};
 			
 			var prdCode = td.eq(4).text();
-			var processDate = td.eq(6).text();
+			var startDate = td.eq(6).text();
 			var inQ = Number(td.eq(12).text());
 			var insCode = td.eq(2).text();
 						
 			//객체에 담기
 			obj["prdCode"] = prdCode;  	     		
-			obj["processDate"] = processDate;               					
+			obj["startDate"] = startDate;               					
 			obj["inQ"] = inQ;   
 			obj["insCode"] = insCode;      					
 

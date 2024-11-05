@@ -741,7 +741,7 @@
 						        
 						        #{lot},
 						        #{prdCode},
-						        #{processDate},
+						        #{startDate},
 						        ADD_MONTHS(SYSDATE, 6),
 						        #{inQ},
 						        #{insCode},

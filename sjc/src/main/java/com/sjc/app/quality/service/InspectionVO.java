@@ -101,7 +101,9 @@ public class InspectionVO {
 	
 	//	POrderVO 
 	    private String porderCode;
-	    private String startDate;
+    	@DateTimeFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	    private Date startDate;
 	    private String porderDate;
 	    private String manager;
 	    private String pordercomm;
