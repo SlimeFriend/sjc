@@ -460,4 +460,30 @@ update line
 set use = 'U'
 where line_code = #{lineCode}
 </update>
+
+<!-- 계획 검색 -->
+<select id="searchPlan" resultType="planVO">
+	    SELECT p.plan_code,
+	    		p.start_date,
+	    		p.end_date,
+	    		u.user_name,
+	    		p.status,
+	    		p.comm
+	    FROM   plan p
+	    JOIN sjc_user u
+	    ON p.manager = u.user_id
+	    WHERE 1 = 1
+	    <if test="planCode != null and planCode != ''">
+	        AND p.plan_code LIKE '%' || #{planCode} || '%'
+	    </if>
+	    <if test="startDate != null and startDate != ''">
+	        AND o.start_date <![CDATA[>=]]> #{startDate}
+	    </if>
+	    <if test="endDate != null and endDate != ''">
+	        AND p.end_date <![CDATA[<=]]> #{endDate}
+	    </if>
+	    <if test="status != null and status != ''">
+        	AND status like #{status}||'%'
+    	</if>
+	</select>
 </mapper>

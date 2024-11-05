@@ -298,4 +298,10 @@ public class PrController {
 		
 		return prdtService.planL(planCode);
 	}
+	
+	@PostMapping("searchPlan")
+	@ResponseBody
+	public List<PlanVO> searchPlan(@RequestBody PlanVO planVO){
+		return prdtService.searchPlan(planVO);
+	}
 }

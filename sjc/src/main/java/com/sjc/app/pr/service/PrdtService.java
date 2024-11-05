@@ -81,4 +81,7 @@ public interface PrdtService {
 	public List<ProductVO> ordPrd(String ordCode);
 	
 	public List<LinePrdVO> planL(String planCode);
+	
+	// 계획 검색 기능
+	public List<PlanVO> searchPlan(PlanVO planVO);
 }
