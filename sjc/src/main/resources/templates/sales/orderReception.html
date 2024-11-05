@@ -32,7 +32,7 @@
 						</div>
 						
 						<div style="display: flex; justify-content: flex-end;">
-							<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+							<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">주문접수</button>
 						</div>
 					</form>
 				</div>
@@ -41,7 +41,7 @@
 					<h2 class="h5 mb-20">제품 선택</h2>
 					<div id="grid" style="flex-grow: 1;"> </div>
 					<div>
-						<h2 class="h3">총 가격 : <span id="totalPrice"></span></h2>
+						<h2 class="h4 mb-10">주문금액 : <span id="totalPrice"></span></h2>
 					</div>
 				</div>
 				
@@ -107,9 +107,14 @@
 						name : 'ordQuantity',
 						align : 'center',
 						editor: 'text',
+					}, {
+						header : '총 가격',
+						name : 'totalPrice',
+						align : 'center',
+						editor: 'text',
 					}, ],
 					rowHeaders : [ 'checkbox' ],
-					bodyHeight: 200,
+					bodyHeight: 280,
 					pageOptions: {
 					    type: 'scroll',
 					    perPage: 10 
@@ -117,28 +122,33 @@
 				});
 				
 				grid.on('editingFinish', (ev) => {
-				    const { value, rowKey, columnName } = ev;
+				    const rowKey = ev.rowKey; // 수정된 행의 키
+				    const price = grid.getValue(rowKey, 'price'); // 가격
+				    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
 
-				    // 편집 중인 셀 값 유효성 검사
-				    if ((columnName === 'price' || columnName === 'ordQuantity') && (isNaN(value) || Number(value) <= 0)) {
-				        alert(`${columnName === 'price' ? '가격' : '수량'}에 올바른 값을 입력해주세요.`);
-				        grid.setValue(rowKey, columnName, ''); // 잘못된 값 초기화
-				        return;
-				    }
+				    // 총 가격 계산
+				    const totalPrice = (Number(price) || 0) * (Number(quantity) || 0);
 				    
-				    const checkedRows = grid.getCheckedRows();
+				    // 총 가격 업데이트
+				    grid.setValue(rowKey, 'totalPrice', totalPrice);
+				});
+				
+				grid.on('check', (ev) => {
+				    const checkedRows = grid.getCheckedRows(); // 체크된 행의 rowKey 배열
+				    console.log('체크된 행:', checkedRows);
+				    
 				    let totalPrice = 0;
 				    
-				    for(let i = 0; i < checkedRows.length; i++) {
-				    	const rowKey = checkedRows[i];
-				        const price = grid.getValue(rowKey, 'price');
-				        const quantity = grid.getValue(rowKey, 'ordQuantity');
-				        totalPrice += Number(price) * Number(quantity);
-				        console.log(price);
+				    for (let i = 0; i < checkedRows.length; i++) {
+				        const rowKey = checkedRows[i];
+				        const totalPriceValue = grid.getValue(rowKey, 'totalPrice'); // totalPrice 컬럼 값
+				        
+				        if (totalPriceValue) {
+				            totalPrice += Number(totalPriceValue); // 총 가격 계산
+				        }
 				    }
-				    
-				    document.getElementById('totalPrice').innerText = totalPrice.toLocaleString() + '원'; // 포맷 추가
-				    
+
+				    window.totalPrice = totalPrice; // totalPrice를 전역 변수로 저장
 				});
 
 			
@@ -201,11 +211,6 @@
 		document.getElementById('cpInput').addEventListener('click', function() {
 			$('#myModal').modal('show'); // 모달 열기
 			modalGrid.refreshLayout();
-		});
-		
-		
-		document.getElementById('modalSubmitBtn').addEventListener('click', function() {
-			modalGrid
 		});
 		
 		function sendCheckedRows() {
