@@ -22,4 +22,9 @@ public class InfoController {
 	public String infoLineProcessList() {
 		return "info/lineProcessList";
 	}
+	// 라인,공정 페이지
+	@GetMapping("infoChartOcta")
+	public String infoChartOcta() {
+		return "info/chartOcta";
+	}
 }
