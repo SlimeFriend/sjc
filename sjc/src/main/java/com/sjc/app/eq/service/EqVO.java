@@ -19,7 +19,7 @@ public class EqVO {
 	private Integer eqStandTemp;  // 기준 온도
 	private Integer eqPeriod;	  // 점검 주기
 	private String manager;		  // 담당자
-	private String eqLocation;	  // 설치 위치
+	private String eqLocation;  // 설치 위치
 	private String eqImg;		  // 이미지
 	private String lineCode;	  // 라인
 	private String eqType;		  // 설비 구분
