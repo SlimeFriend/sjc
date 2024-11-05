@@ -152,7 +152,11 @@ public class EqServiceImpl implements EqService {
     @Transactional
     public void updateCheckStatus(EqChckVO eqChckVO) {
         eqMapper.updateCheckStatus(eqChckVO);
-		
+        
+        EqVO eqVO = new EqVO();
+        eqVO.setEqCkDate(eqChckVO.getEqCkDate());
+        eqVO.setEqCode(eqChckVO.getEqCode());
+        eqMapper.updateEqInfo(eqVO);
 	}
 
 

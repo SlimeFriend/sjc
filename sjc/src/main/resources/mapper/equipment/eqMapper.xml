@@ -87,6 +87,7 @@ from    eq
 		 , eq_min = #{eqMin}
 		 , eq_max = #{eqMax}
 		 , use = #{use}
+		 , eq_ckdate = #{eqCkDate}
 	WHERE eq_code = #{eqCode}
 </update>
 

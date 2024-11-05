@@ -135,10 +135,14 @@ select {
 							<input type="text" id="eqMax" name="eqMax" placeholder="최고">
 						</div>
 					</div>
+					<th:block sec:authorize="isAuthenticated()">
+					
 					<div>
 						<label for="manager">담당자</label>
-						<input type="text" id="manager" name="manager">
+						<input type="text" id="manager" name="manager" th:value="${#authentication.principal.authorities[2]}">
 					</div>
+					</th:block>
+
 					<div>
 						<!--
 						<label for="eqLocation">설비위치</label>

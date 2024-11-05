@@ -20,4 +20,8 @@ public class EqChckVO {
 	
 	// 조인 정보 받아온 속성
 	private String eqName;		  // 설비명
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date eqCkDate;	// 점검일
+	
 }
