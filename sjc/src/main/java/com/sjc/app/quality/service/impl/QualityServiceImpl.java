@@ -337,27 +337,27 @@ public class QualityServiceImpl implements QualityService{
 	// 자재입고검사완료 조회페이지 - 입고처리 버튼
 	@Override
 	@Transactional 
-	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> up) {
+	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> list) {
 		
-		for (InspectionVO inspectionVO : up) {
+		for (InspectionVO inspectionVO : list) {
 			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료
 			qualityMapper.updatePOrderDone(inspectionVO);
 			// 입고검사완료페이지 - 입고처리 버튼 - mt_in으로 데이터 넣기
 			qualityMapper.insertPManage(inspectionVO);
 		}
-		return up;
+		return list;
 	}
 	// 입고검사완료페이지 - 반품 버튼 - mtl_od.mtl_od_status 반품
 	@Override
-	public List<InspectionVO> pdBackUpdate(List<InspectionVO> pd) {
+	public List<InspectionVO> pdBackUpdate(List<InspectionVO> list) {
 	
-		for (InspectionVO inspectionVO : pd) {
+		for (InspectionVO inspectionVO : list) {
 			// 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 반품
 			qualityMapper.updatePdBack(inspectionVO);
 	
 		
 		}
-		return pd;
+		return list;
 	}
 	
 	

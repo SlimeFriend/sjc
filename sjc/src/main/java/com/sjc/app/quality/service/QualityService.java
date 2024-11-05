@@ -96,9 +96,9 @@ public interface QualityService {
 	public List<InspectionVO> outDoneInfoSelect();
 	// 완제품품질검완료페이지 - 입고처리 버튼 - porder.status 출고대기
 	// 완제품품질검완료페이지 - 입고처리 버튼 - prdManagement로 데이터 넣기
-	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> up);
+	public List<InspectionVO> upPOrdInPMan(List<InspectionVO> inspectionVO);
 	// 완제품품질검완료페이지 - pdetail.status 반품
-	public List<InspectionVO> pdBackUpdate(List<InspectionVO> pd);
+	public List<InspectionVO> pdBackUpdate(List<InspectionVO> inspectionVO);
 	
 	
 	

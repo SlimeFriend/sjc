@@ -96,9 +96,9 @@ public interface QualityMapper {
 	// 완제품품질검완료페이지 - 입고처리 버튼 - porder.status 출고대기
 	public int updatePOrderDone(InspectionVO inspectionVO);
 	// 완제품품질검완료페이지 - 입고처리 버튼 - prdManagement로 데이터 넣기
-	public List<InspectionVO> insertPManage(InspectionVO inspectionVOs);
+	public void insertPManage(InspectionVO inspectionVO);
 	// 완제품품질검완료페이지 - pdetail.status 반품
-	public void updatePdBack(InspectionVO inspectionVO);
+	public int updatePdBack(InspectionVO inspectionVO);
 	
 	
 	
