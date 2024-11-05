@@ -78,8 +78,8 @@ public class InfoBomServiceImpl implements InfoBomService {
 	public List<BomVO> registerPrdBoms(List<BomVO> bomVOs) {
 		
 		if (!bomVOs.isEmpty()) { 
+			infoBomMapper.insertBom(bomVOs.get(0));
 		    infoPrdMapper.insertProduct(bomVOs.get(0));
-		    infoBomMapper.insertBom(bomVOs.get(0));
 		}
 		
         for (BomVO bomVO : bomVOs) {

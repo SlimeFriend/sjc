@@ -170,7 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-            /*
             {
                 header: '설명',
                 name: 'description',
@@ -178,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },            
-			*/
+            /*            
             {
                 header: '메모',
                 name: 'comm',
@@ -186,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                
             },
-            /*            
             {
                 header: '소요수량',
                 name: 'quantityRequired',
