@@ -50,13 +50,13 @@ public class StockServiceImpl implements StockService {
         return stockMapper.getCompletedInspectionMaterials();
     }
 
-    /**
-     * 특정 자재 코드와 수량을 기반으로 현재 재고 업데이트
-     */
-    @Override
-    public void updateCurrentStock(String mtCode, Integer quantity) {
-        stockMapper.updateCurrentStock(mtCode, quantity);
-    }
+//    /**
+//     * 특정 자재 코드와 수량을 기반으로 현재 재고 업데이트
+//     */
+//    @Override
+//    public void updateCurrentStock(String mtCode, Integer quantity) {
+//        stockMapper.updateCurrentStock(mtCode, quantity);
+//    }
 
     /**
      * 로트번호별 자재 수량 목록을 가져오는 메서드
@@ -88,7 +88,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public void addQuantityToLotAndUpdateStock(String mtCode, String lotNo, int quantity) {
         stockMapper.updateLotQuantity(mtCode, lotNo, quantity);  // 로트별 수량 업데이트
-        stockMapper.updateCurrentStock(mtCode, quantity);        // 현재 재고 업데이트
+       
     }
 
     /**

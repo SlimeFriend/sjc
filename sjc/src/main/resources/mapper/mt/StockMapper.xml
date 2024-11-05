@@ -76,12 +76,12 @@
         WHERE MT_CODE = #{mtCode}
     </select>
 
-    <!-- 재고 추가 및 차감 - 특정 자재 코드의 현재 재고를 지정 수량만큼 변경 -->
+    <!-- 재고 추가 및 차감 - 특정 자재 코드의 현재 재고를 지정 수량만큼 변경 
     <update id="updateCurrentStock" parameterType="map">
         UPDATE MT
         SET CURRENT_STC = CURRENT_STC + #{quantity}
         WHERE MT_CODE = #{mtCode}
-    </update>
+    </update>-->
 
     <!-- 자재 코드에 따른 로트번호 목록 조회 - 특정 자재 코드로 로트번호 목록 조회 -->
     <select id="findLotNumbersByMtCode" parameterType="String" resultType="String">

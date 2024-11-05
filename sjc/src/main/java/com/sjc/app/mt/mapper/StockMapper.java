@@ -18,8 +18,8 @@ public interface StockMapper {
     // 입고 품질검사가 완료된 자재 목록 조회
     List<MtVO> getCompletedInspectionMaterials();
 
-    // 현재 재고 업데이트 (수량 증가/감소)
-    void updateCurrentStock(@Param("mtCode") String mtCode, @Param("quantity") Integer quantity);
+//    // 현재 재고 업데이트 (수량 증가/감소)
+//    void updateCurrentStock(@Param("mtCode") String mtCode, @Param("quantity") Integer quantity);
 
     // 자재 구분 업데이트
     void updateMaterialType(@Param("mtCode") String mtCode, @Param("materialType") String materialType);

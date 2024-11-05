@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
     <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <style>
 /* tui-grid 선택 테두리 제거 */
 .tui-grid-layer-focus-border {
@@ -54,7 +57,9 @@
                     align: 'center',
                     formatter: (item) => item.value ? new Date(item.value).toISOString().split('T')[0] : '-'
                 }
-            ]
+            ], pageOptions : {
+				useClient : true,
+				perPage : 5}
         });
 
         // 데이터가 없을 경우 표시

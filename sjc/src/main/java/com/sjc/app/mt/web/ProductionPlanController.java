@@ -24,22 +24,12 @@ public class ProductionPlanController {
     private MaterialService materialService;
 
     /**
-     * 모든 생산 계획 목록을 가져와서 productionPlanList 페이지에 전달 (페이징 적용)
+     * 모든 생산 계획 목록을 가져와서 productionPlanList 페이지에 전달
      */
     @GetMapping("/productionPlanList")
-    public String getProductionPlans(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            Model model) {
-
-        int offset = (page - 1) * size;
-
-        // 페이징 적용된 생산 계획 목록 조회
-        List<PlanVO> productionPlans = productionPlanService.getAllProductionPlansWithPaging(size, offset);
+    public String getProductionPlans(Model model) {
+        List<PlanVO> productionPlans = productionPlanService.getAllProductionPlans();
         model.addAttribute("productionPlans", productionPlans);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", size);
-        
         return "mt/productionPlanList";   
     }
 

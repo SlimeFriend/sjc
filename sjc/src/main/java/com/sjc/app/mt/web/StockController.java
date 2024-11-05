@@ -58,20 +58,20 @@ public class StockController {
     /**
      * 품질검사 완료된 자재의 수량을 현재 재고에 추가
      */
-    @PostMapping("/stock/addCompletedInspectionToCurrentStock")
-    public String addCompletedInspectionToCurrentStock(RedirectAttributes redirectAttributes) {
-        try {
-            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials();
-            for (MtVO material : completedMaterials) {
-                stockService.updateCurrentStock(material.getMtCode(), material.getQuantity());
-            }
-            redirectAttributes.addFlashAttribute("message", "품질검사 완료된 자재의 수량이 성공적으로 현재 재고에 추가되었습니다.");
-        } catch (Exception e) {
-            logger.error("품질검사 완료 자재 추가 중 오류 발생: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "품질검사 완료 자재 추가에 실패했습니다.");
-        }
-        return "redirect:/stock";
-    }
+//    @PostMapping("/stock/addCompletedInspectionToCurrentStock")
+//    public String addCompletedInspectionToCurrentStock(RedirectAttributes redirectAttributes) {
+//        try {
+//            List<MtVO> completedMaterials = stockService.getCompletedInspectionMaterials();
+//            for (MtVO material : completedMaterials) {
+//                stockService.updateCurrentStock(material.getMtCode(), material.getQuantity());
+//            }
+//            redirectAttributes.addFlashAttribute("message", "품질검사 완료된 자재의 수량이 성공적으로 현재 재고에 추가되었습니다.");
+//        } catch (Exception e) {
+//            logger.error("품질검사 완료 자재 추가 중 오류 발생: {}", e.getMessage());
+//            redirectAttributes.addFlashAttribute("error", "품질검사 완료 자재 추가에 실패했습니다.");
+//        }
+//        return "redirect:/stock";
+//    }
 
     /**
      * 로트번호별 자재 수량 조회 및 stockPage의 stockDetail 영역으로 이동
@@ -125,4 +125,6 @@ public class StockController {
             return ResponseEntity.status(500).body("재고 조정에 실패했습니다.");
         }
     }
+    
+
 }
