@@ -274,6 +274,32 @@ tbody > tr {
     });
 </script>
 <script>
+    $(document).ready(function() {
+        // 라디오 버튼에 따른 필터링
+        $('input[name="section"]').on('change', function() {
+            const selectedValue = $('input[name="section"]:checked').val();
+
+            $('table:first tbody tr').each(function() {
+                const useStatus = $(this).find('td').eq(5).text();
+
+                if (selectedValue === 'all') {
+                    // 전체 보기
+                    $(this).show();
+                } else if (selectedValue === 'op' && useStatus === '가동') {
+                    // 가동만 보기
+                    $(this).show();
+                } else if (selectedValue === 'nOp' && useStatus === '비가동') {
+                    // 비가동만 보기
+                    $(this).show();
+                } else {
+                    // 조건에 맞지 않는 행 숨기기
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+<script>
 //모달창에서 '등록' 버튼 클릭 시 이벤트
 $('#modalSubmitBtn').on('click', function() {
     const eqCode = $('#eqCode').val();
