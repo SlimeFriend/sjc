@@ -27,6 +27,16 @@
 	ORDER BY eq_code
 </select>
 
+<!-- 점검 유무 확인 -->
+<select id="selectEqChckOx" resultType="Integer">
+	select  count(1)
+	from    eq      e
+	join    eq_chck k
+	on      e.eq_code = k.eq_code
+	where   e.eq_code = #{eqCode}
+	and     k.eq_chckox is null
+</select>
+
     <!-- 등록 -->
 <insert id="insertEqInfo" parameterType="EqVO">
 	<selectKey keyProperty="eqCode"

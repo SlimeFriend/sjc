@@ -164,4 +164,9 @@ public class EqController {
 	    return eqChckVO;  // 저장된 데이터를 반환해 화면에서 바로 추가할 수 있게 함
 	}
 
+	@PostMapping("getEqChckOx")
+	@ResponseBody
+	public int getEqChckOx(@RequestBody EqVO eqVO) {
+		return eqService.selectEqChckOx(eqVO);
+	}
 } // end of class

@@ -43,10 +43,13 @@ public interface EqMapper {
 	// 비가동 목록 "가동"으로 변경
 	public int updateEqChckInfo(EqVO eqVO);
 	
-	// 점검 일자 등록
-	public int updateEqInfoJumgum(EqVO eqVO);
 
 	// 라인 수정
 	int updateLine(EqVO eqVO);	
 
+	// 점검 일자 등록
+	public int updateEqInfoJumgum(EqVO eqVO);
+	
+	// 점검 유무 조회
+	public int selectEqChckOx(EqVO eqVO);
 }
