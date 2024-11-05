@@ -46,8 +46,8 @@ tbody > tr {
 				<div style="text-align: right; margin-bottom: 10px;">
 
 				</div>
-				
-				<table class="table nowrap table-hover table-striped">
+				<!-- 첫 번째 테이블 -->
+				<table class="table nowrap table-hover table-striped modal-table">
 					<thead>
 						<tr>
 							<th class="table-plus datatable-nosort">No.</th>
@@ -71,23 +71,33 @@ tbody > tr {
 						</th:block>
 					</tbody>
 				</table>
-
+				
+				<!-- 두번째 페이지 -->
 				<table class="table nowrap table-hover table-striped">
 					<div class="d-flex justify-content-between align-items-center mb-20">
 						<p style="font-size: 200%">비가동 내역</p>
 					</div>
 					<thead>
-						<form id="searchForm">
-							<label for="date">해당일자</label> 
-							<input type="date" id="startDate" name="startDate"> ~ 
-							<input type="date" id="endDate" name="endDate">
-							<div>
-								<label for="eqCode">설비코드 :</label> 
-								<input type="text" id="SearchEqCode" placeholder="설비코드"> 
-								<button type="button" id="searchBtn">검색</button>
-								<button type="reset">초기화</button>
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
+							<div class="col-sm-12 col-md-3">
+								<input class="form-control" id="epCode" type="text" placeholder="설비코드" oninput="search()">
 							</div>
-						</form>
+						</div>
+						
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-1 col-form-label">시작일자</label>
+								<div class="col-sm-12 col-md-3">
+									<input class="form-control" id="startDate" type="date" oninput="search()">
+								</div>
+								<label class="col-sm-12 col-md-1 col-form-label">종료일자</label>
+								<div class="col-sm-12 col-md-3">
+									<input class="form-control" id="endDate" type="date" oninput="search()">
+								</div>
+						</div>
+						
+						
+						
 						<tr>
 							<th class="table-plus datatable-nosort">No.</th>
 							<th>설비가동코드</th>
@@ -99,7 +109,7 @@ tbody > tr {
 							<th>종료날짜</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="equipTableBody">
 						<th:block th:each="wait, sts : ${equipChck}">
 							<tr>
 								<td>[[${sts.count}]]</td>
@@ -177,7 +187,7 @@ tbody > tr {
 <script>
     $(document).ready(function() {
         // 테이블 행 클릭 시 이벤트 설정
-        $('tbody > tr').on('click', function(event) {
+        $('.modal-table tbody > tr').on('click', function(event) {
             let trTag = event.currentTarget;
             let eqCode = $(trTag).children().eq(1).text(); // 설비코드 가져오기
             let eqName = $(trTag).children().eq(3).text(); // 설비명 가져오기
@@ -353,7 +363,48 @@ $('#modalSubmitBtn').on('click', function() {
         });
     }
 });
+function search() {
+    const eqCode = document.getElementById('eqCode').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    const searchCriteria = {
+    		   eqCode: eqCode
+    		  ,startDate: startDate ? new Date(startDate).toISOString() : null
+    		  ,endDate: endDate ? new Date(endDate).toISOString() : null
+    };
 
+    $.ajax({
+        url: '/eqSearch',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(searchCriteria),
+        success: function(response) {
+        	const tableBody = $('#equipTableBody');  // 테이블의 <tbody>에 id="equipTableBody"를 추가했다고 가정
+            tableBody.empty();
+        	
+            // 검색 결과를 테이블에 추가
+            response.forEach(function(item, index) {
+                const newRow = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.eqChckOpcd}</td>
+                        <td>${item.eqCode}</td>
+                        <td>${item.eqName}</td>
+                        <td>${item.reason || '-'}</td>
+                        <td>${item.eqChckOx || '-'}</td>
+                        <td>${item.startDate ? new Date(item.startDate).toLocaleString() : '-'}</td>
+                        <td>${item.endDate ? new Date(item.endDate).toLocaleString() : '-'}</td>
+                    </tr>
+                `;
+                tableBody.append(newRow);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching search results:', error);
+        }
+    });
+}
 </script>
 	
 

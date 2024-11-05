@@ -137,6 +137,17 @@ public class EqController {
 	  public Map<String, Object> updateUseStatus(@RequestBody EqVO eqVO) {
 		  return eqService.updateEqChck(eqVO); 
 	  }
+	  
+	// 비가동 내역 검색
+	  @PostMapping("/eqSearch")
+		@ResponseBody
+		public List<EqChckVO> eqSearch(@RequestBody Map<String, Object> request) {
+		    String eqCode = (String) request.get("eqCode");
+		    String startDate = (String) request.get("startDate");
+		    String endDate = (String) request.get("endDate");
+		    System.err.print(111);
+		    return eqService.eqSearch(eqCode, startDate, endDate);
+		}
 	
 	// 설비 점검 목록 조회
 	@GetMapping("jgList")
