@@ -1,77 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.net/thymeleaf/layout"
       layout:decorate="~{common/layouts/default_layout}"
       layout:fragment="Content">
 <head>
     <meta charset="UTF-8">
     <title>설비 상세</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+<style>
+.table td, .table th {
+    padding: 1rem;
+}
+</style>    
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="pd-ltr-20">
-            <div class="card-box mb-30">
-                <h2 class="h4 pd-20">설비 상세</h2>
-                <table>
-                    <tr>
-                        <th></th>
-                        <td><img style="width: 100%;"
-                                 th:src="@{/assets/vendors/images/{file}(file=${equip.eqImg})}"></td>
-                    </tr>
-                    <tr>
-                        <th>설비코드</th>
-                        <td>[[${equip.eqCode}]]</td>
-                    </tr>
-                    <tr>
-                        <th>모델명</th>
-                        <td>[[${equip.eqMdnm}]]</td>
-                    </tr>
-                    <tr>
-                        <th>모델번호</th>
-                        <td>[[${equip.eqMdno}]]</td>
-                    </tr>
-                    <tr>
-                        <th>점검날짜</th>
-                        <td>[[${#dates.format(equip.eqCkDate, "yyyy년 MM월 dd일")}]]</td>
-                    </tr>
-                    <tr>
-                        <th>점검주기</th>
-                        <td>[[${equip.eqPeriod}]] 개월</td>
-                    </tr>
-                    <tr>
-                        <th>담당자</th>
-                        <td>[[${equip.manager}]]</td>
-                    </tr>
-                    <tr>
-                        <th>기준온도</th>
-                        <td>[[${equip.eqStandTemp}]]</td>
-                    </tr>
-                    <tr>
-                        <th>라인코드</th>
-                        <td>[[${equip.lineCode}]]</td>
-                    </tr>
-                    <tr>
-                        <th>가동여부</th>
-                        <td>[[${equip.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
-                    </tr>
-                </table>
+<div class="main-container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4 mt-3">
+                <div class="card-header py-3">
+                    <h2 class="h4 mb-0">설비 상세</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- 왼쪽 이미지 영역 -->
+                        <div class="col-md-4 mb-3">
+                            <img style="width: 100%;" class="img-fluid" 
+                                 th:src="@{/assets/vendors/images/{file}(file=${equip.eqImg})}">
+                        </div>
+                        
+                        <!-- 오른쪽 상세정보 영역 -->
+                        <div class="col-md-8">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3" style="width: 30%">설비코드</th>
+                                            <td class="py-3">[[${equip.eqCode}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">모델명</th>
+                                            <td class="py-3">[[${equip.eqMdnm}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">모델번호</th>
+                                            <td class="py-3">[[${equip.eqMdno}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">점검날짜</th>
+                                            <td class="py-3">[[${#dates.format(equip.eqCkDate, "yyyy년 MM월 dd일")}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">점검주기</th>
+                                            <td class="py-3">[[${equip.eqPeriod}]] 개월</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">담당자</th>
+                                            <td class="py-3">[[${equip.manager}]]</td>
+                                        </tr>
+                                        <!-- 
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">기준온도</th>
+                                            <td class="py-3">[[${equip.eqStandTemp}]]</td>
+                                        </tr>
+                                         -->
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">라인코드</th>
+                                            <td class="py-3">[[${equip.lineCode}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light text-right align-middle py-3">가동여부</th>
+                                            <td class="py-3">[[${equip.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                <div>
-                    <!-- 수정 버튼 -->
-                    <button class="btn btn-primary" id="modifyBtn">수정</button>
-                    <!-- 삭제 버튼 -->
-                    <button class="btn btn-danger" id="deleteBtn" type="button">삭제</button>
-                    <!-- 목록으로 버튼 -->
-                    <button class="btn btn-dark"
-                            type="button"
-                            th:onclick="|location.href='@{/eqList}'|">목록으로</button>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary mr-2" id="modifyBtn">수정</button>
+                        <button class="btn btn-danger mr-2" id="deleteBtn" type="button">삭제</button>
+                        <button class="btn btn-dark" type="button" th:onclick="|location.href='@{/eqList}'|">목록으로</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- 수정 모달 -->
     <div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -85,33 +104,39 @@
                 </div>
                 <div class="modal-body">
                     <form id="eqModifyForm">
-                        <div class="mb-3">
-                            <label for="eqCode" class="form-label">설비코드</label>
+                        <div class="form-group">
+                            <label for="eqCode">설비코드</label>
                             <input type="text" id="eqCode" name="eqCode" readonly class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="eqMdnm" class="form-label">모델명</label>
+                        <div class="form-group">
+                            <label for="eqMdnm">모델명</label>
                             <input type="text" id="eqMdnm" name="eqMdnm" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="eqMdno" class="form-label">모델번호</label>
+                        <div class="form-group">
+                            <label for="eqMdno">모델번호</label>
                             <input type="text" id="eqMdno" name="eqMdno" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="manager" class="form-label">담당자</label>
+                        <div class="form-group">
+                            <label for="manager">담당자</label>
                             <input type="text" id="manager" name="manager" class="form-control">
                         </div>
-						<div class="mb-3">
-							<label for="lineCode">라인코드</label> 
-							<select id="lineCode" name="lineCode" class="form-control">
-								<option value="L01">L01</option>
-								<option value="L02">L02</option>
-							</select>
-						</div>
-                        <div class="mb-3">
-                            <label for="use" class="form-label">가동여부</label>
-                            <input type="radio" id="useY" name="use" value="Y"> 사용 가능
-                            <input type="radio" id="useN" name="use" value="N"> 사용 불가
+                        <div class="form-group">
+                            <label for="lineCode">라인코드</label>
+                            <select id="lineCode" name="lineCode" class="form-control">
+                                <option value="L01">L01</option>
+                                <option value="L02">L02</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="d-block">가동여부</label>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="useY" name="use" value="Y" class="custom-control-input">
+                                <label class="custom-control-label" for="useY">사용 가능</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="useN" name="use" value="N" class="custom-control-input">
+                                <label class="custom-control-label" for="useN">사용 불가</label>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -134,7 +159,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    정말 삭제 하시겠습니까?
+                    <p class="mb-0">정말 삭제 하시겠습니까?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
@@ -143,137 +168,137 @@
             </div>
         </div>
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-    $(document).ready(function () {
-        // 수정 버튼 클릭 시 모달 열기
-        $('#modifyBtn').on('click', function () {
-            const eqCode = '[[${equip.eqCode}]]';
-            const eqMdnm = '[[${equip.eqMdnm}]]';
-            const eqMdno = '[[${equip.eqMdno}]]';
-            const use = '[[${equip.use}]]';
-            const eqLocation = '[[${equip.eqLocation}]]';
-            const manager = '[[${equip.manager}]]';
-            const lineCode = '[[${equip.lineCode}]]';
-
-            // 모달 폼에 데이터 채우기
-            $('#eqCode').val(eqCode);
-            $('#eqMdnm').val(eqMdnm);
-            $('#eqMdno').val(eqMdno);
-            $('#eqLocation').val(eqLocation);
-            $('input[name="use"][value="' + use + '"]').prop('checked', true);
-            $('#manager').val(manager);
-            $('#lineCode').val(lineCode);
-
-            // 모달 열기
-            $('#modifyModal').modal('show');
-        });
-
-        // 모달 창에서 수정 처리
-        $('#saveChanges').on('click', function () {
-            const eqData = {
-                eqCode: $('#eqCode').val(),
-                eqMdnm: $('#eqMdnm').val(),
-                eqMdno: $('#eqMdno').val(),
-                eqLocation: $('#eqLocation').val(),
-                use: $('input[name="use"]:checked').val(),
-                manager: $('#manager').val(),
-                lineCode: $('#lineCode').val()
-            };
-
-            // 서버로 데이터 전송 (AJAX 요청)
-            $.ajax({
-                type: 'POST',
-                url: '/eqUpdate2', // 서버에서 해당 설비 코드만 수정하도록 보장
-                contentType: 'application/json',
-                data: JSON.stringify(eqData),
-                success: function (response) {
-                    if (response.result) {
-                        alert('수정이 완료되었습니다.');
-                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 목록 페이지로 이동
-                    } else {
-                        alert('수정에 실패했습니다.');
-                    }
-                },
-                error: function () {
-                    alert('서버 오류가 발생했습니다.');
-                }
-            });
-
-            // 모달 닫기
-            $('#modifyModal').modal('hide');
-        });
-
-        // 삭제 버튼 클릭 시 삭제 확인 모달 열기
-        $('#deleteBtn').on('click', function () {
-            $('#deleteConfirmModal').modal('show');
-        });
-
-        // 삭제 확인 모달에서 삭제 버튼 클릭 시 AJAX 요청으로 삭제 처리
-        $('#confirmDelete').on('click', function () {
-            const eqCode = '[[${equip.eqCode}]]';
-
-            // 서버로 데이터 전송 (AJAX 요청)
-            $.ajax({
-                type: 'POST',
-                url: '/eqDelete', // 서버에서 해당 설비 코드만 삭제하도록 보장
-               // contentType: 'application/json',
-                data:{ eqCode: eqCode },
-                success: function (response) {
-                    if (response == "1") {
-                        alert('삭제가 완료되었습니다.');
-                        location.href = '/eqList'; // 삭제 후 목록 페이지로 이동
-                    } else {
-                        alert('삭제에 실패했습니다.');
-                    }
-                },
-                error: function () {
-                    alert('서버 오류가 발생했습니다.');
-                }
-            });
-
-            // 모달 닫기
-            $('#deleteConfirmModal').modal('hide');
-        });
-    });
-    </script>
-    <script>
- // 모달 창에서 수정 처리
-    $('#saveChanges').on('click', function () {
-        const eqData = {
-            eqCode: $('#eqCode').val(),
-            eqMdnm: $('#eqMdnm').val(),
-            eqMdno: $('#eqMdno').val(),
-            eqLocation: $('#eqLocation').val(),
-            use: $('input[name="use"]:checked').val()
-        };
-
-        if (eqData.use === 'Y') {
-            $.ajax({
-                type: 'POST',
-                url: '/updateUseStatus',
-                contentType: 'application/json',
-                data: JSON.stringify(eqData),
-                success: function (response) {
-                    if (response.result) {
-                        alert('설비 사용여부가 "가동"으로 업데이트되었습니다.');
-                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 상세 페이지로 이동
-                    } else {
-                        alert('업데이트에 실패했습니다.');
-                    }
-                },
-                error: function () {
-                    alert('서버 오류가 발생했습니다.');
-                }
-            });
-        }
-
-        $('#modifyModal').modal('hide');
-    });
-
-    </script>
-</body>
-</html>
+	
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	    <script>
+	    $(document).ready(function () {
+	        // 수정 버튼 클릭 시 모달 열기
+	        $('#modifyBtn').on('click', function () {
+	            const eqCode = '[[${equip.eqCode}]]';
+	            const eqMdnm = '[[${equip.eqMdnm}]]';
+	            const eqMdno = '[[${equip.eqMdno}]]';
+	            const use = '[[${equip.use}]]';
+	            const eqLocation = '[[${equip.eqLocation}]]';
+	            const manager = '[[${equip.manager}]]';
+	            const lineCode = '[[${equip.lineCode}]]';
+	
+	            // 모달 폼에 데이터 채우기
+	            $('#eqCode').val(eqCode);
+	            $('#eqMdnm').val(eqMdnm);
+	            $('#eqMdno').val(eqMdno);
+	            $('#eqLocation').val(eqLocation);
+	            $('input[name="use"][value="' + use + '"]').prop('checked', true);
+	            $('#manager').val(manager);
+	            $('#lineCode').val(lineCode);
+	
+	            // 모달 열기
+	            $('#modifyModal').modal('show');
+	        });
+	
+	        // 모달 창에서 수정 처리
+	        $('#saveChanges').on('click', function () {
+	            const eqData = {
+	                eqCode: $('#eqCode').val(),
+	                eqMdnm: $('#eqMdnm').val(),
+	                eqMdno: $('#eqMdno').val(),
+	                eqLocation: $('#eqLocation').val(),
+	                use: $('input[name="use"]:checked').val(),
+	                manager: $('#manager').val(),
+	                lineCode: $('#lineCode').val()
+	            };
+	
+	            // 서버로 데이터 전송 (AJAX 요청)
+	            $.ajax({
+	                type: 'POST',
+	                url: '/eqUpdate2', // 서버에서 해당 설비 코드만 수정하도록 보장
+	                contentType: 'application/json',
+	                data: JSON.stringify(eqData),
+	                success: function (response) {
+	                    if (response.result) {
+	                        alert('수정이 완료되었습니다.');
+	                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 목록 페이지로 이동
+	                    } else {
+	                        alert('수정에 실패했습니다.');
+	                    }
+	                },
+	                error: function () {
+	                    alert('서버 오류가 발생했습니다.');
+	                }
+	            });
+	
+	            // 모달 닫기
+	            $('#modifyModal').modal('hide');
+	        });
+	
+	        // 삭제 버튼 클릭 시 삭제 확인 모달 열기
+	        $('#deleteBtn').on('click', function () {
+	            $('#deleteConfirmModal').modal('show');
+	        });
+	
+	        // 삭제 확인 모달에서 삭제 버튼 클릭 시 AJAX 요청으로 삭제 처리
+	        $('#confirmDelete').on('click', function () {
+	            const eqCode = '[[${equip.eqCode}]]';
+	
+	            // 서버로 데이터 전송 (AJAX 요청)
+	            $.ajax({
+	                type: 'POST',
+	                url: '/eqDelete', // 서버에서 해당 설비 코드만 삭제하도록 보장
+	               // contentType: 'application/json',
+	                data:{ eqCode: eqCode },
+	                success: function (response) {
+	                    if (response == "1") {
+	                        alert('삭제가 완료되었습니다.');
+	                        location.href = '/eqList'; // 삭제 후 목록 페이지로 이동
+	                    } else {
+	                        alert('삭제에 실패했습니다.');
+	                    }
+	                },
+	                error: function () {
+	                    alert('서버 오류가 발생했습니다.');
+	                }
+	            });
+	
+	            // 모달 닫기
+	            $('#deleteConfirmModal').modal('hide');
+	        });
+	    });
+	    </script>
+	    <script>
+	 // 모달 창에서 수정 처리
+	    $('#saveChanges').on('click', function () {
+	        const eqData = {
+	            eqCode: $('#eqCode').val(),
+	            eqMdnm: $('#eqMdnm').val(),
+	            eqMdno: $('#eqMdno').val(),
+	            eqLocation: $('#eqLocation').val(),
+	            use: $('input[name="use"]:checked').val()
+	        };
+	
+	        if (eqData.use === 'Y') {
+	            $.ajax({
+	                type: 'POST',
+	                url: '/updateUseStatus',
+	                contentType: 'application/json',
+	                data: JSON.stringify(eqData),
+	                success: function (response) {
+	                    if (response.result) {
+	                        alert('설비 사용여부가 "가동"으로 업데이트되었습니다.');
+	                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 상세 페이지로 이동
+	                    } else {
+	                        alert('업데이트에 실패했습니다.');
+	                    }
+	                },
+	                error: function () {
+	                    alert('서버 오류가 발생했습니다.');
+	                }
+	            });
+	        }
+	
+	        $('#modifyModal').modal('hide');
+	    });
+	
+	    </script>
+	</body>
+	</html>
