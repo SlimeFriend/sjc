@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>설비 차트</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+	<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
+	<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+<style>
+	.chart-container {
+	    width: 100%;
+	    max-width: 100%;
+	    overflow-x: auto;
+	}
+	.chart-wrapper {
+	    position: relative;
+	    width: 100%;
+	    min-height: 250px;
+	    margin: 0 auto;
+	}
+		
+	#pieChart {
+	    margin: 0 auto;
+	}
+	
+	@media (max-width: 768px) {
+	    .chart-wrapper {
+	        min-height: 250px;
+	    }
+	}
+</style></head>
+<body>
+<div class="main-container">
+    <div class="pd-ltr-20">
+        <div class="row">
+            <div class="col-12">
+		        <div style="display: flex; width: 100%; gap: 20px;">
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+	                    <div class="chart-wrapper">
+	                        <div id="pieChartLeft"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartRight"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">제품별 주문수량</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartOrd"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">라인 별 설비 수</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartEq"></div>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-12">
+		        <div style="display: flex; width: 100%; gap: 20px;">
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+	                    <div class="chart-wrapper">
+	                        <div id="pieChartEq	"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartRight"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+	                    <div class="chart-wrapper">
+	                        <div id="pieChartLeft"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartRight"></div>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+        
+        
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+
+	const columnChartData = {
+			  categories: ['라인1', '라인2', '라인3', '라인4', '라인5', '라인6', '라인7'],
+			  series: [
+			    {
+			      name: '배합기',
+			      data: [5, 3, 5, 7, 6, 4, 1]
+			    },
+			    {
+			      name: '냉각기',
+			      data: [8, 4, 7, 2, 6, 3, 5]
+			    },
+			    {
+			      name: '성형기',
+			      data: [4, 4, 6, 3, 4, 5, 7]
+			    },
+			    {
+			      name: '포장기',
+			      data: [3, 4, 3, 1, 2, 4, 3]
+			    }
+			  ]
+			}
+	const pieChartData = {
+	    categories: ['가동율'],
+	    series: [
+	        {
+	            name: '가동',
+	            data: 70,
+	        },
+	        {
+	            name: '점검중',
+	            data:  13,
+	        },
+	        /*
+	        {
+	            name: '수리중',
+	            data:  4.45,
+	        },
+	        {
+	            name: '고장',
+	            data:  2.00,
+	        },
+	        */
+	        {
+	            name: '비가동',
+	            data: 17,
+	        },
+	
+	    ],
+	};
+	
+	function initPieChartLeft() {
+	    const { width, height } = getChartSize();
+	    
+	    const options = {
+	        chart: { 
+	            width: width,
+	            height: height,
+	        },
+	        series: {
+	            dataLabels: {
+	                visible: true,
+	                pieSeriesName: {
+	                    visible: true
+	                }
+	            }
+	        },
+	        legend: {
+	            align: 'bottom'
+	        },
+	        theme: {
+	            chart: {
+	                fontFamily: 'Arial'
+	            }
+	        },
+	        exportMenu: {
+	            visible: false
+	        }
+	    };
+	  
+	    const pieChartLeft = new toastui.Chart.pieChart({ 
+	        el: document.getElementById('pieChartLeft'),
+	        data: pieChartData, 
+	        options: options
+	    });
+	
+	    return pieChartLeft;
+	}
+	
+	function initColumnChartRight() {
+	    const { width, height } = getChartSize();
+	    
+	    const options = {
+	        chart: { 
+	            width: width,
+	            height: height,
+	        },
+	        series: {
+	            dataLabels: {
+	                visible: false,
+	                pieSeriesName: {
+	                    visible: true
+	                }
+	            }
+	        },
+	        legend: {
+	            align: 'bottom'
+	        },
+	        theme: {
+	            chart: {
+	                fontFamily: 'Arial'
+	            }
+	        },
+	        exportMenu: {
+	            visible: false
+	        },
+	        tooltip: {
+	            formatter: (value) => `${value}대`,
+            },	        
+	    };
+	  
+	    const columnChartRight = new toastui.Chart.columnChart({ 
+	        el: document.getElementById('columnChartRight'),
+	        data: columnChartData, 
+	        options: options
+	    });
+	
+	    return columnChartRight;
+	}
+	/*
+	
+	function initColumnChartOrd() {
+	    const { width, height } = getChartSize();
+	    
+	    const options = {
+	        chart: { 
+	            width: width,
+	            height: height,
+	        },
+	        series: {
+	            dataLabels: {
+	                visible: false,
+	                pieSeriesName: {
+	                    visible: true
+	                }
+	            }
+	        },
+	        legend: {
+	            align: 'bottom'
+	        },
+	        theme: {
+	            chart: {
+	                fontFamily: 'Arial'
+	            }
+	        },
+	        exportMenu: {
+	            visible: false
+	        },
+	        tooltip: {
+	            formatter: (value) => `${value}개`,
+            },	        
+	    };
+	  
+	    const columnChartOrd = new toastui.Chart.columnChart({ 
+	        el: document.getElementById('columnChartOrd'),
+	        data: columnChartData, 
+	        options: options
+	    });
+	
+	    return columnChartOrd;
+	}
+	*/
+	
+	let pieChart = initPieChartLeft();
+	let columnChart = initColumnChartRight();
+	//let columnChartOrd = initColumnChartOrd();
+	
+	// 디바운스 함수
+	function debounce(func, wait) {
+	    let timeout;
+	    return function executedFunction(...args) {
+	        const later = () => {
+	            clearTimeout(timeout);
+	            func(...args);
+	        };
+	        clearTimeout(timeout);
+	        timeout = setTimeout(later, wait);
+	    };
+	}
+	
+	// 리사이즈 핸들러
+	const handleResize = debounce(() => {
+	    if (chart) {
+	        chart.destroy();
+	    }
+	    chart = initChart();
+	}, 250);
+	
+	window.addEventListener('resize', handleResize);
+	
+	function getChartSize() {
+	    const containerWidth = document.querySelector('.chart-wrapper').offsetWidth;
+	    let chartWidth = containerWidth;
+	    let chartHeight = containerWidth * 0.6; // 높이를 너비의 60%로 설정
+	
+	    // 최소,최대 크기 제한
+	    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
+	    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
+	
+	    return { width: chartWidth, height: chartHeight };
+	}
+	
+	function getChartOrd() {
+		$.ajax({
+		    url: 'getChartOrd',
+		    type: 'GET',
+		    success: function(response) {
+		    	
+		        const columnChartData = {
+		            categories: [], // 제품 이름
+		            series: [{
+		                name: [],
+		                data: [], // 주문 건수
+		            	colorByCategories: true
+		            }]
+		        };
+		        
+			    const { width, height } = getChartSize();
+			    
+			    const options = {
+			        chart: { 
+			            width: width,
+			            height: height,
+			        },
+			        series: {
+			            dataLabels: {
+			                visible: false,
+			                pieSeriesName: {
+			                    visible: true
+			                }
+			            },
+
+
+			        },
+			        legend: {
+			            align: 'bottom',
+		                visible: false,
+			        },
+			        exportMenu: {
+			            visible: false
+			        },
+			        tooltip: {
+			            formatter: (value) => `${value}개`,
+		            },	        
+			    };		        
+		        
+		        // 받은 데이터 변환
+		        response.forEach(item => {
+		            columnChartData.categories.push(item.prdName);
+		            columnChartData.series[0].data.push(item.totalQuantity);
+		        });
+
+			    const columnChartOrd = new toastui.Chart.columnChart({ 
+			        el: document.getElementById('columnChartOrd'),
+			        data: columnChartData, 
+			        options: options
+			    });		        
+		    },
+		    error: function(xhr, status, error) {
+		        console.error(error);
+		    }
+		});
+	}
+	getChartOrd();
+	
+	function getChartEq() {
+		$.ajax({
+		    url: 'getChartEq',
+		    type: 'GET',
+		    success: function(response) {
+		    	
+
+		        
+			    const { width, height } = getChartSize();
+			    
+			    const options = {
+			        chart: { 
+			            width: width,
+			            height: height,
+			        },
+			        series: {
+			            dataLabels: {
+			                visible: false,
+			                pieSeriesName: {
+			                    visible: true
+			                }
+			            },
+
+
+			        },
+			        legend: {
+			            align: 'bottom'
+			        },
+			        exportMenu: {
+			            visible: false
+			        },
+			        tooltip: {
+			            formatter: (value) => `${value}개`,
+		            },	        
+			    };
+			    /*
+			    // name, data
+		        const columnChartData = {
+		            categories: [], // 라인코드
+		            series: [{
+		                name: [], // 설비종류
+		                data: [], 
+		            	colorByCategories: true
+		            }]
+		        };
+		        
+			    response.forEach(item => {
+			        columnChartData.categories.push(item.lineCode);
+			        columnChartData.series[0].name.push(item.eqType);
+			        columnChartData.series[0].data.push(item.eqCount);
+			    });
+			    */
+			    
+			    // category, name, data
+			    const columnChartData = {
+			    	    categories: [],
+			    	    series: []     
+			    	};
+
+			    	const uniqueLineCode = [...new Set(response.map(item => item.lineCode))];
+			    	const uniqueEqType = [...new Set(response.map(item => item.eqType))];
+
+			    	columnChartData.categories = uniqueLineCode;
+
+			    	uniqueEqType.forEach(eqType => {
+			    	    const seriesData = {
+			    	        name: eqType,
+			    	        data: uniqueLineCode.map(lineCode => {
+			    	            const found = response.find(item => 
+			    	                item.lineCode === lineCode && 
+			    	                item.eqType === eqType
+			    	            );
+			    	            return found ? found.eqCount : 0;
+			    	        })
+			    	    };
+			    	    columnChartData.series.push(seriesData);
+			    	});			    
+
+			    const columnChartEq = new toastui.Chart.columnChart({ 
+			        el: document.getElementById('columnChartEq'),
+			        data: columnChartData, 
+			        options: options
+			    });		        
+		    },
+		    error: function(xhr, status, error) {
+		        console.error(error);
+		    }
+		});
+	}
+	getChartEq();
+
+});
+</script>
+</body>

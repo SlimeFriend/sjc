@@ -44,5 +44,13 @@
     )
     WHERE	ROWNUM = 1
     </select>
-	
+
+	<select id="selectEqCount" resultType="EqDTO">
+		SELECT line_code, eq_type, COUNT(*) as eq_count
+		FROM eq
+		WHERE line_code IS NOT NULL 
+		  AND eq_type IS NOT NULL
+		GROUP BY line_code, eq_type
+		ORDER BY line_code, eq_type
+	</select>	
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.sjc.app.info.mapper.InfoEqMapper;
 import com.sjc.app.info.service.ChartDataVO;
 import com.sjc.app.info.service.ChartDataVO.SeriesVO;
+import com.sjc.app.info.service.EqDTO;
 import com.sjc.app.info.service.EqLogVO;
 import com.sjc.app.info.service.InfoEqService;
 @Service
@@ -105,4 +106,10 @@ public class InfoEqServiceImpl implements InfoEqService {
 		return chartData;
 	}
 
+	// 주문 조회
+	@Override
+	public List<EqDTO> getEq() {
+		return infoEqMapper.selectEqCount();
+	}	
+	
 }
