@@ -164,6 +164,11 @@ public class EqServiceImpl implements EqService {
     	return eqMapper.selectEqChckOx(eqVO);
     }
 
+@Override
+public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate) {
+	return eqMapper.eqSearch(eqCode, startDate, endDate);
+}
+
 
 
 } // end of class

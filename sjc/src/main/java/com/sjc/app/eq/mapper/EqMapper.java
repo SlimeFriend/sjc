@@ -52,4 +52,7 @@ public interface EqMapper {
 	
 	// 점검 유무 조회
 	public int selectEqChckOx(EqVO eqVO);
+	
+	// 비가동 내역 검색
+	public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate);
 }

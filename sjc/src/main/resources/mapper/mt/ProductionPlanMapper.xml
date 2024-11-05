@@ -2,9 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.mt.mapper.ProductionPlanMapper">
 
- <!-- 전체 생산 계획 목록 조회 - PLAN과 PLAN_DETAIL 테이블을 LEFT JOIN하여 모든 생산 계획을 페이징하여 조회 -->
-<select id="selectAllProductionPlans" resultMap="PlanWithDetails">
-    SELECT * FROM (
+    <!-- 전체 생산 계획 목록 조회 - PLAN과 PLAN_DETAIL 테이블을 LEFT JOIN하여 모든 생산 계획을 조회 -->
+    <select id="selectAllProductionPlans" resultMap="PlanWithDetails">
         SELECT 
             p.PLAN_CODE,
             p.START_DATE,
@@ -16,15 +15,12 @@
             pd.PRD_NAME,
             pd.QUANTITY,
             pd.NO,
-            pd.PRD_CODE,
-            ROW_NUMBER() OVER (ORDER BY p.PLAN_CODE) AS rn
+            pd.PRD_CODE
         FROM 
             PLAN p
         LEFT JOIN 
             PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
-    ) WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{limit}
-</select>
-
+    </select>
 
     <!-- 특정 제품 코드(prdCode)로 자재 조회 - 자재의 총 필요 수량을 계산하여 반환 -->
 <select id="selectMaterialsByPlanCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">

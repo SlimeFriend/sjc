@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
     <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
     <style>
-/* tui-grid 선택 테두리 제거 */
-.tui-grid-layer-focus-border {
-    display: none !important;
-}
-</style>
+    /* tui-grid 선택 테두리 제거 */
+    .tui-grid-layer-focus-border {
+        display: none !important;
+    }
+    </style>
 </head>
 
 <body>
@@ -26,7 +26,10 @@
                 <label for="cpCode">업체 선택</label>
                 <select name="cpCode" class="form-control" onchange="loadItemsForCpCode(this.value)">
                     <option value="">업체를 선택하세요</option>
-                    <option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}" th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}"></option>
+                    <option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
+                            th:value="${cp.cpCode}"
+                            th:text="${cp.cpCode + ' / ' + cp.cpName}"
+                            th:selected="${selectedCpCode == cp.cpCode}"></option>
                 </select>
             </div>
 
@@ -59,7 +62,19 @@
             ]
         });
 
+        // cpCode가 전달되었을 경우 자동으로 아이템 로딩
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedCpCode = document.querySelector("select[name='cpCode']").value;
+            if (selectedCpCode) {
+                loadItemsForCpCode(selectedCpCode);
+            }
+        });
+
         function loadItemsForCpCode(cpCode) {
+            if (!cpCode) {
+                itemGrid.resetData([]);
+                return;
+            }
             fetch(`/getItemsForCpCode?cpCode=${encodeURIComponent(cpCode)}`)
                 .then(response => response.json())
                 .then(data => {

@@ -8,9 +8,12 @@
 <title>발주 요청 목록</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+
+		
 <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<script type="text/javascript"
+	src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+	
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -90,8 +93,11 @@
         columns: [
             { header: '업체 코드', name: 'cpCode', align: 'center' , hidden: true},
             { header: '업체 명', name: 'cpName', align: 'center' },
-            { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
-            { header: '상태', name: 'mtlOdStatus', align: 'center' },
+            
+            { header: '발주 일자', name: 'mtlOdDate', align: 'center' ,                 sortingType: 'desc',
+                sortable: true     },
+            { header: '상태', name: 'mtlOdStatus', align: 'center' ,                 sortingType: 'desc',
+                    sortable: true     },
             { header: '총 금액', name: 'totalAmount', align: 'right' },
             { header: '담당자', name: 'userName', align: 'center' },
             {
@@ -118,8 +124,8 @@
                     return `<button class="btn btn-danger btn-sm" onclick="deleteOrderRequest('${mtlOdCode}')">삭제</button>`;
                 }
             }
-        ]
-   
+        ], pageOptions: { useClient: true, perPage: 8 },
+
     });
     
     // Excel 다운로드 함수
@@ -322,7 +328,7 @@
         { header: '주문 금액', name: 'orderAmount', align: 'right' },
         { header: '발주 일자', name: 'mtlOdDate', align: 'center' },
         { header: '상태', name: 'mtlOdStatus', align: 'center' }
-    ]
+    ],  pageOptions: { useClient: true, perPage: 8 },
 });
     
     

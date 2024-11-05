@@ -10,8 +10,5 @@ public interface ProductionPlanService {
 
     // 특정 생산 계획 코드에 따른 자재 목록 조회
     List<MtVO> getMaterialsByPlanCode(String planCode);
-    
-    // 페이징 적용된 생산 계획 목록 조회
-    List<PlanVO> getAllProductionPlansWithPaging(int limit, int offset);
 
 }

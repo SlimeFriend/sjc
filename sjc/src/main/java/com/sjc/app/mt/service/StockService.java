@@ -13,8 +13,8 @@ public interface StockService {
     // 자재 구분 업데이트
     void updateMaterialType(String mtCode, String materialType);
 
-    // 현재 재고 업데이트 (재고 추가 또는 차감)
-    void updateCurrentStock(String mtCode, Integer quantity);
+//    // 현재 재고 업데이트 (재고 추가 또는 차감)
+//    void updateCurrentStock(String mtCode, Integer quantity);
 
     // 로트번호별 자재 수량 조회
     List<MtInVO> getMaterialsByLotNo(String mtCode);

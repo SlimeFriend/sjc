@@ -60,14 +60,31 @@ public class OrderRequestController {
         return details;
     }
 
+
     /**
-     * 발주 요청 등록 페이지로 이동
+     * 발주 요청 목록 페이지로 이동
      */
     @GetMapping("/orderRequestNew")
-    public String createOrderRequest(Model model) {
-        List<CpVO> cpInfoList = orderRequestService.getAllCpInfo();
+    public String createOrderRequest(
+            @RequestParam(value = "mtCode", required = false) String mtCode,
+            @RequestParam(value = "cpCode", required = false) String cpCode,
+            Model model) {
+
+        // 전체 업체 목록을 조회하여 모델에 추가
+    	List<CpVO> cpInfoList = orderRequestService.getAllCpInfo();
+    	
+      
         model.addAttribute("cpInfoList", cpInfoList);
-        model.addAttribute("orderRequest", new MtlOdVO());
+       
+
+        // 선택된 자재 코드와 업체 코드가 있을 때만 모델에 추가
+        if (cpCode != null) {
+            model.addAttribute("selectedCpCode", cpCode);
+        }
+        if (mtCode != null) {
+            model.addAttribute("selectedMtCode", mtCode);
+        }
+
         return "mt/orderRequestForm";
     }
 

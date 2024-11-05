@@ -222,6 +222,34 @@ from    eq
 	ORDER BY eq_code
 </select>
 
+<!-- 비가동 내역 검색 -->
+	<select id="eqSearch" resultType="EqChckVO">
+    SELECT   ec.eq_chck_opcd
+           , ec.eq_code
+           , ec.eq_nextchck
+           , ec.eq_chckox
+           , ec.start_date
+           , ec.end_date
+           , ec.reason
+           , ec.comm
+           , e.eq_name
+    FROM eq_chck ec
+    JOIN eq e ON ec.eq_code = e.eq_code
+    WHERE 1=1
+    <if test="eqCode != null and eqCode != ''">
+        AND ec.eq_code LIKE '%' || #{eqCode} || '%'
+    </if>
+    <if test="startDate != null and startDate != ''">
+        AND ec.start_date <![CDATA[>=]]> TO_DATE(#{startDate}, 'YYYY-MM-DD HH:mm')
+    </if>
+    <if test="endDate != null and endDate != ''">
+        AND ec.end_date <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD HH:mm')
+    </if>
+    ORDER BY ec.eq_code
+</select>
+
+
+
 <!-- 설비 점검 조회 -->
 <select id="selectjumgumAll" resultType="EqVO">
 	SELECT  e.eq_code
