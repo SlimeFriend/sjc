@@ -19,7 +19,7 @@ public class SampleController {
 
 	@GetMapping("main")
 	public String main() {
-		return "mainChartOcta";
+		return "mainChartSixth";
 	}
 	
 	@GetMapping("error")
