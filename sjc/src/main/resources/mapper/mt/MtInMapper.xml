@@ -20,7 +20,8 @@
             MT ON MT_IN.MT_CODE = MT.MT_CODE
             JOIN MTL_OD_DETAIL ON MT_IN.MTL_OD_CODE = MTL_OD_DETAIL.MTL_OD_CODE
         ORDER BY 
-            MT_IN.LOT_NO
+            MT_IN.INPUT_DATE DESC
+            
     </select>
 
     <!-- 자재 입고 시 재고 업데이트: 현재 재고(CURRENT_STC)에 입고된 수량 추가 -->

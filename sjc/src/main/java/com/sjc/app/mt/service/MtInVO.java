@@ -1,12 +1,16 @@
 package com.sjc.app.mt.service;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
 public class MtInVO {
-    
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private Date inputDate;       // 입고일
+	
     private Integer inquantity;    // 입고수량
     private Date ed;               // 유통기한
     private String inCode;         // 입고코드
