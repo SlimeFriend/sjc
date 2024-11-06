@@ -17,7 +17,7 @@
              WHERE MTL_OD_DETAIL.MTL_OD_CODE = MTL_OD.MTL_OD_CODE) AS totalAmount
         FROM MTL_OD
         WHERE MTL_OD.CP_CODE = #{cpCode}
-          AND MTL_OD.MTL_OD_STATUS != '입고품질검사완료'
+          AND MTL_OD.MTL_OD_STATUS != '입고완료'
     </select>
 
     <!-- 발주 요청 목록을 업체 코드와 날짜 기준으로 그룹화하고, 금액 합계를 계산 -->
@@ -35,7 +35,7 @@
         LEFT JOIN MT ON MTL_OD_DETAIL.MT_CODE = MT.MT_CODE
         LEFT JOIN CP ON MTL_OD.CP_CODE = CP.CP_CODE
         LEFT JOIN SJC_USER ON MTL_OD.USER_ID = SJC_USER.USER_ID
-        WHERE MTL_OD.MTL_OD_STATUS != '입고품질검사완료'
+        WHERE MTL_OD.MTL_OD_STATUS != '입고완료'
         GROUP BY MTL_OD.MTL_OD_CODE, MTL_OD.MTL_OD_DATE, SJC_USER.USER_NAME, MTL_OD.MTL_OD_STATUS, MTL_OD.CP_CODE, CP.CP_NAME
     </select>
 
@@ -72,7 +72,7 @@
         LEFT JOIN MT ON MTL_OD_DETAIL.MT_CODE = MT.MT_CODE
         LEFT JOIN MTL_OD ON MTL_OD.MTL_OD_CODE = MTL_OD_DETAIL.MTL_OD_CODE
         WHERE MTL_OD.CP_CODE = #{cpCode}
-          AND MTL_OD.MTL_OD_STATUS != '입고품질검사완료'
+          AND MTL_OD.MTL_OD_STATUS != '입고완료'
     </select>
 
     <!-- 업체별 발주 가능한 품목 목록 조회 (CP 테이블 조인 제거) -->
@@ -114,7 +114,7 @@
         FROM MTL_OD
         LEFT JOIN CP ON MTL_OD.CP_CODE = CP.CP_CODE
         WHERE MTL_OD.MTL_OD_CODE = #{mtlOdCode}
-          AND MTL_OD.MTL_OD_STATUS != '입고품질검사완료'
+          AND MTL_OD.MTL_OD_STATUS != '입고완료'
     </select>
 
     <!-- 발주 요청 삽입 -->
