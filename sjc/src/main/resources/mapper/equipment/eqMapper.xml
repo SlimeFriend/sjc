@@ -8,14 +8,12 @@
 	    , eq_mdnm
 	    , use 
 	    , eq_mdno
-	    , eq_dep
 	    , eq_temp
 	    , eq_min
 	    , eq_max
 	    , eq_standtemp
 	    , eq_period
 	    , manager
-	    , eq_location
 	    , eq_img
 	    , line_code
 	    , eq_type
@@ -60,7 +58,6 @@ from    eq
 	     	  , eq_min
 	     	  , eq_max
 	     	  , manager
-	     	  , eq_location
 	     	  , eq_img
 	     	  , line_code
   				)
@@ -74,7 +71,6 @@ from    eq
   			,#{eqMin}
   			,#{eqMax}
   			,#{manager}
-  			,#{eqLocation}
   			,#{eqImg}
   			,#{lineCode}
   			)
@@ -113,7 +109,6 @@ from    eq
 	SET	 
 		   eq_mdnm = #{eqMdnm}
 		 , eq_mdno = #{eqMdno}
-		 , eq_location = #{eqLocation}
 		 , line_code = #{lineCode}
 		 , manager = #{manager}
 		 , use = #{use}
@@ -182,13 +177,11 @@ from    eq
 	    , eq_mdno
 	    , eq_ckdate
 	    , use
-	    , eq_dep
 	    , manager
 	    , eq_period
 	    , eq_img
 	    , eq_code
 	    , eq_standtemp
-	    , eq_location
 	    , line_code
     FROM   eq
     WHERE  eq_code = #{eqCode}

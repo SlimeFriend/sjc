@@ -125,6 +125,8 @@
                             <select id="lineCode" name="lineCode" class="form-control">
                                 <option value="L01">L01</option>
                                 <option value="L02">L02</option>
+                                <option value="L03">L03</option>
+                                <option value="L04">L04</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -180,7 +182,6 @@
 	            const eqMdnm = '[[${equip.eqMdnm}]]';
 	            const eqMdno = '[[${equip.eqMdno}]]';
 	            const use = '[[${equip.use}]]';
-	            const eqLocation = '[[${equip.eqLocation}]]';
 	            const manager = '[[${equip.manager}]]';
 	            const lineCode = '[[${equip.lineCode}]]';
 	
@@ -188,7 +189,6 @@
 	            $('#eqCode').val(eqCode);
 	            $('#eqMdnm').val(eqMdnm);
 	            $('#eqMdno').val(eqMdno);
-	            $('#eqLocation').val(eqLocation);
 	            $('input[name="use"][value="' + use + '"]').prop('checked', true);
 	            $('#manager').val(manager);
 	            $('#lineCode').val(lineCode);
@@ -203,7 +203,6 @@
 	                eqCode: $('#eqCode').val(),
 	                eqMdnm: $('#eqMdnm').val(),
 	                eqMdno: $('#eqMdno').val(),
-	                eqLocation: $('#eqLocation').val(),
 	                use: $('input[name="use"]:checked').val(),
 	                manager: $('#manager').val(),
 	                lineCode: $('#lineCode').val()
@@ -272,7 +271,6 @@
 	            eqCode: $('#eqCode').val(),
 	            eqMdnm: $('#eqMdnm').val(),
 	            eqMdno: $('#eqMdno').val(),
-	            eqLocation: $('#eqLocation').val(),
 	            use: $('input[name="use"]:checked').val()
 	        };
 	

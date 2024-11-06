@@ -98,7 +98,6 @@ public class EqController {
 		    targetEqVO.setEqMdnm(eqVO.getEqMdnm());
 		    targetEqVO.setEqMdno(eqVO.getEqMdno());
 		    targetEqVO.setEqPeriod(eqVO.getEqPeriod());
-		    targetEqVO.setEqLocation(eqVO.getEqLocation());
 		    targetEqVO.setLineCode(eqVO.getLineCode());
 		    targetEqVO.setManager(eqVO.getManager());
 		    targetEqVO.setUse(eqVO.getUse());

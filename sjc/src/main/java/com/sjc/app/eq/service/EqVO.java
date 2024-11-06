@@ -12,14 +12,12 @@ public class EqVO {
 	private String eqMdnm;		  // 모델명
 	private String use;			  // 사용 여부
 	private String eqMdno;		  // 모델 번호
-	private String eqDep;		  // 담당부서
 	private Integer eqTemp;		  // 가용 온도
 	private Integer eqMin;		  // 최저 온도
 	private Integer eqMax;		  // 최고 온도
 	private Integer eqStandTemp;  // 기준 온도
 	private Integer eqPeriod;	  // 점검 주기
 	private String manager;		  // 담당자
-	private String eqLocation;  // 설치 위치
 	private String eqImg;		  // 이미지
 	private String lineCode;	  // 라인
 	private String eqType;		  // 설비 구분
