@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
             {
-                header: '공겅구분',
+                header: '공정구분',
                 name: 'prccessType',
                 align: 'center',
                 sortingType: 'desc',
