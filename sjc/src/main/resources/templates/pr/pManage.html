@@ -119,10 +119,10 @@
         	
         	
             prd = event.currentTarget.dataset.code;
-            cnt = event.currentTarget.children[4].innerText;
+            cnt = event.currentTarget.children[5].innerText;
             pd = event.currentTarget.children[1].innerText;
-            line = event.currentTarget.children[2].innerText;
-            dstatus = event.currentTarget.children[6].innerText;
+            line = event.currentTarget.children[3].innerText;
+            dstatus = event.currentTarget.children[7].innerText;
             
     		if(dstatus == '완료'){
     			sBtn.disabled = true;
@@ -201,14 +201,18 @@
         	
 			const row = document.createElement('tr');
             row.dataset.rc = item.presultCode;
+            
+            const startTime = item.startTime ? item.startTime : '';
+            const endTime = item.endTime ? item.endTime : '';
+            
             if(item.status == 'b1'){
                 row.innerHTML = `
                     <td>${item.no}</td>
                     <td>${item.processName}</td>
                     <td>${item.eqCode}</td>
     				<td>대기</td>
-                    <td>${item.startTime}</td>
-                    <td>${item.endTime}</td>
+                    <td>${startTime}</td>
+                    <td>${endTime}</td>
                     <td>${item.input}</td>
                     <td>${item.err}</td>
                     <td>${item.output}</td>
@@ -219,8 +223,8 @@
                         <td>${item.processName}</td>
                         <td>${item.eqCode}</td>
         				<td>진행</td>
-                        <td>${item.startTime}</td>
-                        <td>${item.endTime}</td>
+                        <td>${startTime}</td>
+                        <td>${endTime}</td>
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
@@ -233,8 +237,8 @@
                         <td>${item.processName}</td>
                         <td>${item.eqCode}</td>
         				<td>완료</td>
-                        <td>${item.startTime}</td>
-                        <td>${item.endTime}</td>
+                        <td>${startTime}</td>
+                        <td>${endTime}</td>
                         <td>${item.input}</td>
                         <td>${item.err}</td>
                         <td>${item.output}</td>
