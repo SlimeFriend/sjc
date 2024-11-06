@@ -10,20 +10,18 @@
 	<div class="pd-ltr-20">
 		
 	<h2 class="h2 mb-20">생산계획 생성</h2>
+	
 		<div class="d-flex justify-content-between">
 			<div class="pd-20 card-box mb-20" style="width: 48%;">	
 				<h2 class="h5 mb-20">생산계획</h2>
 				<form name="form"
 					method="post">
 					<div class="form-group">
-						<label>주문코드</label> 
-							<select name="ordCode" id="ordCode">
-								<option></option>
-								<th:block th:block th:each="list: ${ordCode}">
-									<option>[[ ${list} ]]</option>
-								</th:block>
-							</select>
-						<br>
+						
+							<label for="company">주문코드</label> 
+							<input class="form-control" type="text" id="ordCode" name="ordCode" placeholder="주문코드를 선택해주세요.">
+
+						
 					
 					
 							<label>시작일자</label> 
@@ -60,6 +58,35 @@
 				<div id="grid"></div>
 			</div>
 		</div>
+		
+		
+		
+		
+		
+		
+		<!-- The Modal -->
+				<div class="modal" id="myModal">
+					<div class="modal-dialog modal-xl">
+						<div class="modal-content">
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">주문선택</h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<!-- Modal body -->
+							<div class="modal-body">
+								    <h5 class="h5">주문목록</h5>
+									<div id="cpList"></div>
+							</div>
+							<!-- Modal footer -->
+							<div class="modal-footer justify-content-center">
+								<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmitBtn">등록</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancelBtn">취소</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			
 		</div>
 	</div>
@@ -69,6 +96,7 @@
 			const ol = $('#ordCode');
 			
 			const gridData = /*[[${products}]]*/[];
+			const modalGridData = /*[[${ord}]]*/[];
 			
 			let grid; 
 			
@@ -108,7 +136,7 @@
 			
 			// 주문 select 바꿀경우 
 			ol.on('change', ()=>{
-				const ordCode = ol.val();
+				let ordCode = ol.val();
 				
 				// 계획 그리드 ajax 변경(선택한 plancode의 남은 제품계획수량) 
 				$.ajax({
@@ -140,11 +168,92 @@
 
 			});
 			
+			modalGrid = new tui.Grid({
+				el : document.getElementById('cpList'),
+				data : modalGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '주문일자',
+					name : 'ordDate',
+					align : 'center',
+				}, {
+					header : '납기일자',
+					name : 'ordDate',
+					align : 'center',
+				}, {
+					header : '요청사항',
+					name : 'ordDate',
+					align : 'center',
+				}, 
+				
+				
+				],
+				rowHeaders : [ 'rowNum' ],
+				selectionUnit: 'row',
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			modalGrid.on('click', (ev) => {
+			    const { value } = ev; // 입력된 출고량
+			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+			    
+			    const ordCode = modalGrid.getValue(rowKey, 'ordCode');
+			    
+			    console.log(ordCode);
+		        document.getElementById('ordCode').value = ordCode;
+		        
+				
+				// 계획 그리드 ajax 변경(선택한 plancode의 남은 제품계획수량) 
+				$.ajax({
+				    url: 'ordPrd',
+				    type: 'GET',
+				    data: {
+				        ordCode : ordCode 
+				    },
+				    success: function(response) {
+				    	if(response.length>0){
+				        grid.resetData(response);
+				        grid.getData().forEach((row, index) => {
+	                        grid.check(index, true);  // 해당 행의 체크박스 체크
+	                        grid.disableRow(index);
+	                        
+	                    });
+				        
+				        
+				    	}
+				    	else{
+				    		grid.resetData(gridData);	
+				    	}
+				    },
+				    error: function(jqXHR, textStatus, errorThrown) {
+				        console.error('Error:', textStatus, errorThrown);
+				    }
+				});
+				
+			});
+			
 		// 체크된 행의 데이터를 가져오는 함수
 		/* function logCheckedRows() {
 		    const checkedRows = grid.getCheckedRows();
 		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
 		} */
+		
+		document.getElementById('ordCode').addEventListener('click', function() {
+			$('#myModal').modal('show'); // 모달 열기
+			modalGrid.refreshLayout();
+		});
 		
 		function sendCheckedRows() {
 		    const checkedRows = grid.getCheckedRows();

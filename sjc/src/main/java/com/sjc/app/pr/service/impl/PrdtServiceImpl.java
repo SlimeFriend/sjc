@@ -22,6 +22,7 @@ import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PoVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
+import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 
 @Service
@@ -243,9 +244,9 @@ public class PrdtServiceImpl implements PrdtService {
 	}
 
 	@Override
-	public List<String> oList() {
+	public List<OrderVO> oList() {
 		
-		;
+		
 		return prdtMapper.oList();
 	}
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.info.service.InfoUserVO;
+import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 
 public interface PrdtService {
@@ -75,7 +76,7 @@ public interface PrdtService {
 	public List<PlanDVO> planPrd(String planCode);
 	
 	// 생산 계획생성에 주문 가져오기
-	public List<String> oList();
+	public List<OrderVO> oList();
 	
 	// 주문 클릭시 가져올 완제품
 	public List<ProductVO> ordPrd(String ordCode);

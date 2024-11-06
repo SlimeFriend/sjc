@@ -14,6 +14,7 @@ import com.sjc.app.pr.service.PResultVO;
 import com.sjc.app.pr.service.PlanDVO;
 import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PrcVO;
+import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 
 public interface PrdtMapper {
@@ -96,7 +97,7 @@ public interface PrdtMapper {
 	public List<PlanDVO> planPrd(String planCode);
 	
 	// 생산 계획에 표시할 주문코드
-	public List<String> oList();
+	public List<OrderVO> oList();
 	
 	// 주문코드 선택 시 나올 주문 제품 
 	public List<ProductVO> ordPrd(String ordCode);

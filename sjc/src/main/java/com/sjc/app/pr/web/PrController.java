@@ -25,6 +25,7 @@ import com.sjc.app.pr.service.PlanVO;
 import com.sjc.app.pr.service.PoVO;
 import com.sjc.app.pr.service.PrcVO;
 import com.sjc.app.pr.service.PrdtService;
+import com.sjc.app.sales.service.OrderVO;
 import com.sjc.app.sales.service.ProductVO;
 
 /**
@@ -66,11 +67,11 @@ public class PrController {
 		
 		List<ProductVO> productList = prdtService.productList();
 	
-		List<String> oList = prdtService.oList();
+		List<OrderVO> oList = prdtService.oList();
 
 		model.addAttribute("products", productList);
 		
-		model.addAttribute("ordCode", oList);
+		model.addAttribute("ord", oList);
 		
 		return "pr/planCreate";
 	}
