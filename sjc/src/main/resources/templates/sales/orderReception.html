@@ -9,45 +9,13 @@
 	<head>
 	    <meta charset="UTF-8">
 	    <title>주문접수</title>
-	    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-	    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-	    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-	    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-		<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
-		<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
-		
-		<style>ㅇ
-			.chart-container {
-			    width: 100%;
-			    max-width: 100%;
-			    overflow-x: auto;
-			}
-			
-			.chart-wrapper {
-			    position: relative;
-			    width: 100%;
-			    min-height: 250px;
-			    margin: 0 auto;
-			}
-				
-			#pieChart {
-			    margin: 0 auto;
-			}
-			
-			@media (max-width: 768px) {
-			    .chart-wrapper {
-			        min-height: 250px;
-			    }
-			}
-			
-		</style>
 	</head>
 	
 	<div class="main-container">
 		<div class="pd-20">
 			<h2 class="h2 mb-20">주문접수</h2>
-			<div class="row">
-				<div class="pd-30 card-box mb-20 mr-20" style="width: 48%">
+			<div style="display: flex; width: 100%; gap: 20px;">
+				<div class="pd-30 card-box mb-20" style="width: 50%">
 					<h2 class="h5 mb-20">주문서 작성</h2>
 					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
 						<div class="form-group">
@@ -63,23 +31,15 @@
 							<label>요청사항</label>
 							<textarea class="form-control" name="comm"></textarea>
 						</div>
-						
 						<div style="display: flex; justify-content: flex-end;">
 							<button class="btn" type="button" onclick="sendCheckedRows()" style="background-color: #0b132b; color: #ffffff;">주문접수</button>
 						</div>
 					</form>
 				</div>
 				
-				<div class="pd-20 card-box mb-20" style="width: 48%; display: flex; flex-direction: column;">
+				<div class="pd-20 card-box mb-20" style="width: 48%;">
 					<h2 class="h5 mb-20">제품 선택</h2>
 					<div id="grid"></div>
-				</div>
-				
-				<div class="pd-20 card-box mb-20 mr-20" style="width: 97.5%">
-					<h2 class="h5 mb-20">제품재고 현황</h2>
-                    <div class="chart-wrapper">
-                        <div id="columnChartOrd"></div>
-                    </div>
 				</div>
 				
 				<!-- The Modal -->
@@ -104,7 +64,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 
@@ -141,7 +100,7 @@
 					editor: 'text',
 				}, ],
 				rowHeaders : [ 'checkbox' ],
-				bodyHeight: 280,
+				bodyHeight: 200,
 				pageOptions: {
 				    type: 'scroll',
 				    perPage: 10 
@@ -150,13 +109,12 @@
 			
 			grid.on('editingFinish', (ev) => {
 			    const rowKey = ev.rowKey; // 수정된 행의 키
-			    const price = grid.getValue(rowKey, 'price'); // 가격
 			    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
 
 			    if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
 			        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
 			        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
-			        return; // 함수 종료
+			        console.log(rowKey);
 			    }
 			});
 			
@@ -210,81 +168,6 @@
 
 		    // 납기일자 입력 필드에 min 속성 설정
 		    document.getElementById('dlvReqDate').setAttribute('min', formattedToday);
-		    
-		    function getChartSize() {
-			    const containerWidth = document.querySelector('.chart-wrapper').offsetWidth;
-			    let chartWidth = containerWidth;
-			    let chartHeight = containerWidth * 0.6; // 높이를 너비의 60%로 설정
-			
-			    // 최소,최대 크기 제한
-			    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
-			    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
-			
-			    return { width: chartWidth, height: chartHeight };
-			}
-		    
-		    function getChartOrd() {
-				$.ajax({
-				    url: 'getChartOrd',
-				    type: 'GET',
-				    success: function(response) {
-				    	
-				        const columnChartData = {
-				            categories: [], // 제품 이름
-				            series: [{
-				                name: [],
-				                data: [], // 주문 건수
-				            	colorByCategories: true
-				            }]
-				        };
-				        
-					    const { width, height } = getChartSize();
-					    
-					    const options = {
-					        chart: { 
-					            width: width,
-					            height: height,
-					        },
-					        series: {
-					            dataLabels: {
-					                visible: false,
-					                pieSeriesName: {
-					                    visible: true
-					                }
-					            },
-
-
-					        },
-					        legend: {
-					            align: 'bottom',
-				                visible: false,
-					        },
-					        exportMenu: {
-					            visible: false
-					        },
-					        tooltip: {
-					            formatter: (value) => `${value}개`,
-				            },	        
-					    };		        
-				        
-				        // 받은 데이터 변환
-				        response.forEach(item => {
-				            columnChartData.categories.push(item.prdName);
-				            columnChartData.series[0].data.push(item.totalQuantity);
-				        });
-
-					    const columnChartOrd = new toastui.Chart.columnChart({ 
-					        el: document.getElementById('columnChartOrd'),
-					        data: columnChartData, 
-					        options: options
-					    });		        
-				    },
-				    error: function(xhr, status, error) {
-				        console.error(error);
-				    }
-				});
-			}
-			getChartOrd();
 				
 		});
 		
@@ -294,8 +177,6 @@
 		});
 		
 		function sendCheckedRows() {
-			
-			let checkedRows = grid.getCheckedRows();
 			
 			// 폼 데이터를 직접 수집
 		    const formArr = $("form[name=form]").serializeArray();
@@ -316,6 +197,8 @@
 		        return;
 		    }
 		    
+		    let checkedRows = grid.getCheckedRows();
+		    
 		    // 체크된 행이 없는 경우 경고
 		    if (checkedRows.length === 0) {
 		        alert('제품을 선택해주세요.');
@@ -324,12 +207,14 @@
 		    
 		 	// 체크된 각 행의 수량이 유효한지 검사
 		    for (let i = 0; i < checkedRows.length; i++) {
-		        const rowKey = checkedRows[i];
-		        const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량 가져오기
+		        const rowKey = checkedRows[i]; // 체크된 행의 rowKey
+		        const quantity = grid.getValue(checkedRows, 'ordQuantity'); // 해당 rowKey의 'ordQuantity' 값 가져오기
+				
+		        console.log('Row Key:', rowKey, 'Quantity:', quantity); // 확인용 로그
 
 		        // 수량이 비어있거나 0 이하인 경우
-		        if (!quantity || Number(quantity) <= 0) {
-		            alert('모든 선택된 제품의 수량이 유효해야 합니다. 수량을 입력해주세요.');
+		        if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
+		            alert(`Row ${i + 1}의 수량이 유효하지 않습니다. 수량을 입력해주세요.`);
 		            return; // 폼 제출 중단
 		        }
 		    }
