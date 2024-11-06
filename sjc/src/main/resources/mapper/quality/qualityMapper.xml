@@ -3,27 +3,30 @@
 <mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
 	<!-- 입고품질검사 대기목록 1 (mtlOd)-->
 	<select id="selectMtlOd" resultType="InspectionVO">
-		SELECT 	distinct(o.mtl_od_code) mtl_od_code
-        		, o.cp_code    			cp_code
-        		, c.cp_name 			cp_name
-        		, o.mtl_od_quantity 	mtl_od_quantity
-        		, o.mtl_od_date 		mtl_od_date
-        		, o.dilivery_date 		dilivery_date
-        		, o.price 				price
-        		, o.user_id 			user_id
-        		, o.mtl_od_status 		mtl_od_status
-        		, o.comm 				comm
-        FROM 	mtl_od o
-        	JOIN 	cp c
-        	ON 		o.cp_code = c.cp_code
-        	JOIN 	mtl_od_detail od
-        	ON 		od.mtl_od_code = o.mtl_od_code
-        WHERE 	o.mtl_od_status ='입고품질검사대기' -- 완료
-        OR		(
-        			o.mtl_od_status = '입고품질검사중'
-        			and     
-        			od.MTL_OD_DETAIL_STATUS  is null
-        		)
+		SELECT DISTINCT(o.mtl_od_code) AS mtl_od_code,
+                o.cp_code AS cp_code,
+                c.cp_name AS cp_name,
+                sum(od.quantity) AS mtl_od_quantity,
+                o.mtl_od_date AS mtl_od_date,
+                o.dilivery_date AS dilivery_date,
+                (SELECT SUM(COALESCE(m.UNIT_PRICE, 0) * COALESCE(od.QUANTITY, 0))
+                    FROM MTL_OD_DETAIL od
+                    LEFT JOIN MT m ON od.MT_CODE = m.MT_CODE
+                    WHERE od.MTL_OD_CODE = o.MTL_OD_CODE) AS price,
+                o.user_id AS user_id,
+                o.mtl_od_status AS mtl_od_status,
+                o.comm AS comm
+FROM mtl_od o
+JOIN cp c ON o.cp_code = c.cp_code
+JOIN mtl_od_detail od ON od.mtl_od_code = o.mtl_od_code
+WHERE o.mtl_od_status = '입고품질검사대기' -- 완료
+   OR (
+        o.mtl_od_status = '입고품질검사중'
+        AND od.MTL_OD_DETAIL_STATUS IS NULL
+      )
+GROUP BY ROLLUP ((o.mtl_od_code, o.cp_code, c.cp_name, o.mtl_od_date, o.dilivery_date, 
+o.price, o.user_id, o.mtl_od_status, o.comm))
+HAVING o.mtl_od_code IS NOT NULL
 	</select>
 	
 	<!-- 입고품질검사 대기목록 2 (mtlOdDetail) -->

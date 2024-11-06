@@ -107,7 +107,7 @@
 									<th>입고가능수량</th>
 									<th>자재발주코드</th>
 									<th>자재코드</th>
-									<th>직원번호</th>
+									<th>직원ID</th>
 									<th>비고</th>
 								</tr>
 							</thead>
@@ -248,13 +248,15 @@
 			contentType: 'application/json',
 			data: JSON.stringify(list),
 			success: function(response){
-				console.log('입고성공', response);
+				console.log('입고 성공', response);
+				alert('입고 성공', response);
 				
 				location.reload();
 			},
 			
 			error: function(xhr, status, error){
 				console.error('입고 실패', error);
+				alert('입고 실패', error);
 			}
 		
 		})
@@ -296,12 +298,14 @@
 			data: JSON.stringify(data),
 			success: function(response){
 				console.log('반품 성공', response);
+				alert('반품 성공', response);
 				
 				location.reload();
 			},
 			
 			error: function(xhr, status, error){
 				console.error('반품 실패', error);
+				alert('반품 실패', error);
 			}
 		
 		})
