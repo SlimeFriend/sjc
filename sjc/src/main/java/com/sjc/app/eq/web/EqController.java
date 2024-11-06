@@ -164,7 +164,7 @@ public class EqController {
         eqService.updateCheckStatus(eqChckVO);
         return "success";
     }
-	
+	// 비가동 업데이트
 	@PostMapping("nOpRegister")
 	@ResponseBody
 	public EqChckVO registerNonOperating(@RequestBody EqChckVO eqChckVO) {
@@ -173,10 +173,11 @@ public class EqController {
 	    eqService.saveNonOperating(eqChckVO);
 	    return eqChckVO;  // 저장된 데이터를 반환해 화면에서 바로 추가할 수 있게 함
 	}
-
+	//점검유무 입력
 	@PostMapping("getEqChckOx")
 	@ResponseBody
 	public int getEqChckOx(@RequestBody EqVO eqVO) {
 		return eqService.selectEqChckOx(eqVO);
 	}
+	
 } // end of class

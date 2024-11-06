@@ -31,4 +31,4 @@ public class EqVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eqNextChck;	// 다음 점검일
 	private String eqChckOx;	// 점검 유무
-}
+}	

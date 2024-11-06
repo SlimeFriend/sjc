@@ -46,7 +46,6 @@ public interface EqService {
 	
 	// 비가동 내역 검색
 	public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate);
-
-
+	
 }
 
