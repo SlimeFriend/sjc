@@ -6,6 +6,16 @@
 	
 	<head>
     	<title>주문내역</title>
+    	<style>
+    	.grid-modal .bg-warning {
+		    background-color: #ffc107 !important; /* Bootstrap에서의 경고색 */
+		}
+		
+		/* gridModal에 있는 LACKQUANTITY의 배경색 우선 설정 */
+		.grid-modal .LACKQUANTITY {
+		    background-color: #ffc107 !important; /* 원하는 경고색으로 설정 */
+		}
+    	</style>
 	</head>
 
 	<!-- 페이징 필요하신분 -->
@@ -15,12 +25,11 @@
 			<h2 class="h2 mb-20">주문내역</h2>
 			<div class="pd-30 card-box mb-20">
 				<form>
-					<div class="form-group row" style="display: flex; align-items: center;">
+					<div class="form-group row" style="display: flex; align-items: center; flex-wrap: wrap;">
 					    <label class="col-sm-12 col-md-1 col-form-label">진행상황</label>
-
-					    <div class="col-sm-12 col-md-3 d-flex">
-					    
-					    	<div style="margin-right: 30px; display: flex; align-items: center;">
+					
+					    <div class="col-sm-12 col-md-3 d-flex" style="flex-wrap: wrap;">
+					        <div style="margin-right: 30px; display: flex; align-items: center;">
 					            <input type="radio" id="option1" name="option" value="" style="margin-right: 8px;" checked="checked">
 					            <label for="option1" style="margin-bottom: 0px;">전체</label>
 					        </div>
@@ -36,6 +45,7 @@
 					        </div>	        
 					    </div>
 					</div>
+
 					
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
@@ -117,7 +127,7 @@
 					align : 'center',
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				bodyHeight: 200,
+				bodyHeight: 280,
 				pageOptions: {
 				    type: 'scroll',
 				    perPage: 10 
@@ -161,13 +171,7 @@
 			    if (row.ordStatus === '재고부족') {
 			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
 			    } else if (row.ordStatus === '계획반영') {
-			    	let ordCode = row.ordCode;
 			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-warning');
-	    		    gridModal.getData().forEach(row => {
-	    			    if (row.ordCode === ordCode) {
-	    			    	gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-warning');
-	    			    }
-	    			});
 			    }
 			});
 			
@@ -182,22 +186,44 @@
 			    		contentType : 'application/json',
 			    		data : JSON.stringify({ordCode : ordCodeValue}),
 			    		success: function(response) {
-			    			console.log('Order details received:', response);
 			    			document.getElementById('gridOrderDetail').style.display = 'block';
 			    			gridModal.resetData(response);
 			    			gridModal.refreshLayout();
-			    		    gridModal.getData().forEach(row => {
-			    			    if (row.LACKQUANTITY > 0) {
-			    			    	gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-light-pink');
-			    			    }
+
+			    			// 재고부족인 경우 배경색 변경
+			    			const lackOrdCodes = grid.getData()
+			    			    .filter(row => row.ordStatus === '재고부족')
+			    			    .map(row => row.ordCode);
+
+			    			// 각 lackOrdCode에 대해 rowKey를 찾고 배경색 변경
+			    			lackOrdCodes.forEach(lackOrdCode => {
+			    			    gridModal.getData().forEach(row => {
+			    			        if (row.ORDCODE === lackOrdCode) {
+			    			            gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-light-pink');
+			    			        }
+			    			    });
 			    			});
+
+			    			// ordStatus가 '계획반영'인 경우 배경색 변경
+			    			const planOrdCodes = grid.getData()
+			    			    .filter(row => row.ordStatus === '계획반영')
+			    			    .map(row => row.ordCode);
+
+			    			// 각 planOrdCode에 대해 rowKey를 찾고 배경색 변경
+			    			planOrdCodes.forEach(planOrdCode => {
+			    			    gridModal.getData().forEach(row => {
+			    			        if (row.ORDCODE === planOrdCode) {
+			    			            gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-warning');
+			    			        }
+			    			    });
+			    			});
+			                
 			    		},
 			    		error: function(xhr, status, error) {
 			    			console.error('error during request', error);
 			    		}
 			    	});
 			    }  
-			    
 			});
 			
 		});
