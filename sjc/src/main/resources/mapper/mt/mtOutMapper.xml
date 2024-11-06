@@ -17,7 +17,7 @@
         JOIN 
             MT MT ON MO.MT_CODE = MT.MT_CODE
         ORDER BY 
-            MO.LOT_NO
+            MO.OUT_DATE DESC
     </select>
 
 </mapper>

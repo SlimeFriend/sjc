@@ -20,6 +20,7 @@
             PLAN p
         LEFT JOIN 
             PLAN_DETAIL pd ON p.PLAN_CODE = pd.PLAN_CODE
+            ORDER BY p.START_DATE DESC
     </select>
 
     <!-- 특정 제품 코드(prdCode)로 자재 조회 - 자재의 총 필요 수량을 계산하여 반환 -->
@@ -44,7 +45,7 @@
     JOIN
         MT m ON bd.MT_CODE = m.MT_CODE
     WHERE
-        p.PLAN_CODE = #{planCode}  <!-- planCode를 기준으로 조회 -->
+        p.PLAN_CODE = #{planCode}  
     GROUP BY
         bd.MT_CODE,
         m.MT_NAME,
