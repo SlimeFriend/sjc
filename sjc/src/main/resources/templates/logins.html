@@ -44,6 +44,15 @@
 		    padding: 5px 15px !important;
 		    line-height: 1.2;
 		}
+		
+		.login-header {
+		 background: #0b132b;
+		}
+		
+		.login-btn {
+		 background: #0b132b;
+		 color: #ffffff;
+		}
     </style>	
 </head>
 <body class="login-page">
@@ -54,11 +63,11 @@
 					<!-- 
 					<img th:src="@{assets/vendors/images/deskapp-logo.svg}" alt="">
 					 -->
-					<img th:src="@{assets/images/logo.png}" alt="SJC">
+					<img th:src="@{assets/images/logo8.png}" alt="SJC">
 				</a>
 			</div>
 			<div class="login-menu">
-				<img style="height: 70px;" th:src="@{assets/images/mes.png}" alt="MES">
+				<!-- <img style="height: 70px;" th:src="@{assets/images/mes.png}" alt="MES"> -->
 				<!-- 
 				 -->
 				<!-- 
@@ -70,9 +79,8 @@
 		</div>
 	</div>
 	<div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">
-		<div class="container">
 		
-			
+		<div class="container">
 			<div class="row align-items-center">
 				<div class="col-md-6 col-lg-7">
 					<img th:src="@{assets/images/login.webp}" alt="">
@@ -80,7 +88,7 @@
 				<div class="col-md-6 col-lg-5">
 					<div class="login-box bg-white box-shadow border-radius-10">
 						<div class="login-title">
-							<img class="h-100" th:src="@{assets/images/login.png}" alt="Login to SJC MES">
+							<img class="h-100" th:src="@{assets/images/login1.png}" alt="Login to SJC MES">
 							<!-- 
 							<h2 class="text-center text-primary">Login To DeskApp</h2>
 							 -->				
@@ -118,7 +126,8 @@
 											use code for form submit
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
 										-->
-										<button class="btn btn-primary btn-block btn-lg shadow-lg">로그인</button>
+										<!-- <button class="btn-primary btn-block btn-lg shadow-lg">로그인</button> -->
+										<button class="login-btn btn-block btn-lg">로그인</button>
 									</div>
 							        <div style="position: relative;">
 							            <p id="valid" 
