@@ -233,10 +233,10 @@ from    eq
         AND ec.eq_code LIKE '%' || #{eqCode} || '%'
     </if>
     <if test="startDate != null and startDate != ''">
-        AND ec.start_date <![CDATA[>=]]> TO_DATE(#{startDate}, 'YYYY-MM-DD HH:mm')
+        AND ec.start_date <![CDATA[>=]]> TO_DATE(#{startDate}, 'YYYY-MM-DD')
     </if>
     <if test="endDate != null and endDate != ''">
-        AND ec.end_date <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD HH:mm')
+        AND ec.end_date <![CDATA[<=]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
     </if>
     ORDER BY ec.eq_code
 </select>

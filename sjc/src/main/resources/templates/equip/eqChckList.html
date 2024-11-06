@@ -81,7 +81,7 @@ tbody > tr {
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
 							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="eqCode" type="text" placeholder="설비코드" oninput="search()">
+								<input class="form-control" id="searchEqCode" type="text" placeholder="설비코드" oninput="search()">
 							</div>
 						</div>
 						
@@ -118,8 +118,7 @@ tbody > tr {
 								<td>[[${wait.eqName}]]</td>
 								<td>[[${wait.reason}]]</td>
 								<td>[[${wait.eqChckOx}]]</td>
-								<td>[[ ${ #dates.format(wait.startDate, "yyyy-MM-dd HH:mm" )}
-									]]</td>
+								<td>[[ ${ #dates.format(wait.startDate, "yyyy-MM-dd HH:mm" )}]]</td>
 								<td>[[ ${ #dates.format(wait.endDate, "yyyy-MM-dd HH:mm" )} ]]</td>
 							</tr>
 						</th:block>
@@ -363,14 +362,14 @@ $('#modalSubmitBtn').on('click', function() {
     }
 });
 function search() {
-    const eqCode = document.getElementById('eqCode').value;
+    const eqCode = document.getElementById('searchEqCode').value;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     
     const searchCriteria = {
     		   eqCode: eqCode
-    		  ,startDate: startDate ? new Date(startDate).toISOString() : null
-    		  ,endDate: endDate ? new Date(endDate).toISOString() : null
+    		  ,startDate: startDate
+    		  ,endDate: endDate
     };
 
     $.ajax({
