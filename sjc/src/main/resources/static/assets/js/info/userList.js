@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    })
 	    .then(result => {
 	        //fetchUsers();
-	        grid.reloadData()();
+	        grid.reloadData();
 	        console.log(result);
 	    })
 	    .catch(error => {

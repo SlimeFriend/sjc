@@ -20,4 +20,12 @@
 	    </where>
 	    ORDER BY LINE_CODE
 	</select>
+	
+    <update id="updateLine" parameterType="LineVO">
+        UPDATE 	line
+        SET 	
+            	prd_code = #{prdCode}
+        WHERE 	line_code = #{lineCode}
+    </update>
+    	
 </mapper>
