@@ -86,27 +86,24 @@
     let currentMtlOdCode = null;
     let currentCpCode = null; // cpCode를 저장할 변수 추가
 
-    // 발주 요청 목록 그리드 설정
+ // 발주 요청 목록 그리드 설정
     const orderRequestGrid = new tui.Grid({
         el: document.getElementById('orderRequestGrid'),
         data: orderRequests,
         columns: [
-            { header: '업체 코드', name: 'cpCode', align: 'center' , hidden: true},
+            { header: '업체 코드', name: 'cpCode', align: 'center', hidden: true },
             { header: '업체 명', name: 'cpName', align: 'center' },
-            
-            { header: '발주 일자', name: 'mtlOdDate', align: 'center' ,                 sortingType: 'desc',
-                sortable: true     },
-            { header: '상태', name: 'mtlOdStatus', align: 'center' ,                 sortingType: 'desc',
-                    sortable: true     },
+            { header: '발주 일자', name: 'mtlOdDate', align: 'center', sortingType: 'desc', sortable: true },
+            { header: '상태', name: 'mtlOdStatus', align: 'center', sortingType: 'desc', sortable: true },
             { header: '총 금액', name: 'totalAmount', align: 'right' },
-            { header: '담당자', name: 'userName', align: 'center' },
+            { header: '담당자', name: 'userName', align: 'center' }, // 담당자 이름 그대로 표시
             {
-                header: '상태변경', 
-                name: 'statusChange', 
+                header: '상태변경',
+                name: 'statusChange',
                 align: 'center',
                 formatter: (item) => {
                     const mtlOdCode = item.row.mtlOdCode;
-                    const cpCode = item.row.cpCode; // cpCode 가져오기
+                    const cpCode = item.row.cpCode;
                     return `<button class="btn btn-secondary" onclick="openStatusModal('${mtlOdCode}', '${cpCode}')">변경하기</button>`;
                 }
             },
@@ -124,9 +121,10 @@
                     return `<button class="btn btn-danger btn-sm" onclick="deleteOrderRequest('${mtlOdCode}')">삭제</button>`;
                 }
             }
-        ], pageOptions: { useClient: true, perPage: 8 },
-
+        ],
+        pageOptions: { useClient: true, perPage: 8 },
     });
+
     
     // Excel 다운로드 함수
     function downloadExcel() {

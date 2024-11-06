@@ -91,33 +91,26 @@ public class OrderRequestController {
     /**
      * 발주 요청 등록 처리
      */
+   
     @PostMapping("/orderRequest/submit")
     @ResponseBody // JSON 형식으로 응답 반환
     public ResponseEntity<String> submitOrderRequest(@RequestBody Map<String, Object> payload) {
         String cpCode = (String) payload.get("cpCode");
-        Object userIdObj = payload.get("userId"); // userId를 Object로 받아 타입 검사
+        String userId = (String) payload.get("userId"); // '이성철' 그대로 받음
         List<Map<String, Object>> itemsData = (List<Map<String, Object>>) payload.get("items");
 
         // 필수 파라미터 검증
-        if (cpCode == null || userIdObj == null || itemsData == null) {
+        if (cpCode == null || userId == null || itemsData == null) {
             throw new IllegalArgumentException("필수 파라미터가 누락되었습니다.");
-        }
-
-        // userId를 Integer로 변환
-        Integer userId;
-        if (userIdObj instanceof String) {
-            userId = Integer.parseInt((String) userIdObj);
-        } else if (userIdObj instanceof Integer) {
-            userId = (Integer) userIdObj;
-        } else {
-            throw new IllegalArgumentException("userId가 올바르지 않은 형식입니다.");
         }
 
         // 발주 요청 생성
         MtlOdVO orderRequest = new MtlOdVO();
         orderRequest.setCpCode(cpCode);
-        orderRequest.setUserId(userId);
+        orderRequest.setManagerName(userId); // 'userId' 대신 managerName에 '이성철' 저장
         orderRequestService.insertOrderRequest(orderRequest);
+
+     
 
         // 발주 코드 생성 후 가져오기
         String mtlOdCode = orderRequest.getMtlOdCode();
@@ -145,6 +138,7 @@ public class OrderRequestController {
 
         return ResponseEntity.ok("발주 요청이 성공적으로 등록되었습니다.");
     }
+
 
 
 

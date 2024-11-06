@@ -33,11 +33,15 @@
                 </select>
             </div>
 
-            <!-- 담당자 ID 입력 -->
-            <div class="form-group">
-                <label for="userId">담당자 ID</label>
-                <input type="text" id="userId" class="form-control" placeholder="담당자 ID를 입력하세요">
-            </div>
+          <th:block sec:authorize="isAuthenticated()">
+    <label>담당자</label>
+    <input class="form-control" type="text" id="userId"
+           th:value="${#authentication.principal.authorities[2]}" readonly>
+    <input type="hidden" 
+           th:value="${#authentication.principal.authorities[1]}"
+           name="manager">
+</th:block>
+
 
             <!-- 발주 품목 선택 그리드 -->
             <div id="itemGrid" style="width: 100%; height: 300px;"></div>
@@ -90,11 +94,25 @@
 
         function submitOrderRequest() {
             const cpCode = document.querySelector("select[name='cpCode']").value;
-            const userId = parseInt(document.getElementById("userId").value);
+            const userId = document.getElementById("userId").value;  // 문자열 그대로 가져옴
             const items = itemGrid.getData().filter(item => item.quantity > 0);
 
-            if (!cpCode || !userId || items.length === 0) {
-                alert("모든 필드를 입력하세요.");
+            console.log("cpCode:", cpCode);
+            console.log("userId:", userId);
+            console.log("items:", items);
+
+            if (!cpCode) {
+                alert("업체를 선택하세요.");
+                return;
+            }
+            
+            if (!userId) {
+                alert("담당자 ID가 올바르지 않습니다.");
+                return;
+            }
+
+            if (items.length === 0) {
+                alert("발주 수량을 입력하세요.");
                 return;
             }
 
@@ -109,8 +127,11 @@
                 } else {
                     alert("발주 요청 등록에 실패했습니다.");
                 }
-            });
+            })
+            .catch(error => console.error("Error submitting order request:", error));
         }
+
+
     </script>
 </body>
 </html>
