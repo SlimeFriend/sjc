@@ -59,8 +59,8 @@
 	<!-- 주문 접수 -->
 	<insert id="updateOrdStatus">
 		UPDATE ORD
-		SET ord_status = #{ordStatus}
-		WHERE ord_code = #{ordCode}
+		SET    ord_status = #{ordStatus}
+		WHERE  ord_code = #{ordCode}
 	</insert>
 	
 	<!-- 주문 상태 업데이트 -->
@@ -128,7 +128,7 @@
 	    <if test="orderStatus != null and orderStatus != ''">
         	AND o.ord_status = #{orderStatus}
     	</if>
-    	ORDER BY o.ord_status
+    	ORDER BY o.ord_date DESC
 	</select>
 
 	<!-- 주문내역 조회 -->
@@ -195,6 +195,7 @@
 		FROM   ord o LEFT JOIN cp c
 		ON     o.cp_code = c.cp_code
     	WHERE ord_status = #{status}
+    	ORDER BY o.ord_date DESC
 	</select>
 	
 	<select id="selectProductLot" resultType="ProductVO">
@@ -316,6 +317,7 @@
 	    <if test="inEndDate != null and inEndDate != ''">
 	        AND pm.in_date <![CDATA[<=]]> TO_DATE(#{inEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
+	    ORDER BY pm.in_date DESC
 	</select>
 	
 	<!-- 출고 검색 프로세스 -->
@@ -341,7 +343,7 @@
 	    <if test="outEndDate != null and outEndDate != ''">
 	        AND poh.out_date <![CDATA[<=]]> TO_DATE(#{outEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
-	    ORDER BY    poh.ord_code
+	    ORDER BY poh.OUT_DATE DESC, poh.ord_code
 	</select>
 	
 </mapper>
