@@ -21,6 +21,7 @@
         <table id="bl" class="table table-hover">
             <thead>
                 <tr>
+                	<th>생산지시 코드</th>
                 	<th>생산지시 상세코드</th>
                     <th>제품명</th>
                     <th>라인코드</th>
@@ -34,6 +35,7 @@
             <tbody id="plan">
                 <th:block th:each="list: ${list}">
                     <tr th:data-code="${list.prdCode}">
+                    	<td th:text="${list.porderCode}"></td>
                     	<td th:text="${list.pdetailCode}"></td>
                         <td th:text="${list.prdName}"></td>
                         <td th:text="${list.lineCode}"></td>
@@ -112,7 +114,7 @@
         	
             prd = event.currentTarget.dataset.code;
             cnt = event.currentTarget.children[4].innerText;
-            pd = event.currentTarget.children[0].innerText;
+            pd = event.currentTarget.children[1].innerText;
             line = event.currentTarget.children[2].innerText;
             dstatus = event.currentTarget.children[6].innerText;
             
@@ -413,6 +415,7 @@
         	
         	ctr.innerHTML =
         		`
+        		<td>${n.porderCode}</td>
             	<td>${n.pdetailCode}</td>
                 <td>${n.prdName}</td>
                 <td>${n.lineCode}</td>
@@ -428,6 +431,7 @@
         	else if(n.status == 'b2'){
             	ctr.innerHTML =
             		`
+            		<td>${n.porderCode}</td>
                 	<td>${n.pdetailCode}</td>
                     <td>${n.prdName}</td>
                     <td>${n.lineCode}</td>
@@ -442,6 +446,7 @@
         	else{
             	ctr.innerHTML =
             		`
+            		<td>${n.porderCode}</td>
                 	<td>${n.pdetailCode}</td>
                     <td>${n.prdName}</td>
                     <td>${n.lineCode}</td>
@@ -463,7 +468,7 @@
                 	
                     prd = event.currentTarget.dataset.code;
                     cnt = event.currentTarget.children[4].innerText;
-                    pd = event.currentTarget.children[0].innerText;
+                    pd = event.currentTarget.children[1].innerText;
                     line = event.currentTarget.children[2].innerText;
                     dstatus = event.currentTarget.children[6].innerText;
                     
