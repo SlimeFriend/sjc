@@ -166,6 +166,9 @@ public class EqServiceImpl implements EqService {
 
 	@Override
 	public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate) {
+		System.err.println("eqCode : " + eqCode);
+		System.err.println("startDate : " + startDate);
+		System.err.println("endDate : " + endDate);
 		return eqMapper.eqSearch(eqCode, startDate, endDate);
 	}
 	
