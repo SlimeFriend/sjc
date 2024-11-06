@@ -1,6 +1,9 @@
 package com.sjc.app.mt.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,26 +106,30 @@ public class StockController {
     /**
      * 재고 조정 기능 (AJAX 처리) - 특정 자재 및 로트번호에 대해 수량 조정
      */
-    @PostMapping("/stock/adjust")
+    @PostMapping(value = "/stock/adjust", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<String> adjustStock(@RequestParam("mtCode") String mtCode,
-                                              @RequestParam("lotNo") String lotNo,
-                                              @RequestParam(value = "newStock", required = false) Integer newStock,
-                                              @RequestParam(value = "stockDecrease", required = false) Integer stockDecrease) {
+    public ResponseEntity<Map<String, String>> adjustStock(@RequestParam("mtCode") String mtCode,
+                                                           @RequestParam("lotNo") String lotNo,
+                                                           @RequestParam(value = "newStock", required = false) Integer newStock,
+                                                           @RequestParam(value = "stockDecrease", required = false) Integer stockDecrease) {
         if (newStock == null) newStock = 0;
         if (stockDecrease == null) stockDecrease = 0;
 
+        Map<String, String> response = new HashMap<>();
         try {
             int adjustedStock = newStock - stockDecrease;
             if (adjustedStock != 0) {
                 stockService.addQuantityToLotAndUpdateStock(mtCode, lotNo, adjustedStock);
-                return ResponseEntity.ok("재고 조정이 완료되었습니다.");
+                response.put("message", "재고 조정이 완료되었습니다.");
+                return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.badRequest().body("변경할 수량을 입력해야 합니다.");
+                response.put("message", "변경할 수량을 입력해야 합니다.");
+                return ResponseEntity.badRequest().body(response);
             }
         } catch (Exception e) {
             logger.error("재고 조정 중 오류 발생: {}", e.getMessage());
-            return ResponseEntity.status(500).body("재고 조정에 실패했습니다.");
+            response.put("message", "재고 조정에 실패했습니다.");
+            return ResponseEntity.status(500).body(response);
         }
     }
     
