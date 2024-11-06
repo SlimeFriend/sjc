@@ -19,7 +19,7 @@ public class SampleController {
 
 	@GetMapping("main")
 	public String main() {
-		return "mainChart";
+		return "mainChartOcta";
 	}
 	
 	@GetMapping("error")
@@ -38,9 +38,7 @@ public class SampleController {
 //    public void logins() {}
     
     @GetMapping("/logins")
-    public String logins(@RequestParam(value = "error", required = false) String error,
-                      HttpSession session,
-                      Model model) {
+    public String logins(@RequestParam(value = "error", required = false) String error, HttpSession session,Model model) {
         if (error != null) {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
