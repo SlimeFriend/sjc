@@ -14,7 +14,7 @@
 	from plan p
 	join sjc_user u
 	on p.manager = u.user_id
-	order by p.status
+	order by p.plan_code desc
 </select>
 
 
@@ -44,7 +44,7 @@
 	from porder p
 	join sjc_user u
 	on p.manager = u.user_id
-	order by p.status
+	order by p.porder_code desc
 </select>
 
 <!-- 지시 상세 조회 -->
@@ -61,6 +61,7 @@
 			line_code
 	from pdetail
 	where porder_code = #{porderCode}
+	order by porder_code desc, pdetail_code desc
 </select>
 
 <!-- 공정 실적 조회 -->
@@ -485,6 +486,7 @@ order by l.use DESC, d.prd_code, l.line_code
 	    <if test="status != null and status != ''">
         	AND status like #{status}||'%'
     	</if>
+    	ORDER BY p.plan_code desc
 	</select>
 	
 	<select id="searchOrders" resultType="porderVO">
@@ -513,9 +515,9 @@ order by l.use DESC, d.prd_code, l.line_code
 	    	</if>
 	    	<if test="status != 'b3'">
         	AND status like #{status}||'%'
-	    	
 	    	</if>
     	</if>
+    	ORDER BY p.porder_code desc
     	
 	</select>
 	

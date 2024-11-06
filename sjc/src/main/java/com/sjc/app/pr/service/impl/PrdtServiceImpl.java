@@ -244,7 +244,8 @@ public class PrdtServiceImpl implements PrdtService {
 
 	@Override
 	public List<String> oList() {
-		// TODO Auto-generated method stub
+		
+		;
 		return prdtMapper.oList();
 	}
 
