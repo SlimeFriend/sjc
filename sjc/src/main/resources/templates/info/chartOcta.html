@@ -62,9 +62,9 @@
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">차트</h2>
+		            	<h2 class="h5 mb-20">자재별 안전재고 부족 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id=""></div>
+	                        <div id="stackBarChartMt"></div>
 	                    </div>
 	                </div>
 	            </div>
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    type: 'GET',
 		    success: function(response) {
 		    	const pieChartData = {
-		    		    categories: ['가동율'],
+		    		    categories: ['가동현황'],
 		    		    series: []
 		    		};
 			    const { width, height } = getChartSize();
@@ -168,7 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				            }
 				        },
 				        legend: {
-				            align: 'bottom'
+				            align: 'bottom',
+				        	showCheckbox: false,
+				            
 				        },
 				        theme: {
 				            chart: {
@@ -271,9 +273,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		    url: 'getChartEq',
 		    type: 'GET',
 		    success: function(response) {
-		    	
-
-		        
 			    const { width, height } = getChartSize();
 			    
 			    const options = {
@@ -292,7 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			        },
 			        legend: {
-			            align: 'bottom'
+			            align: 'bottom',
+			        	showCheckbox: false,
+			            
 			        },
 			        exportMenu: {
 			            visible: false
@@ -356,6 +357,87 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	}
 	getChartEq();
+	
+    function getChartMt() {
+        fetch('/getChartMt')
+		.then(response => response.json())
+		.then(response => {
+			const { width, height } = getChartSize();
+			
+			const stackBarChartData = {
+			  categories: [],
+			  series: [
+			    {
+			      name: '현재수량',
+			      data: []
+			    },
+			    {
+			      name: '부족수량',
+			      data: []
+			    },
+			    
+			  ]
+			};
+	
+			// 받은 데이터를 차트 데이터 형식으로 변환
+			response.forEach(item => {
+				stackBarChartData.categories.push(item.mtName);
+				stackBarChartData.series[0].data.push(item.currentStc);
+				stackBarChartData.series[1].data.push(item.safetyStock);
+			});
+	
+			// 차트 옵션 설정
+			const options = {
+				chart: { 
+					width: width,
+					height: height,
+				},
+				series: {
+					dataLabels: {
+					visible: true,
+					formatter: (value) => `${value}`
+					},
+					stack: {
+					    type: 'percent',
+					},			    
+				},
+				legend: {
+			  		align: 'bottom',
+		        	showCheckbox: false,
+				},
+				xAxis: {
+				  title: '안전재고 대비 현재재고 비율(%)'
+				},
+				yAxis: {
+				  title: '자재명'
+				},
+				tooltip: {
+				  formatter: (value) => `${value}개`
+				},
+				/*
+				theme: {
+					series: {
+					  colors: ['#47B881', '#FFB020']
+					}
+				},
+				*/
+				exportMenu: {
+				    visible: false
+				},			  
+			};
+	
+			// 차트 생성
+			const stackBarChartMt = new toastui.Chart.barChart({ 
+			  el: document.getElementById('stackBarChartMt'),
+			  data: stackBarChartData, 
+			  options: options
+			});
+	    })
+	    .catch(error => {
+	      console.error(error);
+	    });
+	}
+    getChartMt();    
 
 });
 </script>

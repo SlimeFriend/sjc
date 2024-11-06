@@ -30,4 +30,17 @@
 	    </where>
 	    ORDER BY MT_CODE
 	</select>
+	
+	<select id="selectMtStockList">
+    <![CDATA[
+        SELECT 
+            MT_NAME as mtName
+            --,SAFETY_STOCK as safetyStock
+            ,CURRENT_STC as currentStc
+            ,SAFETY_STOCK - CURRENT_STC AS safetyStock
+        FROM MT
+        WHERE CURRENT_STC < SAFETY_STOCK
+        ORDER BY MT_CODE
+    ]]>
+	</select>
 </mapper>

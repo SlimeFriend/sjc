@@ -20,5 +20,10 @@ public class InfoMtRestController {
 	public List<MtVO> mtList(MtVO mtVO){
 		return infoMtService.mtList(mtVO);
 	}
+	// 자재 조회
+	@GetMapping("getChartMt")
+	public List<MtVO> getChartMt(){
+		return infoMtService.mtStockList();
+	}
 
 }
