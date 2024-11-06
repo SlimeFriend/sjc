@@ -44,7 +44,7 @@
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">설비 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+		            	<h2 class="h5 mb-20">현재 설비 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
 	                    <div class="chart-wrapper">
 	                        <div id="pieChartEqChck"></div>
 	                    </div>
@@ -56,7 +56,7 @@
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">제품별 주문수량</h2>
+		            	<h2 class="h5 mb-20 text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), 'yyyy년 M월 제품별 주문수량')} "></h2>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartOrd"></div>
 	                    </div>
@@ -72,9 +72,9 @@
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">차트</h2>
+		            	<h2 class="h5 mb-20">공정별 투입/생산 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id=""></div>
+	                        <div id="columnLineChartPr"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
@@ -438,6 +438,110 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	}
     getChartMt();    
+    
+    function getChartPr() {
+        fetch('getChartPr')
+        .then(response => response.json())
+        .then(response => {
+            const { width, height } = getChartSize();
+
+            const chartData = {
+                categories: [],
+                series: {
+                    column: [
+                        {
+                            name: '투입량',
+                            data: []
+                        },
+                        {
+                            name: '생산량',
+                            data: []
+                        }
+                    ],
+                    line: [
+                        {
+                            name: '생산효율',
+                            data: []
+                        }
+                    ]
+                }
+            };
+
+            response.forEach(item => {
+                chartData.categories.push(item.processName);
+                chartData.series.column[0].data.push(item.input);
+                chartData.series.column[1].data.push(item.output);
+                chartData.series.line[0].data.push(item.rate);
+            });
+
+            const options = {
+            	    chart: {
+            	        width: width,
+            	        height: height,
+            	    },
+            	    series: {
+            	        column: {  // column 시리즈 설정
+            	            dataLabels: {
+            	                visible: false,
+            	                formatter: (value) => `${value}개`
+            	            }
+            	        },
+            	        line: {    // line 시리즈 설정
+            	            dataLabels: {
+            	                visible: false,
+            	                formatter: (value) => `${value}%`
+            	            }
+            	        },
+            	        showDot: true,
+            	    },
+            	    legend: {
+            	        align: 'top',
+            	        showCheckbox: false
+            	    },
+            	    xAxis: {
+            	        title: '공정명',
+            	        label: {
+            	            rotatable: true,
+            	            interval: 1
+            	        }
+            	    },
+            	    yAxis: [
+            	        {
+            	            title: '수량',
+            	            chartType: 'column'
+            	        },
+            	        {
+            	            title: '생산비율(%)',
+            	            chartType: 'line',
+            	            scale: {
+            	                min: 0,
+            	                max: 100
+            	            }
+            	        }
+            	    ],
+            	    tooltip: {
+            	        formatter: (value, columnSeriesName, categoryIndex, seriesIndex, point) => {
+            	            if(columnSeriesName.label =='생산효율') return `${value}%`;         	            	
+            	            else return `${value}개`;
+            	        }
+            	    },
+            	    exportMenu: {
+            	        visible: false
+            	    },	
+            	};
+
+
+            const columnLineChartPr = new toastui.Chart.columnLineChart({ 
+                el: document.getElementById('columnLineChartPr'),
+                data: chartData,
+                options: options
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+    getChartPr();  
 
 });
 </script>
