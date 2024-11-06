@@ -120,6 +120,7 @@
 	join porder o
 	on p.porder_code = o.porder_code
 	where o.status = 'b1' or o.status = 'b2'
+	order by p.porder_code desc, p.status, p.pdetail_code desc
 </select>
 
 <!-- 생산 관리 필요 자재 -->
@@ -347,6 +348,7 @@ where p.prd_code = #{prdCode}
 	select plan_code
 	from plan
 	where status = 'a1' OR status = 'a2'
+	order by plan_code desc
 </select>
 
 
@@ -409,11 +411,12 @@ where p.prd_code = #{prdCode}
 	
 <!-- 생산계획 남은 제품 수 -->
 <select id="planPrd" resultType="planDVO">
-select  l.prd_name,
-        l.prd_code,
-        l.quantity - NVL(SUM(d.output), 0) quantity,
-        p.start_date,
-        p.end_date
+select l.prd_name,
+       l.prd_code,
+       GREATEST(l.quantity - NVL(SUM(CASE WHEN d.prd_code = l.prd_code THEN d.output ELSE 0 END), 0), 0) as quantity,
+       p.start_date,
+       p.end_date,
+       l.plan_detail_code
 from plan_detail l
 left join plan p
 on l.plan_code = p.plan_code
@@ -430,15 +433,35 @@ group by l.prd_code, l.prd_name, l.quantity, l.plan_detail_code, p.start_date, p
 select ord_code
 from ord
 where ord_status = '재고부족'
+order by ord_code desc
 </select>
 
 <!-- 주문 클릭 시 가져올 제품 -->
 <select id="ordPrd" resultType="ProductVO">
-select prd_name,
-		prd_code,
-		ord_quantity
-from ord_detail
-where ord_code = #{ordCode}
+		WITH lackQuantity AS (
+		    SELECT 
+		        prd_code, 
+		        SUM(stc_quantity) AS stc_quantity
+		    FROM 
+		        prd_management
+		    GROUP BY 
+		        prd_code
+		)
+		SELECT 
+
+		    od.prd_name AS prdName,
+		    od.prd_code AS prdCode,
+
+		    GREATEST(od.ord_quantity - NVL(stc_quantity, 0), 0) AS ordQuantity
+
+		FROM 
+		    ord o 
+		JOIN 
+		    ord_detail od ON o.ord_code = od.ord_code
+		LEFT OUTER JOIN 
+		    lackQuantity ON od.prd_code = lackQuantity.prd_code
+		WHERE 
+		    o.ord_code = #{ordCode}
 </select>
 
 
