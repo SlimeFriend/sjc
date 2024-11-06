@@ -7,14 +7,48 @@
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	
 	<head>
-    	<title>주문접수</title>
+	    <meta charset="UTF-8">
+	    <title>주문접수</title>
+	    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+	    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+	    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+	    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+		<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
+		<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+		
+		<style>
+		
+			.chart-container {
+			    width: 100%;
+			    max-width: 100%;
+			    overflow-x: auto;
+			}
+			
+			.chart-wrapper {
+			    position: relative;
+			    width: 100%;
+			    min-height: 250px;
+			    margin: 0 auto;
+			}
+				
+			#pieChart {
+			    margin: 0 auto;
+			}
+			
+			@media (max-width: 768px) {
+			    .chart-wrapper {
+			        min-height: 250px;
+			    }
+			}
+			
+		</style>
 	</head>
 	
 	<div class="main-container">
 		<div class="pd-20">
 			<h2 class="h2 mb-20">주문접수</h2>
-			<div class="d-flex justify-content-between">
-				<div class="pd-20 card-box mb-20" style="width: 48%">
+			<div class="row">
+				<div class="pd-30 card-box mb-20 mr-20" style="width: 48%">
 					<h2 class="h5 mb-20">주문서 작성</h2>
 					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
 						<div class="form-group">
@@ -42,156 +76,218 @@
 					<div id="grid"></div>
 				</div>
 				
-			<!-- The Modal -->
-			<div class="modal" id="myModal">
-				<div class="modal-dialog modal-xl">
-					<div class="modal-content">
-						<!-- Modal Header -->
-						<div class="modal-header">
-							<h4 class="modal-title">업체선택</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<!-- Modal body -->
-						<div class="modal-body">
-							    <h5 class="h5">업체목록</h5>
-								<div id="cpList"></div>
-						</div>
-						<!-- Modal footer -->
-						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmitBtn">등록</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancelBtn">취소</button>
+				<div class="pd-20 card-box mb-20 mr-20" style="width: 97.5%">
+					<h2 class="h5 mb-20">제품재고 현황</h2>
+                    <div class="chart-wrapper">
+                        <div id="columnChartOrd"></div>
+                    </div>
+				</div>
+				
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					<div class="modal-dialog modal-xl">
+						<div class="modal-content">
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">업체선택</h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<!-- Modal body -->
+							<div class="modal-body">
+								    <h5 class="h5">업체목록</h5>
+									<div id="cpList"></div>
+							</div>
+							<!-- Modal footer -->
+							<div class="modal-footer justify-content-center">
+								<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmitBtn">등록</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancelBtn">취소</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 	</div>
 
 	<script th:inline="javascript">
 	
-			let grid; 
+	let grid; 
 			
-			document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function() {
 				
-				const gridData = /*[[${products}]]*/[];
-				const modalGridData = /*[[${cpList}]]*/[];
+			const gridData = /*[[${products}]]*/[];
+			const modalGridData = /*[[${cpList}]]*/[];
 
-				grid = new tui.Grid({
-					el : document.getElementById('grid'),
-					data : gridData,
-					scrollX : false,
-					scrollY : true,
-					columns : [ {
-						header : '제품명',
-						name : 'prdName',
-						align : 'center',
-					}, {
-						header : '제품코드',
-						name : 'prdCode',
-						align : 'center',
-					}, {
-						header : '단가',
-						name : 'unitPrice',
-						align : 'center',
-					}, {
-						header : '수량',
-						name : 'ordQuantity',
-						align : 'center',
-						editor: 'text',
-					}, ],
-					rowHeaders : [ 'checkbox' ],
-					bodyHeight: 280,
-					pageOptions: {
-					    type: 'scroll',
-					    perPage: 10 
-					}, 
-				});
-				
-				grid.on('editingFinish', (ev) => {
-				    const rowKey = ev.rowKey; // 수정된 행의 키
-				    const price = grid.getValue(rowKey, 'price'); // 가격
-				    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
-
-				    // 총 가격 계산
-				    const totalPrice = (Number(price) || 0) * (Number(quantity) || 0);
-				    
-				    // 총 가격 업데이트
-				    grid.setValue(rowKey, 'totalPrice', totalPrice);
-				});
-				
-				grid.on('check', (ev) => {
-				    const checkedRows = grid.getCheckedRows(); // 체크된 행의 rowKey 배열
-				    console.log('체크된 행:', checkedRows);
-				    
-				    let totalPrice = 0;
-				    
-				    for (let i = 0; i < checkedRows.length; i++) {
-				        const rowKey = checkedRows[i];
-				        const totalPriceValue = grid.getValue(rowKey, 'totalPrice'); // totalPrice 컬럼 값
-				        
-				        if (totalPriceValue) {
-				            totalPrice += Number(totalPriceValue); // 총 가격 계산
-				        }
-				    }
-
-				    window.totalPrice = totalPrice; // totalPrice를 전역 변수로 저장
-				});
-
-			
-				
-				modalGrid = new tui.Grid({
-					el : document.getElementById('cpList'),
-					data : modalGridData,
-					scrollX : false,
-					scrollY : false,
-					columns : [ {
-						header : '업체코드',
-						name : 'cpCode',
-						align : 'center',
-					}, {
-						header : '업체명',
-						name : 'cpName',
-						align : 'center',
-					}, {
-						header : '주소',
-						name : 'address',
-						align : 'center',
-					}, ],
-					rowHeaders : [ 'rowNum' ],
-					selectionUnit: 'row',
-					pageOptions : {
-						useClient : true,
-						perPage : 10
-					}
-				});
-				
-				modalGrid.on('click', (ev) => {
-				    const { value } = ev; // 입력된 출고량
-				    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
-					const cpCode = modalGrid.getValue(rowKey, 'cpCode');
-				    const cpName = modalGrid.getValue(rowKey, 'cpName');
-				    
-			        document.getElementById('cpCode').value = cpCode; // 업체 코드
-			        document.getElementById('cpInput').value = cpName; // 업체 이름
-				});
-				
-			    // 현재 날짜 가져오기
-			    const today = new Date();
-			 	
-			    // 오늘 날짜에 1일 추가
-			    today.setDate(today.getDate() + 1);
-			    const dd = String(today.getDate()).padStart(2, '0');
-			    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 1월은 0
-			    const yyyy = today.getFullYear();
-
-			    // YYYY-MM-DD 형식으로 변환
-			    const formattedToday = yyyy + '-' + mm + '-' + dd;
-
-			    // 납기일자 입력 필드에 min 속성 설정
-			    document.getElementById('dlvReqDate').setAttribute('min', formattedToday);
-				
+			grid = new tui.Grid({
+				el : document.getElementById('grid'),
+				data : gridData,
+				scrollX : false,
+				scrollY : true,
+				columns : [ {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'prdCode',
+					align : 'center',
+				}, {
+					header : '단가',
+					name : 'unitPrice',
+					align : 'center',
+				}, {
+					header : '수량',
+					name : 'ordQuantity',
+					align : 'center',
+					editor: 'text',
+				}, ],
+				rowHeaders : [ 'checkbox' ],
+				bodyHeight: 280,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10 
+				}, 
 			});
+			
+			grid.on('editingFinish', (ev) => {
+			    const rowKey = ev.rowKey; // 수정된 행의 키
+			    const price = grid.getValue(rowKey, 'price'); // 가격
+			    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
+
+			    if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
+			        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
+			        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
+			        return; // 함수 종료
+			    }
+			});
+			
+			modalGrid = new tui.Grid({
+				el : document.getElementById('cpList'),
+				data : modalGridData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '업체코드',
+					name : 'cpCode',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '주소',
+					name : 'address',
+					align : 'center',
+				}, ],
+				rowHeaders : [ 'rowNum' ],
+				selectionUnit: 'row',
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			modalGrid.on('click', (ev) => {
+			    const { value } = ev; // 입력된 출고량
+			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+				const cpCode = modalGrid.getValue(rowKey, 'cpCode');
+			    const cpName = modalGrid.getValue(rowKey, 'cpName');
+			    
+		        document.getElementById('cpCode').value = cpCode; // 업체 코드
+		        document.getElementById('cpInput').value = cpName; // 업체 이름
+			});
+			
+		    // 현재 날짜 가져오기
+		    const today = new Date();
+		 	
+		    // 오늘 날짜에 1일 추가
+		    today.setDate(today.getDate() + 1);
+		    const dd = String(today.getDate()).padStart(2, '0');
+		    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 1월은 0
+		    const yyyy = today.getFullYear();
+
+		    // YYYY-MM-DD 형식으로 변환
+		    const formattedToday = yyyy + '-' + mm + '-' + dd;
+
+		    // 납기일자 입력 필드에 min 속성 설정
+		    document.getElementById('dlvReqDate').setAttribute('min', formattedToday);
+		    
+		    function getChartSize() {
+			    const containerWidth = document.querySelector('.chart-wrapper').offsetWidth;
+			    let chartWidth = containerWidth;
+			    let chartHeight = containerWidth * 0.6; // 높이를 너비의 60%로 설정
+			
+			    // 최소,최대 크기 제한
+			    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
+			    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
+			
+			    return { width: chartWidth, height: chartHeight };
+			}
+		    
+		    function getChartOrd() {
+				$.ajax({
+				    url: 'getChartOrd',
+				    type: 'GET',
+				    success: function(response) {
+				    	
+				        const columnChartData = {
+				            categories: [], // 제품 이름
+				            series: [{
+				                name: [],
+				                data: [], // 주문 건수
+				            	colorByCategories: true
+				            }]
+				        };
+				        
+					    const { width, height } = getChartSize();
+					    
+					    const options = {
+					        chart: { 
+					            width: width,
+					            height: height,
+					        },
+					        series: {
+					            dataLabels: {
+					                visible: false,
+					                pieSeriesName: {
+					                    visible: true
+					                }
+					            },
+
+
+					        },
+					        legend: {
+					            align: 'bottom',
+				                visible: false,
+					        },
+					        exportMenu: {
+					            visible: false
+					        },
+					        tooltip: {
+					            formatter: (value) => `${value}개`,
+				            },	        
+					    };		        
+				        
+				        // 받은 데이터 변환
+				        response.forEach(item => {
+				            columnChartData.categories.push(item.prdName);
+				            columnChartData.series[0].data.push(item.totalQuantity);
+				        });
+
+					    const columnChartOrd = new toastui.Chart.columnChart({ 
+					        el: document.getElementById('columnChartOrd'),
+					        data: columnChartData, 
+					        options: options
+					    });		        
+				    },
+				    error: function(xhr, status, error) {
+				        console.error(error);
+				    }
+				});
+			}
+			getChartOrd();
+				
+		});
 		
 		document.getElementById('cpInput').addEventListener('click', function() {
 			$('#myModal').modal('show'); // 모달 열기
@@ -226,6 +322,18 @@
 		        alert('제품을 선택해주세요.');
 		        return;
 		    }
+		    
+		 	// 체크된 각 행의 수량이 유효한지 검사
+		    for (let i = 0; i < checkedRows.length; i++) {
+		        const rowKey = checkedRows[i];
+		        const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량 가져오기
+
+		        // 수량이 비어있거나 0 이하인 경우
+		        if (!quantity || Number(quantity) <= 0) {
+		            alert('모든 선택된 제품의 수량이 유효해야 합니다. 수량을 입력해주세요.');
+		            return; // 폼 제출 중단
+		        }
+		    }
 		 	
 		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    const payload = {
@@ -245,5 +353,6 @@
 		        }
 		    });
 		}
+		
 
 	</script>
