@@ -344,11 +344,17 @@ where p.prd_code = #{prdCode}
 </select>
 
 <!-- 생산 지시를 위한 계획 코드(미진행, 진행중) 가져오기 -->
-<select id="findPC" resultType="String">
-	select plan_code
-	from plan
+<select id="findPC" resultType="PlanVO">
+	select p.plan_code,
+			u.user_name,
+			p.start_date,
+			p.end_date,
+			p.comm
+	from plan p
+	join sjc_user u
+	on p.manager = u.user_id
 	where status = 'a1' OR status = 'a2'
-	order by plan_code desc
+	order by p.plan_code desc
 </select>
 
 
@@ -470,7 +476,7 @@ group by l.prd_code, l.prd_name, l.quantity, l.plan_detail_code, p.start_date, p
 		LEFT OUTER JOIN 
 		    lackQuantity ON od.prd_code = lackQuantity.prd_code
 		WHERE 
-		    o.ord_code = #{ordCode}
+		    o.ord_code = #{ordCode} 
 </select>
 
 
@@ -491,6 +497,20 @@ order by l.use DESC, d.prd_code, l.line_code
 	<update id="updateLine" parameterType="LinePrdVO">
 		update line
 		set use = 'U'
+		where line_code = #{lineCode}
+	</update>
+	
+	<!-- 지시 삭제 시 라인 불러오기 -->
+	<select id="findDLine" parameterType="String">
+		select line_code
+		from pdetail
+		where pdetail_code = #{pdetailCode}
+	</select>
+	
+	<!-- 지시 삭제 시 선택 라인 상태 변경 -->
+	<update id="updateLineY" parameterType="String">
+		update line
+		set use = 'Y'
 		where line_code = #{lineCode}
 	</update>
 

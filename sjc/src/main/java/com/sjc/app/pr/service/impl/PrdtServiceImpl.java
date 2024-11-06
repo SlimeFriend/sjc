@@ -204,7 +204,7 @@ public class PrdtServiceImpl implements PrdtService {
 	}
 	
 	@Override
-	public List<String> findPC() {
+	public List<PlanVO> findPC() {
 		
 		return prdtMapper.findPC();
 	}
@@ -282,6 +282,8 @@ public class PrdtServiceImpl implements PrdtService {
 		// result 삭제
 		pdCode.forEach(pc ->{
 			prdtMapper.deleteResult(pc);
+			String lineCode = prdtMapper.findDLine(pc);
+			prdtMapper.updateLineY(lineCode);
 		});
 		
 		// 상세 삭제
@@ -295,6 +297,8 @@ public class PrdtServiceImpl implements PrdtService {
 		if(prdtMapper.countOrder(planCode) == 1) {
 			prdtMapper.updatePlanS(planCode);
 		}
+		
+		
 		
 		
 		return prdtMapper.deleteOrder(porderCode);

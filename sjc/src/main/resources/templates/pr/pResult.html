@@ -3,12 +3,19 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	<head>
+     	<title>생산 공정 실적 조회</title>
+
+    </head>
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-		<h3>생산공정실적 조회</h3>
+		<div class="mb-20">
+		<h3>생산 공정 실적 조회</h3>
+		
+		</div>
 		
 			<div class="pd-20 card-box mb-20"> 
         		<h2 class="h5 mb-20">생산공정실적</h2>

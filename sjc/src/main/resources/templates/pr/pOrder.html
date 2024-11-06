@@ -4,6 +4,15 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	
+	<head>
+     	<title>생산 지시 생성</title>
+        <style>
+            #grid:hover {
+                cursor: pointer;
+            }
+        </style>
+    </head>
 
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 <div class="main-container">
@@ -12,18 +21,19 @@
 		<h2 class="h2 mb-20">생산지시</h2>
 		<div class="d-flex justify-content-between">
 			<div class="pd-20 card-box mb-20" style="width: 48%;">	
+			<div class="d-flex justify-content-between align-items-center align-middle mb-20">
 				<h2 class="h5 mb-20">생산지시 정보</h2>
+				<div>
+				<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+				</div>
+			</div>
 				<form name="form"
 					method="post">
 					<div class="form-group">
-							<label>생산계획</label> 
-							<select name="planCode" id="planCode">
-								<option></option>
-								<th:block th:block th:each="list: ${list}">
-									<option>[[ ${list} ]]</option>
-								</th:block>
-							</select>
-							<br>
+							<label for="company">생산계획</label> 
+							<input class="form-control" type="text" id="planCode" name="planCode" placeholder="생산계획을 선택해주세요.">
+							
+							
 							
 						<th:block sec:authorize="isAuthenticated()">
 							<label>담당자</label>
@@ -39,7 +49,7 @@
 						<label>요청사항</label>
 						<textarea class="form-control" name="comm"></textarea>
 					</div>
-					<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+					
 
 				</form>
 			</div>
@@ -64,6 +74,29 @@
 				</div>
 			</div>
 		</div>
+		
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					<div class="modal-dialog modal-xl">
+						<div class="modal-content">
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">계획선택</h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<!-- Modal body -->
+							<div class="modal-body">
+								    <h5 class="h5">계획목록</h5>
+									<div id="cpList"></div>
+							</div>
+							<!-- Modal footer -->
+							<div class="modal-footer justify-content-center">
+								<button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmitBtn">등록</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" id="modalCancelBtn">취소</button>
+							</div>
+						</div>
+					</div>
+				</div>
 
 
 	</div>
@@ -84,7 +117,8 @@
 			
 			
 	document.addEventListener('DOMContentLoaded', function() {
-				
+		
+		const modalGridData = /*[[${list}]]*/[];
 		// 계획 select 
 		const pc = $('#planCode');
 				
@@ -107,7 +141,7 @@
 						align : 'center',
 					}, {
 						header : '제품코드',
-					name : 'prdCode',
+						name : 'prdCode',
 						align : 'center',
 					},  {
 						header : '목표량',
@@ -191,48 +225,7 @@
 					 mtload();
 				});
 				
-				// 계획 select 바꿀경우 
-				pc.on('change', ()=>{
-					const planCode= pc.val();
-					
-					// 계획 그리드 ajax 변경(선택한 plancode의 남은 제품계획수량) 
-					$.ajax({
-					    url: 'planPrd',
-					    type: 'GET',
-					    data: {
-					        planCode : planCode 
-					    },
-					    success: function(response) {
-					        plangrid.resetData(response);
-					    },
-					    error: function(jqXHR, textStatus, errorThrown) {
-					        console.error('Error:', textStatus, errorThrown);
-					    }
-					});
-					
-					$.ajax({
-						url: 'planL',
-					    type: 'GET',
-					    data: {
-					        planCode : planCode 
-					    },
-					    success: function(response) {
-					    	if(response.length > 0 ){
-					        grid.resetData(response);
-					        
-					        x();
-						}else{
-							grid.resetData(gridData);
-							
-							x();
-						}
-					    },
-					    error: function(jqXHR, textStatus, errorThrown) {
-					        console.error('Error:', textStatus, errorThrown);
-					    }
-					});
-					
-				});
+				
 				
 				plangrid = new tui.Grid({
 					el : document.getElementById('plangrid'),
@@ -279,10 +272,91 @@
 				});
 				
 				
-
+				modalGrid = new tui.Grid({
+					el : document.getElementById('cpList'),
+					data : modalGridData,
+					scrollX : false,
+					scrollY : false,
+					columns : [ {
+						header : '생산계획코드',
+						name : 'planCode',
+						align : 'center',
+					}, {
+						header : '시작일자',
+						name : 'startDate',
+						align : 'center',
+					}, {
+						header : '종료일자',
+						name : 'endDate',
+						align : 'center',
+					}, {
+						header : '담당자',
+						name : 'userName',
+						align : 'center',
+					}, {
+						header : '비고',
+						name : 'comm',
+						align : 'center',
+					}, 
+					
+					
+					],
+					rowHeaders : [ 'rowNum' ],
+					selectionUnit: 'row',
+					pageOptions : {
+						useClient : true,
+						perPage : 10
+					}
+				});
 				
 				
-			
+				modalGrid.on('click', (ev) => {
+				    const { value } = ev; // 입력된 출고량
+				    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
+				    
+				    const planCode = modalGrid.getValue(rowKey, 'planCode');
+				    
+				    
+			        document.getElementById('planCode').value = planCode;
+			        
+					
+			        $.ajax({
+					    url: 'planPrd',
+					    type: 'GET',
+					    data: {
+					        planCode : planCode 
+					    },
+					    success: function(response) {
+					        plangrid.resetData(response);
+					    },
+					    error: function(jqXHR, textStatus, errorThrown) {
+					        console.error('Error:', textStatus, errorThrown);
+					    }
+					});
+					
+					$.ajax({
+						url: 'planL',
+					    type: 'GET',
+					    data: {
+					        planCode : planCode 
+					    },
+					    success: function(response) {
+					    	if(response.length > 0 ){
+					        grid.resetData(response);
+					        
+					        x();
+						}else{
+							grid.resetData(gridData);
+							
+							x();
+						}
+					    },
+					    error: function(jqXHR, textStatus, errorThrown) {
+					        console.error('Error:', textStatus, errorThrown);
+					    }
+					});
+					
+				});
 				
 				
 				function mtload(){
@@ -337,6 +411,12 @@
 			         }
 			    });
 			}
+			
+			document.getElementById('planCode').addEventListener('click', function() {
+				$('#myModal').modal('show'); // 모달 열기
+				modalGrid.refreshLayout();
+			});
+		
 		
 			function sendCheckedRows() {
 	   			const checkedRows = grid.getCheckedRows();

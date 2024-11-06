@@ -85,7 +85,7 @@ public interface PrdtMapper {
 	public List<NeedVO> orderMt(LinePrdVO linePrdVO);
 	
 	// 계획코드 
-	public List<String> findPC();
+	public List<PlanVO> findPC();
 	
 	// 지시 생성 위한 코드
 	public String getOrdCode();
@@ -134,4 +134,10 @@ public interface PrdtMapper {
 	
 	// 계획코드 상태 변경
 	public int updatePlanS(String planCode);
+	
+	// 지시삭제 라인 Y변경
+	public int updateLineY(String lineCode);
+	
+	// 지시삭제 라인 찾기
+	public String findDLine(String pdetailCode);
 }
