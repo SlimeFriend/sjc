@@ -7,7 +7,9 @@
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
-			<img class="h-100 ml-4 pl-2" th:src="@{assets/images/mes.png}" alt="">
+			<!--
+			<img class="h-100 ml-4 pl-2" th:src="@{assets/images/mes.png}" alt="">  
+			-->
 			<!-- 
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			 -->
@@ -132,9 +134,9 @@
 							<span class="user-name" th:text="${#authentication.principal.authorities[4]}"></span>
 							<span class="user-name" th:text="${#authentication.principal.authorities[2]}"></span>
 							<span class="user-name" >([[${#authentication.principal.authorities[5]}]])</span>
-						</th:block>
-						
+						</th:block>	
 					</a>
+					
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<!-- 
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
@@ -143,6 +145,7 @@
 						 -->
 						<a class="dropdown-item" th:href="@{/logout}"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
+					
 				</div>
 			</div>
 			<div class="github-link">

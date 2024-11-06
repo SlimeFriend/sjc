@@ -12,32 +12,32 @@
 	</head>
 	
 	<div class="main-container">
-		<div class="pd-20">
+		<div class="pd-30">
 			<h2 class="h2 mb-20">주문접수</h2>
-			<div style="display: flex; width: 100%; gap: 20px;">
-				<div class="pd-30 card-box mb-20" style="width: 50%">
+			<div>
+				<div class="pd-30 card-box mb-20" style="width: 400px">
 					<h2 class="h5 mb-20">주문서 작성</h2>
 					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
 						<div class="form-group">
-							<label for="company">업체명</label> 
-							<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요.">
+							<label for="company">업체명</label>
+							<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요." style="width: 350px;">
 							<input class="form-control" type="hidden" id="cpCode" name="cpCode">
 						</div>
 						<div class="form-group">
-							<label>납기일자</label> 
-							<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate">
+							<label>납기일자</label>
+							<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
 						</div>
 						<div class="form-group">
 							<label>요청사항</label>
-							<textarea class="form-control" name="comm"></textarea>
+							<textarea class="form-control" name="comm" style="width: 350px;"></textarea>
 						</div>
-						<div style="display: flex; justify-content: flex-end;">
-							<button class="btn" type="button" onclick="sendCheckedRows()" style="background-color: #0b132b; color: #ffffff;">주문접수</button>
+						<div style="text-align: center">
+							<button class="btn" type="button" onclick="sendCheckedRows(event)" style="background-color: #0b132b; color: #ffffff;">주문접수</button>
 						</div>
 					</form>
 				</div>
 				
-				<div class="pd-20 card-box mb-20" style="width: 48%;">
+				<div class="pd-30 card-box mb-20">
 					<h2 class="h5 mb-20">제품 선택</h2>
 					<div id="grid"></div>
 				</div>
@@ -160,7 +160,7 @@
 		    // 오늘 날짜에 1일 추가
 		    today.setDate(today.getDate() + 1);
 		    const dd = String(today.getDate()).padStart(2, '0');
-		    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 1월은 0
+		    const mm = String(today.getMonth() + 1).padStart(2, '0');
 		    const yyyy = today.getFullYear();
 
 		    // YYYY-MM-DD 형식으로 변환
@@ -176,50 +176,49 @@
 			modalGrid.refreshLayout();
 		});
 		
-		function sendCheckedRows() {
-			
-			// 폼 데이터를 직접 수집
-		    const formArr = $("form[name=form]").serializeArray();
+		document.getElementById('submitBtn').addEventListener('click', function(ev) {
+		    sendCheckedRows(ev);
+		});
+
+		function sendCheckedRows(ev) {
+
+		    ev.preventDefault();
 		    
+		    const formArr = $("form[name=form]").serializeArray();
 		    const formObj = {};
+		    
 		    $.each(formArr, function(idx, tag) {
 		        formObj[tag.name] = tag.value;
 		    });
 
-		    // 업체 유효성 검사
+		    // 업체 및 납기일자 유효성 검사
 		    if (!formObj.cpName) {
 		        alert('업체를 선택해주세요.');
 		        return;
 		    }
 		    
 		    if (!formObj.dlvReqDate) {
-		        alert('납기일자를 설정해주세요');
+		        alert('납기일자를 설정해주세요.');
 		        return;
 		    }
 		    
 		    let checkedRows = grid.getCheckedRows();
 		    
-		    // 체크된 행이 없는 경우 경고
 		    if (checkedRows.length === 0) {
 		        alert('제품을 선택해주세요.');
 		        return;
 		    }
 		    
-		 	// 체크된 각 행의 수량이 유효한지 검사
 		    for (let i = 0; i < checkedRows.length; i++) {
-		        const rowKey = checkedRows[i]; // 체크된 행의 rowKey
-		        const quantity = grid.getValue(checkedRows, 'ordQuantity'); // 해당 rowKey의 'ordQuantity' 값 가져오기
-				
-		        console.log('Row Key:', rowKey, 'Quantity:', quantity); // 확인용 로그
+		        const rowKey = checkedRows[i].rowKey;
+		        const quantity = grid.getValue(rowKey, 'ordQuantity');
 
-		        // 수량이 비어있거나 0 이하인 경우
 		        if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
-		            alert(`Row ${i + 1}의 수량이 유효하지 않습니다. 수량을 입력해주세요.`);
-		            return; // 폼 제출 중단
+		            alert(`수량을 입력해주세요.`);
+		            return;
 		        }
 		    }
-		 	
-		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
+		    
 		    const payload = {
 		        orderVO: formObj,    // 폼 데이터 (주문 정보)
 		        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)

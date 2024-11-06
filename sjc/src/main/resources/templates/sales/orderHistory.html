@@ -7,21 +7,16 @@
 	<head>
     	<title>주문내역</title>
     	<style>
-    	.grid-modal .bg-warning {
-		    background-color: #ffc107 !important; /* Bootstrap에서의 경고색 */
-		}
-		
-		/* gridModal에 있는 LACKQUANTITY의 배경색 우선 설정 */
-		.grid-modal .LACKQUANTITY {
-		    background-color: #ffc107 !important; /* 원하는 경고색으로 설정 */
-		}
+	    	#gridOrder:hover {
+	    		cursor: pointer;
+	    	}
     	</style>
 	</head>
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
-		<div class="pd-20">
+		<div class="pd-30">
 			<h2 class="h2 mb-20">주문내역</h2>
 			<div class="pd-30 card-box mb-20">
 				<form>
