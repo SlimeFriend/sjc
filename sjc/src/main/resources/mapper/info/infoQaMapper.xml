@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.info.mapper.InfoQaMapper">
+
+	<select id="selectQaPassRate">
+       SELECT 
+           --m.MT_CODE,
+           m.MT_NAME,
+           SUM(i.NUMBER_OF_TESTS) as NUMBER_OF_TESTS,
+           SUM(i.NUMBER_OF_PASSES) as NUMBER_OF_PASSES,
+           ROUND(SUM(i.NUMBER_OF_PASSES) * 100.0 / SUM(i.NUMBER_OF_TESTS), 1) as RATE
+       FROM MT m
+       INNER JOIN MTL_OD_DETAIL mod ON m.MT_CODE = mod.MT_CODE
+       INNER JOIN INSPECTION i ON mod.MTL_OD_DETAIL_CODE = i.MTL_OD_DETAIL_CODE
+       <![CDATA[
+       WHERE i.NUMBER_OF_TESTS > 0
+       ]]>
+       GROUP BY m.MT_CODE, m.MT_NAME
+       ORDER BY m.MT_CODE
+	</select>
+</mapper>

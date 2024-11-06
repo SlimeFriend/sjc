@@ -44,34 +44,6 @@
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[설비] 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
-	                    <div class="chart-wrapper">
-	                        <div id="pieChartEqChck"></div>
-	                    </div>
-	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[설비] 보유 현황</h2>
-	                    <div class="chart-wrapper">
-	                        <div id="columnChartEq"></div>
-	                    </div>
-	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[영업] 주문 현황</h2>
-	                    <div class="chart-wrapper">
-	                        <div id="columnChartOrd"></div>
-	                    </div>
-	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[자재] 안전재고 현황</h2>
-	                    <div class="chart-wrapper">
-	                        <div id="stackBarChartMt"></div>
-	                    </div>
-	                </div>
-	            </div>
-            </div>
-            <div class="col-12">
-		        <div style="display: flex; width: 100%; gap: 20px;">
-		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">[생산] 투입/생산 현황</h2>
 	                    <div class="chart-wrapper">
 	                        <div id="columnLineChartPr"></div>
@@ -84,20 +56,36 @@
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">차트</h2>
+		            	<h2 class="h5 mb-20">[자재] 안전재고 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id=""></div>
+	                        <div id="stackBarChartMt"></div>
+	                    </div>
+	                </div>
+
+	            </div>
+            </div>
+            <div class="col-12">
+		        <div style="display: flex; width: 100%; gap: 20px;">
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">[영업] 주문 현황</h2>
+	                    <div class="chart-wrapper">
+	                        <div id="columnChartOrd"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">차트</h2>
+		            	<h2 class="h5 mb-20">[설비] 보유 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id=""></div>
+	                        <div id="columnChartEq"></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">[설비] 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+	                    <div class="chart-wrapper">
+	                        <div id="pieChartEqChck"></div>
 	                    </div>
 	                </div>
 	            </div>
             </div>
-        
         
         </div>
     </div>
@@ -168,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				            }
 				        },
 				        legend: {
-				            align: 'bottom',
+				            align: 'top',
 				        	showCheckbox: false,
 				            
 				        },
@@ -181,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				            visible: false
 				        },
 				        tooltip: {
-				            formatter: (value) => `${value}개`,
+				            formatter: (value) => `${value}대`,
 			            },					        
 				    };
 			    
@@ -238,9 +226,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			        },
 			        legend: {
-			            align: 'bottom',
+			            align: 'top',
 		                visible: false,
 			        },
+					xAxis: {
+						  title: '제품명',
+			            label: {
+				              rotatable: false  // 라벨 회전 비활성화
+			            },
+					},			        
+					yAxis: {
+						  title: '주문수'
+					},					        
 			        exportMenu: {
 			            visible: false
 			        },
@@ -291,15 +288,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			        },
 			        legend: {
-			            align: 'bottom',
+			            align: 'top',
 			        	showCheckbox: false,
 			            
 			        },
+					xAxis: {
+						  title: '라인명'
+					},			        
+					yAxis: {
+						  title: '수량'
+					},			        
 			        exportMenu: {
 			            visible: false
 			        },
 			        tooltip: {
-			            formatter: (value) => `${value}개`,
+			            formatter: (value) => `${value}대`,
 		            },	        
 			    };
 			    /*
@@ -402,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					},			    
 				},
 				legend: {
-			  		align: 'bottom',
+			  		align: 'top',
 		        	showCheckbox: false,
 				},
 				xAxis: {
@@ -411,16 +414,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				yAxis: {
 				  title: '자재명'
 				},
+				/*
 				tooltip: {
 				  formatter: (value) => `${value}개`
 				},
-				/*
-				theme: {
-					series: {
-					  colors: ['#47B881', '#FFB020']
-					}
-				},
-				*/
+				*/ 
 				exportMenu: {
 				    visible: false
 				},			  
