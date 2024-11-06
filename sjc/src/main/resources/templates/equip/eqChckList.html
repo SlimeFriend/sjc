@@ -81,7 +81,7 @@ tbody > tr {
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
 							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="epCode" type="text" placeholder="설비코드" oninput="search()">
+								<input class="form-control" id="eqCode" type="text" placeholder="설비코드" oninput="search()">
 							</div>
 						</div>
 						
@@ -245,7 +245,6 @@ tbody > tr {
             if (useValue === 'Y') {
                 // 첫 번째 테이블의 사용 여부를 '가동'으로 업데이트
                 selectedRow.find('td').eq(5).text('가동');
-                alert("설비가 '가동' 상태로 업데이트되었습니다.");
                 $('#nOpModal').modal('hide');
                 $('#NeqModal')[0].reset();
                 return; // '가동'일 때는 서버 전송 없이 종료

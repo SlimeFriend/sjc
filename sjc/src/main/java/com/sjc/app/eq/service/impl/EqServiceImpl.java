@@ -158,17 +158,16 @@ public class EqServiceImpl implements EqService {
         eqVO.setEqCode(eqChckVO.getEqCode());
         eqMapper.updateEqInfoJumgum(eqVO);
 	}
-    
-@Override
-    public int selectEqChckOx(EqVO eqVO) {
-    	return eqMapper.selectEqChckOx(eqVO);
-    }
+	// 점검완료 버튼 업데이트    
+	@Override
+	    public int selectEqChckOx(EqVO eqVO) {
+	    	return eqMapper.selectEqChckOx(eqVO);
+	    }
 
-@Override
-public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate) {
-	return eqMapper.eqSearch(eqCode, startDate, endDate);
-}
-
-
-
+	@Override
+	public List<EqChckVO> eqSearch(String eqCode, String startDate, String endDate) {
+		return eqMapper.eqSearch(eqCode, startDate, endDate);
+	}
+	
+	
 } // end of class

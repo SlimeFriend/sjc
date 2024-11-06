@@ -98,7 +98,7 @@ tbody > tr {
 
             let formattedToday = today.toISOString().split('T')[0];  // yyyy-mm-dd
             let formattedNextCheckDate = nextCheckDate.toISOString().split('T')[0];  // 3개월 후 날짜
-
+            
             // 선택된 체크박스의 부모 행을 찾고 데이터를 업데이트
             $('input[type="checkbox"]:checked').each(function () {
                 let row = $(this).closest('tr');
@@ -122,7 +122,7 @@ tbody > tr {
                     success: function (response) {
                         alert("점검이 완료되었습니다.");
                         // equipInfo.html로 이동하여 최신 점검일자 확인
-                        window.location.href = "/eqInfo?eqCode=" + eqCode;
+                        window.location.href = "/eqChckList";
                     },
                     error: function (error) {
                         alert("점검 완료 처리 중 오류가 발생했습니다.");
