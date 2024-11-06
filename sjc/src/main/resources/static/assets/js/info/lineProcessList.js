@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'prdCode',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                editor: 'text',                  
             },
             {
                 header: '사용여부',
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                  
             },
         ],
-        rowHeaders: ['rowNum'],
+        rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 10
@@ -129,6 +130,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error(error);
             });
     }
-
-    fetchprocesses();    
+    fetchprocesses();
+    
+    
+    document.getElementById('updateLineBtn').addEventListener('click', function() {
+	    //const modifiedRows = grid.getModifiedRows();
+	    const modifiedRows = gridLine.getModifiedRows().updatedRows;
+	    
+	    if (modifiedRows.length === 0) {
+	        alert('수정된 데이터가 없습니다.');
+	        return;
+	    }
+	
+		if (confirm("수정 하시겠습니까??")){
+			modifyLines(modifiedRows);
+		}else{
+			return;
+		}	
+	});    
+    
+    function modifyLines(modifiedRows) {
+	    fetch('lines', {
+	        method: 'PUT',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify(modifiedRows),
+	    })
+	    .then(response => {
+	        if (response.ok) {
+				const modifiedRowKeys = [
+				  ...modifiedRows.map(row => row.rowKey),
+				];
+				
+				modifiedRowKeys.forEach(rowKey => {
+					
+				  if (rowKey !== undefined) {
+				    gridLine.addRowClassName(rowKey, 'bg-warning');
+				  }
+		  		});
+	        }
+	        
+	        return response.json();
+	    })
+	    .then(result => {
+			fetchlines();
+			//gridLine.reloadData();
+	        console.log(result);
+	    })
+	    .catch(error => {
+	        console.error('Error: ', error);
+	    })
+	    .finally(() => {
+	    	
+	    });
+    }    
+        
 });
