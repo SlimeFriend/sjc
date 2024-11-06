@@ -227,16 +227,18 @@
 
 			var obj = {};
 			
+			var insCode = td.eq(2).text();
 			var prdCode = td.eq(4).text();
 			var startDate = td.eq(6).text();
+			var pdetailCode = td.eq(10).text();
 			var inQ = Number(td.eq(12).text());
-			var insCode = td.eq(2).text();
 						
 			//객체에 담기
-			obj["prdCode"] = prdCode;  	     		
-			obj["startDate"] = startDate;               					
-			obj["inQ"] = inQ;   
-			obj["insCode"] = insCode;      					
+			obj["insCode"] = insCode;
+			obj["prdCode"] = prdCode;
+			obj["startDate"] = startDate;
+			obj["inQ"] = inQ;
+			obj["pdetailCode"] = pdetailCode;
 
 			//목록에 담기
 			list.push(obj);
@@ -287,11 +289,13 @@
 
 			var tr = $(this).closest("tr")
 			var td = tr.children();
-
+			
+			var insCode = td.eq(2).text();
+			
 			var item = {
 
-			mtlOdCode : td.eq(10).text()
-			};
+					insCode : td.eq(2).text()
+						};
 			
 			console.log(item);
 

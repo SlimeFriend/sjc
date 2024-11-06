@@ -740,6 +740,15 @@
 		SET status = '출고대기'
 		WHERE pdetail_code = #{pdetailCode}
 	</update>
+<!--  // 완제품품질검사완료페이지 - 불량처리 버튼 - pdetail.status 반품 -->
+	<update id="updatePdBack" parameterType="InspectionVO">
+		UPDATE pdetail
+		SET status = '불량'
+		WHERE pdetail_code = ( SELECT pdetail_code
+                                FROM   inspection
+                                WHERE ins_code =  #{insCode}
+                              )
+	</update>
 	
 	<insert id="insertPManage" parameterType="InspectionVO">
 	    <selectKey keyProperty="lot" order="BEFORE" resultType="string">
@@ -782,15 +791,6 @@
 		WHERE pdetail_code = #{pdetailCode}
 	</update>
 
-<!--  // 완제품품질검사완료페이지 - 불량처리 버튼 - pdetail.status 반품 -->
-	<update id="updatePdBack" parameterType="InspectionVO">
-		UPDATE pdetail
-		SET status = '불량'
-		WHERE pdetail_code = ( SELECT pdetail_code
-                                FROM   inspection
-                                WHERE ins_code =  #{insCode}
-                              )
-	</update>
 	
 	
 	
