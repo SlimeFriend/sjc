@@ -67,7 +67,7 @@ public interface PrdtService {
 	public List<NeedVO> orderMt(List<LinePrdVO> linePrd);
 	
 	// 상태 a1인 계획 코드
-	public List<String> findPC();
+	public List<PlanVO> findPC();
 	
 	// 오더 생성
 	public int insertOrd(PoVO poVO);

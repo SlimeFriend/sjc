@@ -116,7 +116,7 @@ public class PrController {
 	public String pOrder(Model model) {
 		List<LinePrdVO> linePrdList = prdtService.linePrdList();
 		
-		List<String> list = prdtService.findPC();
+		List<PlanVO> list = prdtService.findPC();
 		
 		model.addAttribute("linePrd", linePrdList);
 		

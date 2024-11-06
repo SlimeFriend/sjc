@@ -3,6 +3,14 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	<head>
+     	<title>생산 지시 조회</title>
+        <style>
+            #grid:hover {
+                cursor: pointer;
+            }
+        </style>
+    </head>
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
@@ -177,6 +185,7 @@
         	    },
         	    error: function(xhr, status, error) {
         	        // 요청 실패 시 실행되는 콜백 함수
+        	        alert('삭제 실패');
         	        console.error('Error:', error);
         	    }
         	});

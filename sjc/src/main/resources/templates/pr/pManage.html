@@ -4,6 +4,14 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	<head>
+     	<title>생산 공정</title>
+        <style>
+            #table:hover {
+                cursor: pointer;
+            }
+        </style>
+    </head>
 
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 <style>

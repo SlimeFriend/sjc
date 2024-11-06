@@ -3,6 +3,14 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	<head>
+     	<title>생산 계획 생성</title>
+        <style>
+            #grid:hover {
+                cursor: pointer;
+            }
+        </style>
+    </head>
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
@@ -13,7 +21,13 @@
 	
 		<div class="d-flex justify-content-between">
 			<div class="pd-20 card-box mb-20" style="width: 48%;">	
-				<h2 class="h5 mb-20">생산계획</h2>
+				<div class="d-flex justify-content-between align-items-center align-middle mb-20">
+					<h2 class="h5 mb-20">생산계획</h2>
+					<div>
+						<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+					</div>
+				</div>
+				
 				<form name="form"
 					method="post">
 					<div class="form-group">
@@ -44,7 +58,7 @@
 						<label>요청사항</label>
 						<textarea class="form-control" name="comm"></textarea>
 					</div>
-					<button class="btn btn-primary" type="button" onclick="sendCheckedRows()">제출</button>
+					
 
 				</form>
 			</div>
@@ -205,6 +219,7 @@
 				}
 			});
 			
+			
 			modalGrid.on('click', (ev) => {
 			    const { value } = ev; // 입력된 출고량
 			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
@@ -224,7 +239,16 @@
 				    },
 				    success: function(response) {
 				    	if(response.length>0){
-				        grid.resetData(response);
+				    	
+				    	const resp = [];
+				    		
+				    	response.forEach((a) => {
+				    		if(a.ordQuantity > 0){
+				    			resp.push(a); 
+				    		}
+				    	})	
+				    		
+				        grid.resetData(resp);
 				        grid.getData().forEach((row, index) => {
 	                        grid.check(index, true);  // 해당 행의 체크박스 체크
 	                        grid.disableRow(index);
@@ -242,6 +266,8 @@
 				    }
 				});
 				
+
+				
 			});
 			
 		// 체크된 행의 데이터를 가져오는 함수
@@ -249,6 +275,8 @@
 		    const checkedRows = grid.getCheckedRows();
 		    console.log(checkedRows); // 체크된 행의 데이터 배열 출력
 		} */
+		
+		
 		
 		document.getElementById('ordCode').addEventListener('click', function() {
 			$('#myModal').modal('show'); // 모달 열기
