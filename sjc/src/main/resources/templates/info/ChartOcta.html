@@ -45,13 +45,13 @@
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
 	                    <div class="chart-wrapper">
-	                        <div id="pieChartLeft"></div>
+	                        <div id="pieChartEqChck"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="columnChartRight"></div>
+	                        <div id="columnChartEq"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
@@ -71,27 +71,27 @@
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="pieChartEqChck"></div>
-	                    </div>
-	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
-	                    <div class="chart-wrapper">
-	                        <div id="columnChartEq"></div>
+	                        <div id=""></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="pieChartLeft"></div>
+	                        <div id=""></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
 		            	<h2 class="h5 mb-20">차트</h2>
 	                    <div class="chart-wrapper">
-	                        <div id="columnChartRight"></div>
+	                        <div id=""></div>
+	                    </div>
+	                </div>
+		            <div class="pd-20 card-box mb-20 w-50">                    
+		            	<h2 class="h5 mb-20">차트</h2>
+	                    <div class="chart-wrapper">
+	                        <div id=""></div>
 	                    </div>
 	                </div>
 	            </div>
@@ -107,183 +107,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-
-	const columnChartData = {
-			  categories: ['라인1', '라인2', '라인3', '라인4', '라인5', '라인6', '라인7'],
-			  series: [
-			    {
-			      name: '배합기',
-			      data: [5, 3, 5, 7, 6, 4, 1]
-			    },
-			    {
-			      name: '냉각기',
-			      data: [8, 4, 7, 2, 6, 3, 5]
-			    },
-			    {
-			      name: '성형기',
-			      data: [4, 4, 6, 3, 4, 5, 7]
-			    },
-			    {
-			      name: '포장기',
-			      data: [3, 4, 3, 1, 2, 4, 3]
-			    }
-			  ]
-			}
-	const pieChartData = {
-	    categories: ['가동율'],
-	    series: [
-	        {
-	            name: '가동',
-	            data: 70,
-	        },
-	        {
-	            name: '점검중',
-	            data:  13,
-	        },
-	        /*
-	        {
-	            name: '수리중',
-	            data:  4.45,
-	        },
-	        {
-	            name: '고장',
-	            data:  2.00,
-	        },
-	        */
-	        {
-	            name: '비가동',
-	            data: 17,
-	        },
-	
-	    ],
-	};
-	
-	function initPieChartLeft() {
-	    const { width, height } = getChartSize();
-	    
-	    const options = {
-	        chart: { 
-	            width: width,
-	            height: height,
-	        },
-	        series: {
-	            dataLabels: {
-	                visible: true,
-	                pieSeriesName: {
-	                    visible: true
-	                }
-	            }
-	        },
-	        legend: {
-	            align: 'bottom'
-	        },
-	        theme: {
-	            chart: {
-	                fontFamily: 'Arial'
-	            }
-	        },
-	        exportMenu: {
-	            visible: false
-	        }
-	    };
-	  
-	    const pieChartLeft11 = new toastui.Chart.pieChart({ 
-	        el: document.getElementById('pieChartLeft'),
-	        data: pieChartData, 
-	        options: options
-	    });
-	
-	    return pieChartLeft;
-	}
-	
-	function initColumnChartRight() {
-	    const { width, height } = getChartSize();
-	    
-	    const options = {
-	        chart: { 
-	            width: width,
-	            height: height,
-	        },
-	        series: {
-	            dataLabels: {
-	                visible: false,
-	                pieSeriesName: {
-	                    visible: true
-	                }
-	            }
-	        },
-	        legend: {
-	            align: 'bottom'
-	        },
-	        theme: {
-	            chart: {
-	                fontFamily: 'Arial'
-	            }
-	        },
-	        exportMenu: {
-	            visible: false
-	        },
-	        tooltip: {
-	            formatter: (value) => `${value}대`,
-            },	        
-	    };
-	  
-	    const columnChartRight = new toastui.Chart.columnChart({ 
-	        el: document.getElementById('columnChartRight'),
-	        data: columnChartData, 
-	        options: options
-	    });
-	
-	    return columnChartRight;
-	}
-	/*
-	
-	function initColumnChartOrd() {
-	    const { width, height } = getChartSize();
-	    
-	    const options = {
-	        chart: { 
-	            width: width,
-	            height: height,
-	        },
-	        series: {
-	            dataLabels: {
-	                visible: false,
-	                pieSeriesName: {
-	                    visible: true
-	                }
-	            }
-	        },
-	        legend: {
-	            align: 'bottom'
-	        },
-	        theme: {
-	            chart: {
-	                fontFamily: 'Arial'
-	            }
-	        },
-	        exportMenu: {
-	            visible: false
-	        },
-	        tooltip: {
-	            formatter: (value) => `${value}개`,
-            },	        
-	    };
-	  
-	    const columnChartOrd = new toastui.Chart.columnChart({ 
-	        el: document.getElementById('columnChartOrd'),
-	        data: columnChartData, 
-	        options: options
-	    });
-	
-	    return columnChartOrd;
-	}
-	*/
-	
-	let pieChart = initPieChartLeft();
-	let columnChart = initColumnChartRight();
-	//let columnChartOrd = initColumnChartOrd();
-	
 	// 디바운스 함수
 	function debounce(func, wait) {
 	    let timeout;
