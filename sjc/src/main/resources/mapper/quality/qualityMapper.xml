@@ -3,30 +3,45 @@
 <mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
 	<!-- 입고품질검사 대기목록 1 (mtlOd)-->
 	<select id="selectMtlOd" resultType="InspectionVO">
-		SELECT DISTINCT(o.mtl_od_code) AS mtl_od_code,
-                o.cp_code AS cp_code,
-                c.cp_name AS cp_name,
-                sum(od.quantity) AS mtl_od_quantity,
-                o.mtl_od_date AS mtl_od_date,
-                o.dilivery_date AS dilivery_date,
-                (SELECT SUM(COALESCE(m.UNIT_PRICE, 0) * COALESCE(od.QUANTITY, 0))
-                    FROM MTL_OD_DETAIL od
-                    LEFT JOIN MT m ON od.MT_CODE = m.MT_CODE
-                    WHERE od.MTL_OD_CODE = o.MTL_OD_CODE) AS price,
-                o.user_id AS user_id,
-                o.mtl_od_status AS mtl_od_status,
-                o.comm AS comm
-FROM mtl_od o
-JOIN cp c ON o.cp_code = c.cp_code
-JOIN mtl_od_detail od ON od.mtl_od_code = o.mtl_od_code
-WHERE o.mtl_od_status = '입고품질검사대기' -- 완료
-   OR (
-        o.mtl_od_status = '입고품질검사중'
-        AND od.MTL_OD_DETAIL_STATUS IS NULL
-      )
-GROUP BY ROLLUP ((o.mtl_od_code, o.cp_code, c.cp_name, o.mtl_od_date, o.dilivery_date, 
-o.price, o.user_id, o.mtl_od_status, o.comm))
-HAVING o.mtl_od_code IS NOT NULL
+		SELECT
+				DISTINCT(o.mtl_od_code) AS mtl_od_code,
+				o.cp_code AS cp_code,
+				c.cp_name AS cp_name,
+				sum(od.quantity) AS mtl_od_quantity,
+				o.mtl_od_date AS mtl_od_date,
+				o.dilivery_date AS dilivery_date,
+				(SELECT SUM(COALESCE(m.UNIT_PRICE, 0) * COALESCE(od.QUANTITY, 0))
+					FROM MTL_OD_DETAIL od
+					LEFT JOIN MT m 
+					ON od.MT_CODE = m.MT_CODE
+					WHERE od.MTL_OD_CODE = o.MTL_OD_CODE)
+					 AS price,
+				o.user_id AS user_id,
+				o.mtl_od_status AS mtl_od_status,
+				o.comm AS comm
+		FROM mtl_od o
+			JOIN cp c 
+			ON o.cp_code = c.cp_code
+			JOIN mtl_od_detail od 
+			ON od.mtl_od_code = o.mtl_od_code
+		WHERE o.mtl_od_status = '입고품질검사대기' -- 완료
+			OR (
+					o.mtl_od_status = '입고품질검사중'
+						AND 
+					od.MTL_OD_DETAIL_STATUS IS NULL
+				)
+		GROUP BY ROLLUP ((o.mtl_od_code 
+							, o.cp_code
+							, c.cp_name
+							, o.mtl_od_date
+							, o.dilivery_date
+							, o.price
+							, o.user_id
+							, o.mtl_od_status
+							, o.comm
+						))
+		HAVING o.mtl_od_code IS NOT NULL
+		ORDER BY o.mtl_od_date DESC
 	</select>
 	
 	<!-- 입고품질검사 대기목록 2 (mtlOdDetail) -->
@@ -138,17 +153,17 @@ HAVING o.mtl_od_code IS NOT NULL
 <!-- 자재입고품질검사모달창 insItem 목록 출력 -->
 	<select id="selectTestDetail" resultType="InspectionVO">
 		SELECT  im.mt_code mt_code
-        ,ii.ins_item_code ins_item_code
-        ,ii.ins_item_name ins_item_name
-        ,ii.ins_item_citeria ins_item_citeria
+        		,ii.ins_item_code ins_item_code
+        		,ii.ins_item_name ins_item_name
+        		,ii.ins_item_citeria ins_item_citeria
 		FROM    ins_map im
 		JOIN    ins_item ii
 		ON      im.ins_item_code = ii.ins_item_code
 		WHERE   im.mt_code = (
-					    select  mt_code
-					    from    mtl_od_detail
-					    where   MTL_OD_DETAIL_CODE = #{mtlOdDetailCode}
-					)
+					    		select  mt_code
+					    		from    mtl_od_detail
+					    		where   MTL_OD_DETAIL_CODE = #{mtlOdDetailCode}
+							 )
 	</select>
 	<!-- 자재,완제품 insDetail insert -->
 	<insert id="insertInsDetail" parameterType="InspectionVO">
@@ -207,8 +222,8 @@ HAVING o.mtl_od_code IS NOT NULL
 		UPDATE mtl_od
 		SET mtl_od_status = '입고품질검사완료'
 		WHERE mtl_od_code = ( SELECT mtl_od_code
-								FROM mtl_od_detail
-								WHERE mtl_od_detail_code = #{mtlOdDetailCode})
+							  FROM mtl_od_detail
+							  WHERE mtl_od_detail_code = #{mtlOdDetailCode})
 	</update>
 <!--  // 자재품질검사모달창 - mtl_od_detail.mtl_od_detail_status 개별입고품질검사완료 -->
 	<update id="updateMtlOdDetailSt" parameterType="InspectionVO">
@@ -220,13 +235,13 @@ HAVING o.mtl_od_code IS NOT NULL
 	
 	
 	<select id="selectInsDetail" resultType="InspectionVO">
-			SELECT ins_detail_code
-		                    , ins_item_code
-		                    , ins_value
-		                    , ins_result
-		                    , ins_code
-			 FROM ins_detail
-	         WHERE ins_code = #{insCode}
+			SELECT 	ins_detail_code
+		            , ins_item_code
+		            , ins_value
+		            , ins_result
+		            , ins_code
+			FROM 	ins_detail
+	        WHERE 	ins_code = #{insCode}
 	</select>
 		
 
@@ -238,13 +253,13 @@ HAVING o.mtl_od_code IS NOT NULL
 	
 	
 	<select id="selectTest" resultType="InspectionVO">
-		SELECT i.ins_item_name
+		SELECT 	i.ins_item_name
 		        , i.ins_item_citeria
 		        , i.ins_item_code
-		FROM ins_item i
-		JOIN ins_map m
-		ON m.ins_item_code = i.ins_item_code
-		WHERE m.mt_code = #{mtCode}
+		FROM 	ins_item i
+		JOIN 	ins_map m
+		ON 		m.ins_item_code = i.ins_item_code
+		WHERE 	m.mt_code = #{mtCode}
 	</select>
 	
 	
@@ -254,32 +269,33 @@ HAVING o.mtl_od_code IS NOT NULL
 	<!-- 완료목록페이지 -->
 	<!-- 입고 -->
 	<select id="selectQualityDoneInfo" resultType="InspectionVO">
-		SELECT 	i.ins_date					AS "insDate"
-		        , i.ins_code				AS "insCode"
-		        , i.ins_status				AS "insStatus"
-		        , cmo.mtl_od_status			AS "mtlOdStatus"
-		        , cmod.mtl_od_detail_status	AS "mtlOdDetailStatus"
-		        , cm.mt_name				AS "mtName"
-		        , cm.specification			AS "specification"
-		        , i.number_of_tests			AS "numberOfTests"
-		        , i.number_of_passes		AS "numberOfPasses"
-		        , i.number_of_total_pass	AS "numberOfTotalPass"
-		        , i.total_pass				AS "totalPass"
-		        , cmo.mtl_od_code			AS "mtlOdCode"
-		        , cmod.mtl_od_detail_code	AS "mtlOdDetailCode"
-		        , cm.mt_code				AS "mtCode"
-		        , i.user_id					AS "userId"
-		        , cmo.cp_code				AS "cpCode"
-		FROM    mt cm
-		JOIN    mtl_od_detail cmod
-		ON      cmod.mt_code = cm.mt_code
-        JOIN    mtl_od cmo
-        ON      cmo.mtl_od_code = cmod.mtl_od_code
-		JOIN    inspection i
-		ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
-		WHERE   i.ins_status = '검사완료'
-		        and cmo.mtl_od_status = '입고품질검사완료'
-		        and cmo.mtl_od_status not in ('반품', '입고완료')
+		SELECT 		i.ins_date					AS "insDate"
+		        	, i.ins_code				AS "insCode"
+		        	, i.ins_status				AS "insStatus"
+		        	, cmo.mtl_od_status			AS "mtlOdStatus"
+		        	, cmod.mtl_od_detail_status	AS "mtlOdDetailStatus"
+		        	, cm.mt_name				AS "mtName"
+		        	, cm.specification			AS "specification"
+		        	, i.number_of_tests			AS "numberOfTests"
+		        	, i.number_of_passes		AS "numberOfPasses"
+		        	, i.number_of_total_pass	AS "numberOfTotalPass"
+		        	, i.total_pass				AS "totalPass"
+		        	, cmo.mtl_od_code			AS "mtlOdCode"
+		        	, cmod.mtl_od_detail_code	AS "mtlOdDetailCode"
+		        	, cm.mt_code				AS "mtCode"
+		        	, i.user_id					AS "userId"
+		        	, cmo.cp_code				AS "cpCode"
+		FROM    	mt cm
+			JOIN    mtl_od_detail cmod
+			ON      cmod.mt_code = cm.mt_code
+        	JOIN    mtl_od cmo
+        	ON      cmo.mtl_od_code = cmod.mtl_od_code
+			JOIN    inspection i
+			ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
+		WHERE   	i.ins_status = '검사완료'
+		        	and cmo.mtl_od_status = '입고품질검사완료'
+		        	and cmo.mtl_od_status not in ('반품', '입고완료')
+		ORDER BY 	i.ins_date DESC
 	</select>
 	
 <!--  // 입고검사완료페이지 - 입고처리 버튼 - mtl_od.mtl_od_status 입고완료 -->
@@ -337,26 +353,26 @@ HAVING o.mtl_od_code IS NOT NULL
 
 
 
-	<select id="selectQualityWaitInfo" resultType="MtlOdVO">
+<!-- 	<select id="selectQualityWaitInfo" resultType="MtlOdVO">
 		SELECT mtl_od_code
                , mtl_od_quantity
                , mtl_od_date
                , dilivery_date
                , price
-               --, mt_code 수정해야함 수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함
+               , mt_code 수정해야함 수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함
                , cp_code
                , user_id
                , mtl_od_status
 
 
-		--FROM copy_mtl_od
+		
 		FROM mtl_od
 		WHERE mtl_od_status = '입고품질검사대기'
 
-	</select>
+	</select> -->
 
 	
-	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
+<!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
 		SELECT i.ins_code ins_code
 		       , i.ins_status
 		       , i.ins_type_code
@@ -368,19 +384,16 @@ HAVING o.mtl_od_code IS NOT NULL
 		       , o.mt_code
 		       , o.cp_code
 		       , m.mt_name
-		--FROM copy_mtl_od o
 		FROM mtl_od o
 		    JOIN inspection i
 		        ON o.mtl_od_code = i.mtl_od_code
-		    --JOIN copy_mt m
 		    JOIN mt m
 		        ON o.mt_code = m.mt_code
 		 WHERE
 		 	o.mtl_od_code = #{mtlOdCode}
-		 
-	</select>
+	</select> -->
 	
-	<select id="selectQualityTestInfo" resultType="InspectionVO">
+<!-- 	<select id="selectQualityTestInfo" resultType="InspectionVO">
 		SELECT  i.ins_item_name ins_item_name
         		,i.ins_item_citeria ins_item_citeria
                 , d.ins_value
@@ -389,11 +402,9 @@ HAVING o.mtl_od_code IS NOT NULL
         JOIN ins_item i
         ON d.ins_item_code = i.ins_item_code
         WHERE i.ins_type_code = (SELECT material_type_code
-                                 --FROM copy_mt
                                  FROM mt
                                  WHERE mt_code = (
                                                         SELECT MATERIAL_TYPE
-                                                        --FROM    copy_mt
                                                         FROM    mt
                                                         WHERE   mt_code = (
                                                                             SELECT  mt_code
@@ -403,7 +414,7 @@ HAVING o.mtl_od_code IS NOT NULL
                                                         )
                                                         
                                 )
-	</select>
+	</select> -->
 
 
 <!--   // 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료 -->
@@ -474,26 +485,29 @@ HAVING o.mtl_od_code IS NOT NULL
 	<select id="selectPOrder" resultType="InspectionVO">
 		SELECT  po.porder_code          AS "porderCode"
 		        , MAX(po.plan_code)     AS "planCode"
-		        , SUM(pd.output)        AS "output"
+		        , FLOOR(SUM(pd.output)) AS "output"
 		        , MIN(pd.no)            AS "pdetailNo"
 		        , MAX(u.user_name)      AS "userName"
+                , po.porder_date		AS "porderDate"
 		FROM    porder po
-		JOIN    pdetail pd
-		ON      pd.porder_code = po.porder_code
-		JOIN    sjc_user u
-		ON      u.user_id = po.manager
+			JOIN    pdetail pd
+			ON      pd.porder_code = po.porder_code
+			JOIN    sjc_user u
+			ON      u.user_id = po.manager
 		WHERE   po.status = 'b3'
-		OR		(
-        			po.status = '완제품품질검사중'
-        			and     
-        			pd.status = 'b3'
-        		)
+			OR		(
+        				po.status = '완제품품질검사중'
+        					and     
+        				pd.status = 'b3'
+        			)
 		GROUP BY po.porder_code
+                , po.porder_date
+        ORDER BY po.porder_date DESC
 	</select>
 	<!-- 완제품품질검사 대기목록2(porder_code) -->
 	<select id="selectPDetail" parameterType="String" resultType="map">
 		SELECT pd.pdetail_code 	AS "pdetailCode"
-        		,po.porder_code AS "porderCode"
+        		, po.porder_code AS "porderCode"
 				, pd.prd_code 	AS "prdCode"
 		        , pd.prd_name 	AS "prdName"
 		        , pd.output 	AS "output"
@@ -718,6 +732,7 @@ HAVING o.mtl_od_code IS NOT NULL
 		WHERE   i.ins_status = '검사완료'
                AND     po.status = '완제품품질검사완료'
                AND     pd.status not in ('불량', '출고대기')
+        ORDER BY i.ins_date DESC
 	</select>
 	<!--  // 완제품품질검사완료페이지 - 입고처리 버튼 - pdetail.status 출고대기 -->
 	<update id="updatePOrderDone" parameterType="InspectionVO">
@@ -737,6 +752,7 @@ HAVING o.mtl_od_code IS NOT NULL
 						        md,
 						        ed, 
 						        in_quantity,
+						        --out_quantity,
 						        ins_code,
 						        in_date
 						    )
@@ -747,6 +763,7 @@ HAVING o.mtl_od_code IS NOT NULL
 						        #{startDate},
 						        ADD_MONTHS(SYSDATE, 6),
 						        #{inQ},
+						        --0,
 						        #{insCode},
 						        SYSDATE
 						    )
