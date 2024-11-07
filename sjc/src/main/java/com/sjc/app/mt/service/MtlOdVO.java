@@ -22,7 +22,7 @@ public class MtlOdVO {
     private Integer userId;           // 사용자 번호
     private String mtlOdStatus;       // 발주 상태
     private String comm;              // 비고
-    private String ManagerName;
+    
     // MTL_OD_DETAIL - 자재 발주 상세 정보
     private String mtlOdDetailCode;   // 자재 발주 상세 코드
     private Integer quantity;         // 자재 수량

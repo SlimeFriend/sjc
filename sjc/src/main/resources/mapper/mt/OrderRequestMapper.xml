@@ -148,6 +148,7 @@
             QUANTITY,
             MTL_OD_CODE,
             MTL_OD_STATUS
+           
         )
         VALUES (
             'MTLD' || TO_CHAR(SYSDATE, 'YYMMDD') || MTL_OD_DETAIL_SEQ.NEXTVAL,
@@ -155,6 +156,7 @@
             #{quantity},
             #{mtlOdCode},
             '발주대기'
+           
         )
     </insert>
 

@@ -1,5 +1,6 @@
 package com.sjc.app.mt.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class OrderRequestController {
     @ResponseBody // JSON 형식으로 응답 반환
     public ResponseEntity<String> submitOrderRequest(@RequestBody Map<String, Object> payload) {
         String cpCode = (String) payload.get("cpCode");
-        String userId = (String) payload.get("userId"); // '이성철' 그대로 받음
+        Integer userId =Integer.parseInt((String) payload.get("userId")) ; // '이성철' 그대로 받음
         List<Map<String, Object>> itemsData = (List<Map<String, Object>>) payload.get("items");
 
         // 필수 파라미터 검증
@@ -107,7 +108,7 @@ public class OrderRequestController {
         // 발주 요청 생성
         MtlOdVO orderRequest = new MtlOdVO();
         orderRequest.setCpCode(cpCode);
-        orderRequest.setManagerName(userId); // 'userId' 대신 managerName에 '이성철' 저장
+        orderRequest.setUserId(userId); 
         orderRequestService.insertOrderRequest(orderRequest);
 
      
@@ -149,6 +150,24 @@ public class OrderRequestController {
     public String deleteOrderRequest(@RequestParam("mtlOdCode") String mtlOdCode) {
         orderRequestService.deleteOrderRequest(mtlOdCode);
         return "redirect:/orderRequestList";
+    }
+    /**
+     * 발주 요청 상태 조회
+     */
+    @GetMapping("/orderRequest/status")
+    @ResponseBody
+    public Map<String, String> getOrderRequestStatus(@RequestParam("mtlOdCode") String mtlOdCode) {
+        Map<String, String> response = new HashMap<>();
+        
+        // 발주 요청 상태 가져오기
+        MtlOdVO orderRequest = orderRequestService.getOrderRequestById(mtlOdCode);
+        if (orderRequest != null) {
+            response.put("status", orderRequest.getMtlOdStatus());
+        } else {
+            response.put("status", "NOT_FOUND"); // 요청을 찾지 못한 경우의 응답
+        }
+        
+        return response;
     }
 
     /**
