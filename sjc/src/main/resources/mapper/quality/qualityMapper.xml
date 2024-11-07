@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
+	<!-- 입고품질검사 검색기능 -->
+	<select id="searchMO" resultType="InspectionVO">
+		SELECT  mo.mtl_od_code
+		        , mo.mtl_od_date
+		        , mo.mtl_od_status
+		        , mo.cp_code
+		        , c.cp_name
+		FROM    mtl_od mo
+		LEFT JOIN cp c ON mo.cp_code = c.cp_code
+		WHERE 1=1
+		AND mo.mtl_od_status = '입고품질검사대기'
+		<if test="cpCode != null and cpCode != ''">
+	        AND mo.cp_code LIKE '%' || #{cpCode} || '%'
+	    </if>
+        <if test="cpName != null and cpName != ''">
+	        AND c.cp_name LIKE '%' || #{cpName} || '%'
+	    </if>
+	    <if test="moStartDate != null and moStartDate != ''">
+	        AND mo.mtl_od_date <![CDATA[>=]]> TO_DATE(#{moStartDate}, 'YYYY-MM-DD')
+	    </if>
+	    <if test="moEndDate != null and moEndDate != ''">
+	        AND mo.mtl_od_date <![CDATA[<=]]> TO_DATE(#{moEndDate}, 'YYYY-MM-DD') + 1
+	    </if>
+    	ORDER BY mo.mtl_od_date DESC
+	</select>
+	
 	<!-- 입고품질검사 대기목록 1 (mtlOd)-->
 	<select id="selectMtlOd" resultType="InspectionVO">
 		SELECT
@@ -294,7 +320,8 @@
 			ON      cmod.mtl_od_detail_code = i.mtl_od_detail_code
 		WHERE   	i.ins_status = '검사완료'
 		        	and cmo.mtl_od_status = '입고품질검사완료'
-		        	and cmo.mtl_od_status not in ('반품', '입고완료')
+		        	--and cmo.mtl_od_status not in ('반품', '입고완료')
+		        	and cmo.mtl_od_status not in ('입고완료')
 		ORDER BY 	i.ins_date DESC
 	</select>
 	
@@ -429,7 +456,8 @@
 <!--  // 입고검사완료페이지 - 반품처리 버튼 - mtl_od.mtl_od_status 반품 -->
 	<update id="updateMtlOdBack" parameterType="InspectionVO">
 		UPDATE mtl_od
-		SET mtl_od_status = '반품'
+		--SET mtl_od_status = '반품'
+		SET mtl_od_status = '입고완료'
 		WHERE mtl_od_code = ( SELECT mtl_od_code
                                 FROM  mtl_od_detail
                                 WHERE mtl_od_detail_code = ( SELECT mtl_od_detail_code
@@ -674,7 +702,8 @@
 		ON      i.pdetail_code = pd.pdetail_code
 		WHERE   i.ins_status = '검사완료'
 		        and po.status = '완제품품질검사완료'
-		        and po.status not in ('반품', '입고완료')
+		        --and po.status not in ('불량', '출고대기')
+		        and po.status not in ('출고대기')
 	</select>
 	<!-- 완제품품질검사 완료목록 2 -->
 <!-- 	<select id="selectOutDoneInfo2" resultType="InspectionVO">
@@ -731,7 +760,8 @@
         ON      pd.pdetail_code = i.pdetail_code
 		WHERE   i.ins_status = '검사완료'
                AND     po.status = '완제품품질검사완료'
-               AND     pd.status not in ('불량', '출고대기')
+               --AND     pd.status not in ('불량', '출고대기')
+               AND     pd.status not in ('출고대기')
         ORDER BY i.ins_date DESC
 	</select>
 	<!--  // 완제품품질검사완료페이지 - 입고처리 버튼 - pdetail.status 출고대기 -->
@@ -743,7 +773,8 @@
 <!--  // 완제품품질검사완료페이지 - 불량처리 버튼 - pdetail.status 반품 -->
 	<update id="updatePdBack" parameterType="InspectionVO">
 		UPDATE pdetail
-		SET status = '불량'
+		--SET status = '불량'
+		SET status = '출고대기'
 		WHERE pdetail_code = ( SELECT pdetail_code
                                 FROM   inspection
                                 WHERE ins_code =  #{insCode}
