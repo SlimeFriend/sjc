@@ -10,17 +10,13 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">완제품 입고</h2>
-			<div class="pd-30 card-box mb-20">
-				<div class="d-flex justify-content-between align-items-center mb-20">
-					<h2 class="h5 mb-0">생산완료 제품</h2>
-					<button class="btn btn-primary">입고</button>
-				</div>
-				<div id="grid"></div>
+		<h2 class="h2 mb-20">완제품 입고</h2>
+		<div class="pd-30 card-box mb-20">
+			<div class="d-flex justify-content-between align-items-center mb-20">
+				<h2 class="h5 mb-0">생산완료 제품</h2>
+				<button class="btn btn-primary">입고</button>
 			</div>
-		</div>
+			<div id="grid"></div>
 
 		<script th:inline="javascript">
 			document.addEventListener('DOMContentLoaded', function() {

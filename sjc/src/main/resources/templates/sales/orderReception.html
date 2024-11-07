@@ -11,33 +11,38 @@
 	    <title>주문접수</title>
 	</head>
 	
-	<div class="main-container">
-		<div class="pd-30">
 			<h2 class="h2 mb-20">주문접수</h2>
-			<div>
-				<div class="pd-30 card-box mb-20" style="width: 400px">
-					<h2 class="h5 mb-20">주문서 작성</h2>
-					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
-						<div class="form-group">
-							<label for="company">업체명</label>
-							<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요." style="width: 350px;">
-							<input class="form-control" type="hidden" id="cpCode" name="cpCode">
-						</div>
-						<div class="form-group">
-							<label>납기일자</label>
-							<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
-						</div>
-						<div class="form-group">
-							<label>요청사항</label>
-							<textarea class="form-control" name="comm" style="width: 350px;"></textarea>
-						</div>
+			<div class="row">
+				<div class="pd-30 card-box mb-20" style="width: 100%">
+					<div class="d-flex justify-content-between align-items-center">
+						<h2 class="h5">주문서 작성</h2>
 						<div style="text-align: center">
 							<button class="btn" type="button" onclick="sendCheckedRows(event)" style="background-color: #0b132b; color: #ffffff;">주문접수</button>
+						</div>
+					</div>
+					<hr>
+					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
+						<div class="d-flex">
+							<div>
+								<div class="form-group">
+									<label for="company">업체명</label>
+									<input class="form-control" type="text" id="cpInput" name="cpName" placeholder="업체를 선택해주세요." style="width: 350px;">
+									<input class="form-control" type="hidden" id="cpCode" name="cpCode">
+								</div>
+								<div class="form-group">
+									<label>납기일자</label>
+									<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
+								</div>
+							</div>
+							<div class="form-group">
+								<label>요청사항</label>
+								<textarea class="form-control" name="comm" style="width: 350px; height: 140px;"></textarea>
+							</div>
 						</div>
 					</form>
 				</div>
 				
-				<div class="pd-30 card-box mb-20">
+				<div class="pd-30 card-box mb-20" style="width: 60%">
 					<h2 class="h5 mb-20">제품 선택</h2>
 					<div id="grid"></div>
 				</div>
@@ -64,8 +69,6 @@
 						</div>
 					</div>
 				</div>
-		</div>
-	</div>
 
 	<script th:inline="javascript">
 	

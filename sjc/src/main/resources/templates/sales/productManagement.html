@@ -15,16 +15,12 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">완제품 관리</h2>
-			<div class="pd-30 card-box mb-20">
-				<h4 class="h5 mb-20">제품 선택</h4>
-				<div id="selectProduct"></div>
-			</div>
-			<div id="selectProductLot" style="opacity : 0"></div>
-		</div>
+	<h2 class="h2 mb-20">완제품 관리</h2>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">제품 선택</h4>
+		<div id="selectProduct"></div>
 	</div>
+	<div id="selectProductLot" style="opacity : 0"></div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
