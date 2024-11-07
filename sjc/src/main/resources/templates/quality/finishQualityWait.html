@@ -95,6 +95,9 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
+			
+			tui.Grid.applyTheme('striped');
+			
 			const gridData = /*[[${pOrderList}]]*/[];
 			const gridDetailData = /*[[${pDetail}]]*/[];
 			const gridInspectionData = /*[[${pDInsList}]]*/[];
@@ -105,27 +108,25 @@
 				data : gridData,
 				scrollX : false,
 				scrollY : false,
-				columns : [ {
-					header : '생산지시코드',
-					name : 'porderCode',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
+				columns : [ 
+				{
 					header : '생산계획 코드',
 					name : 'planCode',
 					align : 'center',
 					resizable: true,
 					sortable: true,
-				}, {
-					header : '총 생산량',
-					name : 'output',
+					rowSpan: true,
+				}, 
+					{
+					header : '생산지시코드',
+					name : 'porderCode',
 					align : 'center',
 					resizable: true,
 					sortable: true,
-				}, {
-					header : '우선순위',
-					name : 'pdetailNo',
+				}, 
+				{
+					header : '총 생산량',
+					name : 'output',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -178,6 +179,7 @@
 					align : 'center',
 					resizable: true,
 					sortable: true,
+					
 				}, {
 					header : '제품 코드',
 					name : 'prdCode',
@@ -411,6 +413,11 @@
 				}
 			});
 			
+ 			
+ 			
+ 			document.addEventListener('click', (e) => {
+				gridInsDetailModal.finishEditing();
+			});
 			
 			// gridInsDetailModal에서 데이터가 변경될 때마다 호출되는 함수
 			function updateTestCount() {
