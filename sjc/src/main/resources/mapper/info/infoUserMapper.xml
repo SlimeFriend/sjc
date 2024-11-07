@@ -257,6 +257,7 @@
 		        ,phone
 		        ,created_date
 		from    user_history
+		order by created_date desc
 	</select>
 	<!-- 전체조회 -->
 	<select id="selectUserAllList" resultType="InfoUserVO" parameterType="InfoUserVO">

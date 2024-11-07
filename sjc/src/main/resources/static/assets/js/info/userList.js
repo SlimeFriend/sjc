@@ -1,5 +1,5 @@
 /**
- * userListGridApi.js
+ * userList.js
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -315,6 +315,44 @@ document.addEventListener('DOMContentLoaded', function() {
         
   		grid.readData(1, searchParams);
     });
+    
+    document.getElementById('inputUserId').addEventListener('input', function() {
+	    const searchParams = {
+	        userId: document.getElementById('inputUserId').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+    document.getElementById('inputLoginId').addEventListener('input', function() {
+	    const searchParams = {
+	        loginId: document.getElementById('inputLoginId').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+    document.getElementById('inputRoleName').addEventListener('input', function() {
+	    const searchParams = {
+	        roleName: document.getElementById('inputRoleName').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+    document.getElementById('inputUserName').addEventListener('input', function() {
+	    const searchParams = {
+	        userName: document.getElementById('inputUserName').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+    document.getElementById('inputDeptCode').addEventListener('input', function() {
+	    const searchParams = {
+	        deptCode: document.getElementById('inputDeptCode').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+    document.getElementById('inputDeptName').addEventListener('input', function() {
+	    const searchParams = {
+	        deptName: document.getElementById('inputDeptName').value,
+	    };
+		grid.readData(1, searchParams);
+	});
+
     
     grid.on('editingFinish', (event) => {
         const { rowKey, columnName, value } = event;
