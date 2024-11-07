@@ -3,54 +3,59 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<head>
+    	<title>입/출고 내역</title>
+    	<style>
+            #gridOrder:hover {
+                cursor: pointer;
+            }
+            #gridOrderDetail:hover {
+                cursor: pointer;
+            }
+            #modalInspection:hover {
+                cursor: pointer;
+            }
+            #modalInspectionDetail:hover {
+                cursor: pointer;
+            }
+        </style>
+	</head>
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			<h2 class="h2 mb-20">입고 품질검사</h2>
-<!-- 			<div class="pd-30 card-box mb-20">
+ 			<div class="pd-30 card-box mb-20">
 				<form>
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">업체코드</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="cpCode" type="text" placeholder="업체코드">
+						</div>
+					</div>
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="text" placeholder="업체명">
+							<input class="form-control" id="cpName" type="text" placeholder="업체명">
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
+							<input class="form-control" id="moStartDate"  type="date">
 						</div>
 						<div
 							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
 							<span style="font-size: 1rem;">~</span>
 						</div>
 						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div
-							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-							<span style="font-size: 1rem;">~</span>
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<button class="btn btn-dark">저장</button>
-							<button class="btn btn-dark">초기화</button>
+							<input class="form-control" id="moEndDate"  type="date">
 						</div>
 					</div>
 				</form>
-			</div> -->
+			</div> 
 			<h2 class="h5 mb-20">발주목록</h2>
 			<div id="gridOrder"></div>
 			<h2 class="h5 mb-20">발주상세목록</h2>
@@ -75,7 +80,7 @@
 							<div style="display: flex; width: 100%; gap: 20px;">
 								<div class="pd-20 card-box mb-20" style="width: 100%;">
 									<h2 class="h5 mb-20">검사상세등록</h2>
-									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 조회 </button></div>
+									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 입력 </button></div>
 									
 								</div>
 <!-- 								<div class="pd-20 card-box mb-20" style="width: 50%;">
@@ -100,6 +105,74 @@
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
+			
+			document.getElementById('cpCode').addEventListener('input', () => {
+
+			    const cpCode = document.getElementById('cpCode').value;
+			    
+			    
+			    const searchCriteria = {
+			    		cpCode: cpCode,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			});
+			document.getElementById('cpName').addEventListener('input', () => {
+
+			    const cpName = document.getElementById('cpName').value;
+			    
+			    
+			    const searchCriteria = {
+			    		cpName: cpName,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			});
+			document.getElementById('moStartDate').addEventListener('input', () => {
+
+			    const moStartDate = document.getElementById('moStartDate').value;
+			    
+			    
+			    const searchCriteria = {
+			    		moStartDate: moStartDate,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			});
+			document.getElementById('moEndDate').addEventListener('input', () => {
+
+			    const moEndDate = document.getElementById('moEndDate').value;
+			    
+			    
+			    const searchCriteria = {
+			    		moEndDate: moEndDate,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			});
+			
+			function searchAjax(searchCriteria){
+			    $.ajax({
+			        url: '/searchMO',
+			        type: 'POST',
+			        contentType: 'application/json',
+			        data: JSON.stringify(searchCriteria),
+			        success: function(response) {
+			            grid.resetData(response);
+			        },
+			        error: function(xhr, status, error) {
+			            console.error('Error fetching search results:', error);
+			            //alert("검색실패");
+			        }
+			    });				
+			}
+			
+			
+			
 			const gridData = /*[[${mtlList}]]*/[];
 			const gridDetailData = /*[[${mtlOdDetail}]]*/[];
 			const gridInspectionData = /*[[${insList}]]*/[];
@@ -367,10 +440,6 @@
 					sortable: true,
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 10
-				}
 			});
 
 			
@@ -446,18 +515,9 @@
 			});
 			
 			
-			
+	
 
-			
 
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			
 			
@@ -515,11 +575,17 @@
 			    }
 			}
 			
+			// gridInsDetailModal에서 입력이 완료될 때마다 updateTestCount 호출
+			gridInsDetailModal.on('afterChange', (ev) => {
+				console.log('Data changed:', ev);
+			    updateTestCount();
+			});
+	    
 			
 			
 			document.getElementById('testInsert').addEventListener('click', () => {
 				
-				updateTestCount();
+				//updateTestCount();
 	                const requestData = gridInsDetailModal.getData();
 	                
 	                console.log(requestData);
@@ -541,12 +607,14 @@
 	           
 
 			});
-			// gridInsDetailModal에서 입력이 완료될 때마다 updateTestCount 호출
-			gridInsDetailModal.on('afterChange', (ev) => {
-				console.log('Data changed:', ev);
-			    //updateTestCount();
+			
+			gridInsDetailModal.getData().forEach(row => {
+			    if (row.insResult === '불합격') {
+			    	grid.addCellClassName(row.rowKey, 'insResult', 'bg-light-pink'); // insResult 열의 클래스 추가
+			    } else if (row.insResult === '합격') {
+			    	grid.addCellClassName(row.rowKey, 'insResult', 'bg-warning');
+			    }
 			});
-	    
 					    
 					    
 			document.getElementById('registerBtn').addEventListener('click', () => {

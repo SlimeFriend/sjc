@@ -62,6 +62,19 @@ public class QualityController {
     	return "quality/incomingQualityWaitHistory";
     }
     
+    // 발주목록 검색
+    @PostMapping("/searchMO")
+    @ResponseBody
+    public List<InspectionVO> moSearch(@RequestBody Map<String, Object> request) {
+    	String cpCode = (String) request.get("cpCode");
+	    String cpName = (String) request.get("cpName");
+	    String moStartDate = (String) request.get("moStartDate");
+	    String moEndDate = (String) request.get("moEndDate");
+	    
+	    
+	    return qualityService.moSearch(cpCode, cpName, moStartDate, moEndDate);
+    }
+    
     
     // 발주목록상세 테이블
     @PostMapping("getIncomingQualityWaitDetail")

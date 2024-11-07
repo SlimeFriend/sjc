@@ -33,109 +33,119 @@
 
 
 <body>
+<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="mobile-menu-overlay"></div>
 	<div class="main-container">
+		<div class="pd-ltr-20">
+						<h2 class="h2 mb-20">자재 입고 대기 목록</h2>
+				<div class="card-box mb-20">
+						<!-- <p style="font-size: 300%">자재 입고 대기 목록</p> -->
+						<div class="pd-30 card-box mb-20">
+				<form>
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="text" placeholder="업체명">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div
+							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+							<span style="font-size: 1rem;">~</span>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" type="date">
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<button class="btn btn-dark">저장</button>
+							<button class="btn btn-dark">초기화</button>
+						</div>
+					</div>
+				</form>
+			</div> 
+				</div>
+				</div>
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
-				<div class="card-box mb-30">
-
-
-
 					<div class="filter-buttons mb-3">
 						<button id="filter-pass" class="btn btn-secondary">합격</button>
 						<button id="filter-fail" class="btn btn-secondary">불합격</button>
 						<button id="filter-all" class="btn btn-secondary">전체</button>
 					</div>
-
-
-
-					<div
-						class="d-flex justify-content-between align-items-center mb-20">
-						<p style="font-size: 300%">자재 입고 대기 목록</p>
-
-
-					</div>
-				</div>
-
 				<div class="pb-20">
-					<div id="DataTables_Table_2_wrapper"
-						class="dataTables_wrapper dt-bootstrap4 no-footer">
-<!-- 						<div class="dt-buttons btn-group flex-wrap">
-
-							<button class="btn btn-secondary buttons-copy buttons-html5"
-								tabindex="0" aria-controls="DataTables_Table_2" type="button">
-								<span>Copy</span>
-							</button>
-							<button class="btn btn-secondary buttons-csv buttons-html5"
-								tabindex="0" aria-controls="DataTables_Table_2" type="button">
-								<span>CSV</span>
-							</button>
-							<button class="btn btn-secondary buttons-pdf buttons-html5"
-								tabindex="0" aria-controls="DataTables_Table_2" type="button">
-								<span>PDF</span>
-							</button>
-							<button class="btn btn-secondary buttons-print" tabindex="0"
-								aria-controls="DataTables_Table_2" type="button">
-								<span>Print</span>
-							</button>
-						</div>
-						<div id="DataTables_Table_2_filter" class="dataTables_filter">
-							<label>Search:<input type="search"
-								class="form-control form-control-sm" placeholder="Search"
-								aria-controls="DataTables_Table_2"></label>
-						</div> -->
+					<div id="DataTables_Table_2_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 
 
-<div class="pd-20 card-box mb-20" style="width: 100%;">
-						<button type="button" class="btn btn-primary" id="success1">입고처리</button>
-						<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-						<table
-							class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
-							id="DataTables_Table_2" role="grid">
-							<thead>
-								<tr role="row">
-									<th class="table-plus datatable-nosort sorting_disabled"></th>
-									<th>품질검사 날짜</th>
-									<th>품질검사 코드</th>
-									<th>품질검사 상태</th>
-									<th>거래처코드</th>
-									<th>자재명</th>
-									<th>검사수</th>
-									<th>합격수</th>
-									<th>합격여부</th>
-									<th>입고가능수량</th>
-									<th>자재발주코드</th>
-									<th>자재코드</th>
-									<th>직원ID</th>
-									<th>비고</th>
-								</tr>
-							</thead>
-							<tbody>
-								<th:block th:each="done : ${incomingQualityDones}">
-									<tr>
-										<td><input type=checkbox name=incomingQualityCheck></td>
-										<td class="table-plus">[[${#dates.format(done.insDate, "yyyy-MM-dd")}]]</td>
-										<td><h5 class="font-16">[[${done.insCode}]]</h5></td>
-										<td>[[${done.insStatus}]]</td>
-										<td>[[${done.cpCode}]]</td>
-										
-										<td>[[${done.mtName}]]</td>
-										<td>[[${done.numberOfTests}]]</td>
-										<td>[[${done.numberOfPasses}]]</td>
-										<td>[[${done.totalPass}]]</td>
-										<td>[[${done.numberOfTotalPass}]]</td>
-										
-										<td>[[${done.mtlOdCode}]]</td>
-										<td>[[${done.mtCode}]]</td>
-										<td>[[${#authentication.principal.authorities[1]}]]</td>
-										<td><input type="text" name="comm"></td>
+
+						<div class="pd-20 card-box mb-20" style="width: 100%;">
+							<button type="button" class="btn btn-primary" id="success1">입고처리</button>
+							<button type="button" class="btn btn-primary" id="failuer1">반품처리</button>
+						<div class="d-flex justify-content-between align-items-center align-middle mb-20">
+							<table
+								class="table hover multiple-select-row data-table-export nowrap dataTable no-footer dtr-inline"
+								id="DataTables_Table_2" role="grid">
+								<thead>
+									<tr role="row">
+										<th class="table-plus datatable-nosort sorting_disabled"></th>
+										<th>품질검사 날짜</th>
+										<th>품질검사 코드</th>
+										<th>품질검사 상태</th>
+										<th>거래처코드</th>
+										<th>자재명</th>
+										<th>검사수</th>
+										<th>합격수</th>
+										<th>합격여부</th>
+										<th>입고가능수량</th>
+										<th>자재발주코드</th>
+										<th>자재코드</th>
+										<th>직원ID</th>
+										<th>비고</th>
 									</tr>
-								</th:block>
-							</tbody>
-						</table>
-						</div>
-						</div>
+								</thead>
+								<tbody>
+									<th:block th:each="done : ${incomingQualityDones}">
+										<tr>
+											<td><input type=checkbox name=incomingQualityCheck></td>
+											<td class="table-plus">[[${#dates.format(done.insDate, "yyyy-MM-dd")}]]</td>
+											<td><h5 class="font-16">[[${done.insCode}]]</h5></td>
+											<td>[[${done.insStatus}]]</td>
+											<td>[[${done.cpCode}]]</td>
+											
+											<td>[[${done.mtName}]]</td>
+											<td>[[${done.numberOfTests}]]</td>
+											<td>[[${done.numberOfPasses}]]</td>
+											<td>[[${done.totalPass}]]</td>
+											<td>[[${done.numberOfTotalPass}]]</td>
+											
+											<td>[[${done.mtlOdCode}]]</td>
+											<td>[[${done.mtCode}]]</td>
+											<td>[[${#authentication.principal.authorities[1]}]]</td>
+											<td><input type="text" name="comm"></td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+							</div>
+							</div>
 					</div>
 				</div>
 				<!-- Export Datatable End -->

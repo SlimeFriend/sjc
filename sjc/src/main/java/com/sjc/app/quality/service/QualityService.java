@@ -17,6 +17,8 @@ public interface QualityService {
 	// 자재입고품질검사 대기목록
 	// 발주목록전체
 	public List<InspectionVO> mtlOdList();
+	// 발주목록검색
+	public List<InspectionVO> moSearch(String cpCode, String cpName, String moStartDate, String moEndDate);
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> MtlOdDetail(String mtlOdCode);
 	// 품질검사상세페이지.

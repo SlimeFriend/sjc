@@ -21,6 +21,8 @@ public interface QualityMapper {
 //입고
 	// 발주목록전체
 	public List<InspectionVO> selectMtlOd();
+	// 발주목록검색
+	public List<InspectionVO> searchMO(String cpCode, String cpName, String moStartDate, String moEndDate);
 	
 	// 발주목록상세 테이블
 	public List<Map<String, Object>> selectMtlOdDetail(String mtlOdCode);
