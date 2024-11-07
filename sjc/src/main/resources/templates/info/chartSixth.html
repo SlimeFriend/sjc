@@ -37,26 +37,28 @@
 	}
 </style></head>
 <body>
+<!-- 
 <div class="main-container">
     <div class="pd-ltr-20">
+ -->
 		<h2 class="h2 mb-20">메인 페이지</h2>
         <div class="row">
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[생산] 투입/생산 현황</h2>
+		            	<h4 class="h5 mb-20">[생산] 투입/생산 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnLineChartPr"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[품질] 품질검사 현황</h2>
+		            	<h4 class="h5 mb-20">[품질] 품질검사 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnLineChartQa"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[자재] 안전재고 현황</h2>
+		            	<h4 class="h5 mb-20">[자재] 안전재고 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="stackBarChartMt"></div>
 	                    </div>
@@ -67,19 +69,19 @@
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[영업] 주문 현황</h2>
+		            	<h4 class="h5 mb-20">[영업] 주문 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartOrd"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[설비] 보유 현황</h2>
+		            	<h4 class="h5 mb-20">[설비] 보유 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartEq"></div>
 	                    </div>
 	                </div>
 		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">[설비] 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+		            	<h4 class="h5 mb-20">[설비] 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h4>
 	                    <div class="chart-wrapper">
 	                        <div id="pieChartEqChck"></div>
 	                    </div>
@@ -88,8 +90,10 @@
             </div>
         
         </div>
+<!-- 
     </div>
 </div>
+ -->        
 
 
 
