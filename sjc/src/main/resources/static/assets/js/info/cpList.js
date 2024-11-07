@@ -359,7 +359,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
     });    
     
-    
+	document.addEventListener('click', (e) => {
+	    gridCpModal.finishEditing();
+	    gridCpInsertModal.finishEditing();
+	});    
     
         
 });

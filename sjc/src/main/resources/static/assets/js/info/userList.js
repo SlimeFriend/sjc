@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		grid.readData(1, searchParams);
 	});
 
-    
+    /*
     grid.on('editingFinish', (event) => {
         const { rowKey, columnName, value } = event;
         grid.setValue(rowKey, columnName, value);
@@ -366,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	  	console.log('gridInsert editingFinish:', rowKey, columnName, value );
 	  	
     });
+    */
 	/*    
 	gridInsert.on('validateChange', (ev) => {
 	    console.log('검증 결과:', ev);
@@ -756,6 +757,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(error);
         });
     }
+
+
+	document.addEventListener('click', (e) => {
+	    grid.finishEditing();
+	    gridInsert.finishEditing();
+	});
 
 
 });

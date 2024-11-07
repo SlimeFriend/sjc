@@ -39,7 +39,8 @@
 	            AND UPPER(bom_code) LIKE UPPER('%' || #{bomCode} || '%')
 	        </if>
 	    </where>
-	    ORDER BY BOM_CODE DESC
+	    --ORDER BY BOM_CODE DESC
+	    ORDER BY b.REG_DATE DESC
 	</select>
 	
 	<select id="selectBomDetailAllList" resultType="BomVO" parameterType="BomVO">
