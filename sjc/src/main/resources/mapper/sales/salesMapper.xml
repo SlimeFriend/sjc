@@ -37,6 +37,7 @@
 	<select id="selectProduct" resultType="ProductVO">
 		SELECT prd_name,
 		       prd_code,
+		       bom_code,
 		       unit_price
 		FROM   prd
 	</select>
@@ -114,16 +115,16 @@
 	        AND c.cp_name LIKE '%' || #{companyName} || '%'
 	    </if>
 	    <if test="orderStartDate != null and orderStartDate != ''">
-	        AND o.ord_date <![CDATA[>=]]> TO_DATE(#{orderStartDate}, 'YYYY-MM-DD')
+	        AND TRUNC(o.ord_date) <![CDATA[>=]]> TRUNC(TO_DATE(#{orderStartDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="orderEndDate != null and orderEndDate != ''">
-	        AND o.ord_date <![CDATA[<=]]> TO_DATE(#{orderEndDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(o.ord_date) <![CDATA[<=]]> TRUNC(TO_DATE(#{orderEndDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="deliveryStartDate != null and deliveryStartDate != ''">
-	        AND o.dlv_req_date <![CDATA[>=]]> TO_DATE(#{deliveryStartDate}, 'YYYY-MM-DD')
+	        AND TRUNC(o.dlv_req_date) <![CDATA[>=]]> TRUNC(TO_DATE(#{deliveryStartDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="deliveryEndDate != null and deliveryEndDate != ''">
-	        AND o.dlv_req_date <![CDATA[<=]]> TO_DATE(#{deliveryEndDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(o.dlv_req_date) <![CDATA[<=]]> TRUNC(TO_DATE(#{deliveryEndDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="orderStatus != null and orderStatus != ''">
         	AND o.ord_status = #{orderStatus}
@@ -312,10 +313,10 @@
 	        AND p.prd_name LIKE '%' || #{prdName} || '%'
 	    </if>
 	    <if test="inStartDate != null and inStartDate != ''">
-	        AND pm.in_date <![CDATA[>=]]> TO_DATE(#{inStartDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(pm.in_date) <![CDATA[>=]]> TRUNC(TO_DATE(#{inStartDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="inEndDate != null and inEndDate != ''">
-	        AND pm.in_date <![CDATA[<=]]> TO_DATE(#{inEndDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(pm.in_date) <![CDATA[<=]]> TRUNC(TO_DATE(#{inEndDate}, 'YYYY-MM-DD'))
 	    </if>
 	    ORDER BY pm.in_date DESC
 	</select>
@@ -338,10 +339,10 @@
 	        AND poh.cp_name LIKE '%' || #{cpName} || '%'
 	    </if>
 	    <if test="outStartDate != null and outStartDate != ''">
-	        AND poh.out_date <![CDATA[>=]]> TO_DATE(#{outStartDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(poh.out_date) <![CDATA[>=]]> TRUNC(TO_DATE(#{outStartDate}, 'YYYY-MM-DD'))
 	    </if>
 	    <if test="outEndDate != null and outEndDate != ''">
-	        AND poh.out_date <![CDATA[<=]]> TO_DATE(#{outEndDate}, 'YYYY-MM-DD') + 1
+	        AND TRUNC(poh.out_date) <![CDATA[<=]]> TRUNC(TO_DATE(#{outEndDate}, 'YYYY-MM-DD'))
 	    </if>
 	    ORDER BY poh.OUT_DATE DESC, poh.ord_code
 	</select>
