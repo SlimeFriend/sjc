@@ -14,28 +14,29 @@
 	<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
 	<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
 <style>
-	.chart-container {
-	    width: 100%;
-	    max-width: 100%;
-	    overflow-x: auto;
-	}
-	.chart-wrapper {
-	    position: relative;
-	    width: 100%;
-	    min-height: 250px;
-	    margin: 0 auto;
-	}
-		
-	#pieChart {
-	    margin: 0 auto;
-	}
-	
-	@media (max-width: 768px) {
-	    .chart-wrapper {
-	        min-height: 250px;
-	    }
-	}
-</style></head>
+    .chart-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    .chart-wrapper {
+        position: relative;
+        width: 100%;
+        min-height: 225px;  /* 250px에서 225px로 감소 */
+        margin: 0 auto;
+    }
+        
+    #pieChart {
+        margin: 0 auto;
+    }
+    
+    @media (max-width: 768px) {
+        .chart-wrapper {
+            min-height: 	px;  /* 250px에서 225px로 감소 */
+        }
+    }
+</style>
+</head>
 <body>
 <!-- 
 <div class="main-container">
@@ -55,7 +56,7 @@
 	                    </div>
 	                </div>
 		            <div class="pd-30 card-box mb-20 w-50">                    
-		            	<h4 class="h5 mb-20">라인별 장비 보유 현황</h4>
+		            	<h4 class="h5 mb-20">설비 보유 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartEq"></div>
 	                    </div>
@@ -76,14 +77,14 @@
             </div>
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
-		            <div class="p3-20 card-box mb-20" style="width: 100%;"> 	
-		            	<div class="d-flex justify-content-between align-items-center align-middle mb-20">
+		            <div class="pd-30 card-box" style="width: 100%;"> 	
+		            	<div class="d-flex justify-content-between align-items-center align-middle">
 		            
 			                <div>
-			            		<h4 class="h5 mb-20">실시간 온도 모니터링</h4>
+			            		<h4 class="h5">설비 실시간 온도 모니터링</h4>
 			            		
 			                </div>
-							<div class="row mb-3">
+							<div class="row">
 							    <div class="col">
 							        <div class="btn-group" role="group">
 							            <button type="button" class="btn mr-2" style="opacity:0" id="">빈 버튼</button>
@@ -139,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
         ],
-        bodyHeight: 200,      
+        bodyHeight: 160,      
     });
     
     const gridTemp2 = new tui.Grid({
@@ -162,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
         ],
-        bodyHeight: 200,      
+        bodyHeight: 160,      
 
     });
 
@@ -190,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	//const lineChartData = null;
 	
-	const dataLength = 11; // 빈 배열 갯수
+	const dataLength = 16; // 빈 배열 갯수
 	const seriesNames = ['성형기', '혼합기'];
 	
 	// 배열 생성
@@ -205,28 +206,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	const lineChartData = createEmptyChartData(dataLength, seriesNames);
-	
-	function getChartSize() {
-	    const containerWidth = document.querySelector('.chart-wrapper').offsetWidth;
-	    let chartWidth = containerWidth;
-	    let chartHeight = containerWidth * 0.6; // 높이를 너비의 60%로 설정
-	
-	    // 최소,최대 크기 제한
-	    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
-	    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
-	
-	    //return { width: chartWidth, height: chartHeight };
-	    return { width: chartWidth, height: 300 };
-	}
-	
+
 	function initLineChartBottom() {
-	    const { width, height } = getChartSize();
-	    
 	    const options = {
 	        chart: { 
 	        	//title: '실시간 온도 모니터링',
-	            width: width * 4.5,
-	            height: height,
+	            width: 1500,
+	            height: 260,
 	        },
 	        series: {
 	            dataLabels: {
@@ -277,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	let lineChart = initLineChartBottom();
-	
+	/*
 	// 디바운스 함수
 	function debounce(func, wait) {
 	    let timeout;
@@ -298,8 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	    }
 	    chart = initChart();
 	}, 250);
-	
-	window.addEventListener('resize', handleResize);
+	*/
+	//window.addEventListener('resize', handleResize);
 	
 	
 	$('#schedulerStartBtn, #schedulerStopBtn').click(function() {
@@ -413,14 +399,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		    type: 'GET',
 		    success: function(response) {
 		    	
-
-		        
-			    const { width, height } = getChartSize();
-			    
 			    const options = {
 			        chart: { 
-			            width: width,
-			            height: height,
+			            width: 300,
+			            height: 210,
 			        },
 			        series: {
 			            dataLabels: {
@@ -490,12 +472,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		    		    categories: ['가동현황'],
 		    		    series: []
 		    		};
-			    const { width, height } = getChartSize();
-			    
 			    const options = {
 				        chart: { 
-				            width: width,
-				            height: height,
+				            width: 310,
+				            height: 230,
 				        },
 				        series: {
 				            dataLabels: {
