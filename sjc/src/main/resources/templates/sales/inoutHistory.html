@@ -17,7 +17,7 @@
 			<div style="flex-grow:1" id="inInput">
 				<h2 class="h5 mb-20" id="title">입고</h2>
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+					<label class="col-sm-12 col-md-1 col-form-label" for="prdName">제품명</label>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="prdName" type="text" placeholder="제품명" oninput="inSearch()">
 					</div>
@@ -30,7 +30,7 @@
 					</div>
 					<div
 						class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-						<span style="font-size: 1rem;">~</span>
+						<span style="font-size: 1rem;">-</span>
 					</div>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="inEndDate" type="date" oninput="inSearch()">
@@ -41,14 +41,14 @@
 			<div style="flex-grow:1; display: none;" id="outInput">
 				<h2 class="h5 mb-20">출고</h2>
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+					<label class="col-sm-12 col-md-1 col-form-label" for="outPrdName">제품명</label>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
 					</div>
 				</div>
 
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+					<label class="col-sm-12 col-md-1 col-form-label" for="cpName">업체명</label>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
 					</div>
@@ -60,7 +60,7 @@
 						<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
 					</div>
 					<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-						<span style="font-size: 1rem;">~</span>
+						<span style="font-size: 1rem;">-</span>
 					</div>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">

@@ -39,9 +39,9 @@
 					<hr style="border: 0; height: 2px; background: #ccc;">
 					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label" for="company" style="max-width: 100px;">업체명</label>
+							<label class="col-sm-12 col-md-2 col-form-label" for="cpInput" style="max-width: 100px;">업체명</label>
 							<div class="col-sm-12 col-md-10">
-								<input class="form-control" type="text" id="cpInput" name="cpName" style="width: 400px;" placeholder="업체를 선택해주세요.">
+								<input class="form-control" type="text" id="cpInput" name="cpName" style="width: 350px;" placeholder="업체를 선택해주세요.">
 								<input class="form-control" type="hidden" id="cpCode" name="cpCode">
 							</div>
 						</div>
@@ -49,14 +49,14 @@
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-2 col-form-label" for="dlvReqDate" style="max-width: 100px;">납기일자</label>
 							<div class="col-sm-12 col-md-10">
-								<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 400px;">
+								<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
 							</div>
 						</div>
 						<hr>
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-2 col-form-label" for="comm" style="max-width: 100px;">요청사항</label>
 							<div class="col-sm-12 col-md-10">
-								<textarea class="form-control" name="comm" style="width: 400px; height: 120px;"></textarea>
+								<textarea class="form-control" name="comm" style="width: 350px; height: 120px;"></textarea>
 							</div>
 						</div>
 					</form>
