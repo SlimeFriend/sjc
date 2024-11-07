@@ -24,6 +24,11 @@
 .tui-grid-layer-focus-border {
     display: none !important;
 }
+ 
+            #grid:hover {
+                cursor: pointer;
+            }
+       
 </style>
 </head>
 
@@ -86,27 +91,24 @@
     let currentMtlOdCode = null;
     let currentCpCode = null; // cpCode를 저장할 변수 추가
 
-    // 발주 요청 목록 그리드 설정
+ // 발주 요청 목록 그리드 설정
     const orderRequestGrid = new tui.Grid({
         el: document.getElementById('orderRequestGrid'),
         data: orderRequests,
         columns: [
-            { header: '업체 코드', name: 'cpCode', align: 'center' , hidden: true},
+            { header: '업체 코드', name: 'cpCode', align: 'center', hidden: true },
             { header: '업체 명', name: 'cpName', align: 'center' },
-            
-            { header: '발주 일자', name: 'mtlOdDate', align: 'center' ,                 sortingType: 'desc',
-                sortable: true     },
-            { header: '상태', name: 'mtlOdStatus', align: 'center' ,                 sortingType: 'desc',
-                    sortable: true     },
+            { header: '발주 일자', name: 'mtlOdDate', align: 'center', sortingType: 'desc', sortable: true },
+            { header: '상태', name: 'mtlOdStatus', align: 'center', sortingType: 'desc', sortable: true },
             { header: '총 금액', name: 'totalAmount', align: 'right' },
-            { header: '담당자', name: 'userName', align: 'center' },
+            { header: '담당자', name: 'userName', align: 'center' }, // 담당자 이름 그대로 표시
             {
-                header: '상태변경', 
-                name: 'statusChange', 
+                header: '상태변경',
+                name: 'statusChange',
                 align: 'center',
                 formatter: (item) => {
                     const mtlOdCode = item.row.mtlOdCode;
-                    const cpCode = item.row.cpCode; // cpCode 가져오기
+                    const cpCode = item.row.cpCode;
                     return `<button class="btn btn-secondary" onclick="openStatusModal('${mtlOdCode}', '${cpCode}')">변경하기</button>`;
                 }
             },
@@ -124,9 +126,10 @@
                     return `<button class="btn btn-danger btn-sm" onclick="deleteOrderRequest('${mtlOdCode}')">삭제</button>`;
                 }
             }
-        ], pageOptions: { useClient: true, perPage: 8 },
-
+        ],
+        pageOptions: { useClient: true, perPage: 8 },  
     });
+
     
     // Excel 다운로드 함수
     function downloadExcel() {
@@ -291,27 +294,38 @@
         .catch(error => console.error("Error fetching order details:", error));
 }
 
-    // 발주 요청 삭제 함수
+//발주 요청 삭제 함수
   function deleteOrderRequest(mtlOdCode) {
-    if (!confirm('정말로 삭제하시겠습니까?')) return;
+      // 상태 확인을 위한 요청
+      fetch(`/orderRequest/status?mtlOdCode=${encodeURIComponent(mtlOdCode)}`)
+          .then(response => response.json())
+          .then(data => {
+              if (data.status === '발주대기') { // 상태가 '발주대기'일 때만 삭제 가능
+                  if (!confirm('정말로 삭제하시겠습니까?')) return;
 
-    fetch('/orderRequest/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `mtlOdCode=${encodeURIComponent(mtlOdCode)}`
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('발주 요청이 삭제되었습니다.');
-            
-            // 페이지 새로고침
-            window.location.reload();
-        } else {
-            alert('삭제 중 오류 발생');
-        }
-    })
-    .catch(error => console.error('Error deleting order request:', error));
-}
+                  // 삭제 요청
+                  fetch('/orderRequest/delete', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                      body: `mtlOdCode=${encodeURIComponent(mtlOdCode)}`
+                  })
+                  .then(response => {
+                      if (response.ok) {
+                          alert('발주 요청이 삭제되었습니다.');
+                          // 페이지 새로고침
+                          window.location.reload();
+                      } else {
+                          alert('삭제 중 오류 발생');
+                      }
+                  })
+                  .catch(error => console.error('Error deleting order request:', error));
+              } else {
+                  alert('발주대기 상태에서만 삭제할 수 있습니다.');
+              }
+          })
+          .catch(error => console.error('Error checking order request status:', error));
+  }
+
 
 
     // 발주 상세 내역 그리드 설정
