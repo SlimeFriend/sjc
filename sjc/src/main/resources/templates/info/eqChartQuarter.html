@@ -215,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
 	    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
 	
-	    return { width: chartWidth, height: chartHeight };
+	    //return { width: chartWidth, height: chartHeight };
+	    return { width: chartWidth, height: 300 };
 	}
 	
 	function initLineChartBottom() {
@@ -432,7 +433,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			        },
 			        legend: {
-			            align: 'bottom'
+			            align: 'bottom',
+			        	showCheckbox: false,
 			        },
 			        exportMenu: {
 			            visible: false
@@ -485,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    type: 'GET',
 		    success: function(response) {
 		    	const pieChartData = {
-		    		    categories: ['가동율'],
+		    		    categories: ['가동현황'],
 		    		    series: []
 		    		};
 			    const { width, height } = getChartSize();
@@ -504,7 +506,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				            }
 				        },
 				        legend: {
-				            align: 'bottom'
+				            align: 'bottom',
+				        	showCheckbox: false,
 				        },
 				        theme: {
 				            chart: {

@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             perPage: 5
         }        
         */
-	    bodyHeight: 200,
+	    bodyHeight: 160,
 		pageOptions: {
 		    type: 'scroll', 
 		    perPage: 10 
@@ -325,19 +325,21 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollY: true,
         columns: [
             {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                rowSpan: true,
+
+            },
+            {
                 header: 'BOM상세코드',
                 name: 'bdetailCode', //bDetailCode
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
             },			
-            {
-                header: 'BOM코드',
-                name: 'bomCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
             /*
             {
                 header: '제품코드',
@@ -403,11 +405,11 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
         ],
-	    bodyHeight: 210,
+	    bodyHeight: 160,
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 4
         } 
         /*
 	    bodyHeight: 200,
@@ -556,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    ],
             pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 13
         }
     });
 
@@ -856,5 +858,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(error);
         });
     }
+    
+	document.addEventListener('click', (e) => {
+	    gridMtModal.finishEditing();
+	});    
 
 });		 

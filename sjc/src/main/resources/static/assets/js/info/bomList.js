@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             */
         ],
         rowHeaders: ['checkbox', 'rowNum'],
-	    bodyHeight: 200,
+	    bodyHeight: 160,
 		pageOptions: {
 		    type: 'scroll', 
 		    perPage: 10 
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'bomCode',
                 align: 'center',
                 sortingType: 'asc',
-                sortable: true                
+                sortable: true,
             },
             {
                 header: '제품코드',
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 4
         }        
     });
     
@@ -243,19 +243,21 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollY: false,
         columns: [
             {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                rowSpan: true,
+                                
+            },
+            {
                 header: 'BOM상세코드',
                 name: 'bdetailCode', //bDetailCode
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
             },			
-            {
-                header: 'BOM코드',
-                name: 'bomCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
             /*
             {
                 header: '제품코드',
@@ -324,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['checkbox', 'rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 5
+            perPage: 4
         }        
     });
     
@@ -334,19 +336,20 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollY: false,
         columns: [
             {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                rowSpan: true,
+            },
+            {
                 header: 'BOM상세코드',
                 name: 'bdetailCode', //bDetailCode
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true                
             },			
-            {
-                header: 'BOM코드',
-                name: 'bomCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
             {
                 header: '자재코드',
                 name: 'mtCode',
@@ -620,5 +623,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
     });
 
+
+	document.addEventListener('click', (e) => {
+	    grid.finishEditing();
+	    gridBom.finishEditing();
+	});
 
 });		 
