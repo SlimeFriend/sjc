@@ -7,6 +7,8 @@ import java.util.Map;
 public interface InfoUserService {
 	// 사용자 조회
 	public List<InfoUserVO> userList(InfoUserVO userVO);
+	// 사용자 변경 이력 조회
+	public List<InfoUserVO> userHistoryList(InfoUserVO userVO);
 	// 사용자 수정
 	public List<InfoUserVO> modifyUsers(List<InfoUserVO> userVOs);
 	// 사용자 등록

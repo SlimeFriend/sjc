@@ -27,6 +27,11 @@ import lombok.RequiredArgsConstructor;
 		public List<InfoUserVO> userList(InfoUserVO userVO){
 			return infoUserService.userList(userVO);
 		}
+		// 사용자 변경 조회
+		@GetMapping("userHistory")
+		public List<InfoUserVO> userHistoryList(InfoUserVO userVO){
+			return infoUserService.userHistoryList(userVO);
+		}
 		// 사용자 조회 그리드 API
 	    @GetMapping("usersApi")
 	    public Map<String, Object> infoUserList(InfoUserVO infoUserVO) {
