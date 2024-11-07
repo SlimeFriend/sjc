@@ -12,6 +12,7 @@ public class MtInVO {
     private Date inputDate;       // 입고일
 	
     private Integer inquantity;    // 입고수량
+    private Integer livecount;     // 변동수량
     private Date ed;               // 유통기한
     private String inCode;         // 입고코드
     private Integer userId;        // 유저아이디

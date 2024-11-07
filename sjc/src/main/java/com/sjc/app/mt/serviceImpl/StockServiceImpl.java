@@ -87,7 +87,7 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public void addQuantityToLotAndUpdateStock(String mtCode, String lotNo, int quantity) {
-        stockMapper.updateLotQuantity(mtCode, lotNo, quantity);  // 로트별 수량 업데이트
+        stockMapper.addQuantityToLotAndUpdateStock(mtCode, lotNo, quantity);  // 로트별 수량 업데이트
        
     }
 

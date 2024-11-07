@@ -22,9 +22,9 @@
 </head>
 
 <body>
-	<div class="main-container">
-		<div class="container">
-			<h1>발주 요청 등록</h1>
+	<h2 class="h2 mb-20">발주 요청 등록</h2>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">발주 요청 등록</h4>
 
 			<!-- 업체 선택 -->
 			<div class="form-group">
@@ -52,24 +52,29 @@
 			<button type="button" class="btn btn-primary mt-3"
 				onclick="submitOrderRequest()">발주 요청 제출</button>
 		</div>
-	</div>
+
 
 	<script>
-        const itemGrid = new tui.Grid({
-            el: document.getElementById('itemGrid'),
-            data: [],
-            columns: [
-                { header: '품목명', name: 'mtName', align: 'center' },
-                { header: '규격', name: 'specification', align: 'center' },
-                { header: '단가', name: 'unitPrice', align: 'right' },
-                {
-                    header: '발주 수량 입력',
-                    name: 'quantity',
-                    editor: 'text',
-                    align: 'right'
-                }
-            ]
-        });
+	const itemGrid = new tui.Grid({
+	    el: document.getElementById('itemGrid'),
+	    data: [],
+	    columns: [
+	        { header: '품목명', name: 'mtName', align: 'center' },
+	        { header: '규격', name: 'specification', align: 'center' },
+	        { header: '단가', name: 'unitPrice', align: 'right' },
+	        {
+	            header: '발주 수량 입력',
+	            name: 'quantity',
+	            editor: 'text',
+	            align: 'right'
+	        }
+	    ]
+	});
+	
+	document.addEventListener('click', (e) => {
+		itemGrid.finishEditing();
+	});
+
         
 
         // cpCode가 전달되었을 경우 자동으로 아이템 로딩
@@ -136,6 +141,8 @@
             })
             .catch(error => console.error("Error submitting order request:", error));
         }
+        
+  
 
 
     </script>
