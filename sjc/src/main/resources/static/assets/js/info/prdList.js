@@ -3,6 +3,10 @@
  */
 document.addEventListener('DOMContentLoaded', function() {
     
+    
+   
+    
+    
     tui.Grid.applyTheme('striped');
     
     const grid = new tui.Grid({
@@ -18,11 +22,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
             {
-                header: '자재이름',
+                header: '자재명',
                 name: 'mtName',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                 
             },
             {
                 header: '자재구분',
@@ -85,9 +93,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
             },
             {
-                header: '자재이름',
+                header: '자재명',
                 name: 'mtName',
                 align: 'center',
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                
             },
             {
                 header: '자재구분',
@@ -154,7 +166,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'prdName',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                
+                sortable: true,
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                
             },
             {
                 header: '등록일',
@@ -175,7 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'description',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                
+                sortable: true,
+                ellipsis: true,
             },            
             /*            
             {
@@ -448,11 +465,15 @@ document.addEventListener('DOMContentLoaded', function() {
              
             },
             {
-                header: '자재이름',
+                header: '자재명',
                 name: 'mtName',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}
             },
             {
                 header: '자재구분',
@@ -498,6 +519,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+
+
+
+
     const gridPrd = new tui.Grid({
         el: document.getElementById('gridPrd'),
         scrollX: false,
@@ -515,7 +540,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'prdName',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}
             },
             {
                 header: 'BOM코드',
@@ -536,7 +565,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'description',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}
             },
             {
                 header: '비고',

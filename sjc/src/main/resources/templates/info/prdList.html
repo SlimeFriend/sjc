@@ -11,7 +11,19 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-   
+<style>
+    .custom-tooltip {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        z-index: 1000;
+        display: none;
+        font-size: 12px;
+        pointer-events: none;
+    }
+</style>   
 </head>
 <body>
 	<!-- 
@@ -226,5 +238,5 @@
 			</div>
 		</div>
 	</div>
-
+	<script th:src="@{/assets/js/info/tooltip.js}"></script>
 	<script th:src="@{/assets/js/info/prdList.js}"></script>
