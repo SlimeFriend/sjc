@@ -55,7 +55,8 @@
 				<!-- Modal body -->
 				<div class="modal-body">
 					    <h5 class="h5 mb-20">주문목록</h5>
-						<div id="gridOrderDetail"></div>
+						<div class="mb-20" id="gridOrderDetail"></div>
+						<h5 class="h5 mb-20" id="prdStc" style="display: none">완제품 재고</h5>
 						<div id="selectProductLot"></div>
 				</div>
 				<!-- Modal footer -->
@@ -82,7 +83,6 @@
 			let outValue = 0; // 출고량 값
 			let lotValue = 0; // LOT 값
 			let totalOutQuantity = 0;
-			
 			
 			let outLotData = [];
 			let outPrdData = [];
@@ -152,7 +152,7 @@
 				el : document.getElementById('gridOrderDetail'),
 				data : gridModalData,
 				scrollX : false,
-				scrollY : false,
+				scrollY : true,
 				columns : [ {
 					header : '주문코드',
 					name : 'ORDCODE',
@@ -179,10 +179,11 @@
 					align : 'center',
 				},],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 5
-				}
+				bodyHeight: 200,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10 
+				}, 
 			});
 			
 			gridModal.on('click', (ev) => {
@@ -190,7 +191,6 @@
 			    const rowKey = ev.rowKey;
 			    const prdCodeValue = gridModal.getValue(rowKey, 'PRDCODE');
 			    totalOutQuantity = 0;
-			    console.log(prdCodeValue);
 			    
 			    if(prdCodeValue) {
 			    	$.ajax({
@@ -200,6 +200,7 @@
 			    		data : JSON.stringify({prdCode : prdCodeValue}),
 			    		success: function(response) {
 			    			selectProductLot.style.display = 'block';
+			    			document.getElementById("prdStc").style.display = 'block';
 			    			productLotGrid.resetData(response); 
 			    			productLotGrid.refreshLayout();
 			    		},
@@ -314,7 +315,7 @@
 			    cpName = grid.getValue(rowKey, 'cpName');
 			    selectProductLot.style.display = 'none';
 			    productLotGrid.refreshLayout();
-
+				
 			    if (ordCodeValue) {
 			        // 첫 번째 AJAX 요청: 주문 세부 정보 가져오기
 			        $.ajax({
@@ -327,6 +328,7 @@
 			                gridModal.resetData(response); 
 			                console.log(gridModal.getData()); // 현재 그리드의 데이터 출력
 			                document.getElementById('gridOrderDetail').style.opacity = 1;
+			                document.getElementById("prdStc").style.display = 'none';
 			                $('#myModal').modal('show');
 			                gridModal.refreshLayout(); 
 
