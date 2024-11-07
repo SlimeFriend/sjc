@@ -105,6 +105,9 @@
 <script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			
+			tui.Grid.applyTheme('striped');
+			
+			
 			document.getElementById('cpCode').addEventListener('input', () => {
 
 			    const cpCode = document.getElementById('cpCode').value;
@@ -275,6 +278,7 @@
 					align : 'center',
 					resizable: true,
 					sortable: true,
+					rowSpan: true,
 				}, {
 					header : '발주상세코드',
 					name : 'mtlOdDetailCode',
@@ -514,7 +518,9 @@
 			});
 			
 			
-	
+			document.addEventListener('click', (e) => {
+				gridInsDetailModal.finishEditing();
+			});
 
 
 			
