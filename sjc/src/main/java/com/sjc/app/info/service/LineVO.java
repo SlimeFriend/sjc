@@ -6,5 +6,6 @@ import lombok.Data;
 public class LineVO {
 	private String lineCode;//라인코드
 	private String prdCode;	//제품코드
+	private String prdName;	//제품코드
 	private String use;		//사용여부
 }

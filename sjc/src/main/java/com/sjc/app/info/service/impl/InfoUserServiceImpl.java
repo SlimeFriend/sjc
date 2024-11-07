@@ -41,6 +41,11 @@ public class InfoUserServiceImpl implements InfoUserService {
 	public List<InfoUserVO> userList(InfoUserVO userVO) {
 		return userMapper.selectUserAllList(userVO);
 	}
+	// 사용자 변경 이력 조회
+	@Override
+	public List<InfoUserVO> userHistoryList(InfoUserVO userVO) {
+		return userMapper.selectUserHistory(userVO);
+	}
 	
 	// 사용자 수정
     @Override

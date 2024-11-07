@@ -30,4 +30,6 @@ public class MtVO {
     private String cpCode;             // 업체 코드
 
     private String status;             // 상태 필드 추가
+    private Integer userId;
+    private String userName;
 }

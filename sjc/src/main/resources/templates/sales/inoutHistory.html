@@ -11,78 +11,75 @@
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<h2 class="h2 mb-20">입/출고 내역</h2>
-			<div class="pd-30 card-box mb-20">
-				<div class="d-flex justify-content-between align-items-start">
-					<div style="flex-grow:1" id="inInput">
-						<h2 class="h5 mb-20" id="title">입고</h2>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="prdName" type="text" placeholder="제품명" oninput="inSearch()">
-							</div>
-						</div>
-	
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">입고일자</label>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="inStartDate" type="date" oninput="inSearch()">
-							</div>
-							<div
-								class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-								<span style="font-size: 1rem;">~</span>
-							</div>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="inEndDate" type="date" oninput="inSearch()">
-							</div>
-						</div>
+	<h2 class="h2 mb-20">입/출고 내역</h2>
+	<div class="pd-30 card-box mb-20">
+		<div class="d-flex justify-content-between align-items-start">
+			<div style="flex-grow:1" id="inInput">
+				<h2 class="h5 mb-20" id="title">입고</h2>
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="prdName" type="text" placeholder="제품명" oninput="inSearch()">
 					</div>
-					
-					<div style="flex-grow:1; display: none;" id="outInput">
-						<h2 class="h5 mb-20">출고</h2>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
-							</div>
-						</div>
-	
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
-							</div>
-						</div>
-	
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">출고일자</label>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
-							</div>
-							<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-								<span style="font-size: 1rem;">~</span>
-							</div>
-							<div class="col-sm-12 col-md-3">
-								<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">
-							</div>
-						</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">입고일자</label>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="inStartDate" type="date" oninput="inSearch()">
 					</div>
-					
-					<div class="mb-20 d-flex flex-column align-items-end">
-						<div>
-							<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
-							<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
-						</div>
+					<div
+						class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+						<span style="font-size: 1rem;">~</span>
+					</div>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="inEndDate" type="date" oninput="inSearch()">
 					</div>
 				</div>
 			</div>
 			
-			<div id="inGrid"></div>
-			<div id="outGrid" style="display : none"></div>
+			<div style="flex-grow:1; display: none;" id="outInput">
+				<h2 class="h5 mb-20">출고</h2>
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">제품명</label>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-sm-12 col-md-1 col-form-label">출고일자</label>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
+					</div>
+					<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+						<span style="font-size: 1rem;">~</span>
+					</div>
+					<div class="col-sm-12 col-md-3">
+						<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">
+					</div>
+				</div>
+			</div>
+			
+			<div class="mb-20 d-flex flex-column align-items-end">
+				<div>
+					<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
+					<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
+				</div>
+			</div>
 		</div>
 	</div>
+	
+	<div id="inGrid"></div>
+	<div id="outGrid" style="display : none"></div>
+
 	
 	<script th:inline="javascript">
 		let iGrid;
@@ -142,6 +139,7 @@
 					header : '주문코드',
 					name : 'ordCode',
 					align : 'center',
+					rowSpan: true,
 				}, {
 					header : 'LOT',
 					name : 'lot',

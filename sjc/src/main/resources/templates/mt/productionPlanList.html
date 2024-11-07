@@ -8,8 +8,20 @@
 <head>
 <meta charset="UTF-8">
 <title>생산 계획 목록</title>
-<!-- 페이징필요한사람 -->
-	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<script type="text/javascript"
+	src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
 
 <style>
 .low-stock {
@@ -17,24 +29,34 @@
 	font-weight: bold;
 }
 
-/* tui-grid 선택 테두리 제거 */
-.tui-grid-layer-focus-border {
-    display: none !important;
+
+
+#grid:hover {
+	cursor: pointer;
 }
 </style>
 </head>
 <body>
-	<div class="main-container">
-		<div class="container">
-			<h1>생산 계획 목록</h1>
 
-			<!-- 생산 계획 목록 Grid -->
-			<div id="productionPlanGrid" style="width: 100%; height: 300px;"></div>
+	<h2 class="h2 mb-20">생산 계획 목록</h2>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">생산 계획 목록</h4>
+		<!-- 기능 버튼들 -->
+        <div class="text-right mb-3">
 
-			<h2 class="mt-4">자재 목록</h2>
-			<!-- 자재 목록 Grid -->
-			<div id="materialsGrid" style="width: 100%; height: 300px;"></div>
-		</div>
+            <button class="btn btn-success" onclick="downloadExcel()">Excel
+                다운로드</button>
+            <button class="btn btn-warning" onclick="downloadPDF()">PDF
+                다운로드</button>
+            <button class="btn btn-secondary" onclick="printGrid()">프린트</button>
+        </div>
+		<!-- 생산 계획 목록 Grid -->
+		<div id="productionPlanGrid" style="width: 100%; height: 300px;"></div>
+	</div>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">자재 목록</h4>
+		<!-- 자재 목록 Grid -->
+		<div id="materialsGrid" style="width: 100%; height: 300px;"></div>
 	</div>
 
 	<script th:inline="javascript">
@@ -155,6 +177,76 @@
                     });
             }
         });
+     // Excel 다운로드 함수
+        function downloadExcel() {
+            const data = productionPlanGrid.getData();
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductionPlans");
+            XLSX.writeFile(workbook, "ProductionPlans.xlsx");
+        }
+
+        // PDF 다운로드 함수
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const data = productionPlanGrid.getData();
+
+            const columns = [
+                { header: '생산계획코드', dataKey: 'planCode' },
+                { header: '제품명', dataKey: 'productName' },
+                { header: '수량', dataKey: 'quantity' },
+                { header: '시작일자', dataKey: 'startDate' },
+                { header: '종료일자', dataKey: 'endDate' }
+            ];
+
+            doc.autoTable({
+                columns: columns,
+                body: data,
+                startY: 10,
+                theme: 'grid'
+            });
+
+            doc.save("ProductionPlans.pdf");
+        }
+
+        // 프린트 함수
+        function printGrid() {
+            const data = productionPlanGrid.getData();
+            let printContent = `
+                <h1>생산 계획 목록</h1>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>생산계획코드</th>
+                            <th>제품명</th>
+                            <th>수량</th>
+                            <th>시작일자</th>
+                            <th>종료일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(row => `
+                            <tr>
+                                <td>${row.planCode}</td>
+                                <td>${row.productName}</td>
+                                <td>${row.quantity}</td>
+                                <td>${row.startDate}</td>
+                                <td>${row.endDate}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>생산 계획 목록</title></head><body>');
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+
     </script>
 </body>
 </html>

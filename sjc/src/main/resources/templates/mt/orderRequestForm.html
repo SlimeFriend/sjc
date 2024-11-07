@@ -1,66 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-    <meta charset="UTF-8">
-    <title>발주 요청 등록</title>
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
-    <style>
-    /* tui-grid 선택 테두리 제거 */
-    .tui-grid-layer-focus-border {
-        display: none !important;
-    }
-    </style>
+<meta charset="UTF-8">
+<title>발주 요청 등록</title>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<style>
+/* tui-grid 선택 테두리 제거 */
+.tui-grid-layer-focus-border {
+	display: none !important;
+}
+
+#grid:hover {
+	cursor: pointer;
+}
+</style>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>발주 요청 등록</h1>
+	<h2 class="h2 mb-20">발주 요청 등록</h2>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">발주 요청 등록</h4>
 
-            <!-- 업체 선택 -->
-            <div class="form-group">
-                <label for="cpCode">업체 선택</label>
-                <select name="cpCode" class="form-control" onchange="loadItemsForCpCode(this.value)">
-                    <option value="">업체를 선택하세요</option>
-                    <option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
-                            th:value="${cp.cpCode}"
-                            th:text="${cp.cpCode + ' / ' + cp.cpName}"
-                            th:selected="${selectedCpCode == cp.cpCode}"></option>
-                </select>
-            </div>
+			<!-- 업체 선택 -->
+			<div class="form-group">
+				<label for="cpCode">업체 선택</label> <select name="cpCode"
+					class="form-control" onchange="loadItemsForCpCode(this.value)">
+					<option value="">업체를 선택하세요</option>
+					<option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
+						th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}"
+						th:selected="${selectedCpCode == cp.cpCode}"></option>
+				</select>
+			</div>
 
-            <!-- 담당자 ID 입력 -->
-            <div class="form-group">
-                <label for="userId">담당자 ID</label>
-                <input type="text" id="userId" class="form-control" placeholder="담당자 ID를 입력하세요">
-            </div>
+			<th:block sec:authorize="isAuthenticated()">
+				<label>담당자</label>
+				<input class="form-control" type="text" id="userName"
+					th:value="${#authentication.principal.authorities[2]}" readonly>
+				<input type="hidden"
+					th:value="${#authentication.principal.authorities[1]}"
+					name="userId" id="userId">
+			</th:block>
 
-            <!-- 발주 품목 선택 그리드 -->
-            <div id="itemGrid" style="width: 100%; height: 300px;"></div>
-            <button type="button" class="btn btn-primary mt-3" onclick="submitOrderRequest()">발주 요청 제출</button>
-        </div>
-    </div>
 
-    <script>
-        const itemGrid = new tui.Grid({
-            el: document.getElementById('itemGrid'),
-            data: [],
-            columns: [
-                { header: '품목명', name: 'mtName', align: 'center' },
-                { header: '규격', name: 'specification', align: 'center' },
-                { header: '단가', name: 'unitPrice', align: 'right' },
-                {
-                    header: '발주 수량 입력',
-                    name: 'quantity',
-                    editor: 'text',
-                    align: 'right'
-                }
-            ]
-        });
+			<!-- 발주 품목 선택 그리드 -->
+			<div id="itemGrid" style="width: 100%; height: 300px;"></div>
+			<button type="button" class="btn btn-primary mt-3"
+				onclick="submitOrderRequest()">발주 요청 제출</button>
+		</div>
+
+
+	<script>
+	const itemGrid = new tui.Grid({
+	    el: document.getElementById('itemGrid'),
+	    data: [],
+	    columns: [
+	        { header: '품목명', name: 'mtName', align: 'center' },
+	        { header: '규격', name: 'specification', align: 'center' },
+	        { header: '단가', name: 'unitPrice', align: 'right' },
+	        {
+	            header: '발주 수량 입력',
+	            name: 'quantity',
+	            editor: 'text',
+	            align: 'right'
+	        }
+	    ]
+	});
+	
+	document.addEventListener('click', (e) => {
+		itemGrid.finishEditing();
+	});
+
+        
 
         // cpCode가 전달되었을 경우 자동으로 아이템 로딩
         document.addEventListener("DOMContentLoaded", function() {
@@ -90,11 +105,25 @@
 
         function submitOrderRequest() {
             const cpCode = document.querySelector("select[name='cpCode']").value;
-            const userId = parseInt(document.getElementById("userId").value);
+            const userId = document.getElementById("userId").value;  // 문자열 그대로 가져옴
             const items = itemGrid.getData().filter(item => item.quantity > 0);
 
-            if (!cpCode || !userId || items.length === 0) {
-                alert("모든 필드를 입력하세요.");
+            console.log("cpCode:", cpCode);
+            console.log("userId:", userId);
+            console.log("items:", items);
+
+            if (!cpCode) {
+                alert("업체를 선택하세요.");
+                return;
+            }
+            
+            if (!userId) {
+                alert("담당자 ID가 올바르지 않습니다.");
+                return;
+            }
+
+            if (items.length === 0) {
+                alert("발주 수량을 입력하세요.");
                 return;
             }
 
@@ -109,8 +138,13 @@
                 } else {
                     alert("발주 요청 등록에 실패했습니다.");
                 }
-            });
+            })
+            .catch(error => console.error("Error submitting order request:", error));
         }
+        
+  
+
+
     </script>
 </body>
 </html>

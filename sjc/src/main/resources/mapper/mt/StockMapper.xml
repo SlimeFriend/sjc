@@ -30,7 +30,7 @@
         WHERE MT_CODE = #{mtCode}
     </select>
 
-    <!-- 입고 품질검사 완료 상태 자재 목록 조회 - 상태가 '입고품질검사완료'인 자재 조회 -->
+    <!-- 입고 품질검사 완료 상태 자재 목록 조회 - 상태가 '입완료'인 자재 조회 -->
     <select id="getCompletedInspectionMaterials" resultType="com.sjc.app.mt.service.MtVO">
         SELECT
             MT.MT_CODE AS mtCode,
@@ -40,21 +40,34 @@
         FROM MT_IN
         JOIN MT ON MT_IN.MT_CODE = MT.MT_CODE
         JOIN MTL_OD ON MT_IN.MTL_OD_CODE = MTL_OD.MTL_OD_CODE
-        WHERE MTL_OD.MTL_OD_STATUS = '입고품질검사완료'
+        WHERE MTL_OD.MTL_OD_STATUS = '입고완료'
     </select>
 
     <!-- 로트번호별 자재 수량 조회 - 특정 자재 코드에 대해 로트번호 기준 자재 수량 조회 -->
     <select id="getMaterialsByLotNo" parameterType="String" resultType="com.sjc.app.mt.service.MtInVO">
-        SELECT
-            MT_IN.LOT_NO AS lotNo,
-            MT_IN.INQUANTITY AS inquantity,
-            MT_IN.INPUT_DATE AS inputDate,
-            MT_IN.ED AS ed,
-            MT.MT_NAME AS mtName
-        FROM MT_IN
-        JOIN MT ON MT_IN.MT_CODE = MT.MT_CODE
-        WHERE MT_IN.MT_CODE = #{mtCode}
-        ORDER BY ed
+WITH v_mt_out AS (
+    SELECT
+        lot_no,
+        SUM(mt_out.mt_out_count) AS mt_out_count
+    FROM
+        mt_out
+    GROUP BY
+        lot_no
+)
+SELECT
+    mt_in.lot_no                    AS lotno,
+    mt_in.inquantity                AS inquantity,
+    mt_in.inquantity - mt_out_count AS livecount,
+    mt_in.input_date                AS inputdate,
+    mt_in.ed                        AS ed,
+    mt.mt_name                      AS mtname
+FROM
+         mt_in
+    JOIN mt ON mt_in.mt_code = mt.mt_code
+    LEFT OUTER JOIN v_mt_out ON mt_in.lot_no = v_mt_out.lot_no 
+       WHERE MT_IN.MT_CODE = #{mtCode}
+    order by ed
+                       
     </select>
 
     <!-- 로트번호별 자재 수량 합계 조회 - 특정 자재의 총 수량 계산 -->
@@ -76,12 +89,6 @@
         WHERE MT_CODE = #{mtCode}
     </select>
 
-    <!-- 재고 추가 및 차감 - 특정 자재 코드의 현재 재고를 지정 수량만큼 변경 
-    <update id="updateCurrentStock" parameterType="map">
-        UPDATE MT
-        SET CURRENT_STC = CURRENT_STC + #{quantity}
-        WHERE MT_CODE = #{mtCode}
-    </update>-->
 
     <!-- 자재 코드에 따른 로트번호 목록 조회 - 특정 자재 코드로 로트번호 목록 조회 -->
     <select id="findLotNumbersByMtCode" parameterType="String" resultType="String">
@@ -90,13 +97,7 @@
         WHERE MT_CODE = #{mtCode}
     </select>
 
-    <!-- 로트 번호별 자재 수량 업데이트 - 특정 자재와 로트 번호로 수량 업데이트 -->
-    <update id="updateLotQuantity" parameterType="map">
-        UPDATE MT_IN
-        SET INQUANTITY = INQUANTITY + #{quantity}
-        WHERE LOT_NO = #{lotNo}
-        AND MT_CODE = #{mtCode}
-    </update>
+  
 
     <!-- 로트 번호에 수량 추가 후 현재 재고 업데이트 - 특정 로트에 수량 추가 후 재고를 업데이트 -->
     <update id="addQuantityToLotAndUpdateStock" parameterType="map">
@@ -104,7 +105,7 @@
         UPDATE MT_IN
         SET INQUANTITY = INQUANTITY + #{quantity}
         WHERE LOT_NO = #{lotNo}
-        AND MT_CODE = #{mtCode};
+        AND MT_CODE = #{mtCode}
     </update>
 
 </mapper>

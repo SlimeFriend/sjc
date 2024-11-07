@@ -30,7 +30,41 @@ tbody>tr {
 					<p style="font-size: 200%">설비 목록</p>
 					<button type="button" class="btn btn-primary" id="modifyBtn">설비 수정</button>
 				</div>
+
 				<div id="grid"></div>
+
+
+				<table class="table nowrap table-hover table-striped" style="text-align: center; padding-left: 0px;">
+					<thead>
+						<tr>
+							<th>선택</th>
+							<th class="table-plus datatable-nosort">No.</th>
+							<th>설비코드</th>
+							<th>설비구분</th>
+							<th>설비명</th>
+							<th>최저온도</th>
+							<th>최고온도</th>
+							<th>사용여부</th>
+							<th>라인코드</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="wait, sts : ${equips}">
+							<tr>
+								<td><input type="checkbox" class="eqCheckbox"></td>
+								<td>[[${sts.count}]]</td>
+								<td>[[${wait.eqCode}]]</td>
+								<td>[[${wait.eqType}]]</td>
+								<td>[[${wait.eqName}]]</td>
+								<td>[[${wait.eqMin}]]</td>
+								<td>[[${wait.eqMax}]]</td>
+								<td>[[${wait.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
+								<td>[[${wait.lineCode}]]</td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+
 			</div>
 
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"

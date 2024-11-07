@@ -14,14 +14,16 @@
    
 </head>
 <body>
+	<!-- 
 	<div class="main-container">
 		<div class="pd-ltr-20">
+	 -->
 		<h2 class="h2 mb-20">제품 관리</h2>
 	        <div style="display: flex; width: 100%; gap: 20px;">
 	        
-	            <div class="pd-20 card-box mb-20" style="width: 50%;">
+	            <div class="pd-30 card-box mb-20" style="width: 50%;">
 					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				        <h2 class="h5 mb-0">제품목록</h2>
+				        <h4 class="h5 mb-0">제품목록</h4>
 						<div>
 							<!-- 
 							<button type="button" class="btn btn-success" id="openBomBtn">BOM 생성</button>
@@ -37,9 +39,9 @@
 	            </div>
 				<div style="display: flex; flex-direction: column; width: 50%;">
 				    <!-- 위쪽 card-box (BOM목록) -->
-				    <div class="pd-20 card-box mb-20">
+				    <div class="pd-30 card-box mb-20">
 				        <div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				            <h2 class="h5 mb-0">BOM목록</h2>
+				            <h4 class="h5 mb-0">BOM목록</h4>
 				            <div>
 				                <button type="button" class="btn btn-success" id="bomBtn">BOM 지정</button>
 				            </div>
@@ -48,9 +50,9 @@
 				    </div>
 				
 				    <!-- 아래쪽 card-box (BOM 상세목록) -->
-				    <div class="pd-20 card-box mb-20">
+				    <div class="pd-30 card-box mb-20">
 				        <div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				            <h2 class="h5 mb-0">BOM 상세목록</h2>
+				            <h4 class="h5 mb-0">BOM 상세목록</h4>
 				            <div>
 				                <button type="button" class="btn btn-success" id="" style="opacity: 0;">빈 버튼</button>
 				            </div>
@@ -88,8 +90,8 @@
 	        </div>
 	        
 	        <div style="display: flex; width: 100%; gap: 20px; display: none;">
-	            <div class="pd-20 card-box mb-20" style="width: 50%;">
-		        	<h2 class="h5 mb-20">BOM 목록</h2>
+	            <div class="pd-30 card-box mb-20" style="width: 50%;">
+		        	<h4 class="h5 mb-20">BOM 목록</h4>
 	                <div id="grid"></div>
 	            </div>
 	            <!-- 
@@ -99,9 +101,10 @@
 	            </div>
 	             -->
 	        </div>
-	        
+	<!-- 
 		</div>
 	</div>
+	 -->	        
 
 	<div class="modal" id="bomDetailModal">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
@@ -129,7 +132,7 @@
 	<div class="modal" id="mtModal">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
-	            <div class="pd-20 card-box mb-20" style="width: 100%;">
+	            <div class="pd-30 card-box mb-20" style="width: 100%;">
 					<!-- Modal Header -->
 					<div class="modal-header">
 						<h4 class="modal-title">제품/BOM 등록</h4>
@@ -220,9 +223,6 @@
 						<button type="button" class="btn btn-danger" data-dismiss="modal" id="mtModalCancelBtn">취소</button>
 					</div>
 				</div>
-				
-				
-				
 			</div>
 		</div>
 	</div>

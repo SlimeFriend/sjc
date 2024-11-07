@@ -1,5 +1,9 @@
 package com.sjc.app.info.service;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +19,8 @@ public class InfoUserVO {
 	
 	private int perPage;
 	private int page;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate createdDate;
+	
 }

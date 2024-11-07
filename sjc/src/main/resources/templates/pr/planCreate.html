@@ -201,11 +201,11 @@
 					align : 'center',
 				}, {
 					header : '납기일자',
-					name : 'ordDate',
+					name : 'dlvReqDate',
 					align : 'center',
 				}, {
 					header : '요청사항',
-					name : 'ordDate',
+					name : 'comm',
 					align : 'center',
 				}, 
 				
@@ -221,7 +221,7 @@
 			
 			
 			modalGrid.on('click', (ev) => {
-			    const { value } = ev; // 입력된 출고량
+			    const { value } = ev; 
 			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
 			    
 			    const ordCode = modalGrid.getValue(rowKey, 'ordCode');
@@ -331,7 +331,13 @@
 		        alert('종료 일자를 설정해주세요');
 		        return;
 		    }
-
+			
+		 	// 시작일자가 종료일자보다 나중인 경우
+		    if (formObj.startDate > formObj.endDate) {
+		        alert('시작 일자는 종료 일자보다 이전이어야 합니다.');
+		        return;
+		    }
+		    
 		    // 병합된 데이터를 서버로 전송 (AJAX 요청)
 		    $.ajax({
 		        url: '/planCreate', // 서버에서 처리할 URL 경로

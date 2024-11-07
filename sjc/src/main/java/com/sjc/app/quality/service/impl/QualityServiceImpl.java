@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.mt.service.MtlOdVO;
-import com.sjc.app.pr.service.PDetailVO;
 import com.sjc.app.quality.mapper.QualityMapper;
 import com.sjc.app.quality.service.InsDetailVO;
 import com.sjc.app.quality.service.InspectionVO;
@@ -51,6 +50,13 @@ public class QualityServiceImpl implements QualityService{
 	@Override
 	public List<InspectionVO> mtlOdList() {
 		return qualityMapper.selectMtlOd();
+	}
+	
+	// 발주목록검색
+	@Override
+	public List<InspectionVO> moSearch(String cpCode, String cpName, String moStartDate, String moEndDate) {
+		// TODO Auto-generated method stub
+		return qualityMapper.searchMO(cpCode, cpName, moStartDate, moEndDate);
 	}
 	
 	// 발주목록상세 테이블

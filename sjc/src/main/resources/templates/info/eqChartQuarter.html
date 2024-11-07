@@ -37,33 +37,37 @@
 	}
 </style></head>
 <body>
+<!-- 
 <div class="main-container">
     <div class="pd-ltr-20">
+ -->
+	<h2 class="h2 mb-20">설비</h2>
+	 
         <div class="row">
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">설비 가동율<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h2>
+		            <div class="pd-30 card-box mb-20 w-50">                    
+		            	<h4 class="h5 mb-20">설비 가동 현황<small class="text-secondary ml-2" th:text="${#dates.format(new java.util.Date(), '( yyyy년 M월 d일 )')}"></small ></h4>
 	            		
 		            	
 	                    <div class="chart-wrapper">
 	                        <div id="pieChartEqChck"></div>
 	                    </div>
 	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">라인별 장비 보유 현황</h2>
+		            <div class="pd-30 card-box mb-20 w-50">                    
+		            	<h4 class="h5 mb-20">라인별 장비 보유 현황</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="columnChartEq"></div>
 	                    </div>
 	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">성형기</h2>
+		            <div class="pd-30 card-box mb-20 w-50">                    
+		            	<h4 class="h5 mb-20">성형기</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="gridTemp1"></div>
 	                    </div>
 	                </div>
-		            <div class="pd-20 card-box mb-20 w-50">                    
-		            	<h2 class="h5 mb-20">배합기</h2>
+		            <div class="pd-30 card-box mb-20 w-50">                    
+		            	<h4 class="h5 mb-20">배합기</h4>
 	                    <div class="chart-wrapper">
 	                        <div id="gridTemp2"></div>
 	                    </div>
@@ -72,11 +76,11 @@
             </div>
             <div class="col-12">
 		        <div style="display: flex; width: 100%; gap: 20px;">
-		            <div class="pd-20 card-box mb-20" style="width: 100%;"> 	
+		            <div class="p3-20 card-box mb-20" style="width: 100%;"> 	
 		            	<div class="d-flex justify-content-between align-items-center align-middle mb-20">
 		            
 			                <div>
-			            		<h2 class="h5 mb-20">실시간 온도 모니터링</h2>
+			            		<h4 class="h5 mb-20">실시간 온도 모니터링</h4>
 			            		
 			                </div>
 							<div class="row mb-3">
@@ -105,8 +109,10 @@
             	</div>
             </div>
         </div>
+<!-- 
     </div>
 </div>
+ -->        
 
 
 
@@ -209,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	    chartWidth = Math.min(Math.max(chartWidth, 300), 1200);
 	    chartHeight = Math.min(Math.max(chartHeight, 300), 300);
 	
-	    return { width: chartWidth, height: chartHeight };
+	    //return { width: chartWidth, height: chartHeight };
+	    return { width: chartWidth, height: 300 };
 	}
 	
 	function initLineChartBottom() {
@@ -426,7 +433,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			        },
 			        legend: {
-			            align: 'bottom'
+			            align: 'bottom',
+			        	showCheckbox: false,
 			        },
 			        exportMenu: {
 			            visible: false
@@ -479,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		    type: 'GET',
 		    success: function(response) {
 		    	const pieChartData = {
-		    		    categories: ['가동율'],
+		    		    categories: ['가동현황'],
 		    		    series: []
 		    		};
 			    const { width, height } = getChartSize();
@@ -498,7 +506,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				            }
 				        },
 				        legend: {
-				            align: 'bottom'
+				            align: 'bottom',
+				        	showCheckbox: false,
 				        },
 				        theme: {
 				            chart: {

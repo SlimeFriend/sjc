@@ -15,8 +15,6 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<div class="main-container">
-		<div class="pd-30">
 			<h2 class="h2 mb-20">주문내역</h2>
 			<div class="pd-30 card-box mb-20">
 				<form>
@@ -80,8 +78,6 @@
 			</div>
 			<div id="gridOrder" class="mb-20"></div>
 			<div id="gridOrderDetail" style="display : none"></div>
-		</div>
-	</div>
 
 	<script th:inline="javascript">
 		let grid;

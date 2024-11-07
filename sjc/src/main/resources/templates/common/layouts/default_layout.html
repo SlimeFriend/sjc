@@ -16,9 +16,11 @@
 	<div th:replace="~{common/fragments/default_sidebar :: defaultSidebar}"></div>
 
 	<!-- content 영역 -->
-	
-	<div layout:fragment="Content"></div>
-
+	<div class="main-container">
+		<div class="pd-30">
+			<div layout:fragment="Content"></div>
+		</div>
+	</div>
 	<!-- footer 영역 -->
 	<!--  <div th:replace="~{common/fragments/default_footer :: defaultFooter}"></div> -->
 
