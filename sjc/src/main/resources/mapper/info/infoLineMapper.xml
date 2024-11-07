@@ -3,22 +3,25 @@
 <mapper namespace="com.sjc.app.info.mapper.InfoLineMapper">
 
 	<select id="selectLineAllList" resultType="LineVO" parameterType="LineVO">
-		select	LINE_CODE  
-		        ,PRD_CODE
-				,USE
-		from    LINE
+        select	l.LINE_CODE  
+		        ,l.PRD_CODE
+                ,p.prd_name
+				,l.USE
+		from    LINE    l
+        join    prd     p
+        on      l.prd_code = p.prd_code
 	    <where>
 	        <if test="lineCode != null and lineCode != ''">
-	            AND UPPER(line_code) LIKE UPPER('%' || #{lineCode} || '%')
+	            AND UPPER(l.line_code) LIKE UPPER('%' || #{lineCode} || '%')
 	        </if>
 	        <if test="prdCode != null and prdCode != ''">
-	            AND UPPER(prd_code) LIKE UPPER('%' || #{prdCode} || '%')
+	            AND UPPER(l.prd_code) LIKE UPPER('%' || #{prdCode} || '%')
 	        </if>
 	        <if test="use != null and use != ''">
-	            AND UPPER(use) LIKE UPPER('%' || #{use} || '%')
+	            AND UPPER(l.use) LIKE UPPER('%' || #{use} || '%')
 	        </if>
 	    </where>
-	    ORDER BY LINE_CODE
+	    ORDER BY l.LINE_CODE
 	</select>
 	
     <update id="updateLine" parameterType="LineVO">

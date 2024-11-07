@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 editor: 'text',                  
             },
             {
+                header: '제품명',
+                name: 'prdName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                  
+            },
+            {
                 header: '사용여부',
                 name: 'use',
                 align: 'center',
