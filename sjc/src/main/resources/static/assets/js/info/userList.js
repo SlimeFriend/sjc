@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		data: dataSource,
         scrollX: false,
         scrollY: false,
+        contextMenu : null,
         rowHeaders: ['checkbox', 'rowNum'],
         columns: [
             {
@@ -89,6 +90,99 @@ document.addEventListener('DOMContentLoaded', function() {
             useClient: false,
             perPage: 4
         }
+    });
+    
+    const gridUserHistoryModal = new tui.Grid({
+        el: document.getElementById('gridUserhistoryModal'),
+		data: dataSource,
+        scrollX: false,
+        scrollY: false,
+        contextMenu : null,
+        rowHeaders: ['rowNum'],
+        columns: [
+            {
+                header: '사용자번호',
+                name: 'userId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },
+            {
+                header: '아이디',
+                name: 'loginId',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
+                header: '이름',
+                name: 'userName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',
+	            filter: {
+	                type: 'text',
+	                showApplyBtn: true,
+	                showClearBtn: true
+	            },                
+                                  
+            },
+            /*
+            {
+                header: '권한',
+                name: 'roleName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            */
+            {
+                header: '부서명',
+                name: 'deptCode',
+                align: 'center',
+                formatter: 'listItemText',
+                editor: {
+                  type: 'select',
+                  options: {
+                    listItems: [
+                      { text: '영업', value: 'SA' },
+                      { text: '생산', value: 'PR' },
+                      { text: '자재', value: 'MT' },
+                      { text: '품질', value: 'QA' },
+                      { text: '설비', value: 'EQ' },
+                      { text: '전산', value: 'IT' },
+                    ]
+                  }
+                },
+
+              },
+              {
+			    header: '연락처',
+			    name: 'phone',
+			    align: 'center',
+			    sortingType: 'desc',
+			    sortable: true
+			  },
+              {
+			    header: '수정일',
+			    name: 'createdDate',
+			    align: 'center',
+			    sortingType: 'desc',
+			    sortable: true
+			  },
+        ],
+	    bodyHeight: 400,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},        
+        /*
+        pageOptions: {
+            useClient: false,
+            perPage: 4
+        }
+        */
     });
     
     const gridInsert = new tui.Grid({
@@ -594,8 +688,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error(error);
             });
     }
-
     fetchCopyDetails();
     
+	document.getElementById('xlsxBtn').addEventListener('click', function() {
+		
+		const options = {
+		  includeHiddenColumns: true,
+		  onlySelected: false,
+		  fileName: '사용자정보',
+		};
+		
+		grid.export('xlsx', options);		
+	});
+	
+	document.getElementById('userHistoryBtn').addEventListener('click', function() {
+		fetchUserHistory();
+	});
+
+    function fetchUserHistory() {
+        const url = `userHistory`;
+        fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            gridUserHistoryModal.resetData(result);
+            $('#userHistoryModal').modal('show');
+            gridUserHistoryModal.refreshLayout();            
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
 
 });

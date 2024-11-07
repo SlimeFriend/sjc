@@ -15,6 +15,9 @@ public interface InfoUserMapper {
     
     // 사용자 목록 조회
     public List<InfoUserVO> selectUserAllList(InfoUserVO userVO);
+    
+    // 사용자 변경 이력 조회
+    public List<InfoUserVO> selectUserHistory(InfoUserVO userVO);
 
     // 사용자 정보 수정
     int updateUser(InfoUserVO userVO);

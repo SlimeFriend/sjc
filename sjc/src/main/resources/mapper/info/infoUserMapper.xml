@@ -249,6 +249,16 @@
 	</select>
 
 	<!-- 전체조회 -->
+	<select id="selectUserHistory" resultType="InfoUserVO" parameterType="InfoUserVO">
+		select	user_id  
+				,login_id
+		        ,user_name
+		        ,dept_code
+		        ,phone
+		        ,created_date
+		from    user_history
+	</select>
+	<!-- 전체조회 -->
 	<select id="selectUserAllList" resultType="InfoUserVO" parameterType="InfoUserVO">
 		select	u.user_id user_id  
 				,login_id
