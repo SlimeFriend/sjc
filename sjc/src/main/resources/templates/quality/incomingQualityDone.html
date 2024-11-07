@@ -34,57 +34,59 @@
 
 <body>
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<div class="mobile-menu-overlay"></div>
+<!-- 	<div class="mobile-menu-overlay"></div>
 	<div class="main-container">
-		<div class="pd-ltr-20">
-						<h2 class="h2 mb-20">자재 입고 대기 목록</h2>
-				<div class="card-box mb-20">
+		<div class="pd-ltr-20"> -->
+					<h2 class="h2 mb-20">자재 입고 대기 목록</h2>
+						<div class="card-box mb-20">
 						<!-- <p style="font-size: 300%">자재 입고 대기 목록</p> -->
-						<div class="pd-30 card-box mb-20">
-				<form>
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="text" placeholder="업체명">
+							<div class="pd-30 card-box mb-20">
+								<form>
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="text" placeholder="업체명">
+										</div>
+									</div>
+				
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div
+											class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+											<span style="font-size: 1rem;">~</span>
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+									</div>
+				
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div
+											class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+											<span style="font-size: 1rem;">~</span>
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<button class="btn btn-dark">저장</button>
+											<button class="btn btn-dark">초기화</button>
+										</div>
+									</div>
+								</form>
+							</div> 
 						</div>
-					</div>
-
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div
-							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-							<span style="font-size: 1rem;">~</span>
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div
-							class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-							<span style="font-size: 1rem;">~</span>
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<input class="form-control" type="date">
-						</div>
-						<div class="col-sm-12 col-md-3">
-							<button class="btn btn-dark">저장</button>
-							<button class="btn btn-dark">초기화</button>
-						</div>
-					</div>
-				</form>
-			</div> 
-				</div>
-				</div>
-		<div class="pd-ltr-20 xs-pd-20-10">
+<!-- 				</div> -->
+		<!-- <div class="pd-ltr-20 xs-pd-20-10"> -->
+		
+		<div class="pd-30 card-box mb-20">
 			<div class="min-height-200px">
 					<div class="filter-buttons mb-3">
 						<button id="filter-pass" class="btn btn-secondary">합격</button>
@@ -158,7 +160,7 @@
 
 
 
-	</div>
+<!-- 	</div> -->
 
 
 
@@ -174,7 +176,7 @@
 	<!-- 	<script src="vendors/scripts/datatable-setting.js"></script> -->
 </body>
 
-<script>
+<script th:inline="javascript">
 
 	
 	

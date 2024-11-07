@@ -6,9 +6,10 @@
 
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<div class="main-container">
-		<div class="pd-ltr-20">
+<!-- 	<div class="main-container">
+		<div class="pd-ltr-20"> -->
 			<h2 class="h2 mb-20">완제품 품질검사</h2>
+			
 <!-- 			<div class="pd-30 card-box mb-20">
 				<form>
 					<div class="form-group row">
@@ -50,12 +51,13 @@
 						</div>
 					</div>
 				</form>
-			</div>-->		
-			<h2 class="h5 mb-20">발주목록</h2>	
-			<div id="gridOrder"></div>
-			<h2 class="h5 mb-20">발주상세목록</h2>
-			<div id="gridOrderDetail"></div>
-
+			</div>-->	
+			<div class="pd-30 card-box mb-20">	
+				<h2 class="h5 mb-20">발주목록</h2>	
+				<div id="gridOrder"></div>
+				<h2 class="h5 mb-20">발주상세목록</h2>
+				<div id="gridOrderDetail"></div>
+			</div>
 			
 			<div class="modal" id="myModal">
 				<div class="modal-dialog modal-xl">
@@ -63,18 +65,20 @@
 						<div class="pd-ltr-20">
 							<h2 class="h2 mb-20">검사등록</h2>
 
-							<div class="pd-20 card-box mb-20">
+							<div class="pd-30 card-box mb-20">
 								<button class="btn btn-primary mb-3 mr-3" id="registerBtn">
-								검사 등록</button>
-								<button type="button" class="btn btn-danger"
-									data-dismiss="modal" id="cancelBtn">취소</button>
-								<h2 class="h5 mb-20">검사대상 목록</h2>
+									검사 등록
+								</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">
+									취소
+								</button>
+								<h4 class="h5 mb-20">검사대상 목록</h4>
 								<div id="modalInspection"></div>
 							</div>
 
 							<div style="display: flex; width: 100%; gap: 20px;">
-								<div class="pd-20 card-box mb-20" style="width: 100%;">
-									<h2 class="h5 mb-20">검사상세등록</h2>
+								<div class="pd-30 card-box mb-20" style="width: 100%;">
+									<h4 class="h5 mb-20">검사상세등록</h4>
 									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 조회 </button></div>
 									
 								</div>
@@ -83,19 +87,10 @@
 									<div id="gridBomDetail"></div>
 								</div> --> 
 							</div>
-
 						</div>
-
-
-
-
 					</div>
 				</div>
-
 			</div>
-
-
-		</div>
 	</div>
 
 	<script th:inline="javascript">
