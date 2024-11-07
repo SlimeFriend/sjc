@@ -140,4 +140,7 @@ public interface PrdtMapper {
 	
 	// 지시삭제 라인 찾기
 	public String findDLine(String pdetailCode);
+	
+	// 공정 실적 검색
+	public List<PResultVO> searchDetail(String pdetailCode, String processDate, String processName);
 }

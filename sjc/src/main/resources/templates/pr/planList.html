@@ -14,8 +14,7 @@
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-	<div class="main-container">
-		<div class="pd-20">
+
 			<h2 class="h2 mb-20">생산 계획 조회</h2>
 			<div class="pd-30 card-box mb-20">
 		
@@ -23,6 +22,7 @@
            <form>
   <!-- 진행상황 라디오 버튼들 -->
   <div class="form-group row" style="display: flex; align-items: center;">
+  
     <label class="col-sm-12 col-md-1 col-form-label">진행상황</label>
     <div class="col-sm-12 col-md-8" style="display: flex; align-items: center;">
       <div style="margin-right: 30px; display: flex; align-items: center;">
@@ -90,10 +90,10 @@
         	</div>
     	</div>
     	</div>
-    </div>
-    </div>
+   
 
     <script th:inline="javascript">
+    
     const be = document.getElementsByName('btn');
     const dbtn = document.getElementById('dbtn');
     let grid;
@@ -101,7 +101,7 @@
     let selectedRow;
     
     document.addEventListener('DOMContentLoaded', function() {
-    const gridData = /*[[${list}]]*/[];
+    	const gridData = /*[[${list}]]*/[];
     	
     	grid = new tui.Grid({
             el: document.getElementById('grid'),
@@ -133,8 +133,11 @@
             pageOptions: { useClient: true, perPage: 10 },
             height: '300px'
         });
+    	
+    	
+    	
     
-
+	
 
 
         // 상세 그리드 초기화
@@ -149,6 +152,8 @@
             rowHeaders: ['rowNum'],
             height: '300px'
         });
+        
+        
 
         // 생산지시 클릭 시 상세 정보 로드
         grid.on('click', (ev) => {
@@ -168,39 +173,9 @@
                     console.error('Error fetching detail data:', error);
                 });
         });
-        /*        
-        Array.from(be).forEach((b) => {
-            b.addEventListener('change', (event) => {
-            	dbtn.disabled = true;
-                const val = document.querySelector('input[type=radio][name=btn]:checked').value;
-                fetchPlans(val);
-            });
-        });
-                
-        const fetchPlans = (status) => {
-            fetch('/planListS?status=' + status)
-                .then(resp => {
-                    if (!resp.ok) throw new Error('Network response was not ok');
-                    return resp.json();
-                })
-                .then(resp => {
 
-                    grid.resetData(resp);
-
-                })
-                .catch(error => console.error('Fetch error:', error));
-        };
-        
-        
-        Array.from(be).forEach((b) => {
-            b.addEventListener('change', (event) => {
-            	dbtn.disabled = true;
-                const val = document.querySelector('input[type=radio][name=btn]:checked').value;
-                fetchPlans(val);
-            });
-        });
-        
-*/       
+ 
+		
 		
         dbtn.addEventListener('click', function(){
         	console.log('as');
@@ -227,6 +202,8 @@
         	    }
         	});
         });
+        
+ 
         
     });
     

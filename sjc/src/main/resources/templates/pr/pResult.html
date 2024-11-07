@@ -10,13 +10,58 @@
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-	<div class="main-container">
-		<div class="pd-ltr-20">
+	
 		<div class="mb-20">
 		<h3>생산 공정 실적 조회</h3>
 		
 		</div>
+		<div class="pd-30 card-box mb-20">
 		
+
+           <form>
+           <div class="form-group row" style="display: flex; align-items: center;">
+           
+			<label class="col-sm-12 col-md-1 col-form-label">진행상황</label>
+			<div class="col-sm-12 col-md-8" style="display: flex; align-items: center;">
+			<div style="margin-right: 30px; display: flex; align-items: center;">
+        		<input name="option" type="radio" value="" id="all" checked style="margin-right: 8px;">
+            	<label for="all" style="margin-bottom: 0px;">전체</label>
+        	</div>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+        		<input name="option" type="radio" value="배합" id="a" style="margin-right: 8px;">
+            	<label for="a" style="margin-bottom: 0px;">배합</label>
+        	</div>
+        	<div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="성형" id="no" style="margin-right: 8px;">
+            	<label for="no" style="margin-bottom: 0px;">성형</label>
+            </div>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="포장" id="ing" style="margin-right: 8px;">
+            	<label for="ing" style="margin-bottom: 0px;">포장</label>
+            </div>
+            <div style="margin-right: 30px; display: flex; align-items: center;">
+            	<input name="option" type="radio" value="냉각" id="com" style="margin-right: 8px;">
+            	<label for="com" style="margin-bottom: 0px;">냉각</label>
+            </div>
+            </div>
+           </div>
+            <div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">코드 검색</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="pdetailCode" type="text" placeholder="생산지시 상세코드" oninput="performSearch()">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-12 col-md-1 col-form-label">지시일자</label>
+						<div class="col-sm-12 col-md-3">
+							<input class="form-control" id="processDate" type="date" oninput="performSearch()">
+						</div>
+					</div>
+
+					
+            </form> 
+            </div>
 			<div class="pd-20 card-box mb-20"> 
         		<h2 class="h5 mb-20">생산공정실적</h2>
         		<div id="grid"></div>
@@ -24,16 +69,17 @@
         
         
 
-    	</div>
-    </div>
+
 
     <script th:inline="javascript">
     
     const gridData = /*[[${list}]]*/[];
     
+    let grid;
+    
     document.addEventListener('DOMContentLoaded', function() {
     	
-    	const grid = new tui.Grid({
+    	grid = new tui.Grid({
             el: document.getElementById('grid'),
             data: gridData, // 초기 데이터
             columns: [{ 
@@ -72,5 +118,42 @@
         });
 
     });
+    const radioButtons = document.querySelectorAll('input[name="option"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            performSearch(); // 여기에서 원하는 함수를 호출
+        });
+    });
+    
+    
+    function performSearch() {
+	    const pdetailCode = document.getElementById('pdetailCode').value;
+	    const processDate = document.getElementById('processDate').value;
+	    
+
+	    const selectedOption = document.querySelector('input[name="option"]:checked');
+	    const processName = selectedOption ? selectedOption.value : null; // 선택된 값이 없을 경우 null 처리
+
+	    
+	    const searchCriteria = {
+	        pdetailCode: pdetailCode,
+	        processDate: processDate,
+	        processName : processName
+	    };
+
+	    $.ajax({
+	        url: '/searchDetail',
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: JSON.stringify(searchCriteria),
+	        success: function(response) {
+	            grid.resetData(response);
+	
+	        },
+	        error: function(xhr, status, error) {
+	            console.error('Error fetching search results:', error);
+	        }
+	    });
+	}
     </script>
 </body>

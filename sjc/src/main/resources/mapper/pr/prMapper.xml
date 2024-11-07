@@ -611,4 +611,31 @@ order by l.use DESC, d.prd_code, l.line_code
 		set status = 'a1'
 		where plan_code = #{planCode}
 	</update>
+	
+	<select id="searchDetail" resultType="PResultVO">
+	    SELECT p.pdetail_code,
+	    		p.process_name,
+	    		p.process_date,
+	    		u.user_name,
+	    		p.eq_code,
+	    		p.input,
+	    		p.output
+	    FROM   presult p
+	    JOIN sjc_user u
+	    ON p.manager = u.user_id
+	    where p.status = 'b3'
+	    <if test="pdetailCode != null and pdetailCode != ''">
+	        AND p.pdetail_code LIKE '%' || #{pdetailCode} || '%'
+	    </if>
+	    <if test="processDate != null and processDate != ''">
+	        AND TRUNC(p.process_date) <![CDATA[=]]> TO_DATE(#{processDate}, 'YYYY-MM-DD')
+	    </if> 
+	    <if test="processName != null and processName != ''">
+
+	    	AND process_name = #{processName}
+
+    	</if>
+    	ORDER BY p.pdetail_code desc, p.start_time desc
+    	
+	</select>
 </mapper>

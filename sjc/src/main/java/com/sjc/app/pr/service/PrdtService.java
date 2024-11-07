@@ -91,4 +91,7 @@ public interface PrdtService {
 	
 	// 지시 삭제
 	public int deleteOrder(String porderCode);
+	
+	// 생산 공정 실적 검색
+	public List<PResultVO> searchDetail(String pdetailCode, String processDate, String processName);
 }
