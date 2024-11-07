@@ -7,35 +7,49 @@
 <head>
     <meta charset="UTF-8">
     <title>출고 목록</title>
-       <style>
-            #grid:hover {
-                cursor: pointer;
-            }
-        </style>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
-    
-      <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<script type="text/javascript"
+	src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
     <style>
 /* tui-grid 선택 테두리 제거 */
 .tui-grid-layer-focus-border {
     display: none !important;
 }
+        #grid:hover {
+                cursor: pointer;
+            }
 </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <h1>자재 출고 내역</h1>
+   <h2 class="h2 mb-20">자재 입고 내역</h2>
+	<div class="pd-30 card-box mb-20">
+		<h4 class="h5 mb-20">자재 입고 내역</h4>
+		<!-- 기능 버튼들 -->
+        <div class="text-right mb-3">
+
+            <button class="btn btn-success" onclick="downloadExcel()">Excel
+                다운로드</button>
+            <button class="btn btn-warning" onclick="downloadPDF()">PDF
+                다운로드</button>
+            <button class="btn btn-secondary" onclick="printGrid()">프린트</button>
+        </div>
 
             <!-- Toast UI Grid 영역 -->
             <div id="grid" style="width: 100%; height: 500px;"></div>
         </div>
-    </div>
+   
 
     <script th:inline="javascript">
      
@@ -66,6 +80,80 @@
         if (outData.length === 0) {
             grid.resetData([{ pDetailCode: '-', lotNo: '-', materialCode: '-', materialName: '출고된 자재가 없습니다.', outgoingQuantity: '-', outDate: '-' }]);
         }
+        
+     // Excel 다운로드 함수
+        function downloadExcel() {
+            const data = grid.getData();
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "OutData");
+            XLSX.writeFile(workbook, "OutData.xlsx");
+        }
+
+        // PDF 다운로드 함수
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const data = grid.getData();
+
+            const columns = [
+                { header: '생산지시 상세코드', dataKey: 'pDetailCode' },
+                { header: 'LOT 번호', dataKey: 'lotNo' },
+                { header: '자재 코드', dataKey: 'materialCode' },
+                { header: '자재명', dataKey: 'materialName' },
+                { header: '출고 수량', dataKey: 'outgoingQuantity' },
+                { header: '출고일', dataKey: 'outDate' }
+            ];
+
+            doc.autoTable({
+                columns: columns,
+                body: data,
+                startY: 10,
+                theme: 'grid'
+            });
+
+            doc.save("OutData.pdf");
+        }
+
+        // 프린트 함수
+        function printGrid() {
+            const data = grid.getData();
+            let printContent = `
+                <h1>출고 목록</h1>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>생산지시 상세코드</th>
+                            <th>LOT 번호</th>
+                            <th>자재 코드</th>
+                            <th>자재명</th>
+                            <th>출고 수량</th>
+                            <th>출고일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(row => `
+                            <tr>
+                                <td>${row.pDetailCode}</td>
+                                <td>${row.lotNo}</td>
+                                <td>${row.materialCode}</td>
+                                <td>${row.materialName}</td>
+                                <td>${row.outgoingQuantity}</td>
+                                <td>${row.outDate}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>출고 목록</title></head><body>');
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+
     </script>
 </body>
 </html>
