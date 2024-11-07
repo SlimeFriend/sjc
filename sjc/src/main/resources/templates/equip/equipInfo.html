@@ -71,10 +71,14 @@
                                             <th class="bg-light text-right align-middle py-3">라인코드</th>
                                             <td class="py-3">[[${equip.lineCode}]]</td>
                                         </tr>
-                                        <tr>
-                                            <th class="bg-light text-right align-middle py-3">가동여부</th>
-                                            <td class="py-3">[[${equip.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
-                                        </tr>
+										<tr>
+										    <th class="bg-light text-right align-middle py-3">가동여부</th>
+										    <td class="py-3">
+										        <span th:class="${equip.use == 'Y' ? 'text-primary' : 'text-danger'}">
+										            [[${equip.use == 'Y' ? '사용 가능' : '사용 불가'}]]
+										        </span>
+										    </td>
+										</tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -231,21 +235,26 @@
 	            $('#modifyModal').modal('hide');
 	        });
 	
-	        // 삭제 버튼 클릭 시 삭제 확인 모달 열기
+	     // 삭제 버튼 클릭 시 삭제 확인 모달 열기
 	        $('#deleteBtn').on('click', function () {
-	            $('#deleteConfirmModal').modal('show');
+	            const useStatus = '[[${equip.use}]]'; // 현재 사용여부 가져오기
+
+	            if (useStatus === 'Y') {
+	                alert('가동 중인 설비는 삭제할 수 없습니다.');
+	            } else {
+	                $('#deleteConfirmModal').modal('show'); // 사용 불가일 때만 모달 표시
+	            }
 	        });
-	
+
 	        // 삭제 확인 모달에서 삭제 버튼 클릭 시 AJAX 요청으로 삭제 처리
 	        $('#confirmDelete').on('click', function () {
 	            const eqCode = '[[${equip.eqCode}]]';
-	
+
 	            // 서버로 데이터 전송 (AJAX 요청)
 	            $.ajax({
 	                type: 'POST',
 	                url: '/eqDelete', // 서버에서 해당 설비 코드만 삭제하도록 보장
-	               // contentType: 'application/json',
-	                data:{ eqCode: eqCode },
+	                data: { eqCode: eqCode },
 	                success: function (response) {
 	                    if (response == "1") {
 	                        alert('삭제가 완료되었습니다.');
@@ -258,10 +267,11 @@
 	                    alert('서버 오류가 발생했습니다.');
 	                }
 	            });
-	
+
 	            // 모달 닫기
 	            $('#deleteConfirmModal').modal('hide');
 	        });
+
 	    });
 	    </script>
 	    <script>

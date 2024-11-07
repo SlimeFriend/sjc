@@ -89,49 +89,58 @@ tbody > tr {
 		});
 	</script>
 <script>
-    $(document).ready(function () {
-        // 점검완료 버튼 클릭 시
-        $('.btn-success').on('click', function () {
-            let today = new Date();
-            let nextCheckDate = new Date();
-            nextCheckDate.setMonth(today.getMonth() + 3);  // 3개월 후
+$(document).ready(function () {
+    // 점검완료 버튼 클릭 시
+    $('.btn-success').on('click', function () {
+        let today = new Date();
+        let nextCheckDate = new Date();
+        nextCheckDate.setMonth(today.getMonth() + 3);  // 3개월 후
 
-            let formattedToday = today.toISOString().split('T')[0];  // yyyy-mm-dd
-            let formattedNextCheckDate = nextCheckDate.toISOString().split('T')[0];  // 3개월 후 날짜
-            
-            // 선택된 체크박스의 부모 행을 찾고 데이터를 업데이트
-            $('input[type="checkbox"]:checked').each(function () {
-                let row = $(this).closest('tr');
-                let eqCode = row.find('td').eq(2).text().trim(); // 설비코드
+        let formattedToday = today.toISOString().split('T')[0];  // yyyy-mm-dd
+        let formattedNextCheckDate = nextCheckDate.toISOString().split('T')[0];  // 3개월 후 날짜
 
-                row.find('td').eq(4).text(formattedToday);  // 점검일자
-                row.find('td').eq(5).text(formattedNextCheckDate);  // 다음 점검일
-                row.find('td').eq(6).text("점검완료");  // 점검유무
+        // 선택된 체크박스의 부모 행을 찾고 데이터를 업데이트
+        $('input[type="checkbox"]:checked').each(function () {
+            let row = $(this).closest('tr');
+            let eqCode = row.find('td').eq(2).text().trim(); // 설비코드
+            let checkStatus = row.find('td').eq(6).text().trim(); // 점검유무
 
-                // AJAX로 서버에 데이터 전송하여 DB 업데이트
-                $.ajax({
-                    type: "POST",
-                    url: "/updateCheckStatus",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        eqCode: eqCode,
-                        eqCkDate: formattedToday,
-                        eqNextChck: formattedNextCheckDate,
-                        eqChckOx: "점검완료"
-                    }),
-                    success: function (response) {
-                        alert("점검이 완료되었습니다.");
-                        // equipInfo.html로 이동하여 최신 점검일자 확인
-                        window.location.href = "/eqChckList";
-                    },
-                    error: function (error) {
-                        alert("점검 완료 처리 중 오류가 발생했습니다.");
-                        console.error(error);
-                    }
-                });
+            // 점검유무가 "점검완료"인 경우 알림 표시 및 종료
+            if (checkStatus === "점검완료") {
+                alert("이미 점검이 완료된 설비입니다.");
+                return;
+            }
+
+            // 점검일자, 다음 점검일, 점검유무 업데이트
+            row.find('td').eq(4).text(formattedToday);  // 점검일자
+            row.find('td').eq(5).text(formattedNextCheckDate);  // 다음 점검일
+            row.find('td').eq(6).text("점검완료");  // 점검유무
+
+            // AJAX로 서버에 데이터 전송하여 DB 업데이트
+            $.ajax({
+                type: "POST",
+                url: "/updateCheckStatus",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    eqCode: eqCode,
+                    eqCkDate: formattedToday,
+                    eqNextChck: formattedNextCheckDate,
+                    eqChckOx: "점검완료"
+                }),
+                success: function (response) {
+                    alert("점검이 완료되었습니다.");
+                    // equipInfo.html로 이동하여 최신 점검일자 확인
+                    window.location.href = "/eqChckList";
+                },
+                error: function (error) {
+                    alert("점검 완료 처리 중 오류가 발생했습니다.");
+                    console.error(error);
+                }
             });
         });
     });
+});
+
 </script>
 
 

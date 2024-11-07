@@ -9,18 +9,19 @@
 <meta charset="UTF-8">
 <title>설비 목록</title>
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 <style>
 tbody>tr {
 	cursor: pointer;
 }
 </style>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" /> <!-- Pagination CSS 추가 -->
+
 </head>
 
-	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 <body>
+	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			<p style="font-size: 300%">설비 목록</p>
@@ -29,37 +30,7 @@ tbody>tr {
 					<p style="font-size: 200%">설비 목록</p>
 					<button type="button" class="btn btn-primary" id="modifyBtn">설비 수정</button>
 				</div>
-
-				<table class="table nowrap table-hover table-striped">
-					<thead>
-						<tr>
-							<th>선택</th>
-							<th class="table-plus datatable-nosort">No.</th>
-							<th>설비코드</th>
-							<th>설비구분</th>
-							<th>설비명</th>
-							<th>최저온도</th>
-							<th>최고온도</th>
-							<th>사용여부</th>
-							<th>라인코드</th>
-						</tr>
-					</thead>
-					<tbody>
-						<th:block th:each="wait, sts : ${equips}">
-							<tr>
-								<td><input type="checkbox" class="eqCheckbox"></td>
-								<td>[[${sts.count}]]</td>
-								<td>[[${wait.eqCode}]]</td>
-								<td>[[${wait.eqType}]]</td>
-								<td>[[${wait.eqName}]]</td>
-								<td>[[${wait.eqMin}]]</td>
-								<td>[[${wait.eqMax}]]</td>
-								<td>[[${wait.use == 'Y' ? '사용 가능' : '사용 불가'}]]</td>
-								<td>[[${wait.lineCode}]]</td>
-							</tr>
-						</th:block>
-					</tbody>
-				</table>
+				<div id="grid"></div>
 			</div>
 
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -122,7 +93,7 @@ tbody>tr {
                                 		<option value="L02">L02</option>
                                 		<option value="L03">L03</option>
                                 		<option value="L04">L04</option>
-                            </select>
+                            		</select>
                         		</div>
 							</form>
 						</div>
@@ -130,170 +101,216 @@ tbody>tr {
 							<button type="button" class="btn btn-success" id="saveChanges">수정</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
 						</div>
-
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+	 <!-- 수정 모달 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">설비 목록 수정</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="eqProject">
+                        <div class="mb-3">
+                            <label for="eqCode" class="form-label">설비코드</label>
+                            <input type="text" id="eqCode" name="eqCode" readonly class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eqName" class="form-label">설비명</label>
+                            <input type="text" id="eqName" name="eqName" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eqMin" class="form-label">최저온도</label>
+                            <input type="text" id="eqMin" name="eqMin" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eqMax" class="form-label">최고온도</label>
+                            <input type="text" id="eqMax" name="eqMax" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="use" class="form-label">사용여부</label> 
+                            <input type="radio" id="use" name="use" value="Y"> 사용가능
+                            <input type="radio" id="use" name="use" value="N"> 사용불가
+                        </div>
+                        <div class="form-group">
+                            <label for="lineCode">라인코드</label>
+                            <select id="lineCode" name="lineCode" class="form-control">
+                                <option value="L01">L01</option>
+                                <option value="L02">L02</option>
+                                <option value="L03">L03</option>
+                                <option value="L04">L04</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="saveChanges">수정</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<script th:inline="javascript">
+	const gridData = /*[[${equips}]]*/[];
 
-	<script>
-	$(document).ready(function () {
-	    // 체크박스 클릭 시 이벤트 전파 막기
-	    $('.eqCheckbox').on('click', function (event) {
-	        event.stopPropagation(); // 이벤트 전파 중지
-	    });
-
-	    // 첫 번째 <td> (체크박스) 클릭 시 체크박스 선택/해제 처리
-	    $('tbody > tr').on('click', 'td:first-child', function (event) {
-	        const checkbox = $(this).find('.eqCheckbox');
-	        checkbox.prop('checked', !checkbox.prop('checked')); // 체크 상태 반전
-	        event.stopPropagation(); // 클릭 이벤트 전파 중지
-	    });
-
-	    // 나머지 <td> 클릭 시 상세 페이지로 이동
-	    $('tbody > tr').on('click', function (event) {
-	        if ($(event.target).closest('td').index() !== 0) {
-	            const eqCode = $(this).find('td').eq(2).text(); // 설비코드 추출
-	            const url = `/eqInfo?eqCode=${eqCode}`; // 상세 페이지 URL 생성
-	            location.href = url; // 상세 페이지로 이동
-	        }
-	    });
-
-	    // '설비 수정' 버튼 클릭 시 체크된 행의 데이터 가져오기
-	    $('#modifyBtn').on('click', function (event) {
-	        const checkedRows = $('input.eqCheckbox:checked').closest('tr');
-			
-	        // 체크된 항목이 없을 때
-	        if (checkedRows.length === 0) {
-	            alert('수정할 설비를 선택하세요.');
-	            return;
-	        }
-
-	        if (checkedRows.length > 1) {
-	            alert('하나의 설비만 수정할 수 있습니다.');
-	            return;
-	        }
-
-	        // 체크된 한 개의 행 데이터 추출
-	        const checkedRow = checkedRows.eq(0);
-	        const eqCode = checkedRow.find('td').eq(2).text();
-	        const eqType = checkedRow.find('td').eq(3).text(); // 설비 구분 값
-	        const eqName = checkedRow.find('td').eq(4).text();
-	        const eqMin = checkedRow.find('td').eq(5).text();
-	        const eqMax = checkedRow.find('td').eq(6).text();
-	        const use = checkedRow.find('td').eq(7).text();
-	        const lineCode = checkedRow.find('td').eq(8).text();
-
-	        // 모달 폼에 데이터 채우기
-	        $('#eqCode').val(eqCode);
-	        $('#eqName').val(eqName);
-	        $('#eqMin').val(eqMin);
-	        $('#eqMax').val(eqMax);
-	        $('input[name="use"][value="' + use + '"]').prop('checked', true);
-	        $('#lineCode').val(lineCode);
-
-	        // 설비 구분 select 옵션 설정
-	        setEqType(); // 초기 설비 구분 값 설정
-
-	        // 모달 창 표시
-	        $('#myModal').modal('show');
-	    });
-
-	    // 선택된 옵션에 따라 설비 구분 값 설정
-	    function setEqType() {
-	        const selectedOption = $('#eqName').find(':selected'); // 선택된 <option>
-	        const eqType = selectedOption.closest('optgroup').attr('label'); // 부모 <optgroup>의 label
-	        $('[name="eqType"]').val(eqType); // Hidden input에 값 설정
-	    }
-
-	    // 설비 구분 값이 변경될 때마다 업데이트
-	    $('#eqName').on('change', function () {
-	        setEqType();
-	    });
-
-	    // 모달 창에서 수정 처리
-	    $('#saveChanges').on('click', function (event) {
-	        event.preventDefault(); // 기본 폼 제출 방지
-
-	        const eqData = {
-	            eqCode: $('#eqCode').val(),
-	            eqType: $('[name="eqType"]').val(), // Hidden input에서 값 가져오기
-	            eqName: $('#eqName').val(),
-	            eqMin: $('#eqMin').val(),
-	            eqMax: $('#eqMax').val(),
-	            use: $('input[name="use"]:checked').val(),
-	            lineCode: $('#lineCode').val()
-	            
-	        };
-
-	        $.ajax({
-	            type: 'POST',
-	            url: '/eqUpdate',
-	            contentType: 'application/json',
-	            data: JSON.stringify(eqData),
-	            success: function (response) {
-	                if (response.result) {
-	                    alert('수정이 완료되었습니다.');
-	                    location.reload(); // 페이지 새로고침
-	                } else {
-	                    alert('수정에 실패했습니다.');
-	                }
-	            },
-	            error: function () {
-	                alert('서버 오류가 발생했습니다.');
-	            }
-	        });
-
-	        // 모달 창 닫기
-	        $('#myModal').modal('hide');
-	    });
+	grid = new tui.Grid({
+		el : document.getElementById('grid'),
+		data : gridData,
+		scrollX : false,
+		scrollY : false,
+		columns : [ {
+			header : '설비코드',
+			name : 'eqCode',
+			align : 'center',
+		}, {
+			header : '설비구분',
+			name : 'eqType',
+			align : 'center',
+		}, {
+			header : '설비명',
+			name : 'eqName',
+			align : 'center',
+		}, {
+			header : '최저온도',
+			name : 'eqMin',
+			align : 'center',
+		}, {
+			header : '최고온도',
+			name : 'eqMin',
+			align : 'center',
+		}, {
+			header : '최저온도',
+			name : 'eqMax',
+			align : 'center',
+		},{
+			header : '사용여부',
+			name : 'use',
+			align : 'center',
+		    formatter: function(item) {
+		        return item.value === 'Y' 
+		        	? '<span style="color: blue;">사용 가능</span>' 
+		            : '<span style="color: red;">사용 불가</span>';
+		    }
+		},{
+			header : '라인코드',
+			name : 'lineCode',
+			align : 'center',
+		},],
+		rowHeaders : [ 'checkbox' ],
+		pageOptions: {
+			useClient : true,
+		    perPage: 5 
+		},
 	});
+	
+	grid.resetData(gridData);
+	
+	// 행 클릭 시 상세 페이지로 이동
+    grid.on('click', (ev) => {
+        const { rowKey, columnName } = ev;
+        if (columnName !== '_checked') { // 체크박스가 아닌 부분 클릭 시
+            const rowData = grid.getRow(rowKey);
+            const eqCode = rowData.eqCode;
+            const url = `/eqInfo?eqCode=${eqCode}`;
+            location.href = url; // 상세 페이지로 이동
+        }
+    });
 
+    // '설비 수정' 버튼 클릭 시 체크된 행의 데이터 가져오기
+    $('#modifyBtn').on('click', function () {
+        const checkedRows = grid.getCheckedRows();
+
+        // 체크된 항목이 없을 때
+        if (checkedRows.length === 0) {
+            alert('수정할 설비를 선택하세요.');
+            return;
+        }
+
+        // 여러 항목이 선택된 경우 경고
+        if (checkedRows.length > 1) {
+            alert('하나의 설비만 수정할 수 있습니다.');
+            return;
+        }
+
+        const rowData = checkedRows[0];
+
+        // 모달 폼에 데이터 채우기
+        $('#eqCode').val(rowData.eqCode);
+        $('#eqName').val(rowData.eqName);
+        $('#eqMin').val(rowData.eqMin);
+        $('#eqMax').val(rowData.eqMax);
+        $('input[name="use"][value="' + rowData.use + '"]').prop('checked', true);
+        $('#lineCode').val(rowData.lineCode);
+        setEqType();
+        
+        $('#myModal').modal('show');
+        
+        
+    });
+    
+    function setEqType() {
+        const selectedOption = $('#eqName').find(':selected'); // 선택된 <option>
+        const eqType = selectedOption.closest('optgroup').attr('label'); // 부모 <optgroup>의 label
+        $('[name="eqType"]').val(eqType); // Hidden input에 값 설정
+    }
+    
+    $('#eqName').on('change', function () {
+        setEqType();
+    });
+
+    // 모달 창에서 수정 처리
+    $('#saveChanges').on('click', function (event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        const eqData = {
+            eqCode: $('#eqCode').val(),
+            eqType: $('[name="eqType"]').val(),
+            eqName: $('#eqName').val(),
+            eqMin: $('#eqMin').val(),
+            eqMax: $('#eqMax').val(),
+            use: $('input[name="use"]:checked').val(),
+            lineCode: $('#lineCode').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/eqUpdate',
+            contentType: 'application/json',
+            data: JSON.stringify(eqData),
+            success: function (response) {
+                if (response.result) {
+                    alert('수정이 완료되었습니다.');
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert('수정에 실패했습니다.');
+                }
+            },
+            error: function () {
+                alert('서버 오류가 발생했습니다.');
+            }
+        });
+
+        // 모달 창 닫기
+        $('#myModal').modal('hide');
+    });
 	</script>
-	<script>
-	// 모달 창에서 수정 처리
-	$('#saveChanges').on('click', function(event) {
-	    event.preventDefault(); // 기본 폼 제출 방지
 
-	    const eqData = {
-	        eqCode: $('#eqCode').val(),
-	        eqName: $('#eqName').val(),
-	        eqMin: $('#eqMin').val(),
-	        eqMax: $('#eqMax').val(),
-	        use: $('input[name="use"]:checked').val()
-	    };
-
-	    // 사용여부가 "Y"로 선택되었는지 확인하여 업데이트 요청
-	    if (eqData.use === 'Y') {
-	        $.ajax({
-	            type: 'POST',
-	            url: '/updateUseStatus',
-	            contentType: 'application/json',
-	            data: JSON.stringify(eqData),
-	            success: function(response) {
-	                if (response.result) {
-	                    alert('사용여부가 "가동"으로 업데이트되었습니다.');
-	                    location.reload(); // 페이지 새로고침
-	                } else {
-	                    alert('업데이트에 실패했습니다.');
-	                }
-	            },
-	            error: function() {
-	                alert('서버 오류가 발생했습니다.');
-	            }
-	        });
-	    }
-
-	    // 모달 창 닫기
-	    $('#myModal').modal('hide');
-	});
-
-	</script>
 </body>
 
 </html>
