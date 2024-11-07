@@ -14,10 +14,9 @@
 	<!-- 페이징필요한사람 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
-	<div class="main-container">
-	<div class="pd-ltr-20">
 		
 	<h2 class="h2 mb-20">생산계획 생성</h2>
+	
 	
 		<div class="d-flex justify-content-between">
 			<div class="pd-20 card-box mb-20" style="width: 48%;">	
@@ -40,10 +39,10 @@
 					
 							<label>시작일자</label> 
 							<input class="form-control" type="date"
-						 	name="startDate" >
+						 	name="startDate" id="startDate">
 							<label>종료일자</label> 
 							<input class="form-control" type="date"
-						 	name="endDate">
+						 	name="endDate" id="endDate">
 						<th:block sec:authorize="isAuthenticated()">
 							<label>담당자</label>
 							<input class="form-control" type="text"
@@ -102,8 +101,8 @@
 				</div>
 			</div>
 			
-		</div>
-	</div>
+	
+
 
 <script th:inline="javascript">
 			
@@ -143,6 +142,22 @@
 						perPage : 10
 					}
 				});
+		    	// 현재 날짜 가져오기
+				const today = new Date();
+			
+				// 오늘 날짜에 1일 추가
+				today.setDate(today.getDate());
+				const dd = String(today.getDate()).padStart(2, '0');
+				const mm = String(today.getMonth() + 1).padStart(2, '0');
+				const yyyy = today.getFullYear();
+					
+				// YYYY-MM-DD 형식으로 변환
+				const formattedToday = yyyy + '-' + mm + '-' + dd;
+
+				// 납기일자 입력 필드에 min 속성 설정
+				document.getElementById("startDate").setAttribute('min', formattedToday);
+				
+				document.getElementById("endDate").setAttribute('min',formObj.startDate > formObj.endDate)
 			});
 			
 			
@@ -351,6 +366,9 @@
 		        }
 		    });
 		}
+		document.addEventListener('click', (e) => {
+		    grid.finishEditing();
+		});
 
 		</script>
 

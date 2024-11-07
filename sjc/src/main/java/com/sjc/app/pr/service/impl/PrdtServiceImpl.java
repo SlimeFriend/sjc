@@ -303,4 +303,10 @@ public class PrdtServiceImpl implements PrdtService {
 		
 		return prdtMapper.deleteOrder(porderCode);
 	}
+
+	@Override
+	public List<PResultVO> searchDetail(String pdetailCode, String processDate, String processName) {
+		// TODO Auto-generated method stub
+		return prdtMapper.searchDetail(pdetailCode, processDate, processName);
+	}
 }

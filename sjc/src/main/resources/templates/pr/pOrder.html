@@ -15,8 +15,7 @@
     </head>
 
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-<div class="main-container">
-	<div class="pd-ltr-20">
+
 		
 		<h2 class="h2 mb-20">생산지시</h2>
 		<div class="d-flex justify-content-between">
@@ -99,8 +98,6 @@
 				</div>
 
 
-	</div>
-</div>
 
 
 <script th:inline="javascript">
@@ -482,7 +479,9 @@
 	        		}
 	    		});
 			}
-		
+			document.addEventListener('click', (e) => {
+			    grid.finishEditing();
+			});
 	
 
 		</script>

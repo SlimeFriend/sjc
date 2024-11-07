@@ -327,4 +327,14 @@ public class PrController {
 		
 		return prdtService.deleteOrder(porderCode);
 	}
+	
+	@PostMapping("searchDetail")
+	@ResponseBody
+	public List<PResultVO> searchDetail(@RequestBody Map<String, Object> request){
+		String pdetailCode = (String) request.get("pdetailCode");
+		String processDate = (String) request.get("processDate");
+		String processName = (String) request.get("processName");
+		
+		return prdtService.searchDetail(pdetailCode, processDate, processName);
+	}
 }
