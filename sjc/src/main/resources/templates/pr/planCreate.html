@@ -201,11 +201,11 @@
 					align : 'center',
 				}, {
 					header : '납기일자',
-					name : 'ordDate',
+					name : 'dlvReqDate',
 					align : 'center',
 				}, {
 					header : '요청사항',
-					name : 'ordDate',
+					name : 'comm',
 					align : 'center',
 				}, 
 				
@@ -221,7 +221,7 @@
 			
 			
 			modalGrid.on('click', (ev) => {
-			    const { value } = ev; // 입력된 출고량
+			    const { value } = ev; 
 			    const rowKey = ev.rowKey; // 현재 수정 중인 행의 키
 			    
 			    const ordCode = modalGrid.getValue(rowKey, 'ordCode');
