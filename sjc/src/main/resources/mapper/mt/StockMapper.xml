@@ -57,7 +57,7 @@ WITH v_mt_out AS (
 SELECT
     mt_in.lot_no                    AS lotno,
     mt_in.inquantity                AS inquantity,
-    mt_in.inquantity - mt_out_count AS livecount,
+    mt_in.inquantity - nvl(mt_out_count,0) AS livecount,
     mt_in.input_date                AS inputdate,
     mt_in.ed                        AS ed,
     mt.mt_name                      AS mtname

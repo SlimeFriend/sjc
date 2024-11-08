@@ -188,32 +188,32 @@
         }
      //pdf
 
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+       function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const data = productionPlanGrid.getData();  
+    doc.setFont("GowunDodum-Regular");
+    const columns = [
+        { header: '생산계획코드', dataKey: 'planCode' },
+        { header: '제품명', dataKey: 'productName' },
+        { header: '수량', dataKey: 'quantity' },
+        { header: '시작일자', dataKey: 'startDate' },
+        { header: '종료일자', dataKey: 'endDate' }
+    ];
 
-          
-            doc.setFont("GowunDodum-Regular-normal");
+    doc.text("생산 계획 별 발주 확인", 90, 20);
+    doc.autoTable({
+        columns: columns,
+        body: data,
+        margin : {top:25},
+        styles : {font: "GowunDodum-Regular", fontStyle:"normal"},
+        theme: 'grid'
+    });
 
-            const data = productionPlanGrid.getData();
+    // PDF 파일 저장
+    doc.save("ProductionPlans.pdf");
+}
 
-            const columns = [
-                { header: '생산계획코드', dataKey: 'planCode' },
-                { header: '제품명', dataKey: 'productName' },
-                { header: '수량', dataKey: 'quantity' },
-                { header: '시작일자', dataKey: 'startDate' },
-                { header: '종료일자', dataKey: 'endDate' }
-            ];
-
-            doc.autoTable({
-                columns: columns,
-                body: data,
-                startY: 10,
-                theme: 'grid'
-            });
-
-            doc.save("ProductionPlans.pdf");
-        }
 
 
         // 프린트 함수

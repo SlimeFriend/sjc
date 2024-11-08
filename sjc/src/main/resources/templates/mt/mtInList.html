@@ -21,6 +21,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+	<script src="/assets/font/GowunDodum-Regular-normal.js"></script>
 <style>
 /* tui-grid 선택 테두리 제거 */
 .tui-grid-layer-focus-border {
@@ -104,7 +105,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const data = grid.getData();
-
+            doc.setFont('GowunDodum-Regular')
             const columns = [
                 { header: 'LOT번호', dataKey: 'lotNo' },
                 { header: '발주코드', dataKey: 'mtlOdCode' },
@@ -115,11 +116,12 @@
                 { header: '입고일', dataKey: 'inputDate' },
                 { header: '유통기한', dataKey: 'ed' }
             ];
-
+            doc.text("자재 입고 목록", 90, 20);
             doc.autoTable({
                 columns: columns,
                 body: data,
-                startY: 10,
+                margin : {top:25},
+                styles : {font: "GowunDodum-Regular", fontStyle:"normal"},
                 theme: 'grid'
             });
 
