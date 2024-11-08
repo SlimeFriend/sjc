@@ -18,6 +18,7 @@ import com.sjc.app.sales.service.ProductVO;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
+import oracle.net.aso.b;
 
 @Timed("info.bom")
 @Slf4j
@@ -77,15 +78,16 @@ public class InfoBomServiceImpl implements InfoBomService {
 	@Transactional
 	public List<BomVO> registerPrdBoms(List<BomVO> bomVOs) {
 		
-		if (!bomVOs.isEmpty()) { 
+		// BOM 체크박스 선택
+		if(bomVOs.get(0).getCustomSwitchBom().equals("true")) {
 			infoBomMapper.insertBom(bomVOs.get(0));
-		    infoPrdMapper.insertProduct(bomVOs.get(0));
+			for (BomVO bomVO : bomVOs) {
+				infoBomMapper.insertBomDetail(bomVO);  // 단건 처리로 변경
+			}
 		}
 		
-        for (BomVO bomVO : bomVOs) {
-        	infoBomMapper.insertBomDetail(bomVO);  // 단건 처리로 변경
-        }
-
+		infoPrdMapper.insertProduct(bomVOs.get(0));
+		
         return bomVOs;	
 	}
 	
@@ -122,6 +124,7 @@ public class InfoBomServiceImpl implements InfoBomService {
 		productVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
 		productVO.setBomCode(prdBomDTO.getBom().getBomCode());
 		
+		infoBomMapper.updatePrdNull(productVO);
 		infoBomMapper.updatePrd(productVO);
 		
 		BomVO bomVO = new BomVO();

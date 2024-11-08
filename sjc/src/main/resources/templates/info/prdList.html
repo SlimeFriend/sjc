@@ -155,8 +155,17 @@
 			        <div style="display: flex; width: 100%; gap: 20px;">
 					
 				            <div class="pd-20 card-box mb-20" style="width: 60%;">
+								<div class="d-flex justify-content-between align-items-center align-middle">
 			
-								<h2 class="h5 mb-20">자재 선택</h2>
+									<h2 class="h5 mb-20">자재 목록</h2>
+								
+									<div class="custom-control custom-switch">
+									  <input type="checkbox" class="custom-control-input" id="customSwitchBom" name="customSwitchBom" value="off">
+									  <label class="custom-control-label" for="customSwitchBom">BOM 등록</label>
+									  
+									</div>
+								</div>
+								
 								<div id="gridMtModal"></div>
 								
 							</div>
@@ -175,7 +184,7 @@
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>등록일자</label>
-								                <input class="form-control form-control-sm" type="date" name="regDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
+								                <input class="form-control form-control-sm text-center" type="date" name="regDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
 								            </div>
 								        </div>
 								    </div>
@@ -183,13 +192,13 @@
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>제품코드</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="prdCode" placeholder="제품코드" value="PRD" >
+								                <input class="form-control form-control-sm text-center" type="text" name="prdCode" placeholder="제품코드" value="" >
 								            </div>
 								        </div>
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>제품명</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="prdName" placeholder="제품명" value="테스트" >
+								                <input class="form-control form-control-sm text-center" type="text" name="prdName" placeholder="제품명" value="" >
 								            </div>
 								        </div>
 								    </div>
@@ -197,13 +206,13 @@
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>단가</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="unitPrice" placeholder="단가" value="1000" >
+								                <input class="form-control form-control-sm text-center" type="text" name="unitPrice" placeholder="단가" value="" >
 								            </div>
 								        </div>
 								        <div class="col-md-6">
 								            <div class="form-group">
-								                <label>설명</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="descrpition" placeholder="설명" value="테스트" >
+								                <label>비고</label>
+								                <input class="form-control form-control-sm text-center" type="text" name="comm" placeholder="비고" value="" >
 								            </div>
 								        </div>
 								    </div>

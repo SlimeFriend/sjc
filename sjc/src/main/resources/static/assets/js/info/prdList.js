@@ -193,6 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 ellipsis: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                 
             },            
             /*            
             {
@@ -641,38 +645,63 @@ document.addEventListener('DOMContentLoaded', function() {
         
 		const rowKeys = selectedRows.map(row => row.rowKey);
 		
-		if (selectedRows.length > 0) {
-		    const validation = gridMtModal.validate();
-		    
-		    const invalidRows = validation.filter(result => 
-		        rowKeys.includes(result.rowKey)
-		    );
-		
-		    if (invalidRows.length > 0) {
-		        alert('입력값을 확인하세요.');
-		        return false;
-		    }
-						
-			const description = document.querySelector('textarea[name="description"]').value;
-			if (!description || description.trim() === '') {
-			    alert('설명을 입력하세요.');
-			    return false;
-			}			
+		if($('input:checkbox[name="customSwitchBom"]').val() == "on"){
+			if (selectedRows.length > 0) {
+			    const validation = gridMtModal.validate();
+			    
+			    const invalidRows = validation.filter(result => 
+			        rowKeys.includes(result.rowKey)
+			    );
 			
-        	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
-        		//registerBoms(selectedRows.map(row => row.mtCode));
-        		//registerBoms(selectedRows);
-        		registerPrdBom(selectedRows);
-        	}else{
-        		return false;
-        	}
+			    if (invalidRows.length > 0) {
+			        alert('필요수량 값을 확인하세요.');
+			        return false;
+			    }
+	        } else {
+	            alert('자재를 선택하세요.');
+	            return false;
+	        }
+			
+		}
+	    const prdCode = document.querySelector('input[type="text"][name="prdCode"]').value;
+		if (!prdCode || prdCode.trim() === '') {
+		    alert('제품코드를 입력하세요.');
+		    return false;
+		}	    
+	    const prdName = document.querySelector('input[type="text"][name="prdName"]').value;
+		if (!prdName || prdName.trim() === '') {
+		    alert('제품명을 입력하세요.');
+		    return false;
+		}	    
+	    const unitPrice = document.querySelector('input[type="text"][name="unitPrice"]').value;
+		if (!unitPrice || unitPrice.trim() === '') {
+		    alert('단가를 입력하세요.');
+		    return false;
+		}	    
+
+		const description = document.querySelector('textarea[name="description"]').value;
+		if (!description || description.trim() === '') {
+		    alert('설명을 입력하세요.');
+		    return false;
+		}			
+		
+    	if (confirm("새로운 제픔을 등록하시겠습니까??") == true){
+    		//registerBoms(selectedRows.map(row => row.mtCode));
+    		//registerBoms(selectedRows);
+    		registerPrdBom(selectedRows);
+    	}else{
+    		return false;
+    	}
         	
-        } else {
-            alert('자재를 선택하세요.');
-            return false;
-        }
         
         $('#mtModal').modal('hide');
+	    document.querySelector('textarea[name="description"]').value="";
+	    //document.querySelector('input[type="date"][name="regDate"]').value="";
+	    document.querySelector('input[type="text"][name="manager"]').value="";
+	    document.querySelector('input[type="text"][name="prdCode"]').value="";
+	    document.querySelector('input[type="text"][name="prdName"]').value="";
+	    document.querySelector('input[type="text"][name="unitPrice"]').value="";
+	    document.querySelector('input[type="text"][name="comm"]').value="";
 
         
         
@@ -680,20 +709,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function registerPrdBom(selectedRows) {
 		
-		document.querySelector('textarea[name="description"]').value
+	
+		let customSwitchBom= false;
 		
-		const editedRows = selectedRows.map(row => ({
-		    ...row,
-		    description: document.querySelector('textarea[name="description"]').value,
-		    regDate: document.querySelector('input[type="date"][name="regDate"]').value,
-		    manager: document.querySelector('input[type="text"][name="manager"]').value,
-		    
-		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
-		    prdName: document.querySelector('input[type="text"][name="prdName"]').value,
-		    unitPrice: document.querySelector('input[type="text"][name="unitPrice"]').value,
-		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
-		    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
-		}));
+		if($('#customSwitchBom').prop('checked')){
+			customSwitchBom = "true";
+		}else{
+			customSwitchBom = "false";
+			
+		}
+
+		let editedRows;		
+		
+		if($('#customSwitchBom').prop('checked')){
+			
+			editedRows = selectedRows.map(row => ({
+			    ...row,
+			    description: document.querySelector('textarea[name="description"]').value,
+			    regDate: document.querySelector('input[type="date"][name="regDate"]').value,
+			    manager: document.querySelector('input[type="text"][name="manager"]').value,
+			    
+			    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
+			    prdName: document.querySelector('input[type="text"][name="prdName"]').value,
+			    unitPrice: document.querySelector('input[type="text"][name="unitPrice"]').value,
+			    comm: document.querySelector('input[type="text"][name="comm"]').value,
+			    customSwitchBom: customSwitchBom,
+			}));
+		}else{
+			editedRows = [{
+			    description: document.querySelector('textarea[name="description"]').value,
+			    regDate: document.querySelector('input[type="date"][name="regDate"]').value,
+			    manager: document.querySelector('input[type="text"][name="manager"]').value,
+			    
+			    prdCode: document.querySelector('input[type="text"][name="prdCode"]').value,
+			    prdName: document.querySelector('input[type="text"][name="prdName"]').value,
+			    unitPrice: document.querySelector('input[type="text"][name="unitPrice"]').value,
+			    comm: document.querySelector('input[type="text"][name="comm"]').value,
+			    customSwitchBom: customSwitchBom,
+			}];
+		}
+		
 
 		
         fetch('/registerPrdBoms', {
@@ -713,11 +768,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			    
 			    //grid.uncheckAll();
 
+		    	/*
 		    	gridPrd.addRowClassName(0, 'bg-success');
 		    	gridBom.addRowClassName(0, 'bg-success');
 			    selectedRows.forEach((row , index) => {
 					gridBomDetail.addRowClassName(index, 'bg-success');
 				});
+				*/
 	        }
 	        
 	        return response.json();
@@ -883,9 +940,12 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
         .then(response => response.json())
         .then(result => {
+        	$('#customSwitchBom').prop('checked', false); //체크 해제
             gridMtModal.resetData(result);
         	$('#mtModal').modal('show');
-        	gridMtModal.refreshLayout();                  
+        	gridMtModal.refreshLayout();
+  			gridMtModal.disable();
+
         })
         .catch(error => {
             console.error(error);
@@ -896,4 +956,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	    gridMtModal.finishEditing();
 	});    
 
+
+
+    document.getElementById('customSwitchBom').addEventListener('change', function() {
+		
+		if($(this).prop('checked')){
+			gridMtModal.enable();
+			console.log($(this).prop('checked'));
+			console.log($('#customSwitchBom').prop('checked'));
+		}else{
+			gridMtModal.disable();
+			console.log($(this).prop('checked'));
+			console.log($('#customSwitchBom').prop('checked'));
+		}
+		
+    });
 });		 
