@@ -4,13 +4,32 @@ Author: Ankit Hingarajiya - DeskApp
 */
 @charset "utf-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
+
+
+/*  타이틀(bold) */
+@font-face {
+    font-family: 'ONE-Mobile-Title';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*  본문(thin) */
+@font-face {
+    font-family: 'ONE-Mobile-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 body, html {
 	-webkit-font-smoothing: antialiased;
 	width: 100%;
 	height: 100%;
-	font-family: "Roboto", sans-serif;
+	/* font-family: "Roboto", sans-serif; */
+	font-family: 'ONE-Mobile-Title';
     font-weight: 500;
     font-style: normal;
 }
@@ -35,7 +54,8 @@ input[type=submit] {
 body {
 	margin: 0;
 	padding: 0;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Regular';
 	font-weight: 400;
 	min-height: 100%;
 	color: #031e23;
@@ -65,7 +85,8 @@ img {
 
 input, select, textarea {
 	resize: none;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Title';
 }
 
 select, textarea {
@@ -85,7 +106,8 @@ h1, h2, h3, h4, h5, h6 {
 	padding: 0;
 	font-weight: 700;
 	color: #202342;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Title';
 }
 
 ol, p, ul {
@@ -362,7 +384,8 @@ p {
 
 .h1, .h2, .h3 {
 	color: #1b3133;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Title';
 }
 
 .h2 {
@@ -384,7 +407,8 @@ p {
 	font-size: 20px;
 	line-height: 1.35;
 	color: #1b3133;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Title';
 }
 
 .h5 {
@@ -666,7 +690,8 @@ p {
 }
 
 .highcharts-root {
-	font-family: 'Inter', sans-serif !important
+	/* font-family: 'Inter', sans-serif !important */
+	font-family: 'ONE-Mobile-Title' !important;
 }
 
 .bootstrap-select .dropdown-toggle {
@@ -720,7 +745,8 @@ p {
 	font-weight: 400;
 	padding: .657rem 1rem;
 	color: #444;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Title';
 	-webkit-transition: all .3s ease-in-out;
 	transition: all .3s ease-in-out
 }
@@ -740,7 +766,8 @@ p {
 }
 
 .custom-file-input, .custom-file-label, .custom-select, .form-control {
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Regular';
 	color: #131e22;
 	font-weight: 400;
 	height: 45px;
@@ -896,7 +923,8 @@ textarea.form-control {
 }
 
 .btn {
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Regular';
 	letter-spacing: 0;
 	font-weight: 500;
 	padding: .438rem 1rem
@@ -1155,7 +1183,8 @@ textarea.form-control {
 	font-weight: 400;
 	padding: .55rem 1rem;
 	color: #667f87;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Regular';
 	-webkit-transition: all .3s ease-in-out;
 	transition: all .3s ease-in-out
 }
@@ -1365,7 +1394,8 @@ table.dataTable>tbody>tr.child ul.dtr-details {
 }
 
 .apexcharts-svg * {
-	font-family: 'Muli', sans-serif !important
+	/* font-family: 'Muli', sans-serif !important */
+	font-family: 'ONE-Mobile-Title'!important;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role=row]>td:first-child:before,
@@ -1546,7 +1576,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	vertical-align: middle;
 	margin-left: 5px;
 	color: #ffffff;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Regular';
 }
 
 .user-info-dropdown .dropdown-menu {
@@ -1604,7 +1635,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	color: #666;
 	font-size: 14px;
 	font-weight: 500;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Regular';
 	border-radius: 5px
 }
 
@@ -1624,7 +1656,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	color: #202342;
 	font-weight: 700;
 	text-transform: capitalize;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Title';
 	padding-bottom: 5px
 }
 
@@ -1728,7 +1761,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	letter-spacing: .05em;
 	font-weight: 500;
 	line-height: 45px;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Title';
 	padding: 0 20px
 }
 
@@ -1810,7 +1844,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	font-weight: 300;
 	letter-spacing: .03em;
 	position: relative;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Title';
 	-webkit-transition: all .3s ease-in-out;
 	transition: all .3s ease-in-out
 }
@@ -1918,7 +1953,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 
 .sidebar-menu.icon-list-style-2 .submenu li>a:before {
 	content: "\f10c";
-	font-family: FontAwesome
+	font-family: FontAwesome;
 }
 
 .sidebar-menu.icon-list-style-3 .submenu li>a:before {
@@ -1955,7 +1990,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 	font-weight: 300;
 	letter-spacing: .03em;
 	position: relative;
-	font-family: 'Inter', sans-serif
+	/* font-family: 'Inter', sans-serif */
+	font-family: 'ONE-Mobile-Regular';
 }
 
 .chat-box .chat-desc ul li.upload-file.admin_chat .upload-file-box .left .overlay,
@@ -2461,7 +2497,8 @@ body.IE .login-wrap .container, body.IE .register-page-wrap .container {
 	font-weight: 400;
 	padding: .55rem 1rem;
 	color: #667f87;
-	font-family: 'Inter', sans-serif;
+	/* font-family: 'Inter', sans-serif; */
+	font-family: 'ONE-Mobile-Title';
 	-webkit-transition: all .3s ease-in-out;
 	transition: all .3s ease-in-out
 }
