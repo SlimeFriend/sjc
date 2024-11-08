@@ -20,6 +20,8 @@ public class outHistoryVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date outDate;
     
+    private String userName;
+    private String manager;
 	private String cpName;
 	private String cpCode;
 	private String ordCode;

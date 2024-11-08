@@ -108,13 +108,16 @@ public class SalesServiceImpl implements SalesService {
 			ordCode = (String) lot.get("ordCode");
 			String lotNumber = (String) lot.get("lot");
 			String cpName = (String) lot.get("cpName");
+			String manager = (String) lot.get("manager");
 			int outQuantity = (Integer) lot.get("outQuantity");
 			
-			totalRowsAffected += salesMapper.insertOutHistory(ordCode, prdCode, lotNumber, outQuantity, cpName);
+			totalRowsAffected += salesMapper.insertOutHistory(ordCode, prdCode, lotNumber, outQuantity, cpName, manager);
 			totalRowsAffected += salesMapper.prdLotOutProcess(outQuantity, lotNumber);
 		}
 		
 		salesMapper.updateOrdFinish(ordCode);
+		salesMapper.updateOrdOutDate(ordCode);
+		
 	    
 		return totalRowsAffected;
 	}

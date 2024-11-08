@@ -68,7 +68,7 @@ public interface SalesMapper {
 	public int selectRemainData(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode);
 	
 	// 출고내역 등록
-	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName);
+	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName, @Param("manager") String manager);
 	public int prdLotOutProcess(@Param("outQuantity") int outQuantity, @Param("lot") String lot);
 	public int updateOrdFinish(@Param("ordCode") String ordCode);
 
@@ -79,5 +79,6 @@ public interface SalesMapper {
 	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate);
 
 	public int updateOrdStatus(@Param("ordStatus") String ordStatus, @Param("ordCode") String ordCode);
+	public int updateOrdOutDate(String ordCode);
 	
 }
