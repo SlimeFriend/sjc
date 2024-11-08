@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 	
 	<head>
-    	<title>입/출고 내역</title>
+    	<title>완제품 입/출고 내역</title>
     	<style>
     		.resetBtn {
 	    		background-color: #0b132b; 
@@ -22,17 +22,30 @@
 	<!-- 페이징 필요하신분 -->
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	
-	<h2 class="h2 mb-20">입/출고 내역</h2>
+	<h2 class="h2 mb-20">완제품 입/출고 내역</h2>
+	
 	<div class="pd-30 card-box mb-20">
-		<div class="d-flex justify-content-between align-items-start">
-			<div style="flex-grow:1" id="inInput">
-				<h2 class="h5 mb-20" id="title">입고내역</h2>
-				<div class="form-group row">
+		<div class="d-flex justify-content-between align-items-center">
+			<h2 class="h5 mb-20" id="title">입고제품 검색</h2>
+			<div class="d-flex">
+				<div style="text-align: center">
+					<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
+					<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
+					<button class="btn resetBtn" type="button" style="margin-left: 10px;" onclick="resetForm()">초기화</button>
+				</div>
+			</div>
+		</div>
+		<hr style="border: 0; height: 2px; background: #ccc;">
+		
+		<form id="inCard">
+			<div class="form-group row">
 					<label class="col-sm-12 col-md-1 col-form-label" for="prdName">제품명</label>
 					<div class="col-sm-12 col-md-3">
 						<input class="form-control" id="prdName" type="text" placeholder="제품명" oninput="inSearch()">
 					</div>
 				</div>
+
+				<hr>
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-1 col-form-label">입고일자</label>
@@ -47,50 +60,47 @@
 						<input class="form-control" id="inEndDate" type="date" oninput="inSearch()">
 					</div>
 				</div>
-			</div>
-			
-			<div style="flex-grow:1; display: none;" id="outInput">
-				<h2 class="h5 mb-20">출고내역</h2>
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label" for="outPrdName">제품명</label>
-					<div class="col-sm-12 col-md-3">
-						<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label" for="cpName">업체명</label>
-					<div class="col-sm-12 col-md-3">
-						<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-1 col-form-label">출고일자</label>
-					<div class="col-sm-12 col-md-3">
-						<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
-					</div>
-					<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
-						<span style="font-size: 1rem;">-</span>
-					</div>
-					<div class="col-sm-12 col-md-3">
-						<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">
-					</div>
+		</form>
+		
+		<form id="outCard" style="display:none">
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-1 col-form-label" for="outPrdName">제품명</label>
+				<div class="col-sm-12 col-md-3">
+					<input class="form-control" id="outPrdName" type="text" placeholder="제품명" oninput="outSearch()">
 				</div>
 			</div>
 			
-			<div class="mb-20 d-flex flex-column align-items-end">
-				<div>
-					<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
-					<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
-					<button class="btn resetBtn" type="button" style="margin-left: 10px;" onclick="resetForm()">초기화</button>
+			<hr>
+
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-1 col-form-label" for="cpName">업체명</label>
+				<div class="col-sm-12 col-md-3">
+					<input class="form-control" id="cpName" type="text" placeholder="업체명" oninput="outSearch()">
 				</div>
 			</div>
-		</div>
+			
+			<hr>
+
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-1 col-form-label">출고일자</label>
+				<div class="col-sm-12 col-md-3">
+					<input class="form-control" id="outStartDate" type="date" oninput="outSearch()">
+				</div>
+				<div class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+					<span style="font-size: 1rem;">-</span>
+				</div>
+				<div class="col-sm-12 col-md-3">
+					<input class="form-control" id="outEndDate" type="date" oninput="outSearch()">
+				</div>
+			</div>
+		</form>
 	</div>
 	
-	<div id="inGrid"></div>
-	<div id="outGrid" style="display : none"></div>
+	<div class="pd-30 card-box mb-20">
+		<h2 class="h5 mb-20" id="subTitle">입고제품 내역</h2>
+		<div id="inGrid"></div>
+		<div id="outGrid" style="display : none"></div>
+	</div>
 
 	
 	<script th:inline="javascript">
@@ -102,6 +112,9 @@
 			const inGrid = document.getElementById('inGrid');
 	        const outGrid = document.getElementById('outGrid');
 			const title = document.getElementById('title');
+			
+			const inCard = document.getElementById('inCard');
+			const outCard = document.getElementById('outCard');
 			
 			const inInput = document.getElementById('inInput');
 			const outInput = document.getElementById('outInput');
@@ -153,10 +166,6 @@
 					align : 'center',
 					rowSpan: true,
 				}, {
-					header : '담당자',
-					name : 'userName',
-					align : 'center',
-				}, {
 					header : 'LOT',
 					name : 'lot',
 					align : 'center',
@@ -195,42 +204,32 @@
 
 		    // 입고 버튼 클릭 이벤트
 		    document.getElementById('inButton').addEventListener('click', function() {
+		        inCard.style.display = 'block';
+		        outCard.style.display = 'none';
 		        inGrid.style.display = 'block'; // 입고 그리드 보이기
 		        outGrid.style.display = 'none'; // 출고 그리드 숨기기
-		        inInput.style.display = 'block';
-		        outInput.style.display = 'none';
 		        iGrid.refreshLayout();
-
+		        title.innerHTML = '입고제품 검색';
+		        subTitle.innerHTML = '입고제품 내역';
+		        inSearch();
 		        // 버튼 스타일 업데이트
 		        setButtonStyles(this, document.getElementById('outButton'));
 		    });
 
 		    // 출고 버튼 클릭 이벤트
 		    document.getElementById('outButton').addEventListener('click', function() {
+		        inCard.style.display = 'none';
+		        outCard.style.display = 'block';
 		        outGrid.style.display = 'block'; // 출고 그리드 보이기
 		        inGrid.style.display = 'none'; // 입고 그리드 숨기기
-		        inInput.style.display = 'none';
-		        outInput.style.display = 'block';
 		        oGrid.refreshLayout();
-
+		        title.innerHTML = '출고제품 검색';
+		        subTitle.innerHTML = '출고제품 내역';
+		        outSearch();
 		        // 버튼 스타일 업데이트
 		        setButtonStyles(this, document.getElementById('inButton'));
 		    });
 		});
-		
-		function resetForm() {
-
-			document.getElementById('prdName').value = '';
-			document.getElementById('inStartDate').value = '';
-			document.getElementById('inEndDate').value = '';
-			document.getElementById('outPrdName').value = '';
-			document.getElementById('cpName').value = '';
-			document.getElementById('outStartDate').value = '';
-			document.getElementById('outEndDate').value = '';
-			
-			inSearch();
-			outSearch();
-		}
 		
 		function inSearch() {
 		    const prdName = document.getElementById('prdName').value;
@@ -284,5 +283,19 @@
 		    });
 		}
 		
+		function resetForm() {
+
+			document.getElementById('prdName').value = '';
+			document.getElementById('inStartDate').value = '';
+			document.getElementById('inEndDate').value = '';
+			document.getElementById('outPrdName').value = '';
+			document.getElementById('cpName').value = '';
+			document.getElementById('outStartDate').value = '';
+			document.getElementById('outEndDate').value = '';
+			
+			inSearch();
+			outSearch();
+
+		}
 		
 	</script>
