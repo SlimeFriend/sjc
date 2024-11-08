@@ -20,14 +20,14 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
-
+<script src="/assets/font/GowunDodum-Regular-normal.js"></script>
 <style>
 /* tui-grid 선택 테두리 제거 */
 .tui-grid-layer-focus-border {
 	display: none !important;
 }
 
-#grid:hover {
+#orderRequestGrid:hover {
 	cursor: pointer;
 }
 </style>
@@ -148,7 +148,7 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const data = orderRequestGrid.getData();
-
+        doc.setFont('GowunDodum-Regular')
         const columns = [
             { header: '업체 코드', dataKey: 'cpCode' },
             { header: '업체 명', dataKey: 'cpName' },
@@ -157,11 +157,12 @@
             { header: '총 금액', dataKey: 'totalAmount' },
             { header: '담당자', dataKey: 'userName' }
         ];
-
+    	doc.text("발주 관리", 90, 20);
         doc.autoTable({
             columns: columns,
             body: data,
-            startY: 10,
+            margin : {top:25},
+            styles : {font: "GowunDodum-Regular", fontStyle:"normal"},
             theme: 'grid'
         });
 

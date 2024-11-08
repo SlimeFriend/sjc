@@ -22,6 +22,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+<script src="/assets/font/GowunDodum-Regular-normal.js"></script>
 
 <style>
 .low-stock {
@@ -31,7 +32,7 @@
 
 
 
-#grid:hover {
+#productionPlanGrid:hover {
 	cursor: pointer;
 }
 </style>
@@ -185,30 +186,35 @@
             XLSX.utils.book_append_sheet(workbook, worksheet, "ProductionPlans");
             XLSX.writeFile(workbook, "ProductionPlans.xlsx");
         }
+     //pdf
 
-        // PDF 다운로드 함수
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const data = productionPlanGrid.getData();
+       function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const data = productionPlanGrid.getData();  
+    doc.setFont("GowunDodum-Regular");
+    const columns = [
+        { header: '생산계획코드', dataKey: 'planCode' },
+        { header: '제품명', dataKey: 'productName' },
+        { header: '수량', dataKey: 'quantity' },
+        { header: '시작일자', dataKey: 'startDate' },
+        { header: '종료일자', dataKey: 'endDate' }
+    ];
 
-            const columns = [
-                { header: '생산계획코드', dataKey: 'planCode' },
-                { header: '제품명', dataKey: 'productName' },
-                { header: '수량', dataKey: 'quantity' },
-                { header: '시작일자', dataKey: 'startDate' },
-                { header: '종료일자', dataKey: 'endDate' }
-            ];
+    doc.text("생산 계획 별 발주 확인", 90, 20);
+    doc.autoTable({
+        columns: columns,
+        body: data,
+        margin : {top:25},
+        styles : {font: "GowunDodum-Regular", fontStyle:"normal"},
+        theme: 'grid'
+    });
 
-            doc.autoTable({
-                columns: columns,
-                body: data,
-                startY: 10,
-                theme: 'grid'
-            });
+    // PDF 파일 저장
+    doc.save("ProductionPlans.pdf");
+}
 
-            doc.save("ProductionPlans.pdf");
-        }
+
 
         // 프린트 함수
         function printGrid() {
