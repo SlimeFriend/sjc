@@ -25,7 +25,7 @@
 			<label class="col-sm-12 col-md-1 col-form-label">진행상황</label>
 			<div class="col-sm-12 col-md-8" style="display: flex; align-items: center;">
             <div style="margin-right: 30px; display: flex; align-items: center;">
-        		<input name="option" type="radio" value="b" id="all" checked style="margin-right: 8px;">
+        		<input name="option" type="radio" value="" id="all" checked style="margin-right: 8px;">
             	<label for="all" style="margin-bottom: 0px;">전체</label>
         	</div>
         	<div style="margin-right: 30px; display: flex; align-items: center;">
@@ -219,7 +219,7 @@
 	    };
 
 	    $.ajax({
-	        url: '/searchDetail',
+	        url: '/searchOrders',
 	        type: 'POST',
 	        contentType: 'application/json',
 	        data: JSON.stringify(searchCriteria),
