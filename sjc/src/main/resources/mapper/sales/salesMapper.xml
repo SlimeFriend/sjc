@@ -12,17 +12,6 @@
 		    END AS ord_code
 		FROM ord
 	</select>
-	
-	<select id="getLot" resultType="String">
-		SELECT 
-		    CASE
-		        WHEN (MAX(SUBSTR(lot, 4, 8)) = TO_CHAR(SYSDATE, 'yyyyMMdd')) THEN 
-		            ('LOT' || TO_CHAR(MAX(SUBSTR(lot, 4, 12)) + 1))
-		        ELSE 
-		            ('LOT' || TO_CHAR(SYSDATE, 'yyyyMMdd') || TO_CHAR(LPAD(1, 3, '0')))
-		    END AS lot
-		FROM prd_management
-	</select>
 
 	<!-- 업체 리스트 조회 -->
 	<select id="selectCp" resultType="CpVO">
@@ -70,13 +59,15 @@
                  ord_date, 
                  dlv_req_date, 
                  cp_code,
-                 ord_status, 
+                 ord_status,
+                 manager, 
                  comm)
         VALUES ( #{ordCode}, 
                  SYSDATE,
                  #{dlvReqDate},
                  #{cpCode},
-                 #{ordStatus}, 
+                 #{ordStatus},
+                 #{manager}, 
                  #{comm})
 	</insert>
 	
@@ -99,6 +90,24 @@
 		FROM   prd_management
 		WHERE  prd_code = #{prdCode}
 	</select>
+
+	<!-- 주문내역 조회 -->
+	<select id="selectOrder" resultType="OrderVO">
+		SELECT o.ord_code,
+		       c.cp_name,
+		       o.ord_date,
+		       o.dlv_req_date,
+		       o.ord_status,
+		       o.comm,
+		       u.user_name,
+		       o.manager
+		       
+		FROM   ord o LEFT JOIN cp c
+		ON     o.cp_code = c.cp_code
+		JOIN   sjc_user u
+		ON     u.user_id = o.manager
+		ORDER BY o.ord_date DESC, o.ord_status
+	</select>
 	
 	<!-- 주문내역 검색 기능 -->
 	<select id="searchOrder" resultType="orderVO">
@@ -107,9 +116,13 @@
 	           o.ord_date,
 	           o.dlv_req_date,
 	           o.ord_status,
+	           u.user_name,
+	           o.manager,
 	           o.comm
-	    FROM   ord o 
-	    LEFT JOIN cp c ON o.cp_code = c.cp_code
+	    FROM   ord o LEFT JOIN cp c 
+	                        ON o.cp_code = c.cp_code 
+	                      JOIN sjc_user u
+	                        ON u.user_id = o.manager
 	    WHERE 1 = 1
 	    <if test="companyName != null and companyName != ''">
 	        AND c.cp_name LIKE '%' || #{companyName} || '%'
@@ -129,23 +142,13 @@
 	    <if test="orderStatus != null and orderStatus != ''">
         	AND o.ord_status = #{orderStatus}
     	</if>
+    	<if test="orderStatus == ''">
+    		AND o.ord_status IS NOT NULL 
+		</if>
     	ORDER BY o.ord_date DESC
 	</select>
-
-	<!-- 주문내역 조회 -->
-	<select id="selectOrder" resultType="OrderVO">
-		SELECT o.ord_code,
-		       c.cp_name,
-		       o.ord_date,
-		       o.dlv_req_date,
-		       o.ord_status,
-		       o.comm
-		       
-		FROM   ord o LEFT JOIN cp c
-		ON     o.cp_code = c.cp_code
-		ORDER BY o.ord_date DESC, o.ord_status
-	</select>
 	
+	<!-- 주문내역 상세 -->
 	<select id="selectOrderDetail" parameterType="String" resultType="map">
 		WITH lackQuantity AS (
 		    SELECT 
@@ -157,7 +160,7 @@
 		        prd_code
 		)
 		SELECT 
-		    o.ord_code AS ordCode,
+		    od.ord_code AS ordCode,
 		    od.prd_name AS prdName,
 		    od.prd_code AS prdCode,
 		    od.ord_quantity AS ordQuantity,

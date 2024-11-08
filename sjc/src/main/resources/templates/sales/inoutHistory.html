@@ -6,6 +6,17 @@
 	
 	<head>
     	<title>입/출고 내역</title>
+    	<style>
+    		.resetBtn {
+	    		background-color: #0b132b; 
+	    		color: #ffffff;
+	    	}
+	    	
+	    	.resetBtn:hover {
+	    		background-color: #2f08cc; 
+	    		color: #ffffff;
+	    	}
+    	</style>
 	</head>
 
 	<!-- 페이징 필요하신분 -->
@@ -72,6 +83,7 @@
 				<div>
 					<button class="btn" id="inButton" style="background-color: #0b132b; color: #ffffff;">입고</button>
 					<button class="btn" id="outButton" style="border: 1px solid #0b132b; color: #0b132b;">출고</button>
+					<button class="btn resetBtn" type="button" style="margin-left: 10px;" onclick="resetForm()">초기화</button>
 				</div>
 			</div>
 		</div>
@@ -252,6 +264,18 @@
 		            console.error('Error fetching search results:', error);
 		        }
 		    });
+		}
+		
+		function resetForm() {
+
+			document.getElementById('prdName').value = '';
+			document.getElementById('inStartDate').value = '';
+			document.getElementById('inEndDate').value = '';
+			document.getElementById('outPrdName').value = '';
+			document.getElementById('cpName').value = '';
+			document.getElementById('outStartDate').value = '';
+			document.getElementById('outEndDate').value = '';
+
 		}
 		
 	</script>
