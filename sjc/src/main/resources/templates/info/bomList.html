@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<style>
+	.gridClass:hover{
+		cursor: pointer;
+	}  
+</style>
+
    
 </head>
 <body>
@@ -23,7 +29,7 @@
 	        
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
 			        <h2 class="h5 mb-20">자재목록</h2>
-					<div id="grid"></div>
+					<div class="gridClass" id="grid"></div>
 	            </div>
 	            
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
@@ -66,7 +72,7 @@
 	        <div style="display: flex; width: 100%; gap: 20px;">
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
 		        	<h4 class="h5 mb-20">BOM 목록</h4>
-	                <div id="gridBom"></div>
+	                <div class="gridClass" id="gridBom"></div>
 	            </div>
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
 		        	<h4 class="h5 mb-20">BOM 상세목록</h4>

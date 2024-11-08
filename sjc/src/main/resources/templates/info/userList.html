@@ -13,6 +13,12 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     
+<style>
+	.gridClass:hover{
+		cursor: pointer;
+	}  
+</style>    
+    
 </head>
 <body>
 <!-- 
@@ -68,12 +74,12 @@
 		        <button class="btn btn-dark" id="xlsxBtn">Excel</button>
 		        
 		    </div>
-	    	<div id="grid"></div>
+	    	<div class="gridClass" id="grid"></div>
 	    </div>
 	    
 		<div class="pd-20 card-box mb-20" id="gridInsertWrapper" style="display:none">
 	        <h2 class="h5 mb-20">사용자 등록</h2>
-	    	<div id="gridInsert"></div>
+	    	<div class="gridClass" id="gridInsert"></div>
 		</div>
 	
 		<div class="pd-20 card-box mb-20" style="display:none;">
