@@ -93,19 +93,20 @@
 
 	<!-- 주문내역 조회 -->
 	<select id="selectOrder" resultType="OrderVO">
-		SELECT o.ord_code,
-		       c.cp_name,
-		       o.ord_date,
-		       o.dlv_req_date,
-		       o.ord_status,
-		       o.comm,
-		       u.user_name,
-		       o.manager
+		SELECT   o.ord_code,
+		         o.manager,
+		         c.cp_name,
+		         o.ord_date,
+		         o.dlv_req_date,
+		         o.ord_status,
+		         o.comm,
+		         u.user_name,
+		         o.out_date
 		       
-		FROM   ord o LEFT JOIN cp c
-		ON     o.cp_code = c.cp_code
-		JOIN   sjc_user u
-		ON     u.user_id = o.manager
+		FROM     ord o LEFT JOIN cp c
+		ON       o.cp_code = c.cp_code
+		JOIN     sjc_user u
+		ON       u.user_id = o.manager
 		ORDER BY o.ord_date DESC, o.ord_status
 	</select>
 	
@@ -151,13 +152,10 @@
 	<!-- 주문내역 상세 -->
 	<select id="selectOrderDetail" parameterType="String" resultType="map">
 		WITH lackQuantity AS (
-		    SELECT 
-		        prd_code, 
-		        SUM(stc_quantity) AS stc_quantity
-		    FROM 
-		        prd_management
-		    GROUP BY 
-		        prd_code
+		    SELECT   prd_code, 
+		             SUM(stc_quantity) AS stc_quantity
+		    FROM     prd_management
+		    GROUP BY prd_code
 		)
 		SELECT 
 		    od.ord_code AS ordCode,
@@ -194,10 +192,14 @@
 		       o.ord_date,
 		       o.dlv_req_date,
 		       o.ord_status,
-		       o.comm
+		       o.manager,
+		       u.user_name,
+		       o.comm,
+		       o.out_date
 		       
 		FROM   ord o LEFT JOIN cp c
-		ON     o.cp_code = c.cp_code
+		ON     o.cp_code = c.cp_code JOIN sjc_user u
+		ON     o.manager = u.user_id
     	WHERE ord_status = #{status}
     	ORDER BY o.ord_date DESC
 	</select>
@@ -265,10 +267,16 @@
 		WHERE ord_code = #{ordCode}
 	</update>
 	
+	<update id="updateOrdOutDate">
+		UPDATE ord
+		SET    out_date = sysdate
+		WHERE  ord_code = #{ordCode}
+	</update>
+	
 	<!-- LOT출고접수 프로세스 -->
 	<insert id="insertOutHistory">
-		INSERT INTO prd_out_history(out_no, lot, prd_code, out_quantity, out_date, ord_code, cp_name)
-		VALUES(out_seq.NEXTVAL + 3, #{lot}, #{prdCode}, #{outQuantity}, SYSDATE, #{ordCode}, #{cpName})
+		INSERT INTO prd_out_history(out_no, lot, prd_code, out_quantity, out_date, ord_code, cp_name, manager)
+		VALUES(out_seq.NEXTVAL + 3, #{lot}, #{prdCode}, #{outQuantity}, SYSDATE, #{ordCode}, #{cpName}, #{manager})
 	</insert>
 	
 	<!-- Prd출고접수 프로세스 -->
@@ -291,15 +299,25 @@
 	</select>
 	
 	<select id="selectOutHistory" resultType="outHistoryVO">
-		SELECT      poh.LOT AS "lot",
-		            p.PRD_NAME AS "prdName",
-		            poh.OUT_QUANTITY AS "outQuantity",
-		            poh.OUT_DATE AS "outDate",
-		            poh.CP_NAME AS "cpName",
-		            poh.ORD_CODE AS "ordCode"
-		FROM        prd_out_history poh LEFT JOIN prd p
-		                                ON p.prd_code = poh.prd_code
-		ORDER BY    poh.OUT_DATE DESC, poh.LOT
+		SELECT 
+		    poh.LOT AS "lot",
+		    p.PRD_NAME AS "prdName",
+		    poh.OUT_QUANTITY AS "outQuantity",
+		    poh.OUT_DATE AS "outDate",
+		    poh.CP_NAME AS "cpName",
+		    poh.ORD_CODE AS "ordCode",
+		    u.user_name,
+		    o.manager
+		FROM 
+		    prd_out_history poh
+		LEFT JOIN 
+		    prd p ON p.prd_code = poh.prd_code
+		JOIN 
+		    ord o ON o.ord_code = poh.ord_code
+		JOIN 
+		    sjc_user u ON u.user_id = o.manager
+		ORDER BY 
+		    poh.OUT_DATE DESC, poh.LOT
 	</select>
 	
 	<!-- 입고 검색 프로세스 -->

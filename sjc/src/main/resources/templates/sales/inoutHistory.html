@@ -26,7 +26,7 @@
 	<div class="pd-30 card-box mb-20">
 		<div class="d-flex justify-content-between align-items-start">
 			<div style="flex-grow:1" id="inInput">
-				<h2 class="h5 mb-20" id="title">입고</h2>
+				<h2 class="h5 mb-20" id="title">입고내역</h2>
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-1 col-form-label" for="prdName">제품명</label>
 					<div class="col-sm-12 col-md-3">
@@ -50,7 +50,7 @@
 			</div>
 			
 			<div style="flex-grow:1; display: none;" id="outInput">
-				<h2 class="h5 mb-20">출고</h2>
+				<h2 class="h5 mb-20">출고내역</h2>
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-1 col-form-label" for="outPrdName">제품명</label>
 					<div class="col-sm-12 col-md-3">
@@ -153,6 +153,10 @@
 					align : 'center',
 					rowSpan: true,
 				}, {
+					header : '담당자',
+					name : 'userName',
+					align : 'center',
+				}, {
 					header : 'LOT',
 					name : 'lot',
 					align : 'center',
@@ -214,6 +218,20 @@
 		    });
 		});
 		
+		function resetForm() {
+
+			document.getElementById('prdName').value = '';
+			document.getElementById('inStartDate').value = '';
+			document.getElementById('inEndDate').value = '';
+			document.getElementById('outPrdName').value = '';
+			document.getElementById('cpName').value = '';
+			document.getElementById('outStartDate').value = '';
+			document.getElementById('outEndDate').value = '';
+			
+			inSearch();
+			outSearch();
+		}
+		
 		function inSearch() {
 		    const prdName = document.getElementById('prdName').value;
 		    const inStartDate = document.getElementById('inStartDate').value;
@@ -266,16 +284,5 @@
 		    });
 		}
 		
-		function resetForm() {
-
-			document.getElementById('prdName').value = '';
-			document.getElementById('inStartDate').value = '';
-			document.getElementById('inEndDate').value = '';
-			document.getElementById('outPrdName').value = '';
-			document.getElementById('cpName').value = '';
-			document.getElementById('outStartDate').value = '';
-			document.getElementById('outEndDate').value = '';
-
-		}
 		
 	</script>

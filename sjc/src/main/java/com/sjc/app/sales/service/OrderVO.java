@@ -22,6 +22,10 @@ public class OrderVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dlvReqDate;
     
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date outDate;
+    
     private String userName;
     private String manager;
 	private String comm;

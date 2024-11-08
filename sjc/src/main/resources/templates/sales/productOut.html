@@ -41,6 +41,8 @@
 	<div class="pd-30 card-box mb-20">
 		<h4 class="h5 mb-20">출고접수</h4>
 		<div id="gridOrder"></div>
+		<input type="hidden" th:value="${#authentication.principal.authorities[2]}">
+		<input type="hidden" th:value="${#authentication.principal.authorities[1]}" name="manager">
 	</div>
 	
 	<!-- The Modal -->
@@ -97,6 +99,10 @@
 				columns : [ {
 					header : '주문코드',
 					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : '담당자',
+					name : 'userName',
 					align : 'center',
 				}, {
 					header : '업체명',
@@ -166,7 +172,7 @@
 					name : 'PRDCODE',
 					align : 'center',
 				}, {
-					header : '총 주문량',
+					header : '주문량',
 					name : 'ORDQUANTITY',
 					align : 'center',
 				}, {
@@ -262,6 +268,10 @@
 					name : 'ordCode',
 					align : 'center',
 				}, {
+					header : '담당자',
+					name : 'userName',
+					align : 'center',
+				}, {
 					header : '업체명',
 					name : 'cpName',
 					align : 'center',
@@ -272,6 +282,10 @@
 				}, {
 					header : '납기일자',
 					name : 'dlvReqDate',
+					align : 'center',
+				}, {
+					header : '출고일자',
+					name : 'outDate',
 					align : 'center',
 				}, {
 					header : '진행상황',
@@ -376,7 +390,7 @@
 			    
 			 	// 가격과 수량 검증
 			    if (isNaN(lotOutQuantity) || lotOutQuantity === '' || Number(lotOutQuantity) <= 0) {
-			        alert('올바르지 않은 값이 들어왔습니다.');
+			        alert('숫자를 입력해주세요.');
 			        productLotGrid.setValue(rowKey, 'OUT_QUANTITY', '');
 			    }
 			    
@@ -419,7 +433,8 @@
 			                    ordCode: ordCodeValue,
 			                    prdCode: currentPrdCode,
 			                    lot: currentLot,
-			                    outQuantity: Number(currentOutQuantity)
+			                    outQuantity: Number(currentOutQuantity),
+			                    manager: document.querySelector('input[name="manager"]').value,
 			                });
 			            }
 
@@ -497,11 +512,15 @@
 				    	}	
 				    }
 				    
-				    const requestData = {
+				   // 사용자의 확인을 받기 위해 confirm 창 띄우기
+				   const isConfirmed = confirm("출고 접수하시겠습니까?");
+				   
+				   if(isConfirmed) {
+				   const requestData = {
 				    	    outLotData: outLotData,
 				    	    outPrdData: outPrdData,
 				    };
-				    
+				   
 				   $.ajax({
 			    		url: '/getPrdOutInfo',
 			    		type: 'POST',
@@ -514,6 +533,16 @@
 			    			fetchOutGrid();
 			    		}
 			    	});
+				   } else {
+					   alert('출고 접수가 취소되었습니다.');
+					   
+					   const modalCount = gridModal.getRowCount();
+					   
+					   for(let i = 0; i < modalCount; i++) {
+					   	gridModal.setValue(i, 'totalOutQuantity', "")
+					   	gridModal.setValue(i, 'remainQuantity', "")
+					   }
+				   }
 			    }
 			    
 			    outLotData = [];
