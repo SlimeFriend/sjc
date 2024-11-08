@@ -167,14 +167,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'prdName',
                 align: 'center',
                 sortingType: 'asc',
-                sortable: true                
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                 
             },
             {
                 header: '설명',
                 name: 'description',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                 
             },
             {
                 header: '등록일',

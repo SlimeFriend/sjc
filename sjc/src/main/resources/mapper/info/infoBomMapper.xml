@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.info.mapper.InfoBomMapper">
+	<update id="updatePrdNull" parameterType="ProductVO">
 
+		update 	prd
+		set		bom_code = null
+		where	bom_code = #{bomCode}
+	</update>
+	
 	<update id="updatePrd" parameterType="ProductVO">
 		update 	prd
 		set		bom_code = #{bomCode}

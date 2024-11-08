@@ -24,6 +24,9 @@ public interface InfoBomMapper {
     // 제품 정보 수정
     int updatePrd(ProductVO productVO);
     
+    // 제품의 BOM 지정 시 기존에 지정돈 BOM 정보 초기화
+    int updatePrdNull(ProductVO productVO);
+    
     // BOM 정보 수정
     int updateBom(BomVO bomVO);
     

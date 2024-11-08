@@ -41,4 +41,7 @@ public class BomVO extends ProductVO{
 	private String specification; 	// 규격
 	private String unit; 			// 단위
 	
+	//private boolean customSwitchBom;
+	private String customSwitchBom;
+	
 }
