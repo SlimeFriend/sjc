@@ -28,11 +28,11 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h2 class="h5">주문서 작성</h2>
 						<div class="d-flex">
-							<div class="mr-10" style="text-align: center">
-								<button class="btn" type="button" onclick="resetForm()">초기화</button>
+							<div style="text-align: center; margin-right: 10px;">
+								<button class="btn" type="button" onclick="sendCheckedRows(event)">주문접수</button>
 							</div>
 							<div style="text-align: center">
-								<button class="btn" type="button" onclick="sendCheckedRows(event)">주문접수</button>
+								<button class="btn" type="button" onclick="resetForm()">초기화</button>
 							</div>
 						</div>
 					</div>
@@ -43,6 +43,8 @@
 							<div class="col-sm-12 col-md-10">
 								<input class="form-control" type="text" id="cpInput" name="cpName" style="width: 350px;" placeholder="업체를 선택해주세요.">
 								<input class="form-control" type="hidden" id="cpCode" name="cpCode">
+								<input type="hidden" th:value="${#authentication.principal.authorities[2]}">
+								<input type="hidden" th:value="${#authentication.principal.authorities[1]}" name="manager">
 							</div>
 						</div>
 						<hr>
@@ -252,22 +254,32 @@
 	        }
 	    }
 	    
-	    const payload = {
-	        orderVO: formObj,    // 폼 데이터 (주문 정보)
-	        productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
-	    };
+	 	// 사용자의 확인을 받기 위해 confirm 창 띄우기
+	    const isConfirmed = confirm("주문을 접수하시겠습니까?");
+	    if (isConfirmed) {
+	        // 병합된 데이터를 서버로 전송 (AJAX 요청)
+	        const payload = {
+	            orderVO: formObj,    // 폼 데이터 (주문 정보)
+	            productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+	        };
 
-	    $.ajax({
-	        url: '/orderReception',
-	        type: 'POST',
-	        contentType: 'application/json',
-	        data: JSON.stringify(payload),
-	        success: function(response) {
-	            alert('주문이 성공적으로 접수되었습니다!');
-	            window.location.href = "orderHistory";
-	            console.log(response);
-	        }
-	    });
+	        $.ajax({
+	            url: '/orderReception',
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(payload),
+	            success: function(response) {
+	                alert('주문이 성공적으로 접수되었습니다!');
+	                window.location.href = "orderHistory";
+	            },
+	            error: function(xhr, status, error) {
+	                console.error('Error during AJAX request:', error);
+	                alert('주문 접수 중 오류가 발생했습니다.');
+	            }
+	        });
+	    } else {
+	        alert('주문 접수가 취소되었습니다.');
+	    }
 	}
 		
 
