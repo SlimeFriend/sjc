@@ -14,8 +14,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     
 <style>
-	.gridClass:hover{
-		cursor: pointer;
+	.gridClass td.tui-grid-cell-editable
+	{
+	  cursor: pointer;
 	}  
 </style>    
     
@@ -45,10 +46,10 @@
 		            <input class="form-control" type="text" id="inputRoleName" placeholder="권한 입력">
 		        </div>
 		
-		        <button class="btn btn-primary mr-3 ml-5" id="searchBtn" style="opacity: 0;">검색</button>
-		        <button class="btn btn-success mr-3" id="insertBtn">추가</button>
-		        <button class="btn btn-secondary mr-3" id="saveBtn">저장</button>
-		        <button class="btn btn-info mr-3" id="userHistoryBtn">이력</button>
+		        <button class="btn btn-primary" id="searchBtn" style="display: none;" disabled>검색</button>
+		        <button class="btn btn-success ml-5" id="insertBtn">추가</button>
+		        <button class="btn btn-secondary ml-5" id="saveBtn">저장</button>
+		        <button class="btn btn-info ml-5" id="userHistoryBtn">이력</button>
 		        
 		    </div>
 	    
@@ -68,10 +69,10 @@
 		            <input class="form-control" type="text" id="inputDeptName" placeholder="부서명 입력">
 		        </div>
 		        
-		        <button class="btn btn-info mr-3 ml-5" id="copyBtn" style="opacity: 0;">복사</button>
-		        <button class="btn btn-danger mr-3" id="deleteBtn">삭제</button>
-		        <button class="btn btn-warning mr-3" id="updateBtn">수정</button>
-		        <button class="btn btn-dark" id="xlsxBtn">xlsx</button>
+		        <button class="btn btn-info" id="copyBtn" style="display: none;" disabled>복사</button>
+		        <button class="btn btn-danger ml-5" id="deleteBtn">삭제</button>
+		        <button class="btn btn-warning ml-5" id="updateBtn">수정</button>
+		        <button class="btn btn-dark ml-5" id="xlsxBtn">xlsx</button>
 		        
 		    </div>
 	    	<div class="gridClass" id="grid"></div>
