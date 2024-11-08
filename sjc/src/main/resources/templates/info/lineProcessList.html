@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+
+<style>
+	.gridClass td.tui-grid-cell-editable {
+	  cursor: pointer;
+	}
+</style>
+    
 </head>
 <body>
 	<!-- 
@@ -64,7 +71,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="gridLine"></div>
+					<div class="gridClass" id="gridLine"></div>
 				</div>
 				<div class="pd-30 card-box mb-20" style="width: 50%;">
 					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
