@@ -23,6 +23,10 @@
         font-size: 12px;
         pointer-events: none;
     }
+    
+	.gridClass:hover{
+		cursor: pointer;
+	}    
 </style>   
 </head>
 <body>
@@ -47,7 +51,7 @@
 							 -->
 						</div>
 					</div>	            
-					<div id="gridPrd"></div>
+					<div class="gridClass" id="gridPrd"></div>
 	            </div>
 				<div style="display: flex; flex-direction: column; width: 50%;">
 				    <!-- 위쪽 card-box (BOM목록) -->
@@ -58,7 +62,7 @@
 				                <button type="button" class="btn btn-success" id="bomBtn">BOM 지정</button>
 				            </div>
 				        </div>
-				        <div class="pb-30" id="gridBom"></div>
+				        <div class="pb-30 gridClass" id="gridBom"></div>
 				    </div>
 				
 				    <!-- 아래쪽 card-box (BOM 상세목록) -->
