@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +16,11 @@ import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoBomService;
 import com.sjc.app.info.service.PrdBomDTO;
 import com.sjc.app.sales.service.ProductVO;
+import com.sjc.app.security.service.LoginUserVO;
 
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
-import oracle.net.aso.b;
 
 @Timed("info.bom")
 @Slf4j
@@ -120,6 +122,16 @@ public class InfoBomServiceImpl implements InfoBomService {
 	@Transactional
 	public Map<String, Object> modifyPrdBom(PrdBomDTO prdBomDTO) {
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //String id = null;
+        String name = null;
+        if (authentication.getPrincipal() instanceof LoginUserVO) {
+            LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
+            //id = loginUserVO.getUserVO().getUserId();
+            name = loginUserVO.getUserVO().getUserName();
+        }
+		
+		
 		ProductVO productVO = new ProductVO();
 		productVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
 		productVO.setBomCode(prdBomDTO.getBom().getBomCode());
@@ -130,6 +142,7 @@ public class InfoBomServiceImpl implements InfoBomService {
 		BomVO bomVO = new BomVO();
 		bomVO.setBomCode(prdBomDTO.getBom().getBomCode());
 		bomVO.setPrdCode(prdBomDTO.getPrd().getPrdCode());
+		bomVO.setManager(name);
 		
 		infoBomMapper.updateBomNull(productVO);
 		infoBomMapper.updateBom(bomVO);
