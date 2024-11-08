@@ -81,10 +81,8 @@ select {
 }
 </style>
 <body>
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<div class="card-box pd-20 mb-30">
-				<h2 class="mb-4">설비 등록</h2>
+<h2 class="h2 mb-20">설비 등록</h2>
+		<div class="pd-30 card-box mb-20">				
 				<form th:action="@{/eqInsert}" name="insertForm" method="post">
 					<div>
 						<label for="eqMdnm">모델명(필수)</label>
@@ -159,6 +157,7 @@ select {
 						<label for="lineCode">라인코드</label>
 						<select id="lineCode" name="lineCode">
 							<option value="">선택</option>
+							<option value="대기">대기</option>
 							<option value="L01">L01</option>
 							<option value="L02">L02</option>
 							<option value="L03">L03</option>
@@ -175,8 +174,6 @@ select {
 					</div>
 				</form>
 			</div>
-		</div>
-	</div>
 	<script>
 		$('[name=insertForm]').on('submit', equipInsertHandler);
 
