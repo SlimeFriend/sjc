@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+    layout:decorate="~{common/layouts/default_layout}"
+    layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- Toast UI Grid CSS 추가 -->
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Toast UI Grid JS 추가 -->
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <title>설비 비가동 관리</title>
 
@@ -16,8 +20,8 @@
 <style>
 
 tbody > tr {
-	cursor: pointer;
-	
+    cursor: pointer;
+    
 }
 
 .small-input {
@@ -29,122 +33,120 @@ tbody > tr {
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
 <body>
-	<h2 class="h2 mb-20">설비 비가동 관리</h2>
-				<div class="pd-30 card-box mb-20">
-					<div class="d-flex justify-content-between align-items-center mb-20">
-						<h4 class="h5 mb-20">설비 목록</h4>
-					</div>
-					<section>
-						<div>
-							<p style="font-size: 100%">
-								<label style="font-size: 120%;">구분</label>&nbsp;&nbsp;&nbsp;&nbsp; 
-								<input type="radio" id="all" name="section" value="all" checked> 
-								<label>전체</label>&nbsp;&nbsp;
-								<input type="radio" id="operating" name="section" value="op">
-								<label>가동</label>&nbsp;&nbsp; 
-								<input type="radio" id="nOperating" name="section" value="nOp"> <label>비가동</label>
-						</div>
-					</section>
-					
-					<div id="grid"></div>
-				</div>
-				
-				<div class="card-box pd-20 mb-30">
-				<!-- 두번째 페이지 -->
+    <h2 class="h2 mb-20">설비 비가동 관리</h2>
+                <div class="pd-30 card-box mb-20">
+                    <div class="d-flex justify-content-between align-items-center mb-20">
+                        <h4 class="h5 mb-20">설비 목록</h4>
+                    </div>
+                    <section>
+                        <div>
+                            <p style="font-size: 100%">
+                                <label style="font-size: 120%;">구분</label>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                <input type="radio" id="all" name="section" value="all" checked> 
+                                <label>전체</label>&nbsp;&nbsp;
+                                <input type="radio" id="operating" name="section" value="op">
+                                <label>가동</label>&nbsp;&nbsp; 
+                                <input type="radio" id="nOperating" name="section" value="nOp"> <label>비가동</label>
+                        </div>
+                    </section>
+                    
+                    <div id="grid"></div>
+                </div>
+                
+                <div class="card-box pd-20 mb-30">
+                <!-- 두번째 페이지 -->
 
-					<div class="d-flex justify-content-between align-items-center mb-20">
-						<h4 class="h5 mb-20">비가동 내역</h4>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
-						<div class="col-sm-12 col-md-2">
-							<input class="form-control" id="searchEqCode" type="text" placeholder="설비코드" oninput="search()" style="width: 150px;">
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<label class="col-sm-12 col-md-1 col-form-label">시작일자</label>
-							<div class="col-sm-12 col-md-2">
-								<input class="form-control" id="startDate" type="date" oninput="search()" style="width: 150px;">
-							</div>
-							
-							<label class="col-sm-12 col-md-1 col-form-label">이후부터</label>
-					</div>
-					<div class="form-group row">
-							<label class="col-sm-12 col-md-1 col-form-label">종료일자</label>
-							
-							<div class="col-sm-12 col-md-2">
-								<input class="form-control" id="endDate" type="date" oninput="search()" style="width: 150px;">
-							</div>
-							<label class="col-sm-12 col-md-1 col-form-label">이전까지</label>
-					</div>
-					
-					<div id="grid2"></div>
-			</div>
-			<!-- The Modal -->
-		    <div class="modal fade" id="nOpModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-			
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<!-- Modal Header -->
-						<div class="modal-header">
-							<h4 class="modal-title">비가동 설비 등록</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<!-- Modal body -->
-						<div class="modal-body">
-							<form id="NeqModal" action="">
-								<div class="mb-3 form-group">
-									<label for="eqCode" class="form-label">설비코드 :</label> 
-									<input type="text" id="eqCode" name="eqCode" value="" readonly class="form-control">
-								</div>
-								<div class="mb-3">
-									<label for="eqName" class="form-label">설비명 :</label> 
-									<input type="text" id="eqName" name="eqName" value="" readonly class="form-control">
-								</div>
-								<div class="mb-3">
-									<label for="nOpTime" class="form-label">비가동 기간 :
-									</label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate" class="form-control">
-											 <br />
-											 종료 <input type="datetime-local" id="modalEndDate" name="endDate" class="form-control">
-								</div>
-								<div class="mb-3">
-									<label for="reason" class="form-label">사유 :</label> 
-									<select id="reason" name="reason" class="form-control">
-										<option value="">선택
-										<option value="상시점검">상시점검
-										<option value="임시점검">임시점검
-										<option value="고장">고장
-										<option value="부품교체">부품교체
-									</select>
-								</div>
-								<div class="mb-3">
-									<label for="use" class="form-label">사용여부</label> 
-									<select name="use" id="use" class="form-control">
-										<option value="" selected>선택
-										<option id="use" value="Y">가동
-										<option id="use" value="N">비가동
-									</select>
-								</div>
-							</form>
-						</div>
-						<!-- Modal footer -->
-						<div class="modal-footer">
-							<button type="button" id="modalSubmitBtn" class="btn btn-success">등록</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		
-	
+                    <div class="d-flex justify-content-between align-items-center mb-20">
+                        <h4 class="h5 mb-20">비가동 내역</h4>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
+                        <div class="col-sm-12 col-md-2">
+                            <input class="form-control" id="searchEqCode" type="text" placeholder="설비코드" oninput="search()" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-1 col-form-label">시작일자</label>
+                            <div class="col-sm-12 col-md-2">
+                                <input class="form-control" id="startDate" type="date" oninput="search()" style="width: 150px;">
+                            </div>
+                            
+                            <label class="col-sm-12 col-md-1 col-form-label">이후부터</label>
+                    </div>
+                    <div class="form-group row">
+                            <label class="col-sm-12 col-md-1 col-form-label">종료일자</label>
+                            
+                            <div class="col-sm-12 col-md-2">
+                                <input class="form-control" id="endDate" type="date" oninput="search()" style="width: 150px;">
+                            </div>
+                            <label class="col-sm-12 col-md-1 col-form-label">이전까지</label>
+                    </div>
+                    
+                    <div id="grid2"></div>
+            </div>
+            <!-- The Modal -->
+            <div class="modal fade" id="nOpModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">비가동 설비 등록</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form id="NeqModal" action="">
+                                <div class="mb-3 form-group">
+                                    <label for="eqCode" class="form-label">설비코드 :</label> 
+                                    <input type="text" id="eqCode" name="eqCode" value="" readonly class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eqName" class="form-label">설비명 :</label> 
+                                    <input type="text" id="eqName" name="eqName" value="" readonly class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nOpTime" class="form-label">비가동 기간 :
+                                    </label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate" class="form-control">
+                                             <br />
+                                             종료 <input type="datetime-local" id="modalEndDate" name="endDate" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="reason" class="form-label">사유 :</label> 
+                                    <select id="reason" name="reason" class="form-control">
+                                        <option value="">선택
+                                        <option value="상시점검">상시점검
+                                        <option value="임시점검">임시점검
+                                        <option value="고장">고장
+                                        <option value="부품교체">부품교체
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="use" class="form-label">사용여부</label> 
+                                    <select name="use" id="use" class="form-control">
+                                        <option value="" selected>선택
+                                        <option id="use" value="Y">가동
+                                        <option id="use" value="N">비가동
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" id="modalSubmitBtn" class="btn btn-success">등록</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
 
 <script th:inline="javascript">
     $(document).ready(function() {
-        
         const gridData = /*[[${equips}]]*/[];
         const gridData2 = /*[[${equipChck}]]*/[];
-        
+
         const grid = new tui.Grid({
             el : document.getElementById('grid'),
             data : gridData,
@@ -188,7 +190,7 @@ tbody > tr {
                 perPage : 5
             }, 
         });
-        
+
         const grid2 = new tui.Grid({
             el : document.getElementById('grid2'),
             data : gridData2,
@@ -219,6 +221,11 @@ tbody > tr {
                     header : '점검유무',
                     name : 'eqChckOx',
                     align : 'center',
+                    formatter: function(item) {
+                        return item.value === '점검완료'
+                            ? '<span style="color: green;">' + item.value + '</span>'
+                            : item.value;
+                    }
                 }, 
                 {
                     header : '시작날짜',
@@ -237,61 +244,35 @@ tbody > tr {
                 perPage : 5
             }, 
         });
-        
-        // 라디오 버튼에 따른 필터링
-        $('input[name="section"]').on('change', function() {
-            const selectedValue = $('input[name="section"]:checked').val();
 
-            let filteredData;
-            if (selectedValue === 'all') {
-                filteredData = gridData;
-            } else if (selectedValue === 'op') {
-                filteredData = gridData.filter(row => row.use === 'Y');
-            } else if (selectedValue === 'nOp') {
-                filteredData = gridData.filter(row => row.use === 'N');
-            }
-
-            // 필터링된 데이터로 그리드 데이터 초기화
-            grid.resetData(filteredData);
+        // 모달창에서 "가동" 선택 시 날짜 및 사유 비활성화
+        $('#use').on('change', function() {
+            const useValue = $(this).val();
+            const isOperating = useValue === 'Y'; // '가동'이 선택되었는지 확인
+            $('#modalStartDate, #modalEndDate, #reason').prop('disabled', isOperating);
         });
-        
-        // 기타 이벤트 코드 유지
+
+        // 그리드 클릭 이벤트 - 모달창 열기
         grid.on('click', (event) => {
             const rowKey = event.rowKey;
             const rowData = grid.getRow(rowKey);
             const eqCode = rowData.eqCode;
             const eqName = rowData.eqName;
 
-            const payload = { eqCode: eqCode };
-
-            $.ajax({
-                url: 'getEqChckOx',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(payload),
-                success: function(response) {
-                    if (response) {
-                        alert("이미 비가동 내역에 등록 되어 있습니다.");
-                    } else {
-                        $('#eqCode').val(eqCode);
-                        $('#eqName').val(eqName);
-                        $('#nOpModal').data('selectedRowKey', rowKey); // 행 키를 저장
-                        $('#nOpModal').modal('show');
-                    }
-                },
-                error: function(error) {
-                    console.error("Error fetching data:", error);
-                }
-            });
+            $('#eqCode').val(eqCode);
+            $('#eqName').val(eqName);
+            $('#use').val(rowData.use === 'Y' ? 'Y' : 'N').trigger('change'); // 가동상태 반영 및 트리거로 비활성화 제어
+            $('#nOpModal').data('selectedRowKey', rowKey); // 행 키를 저장
+            $('#nOpModal').modal('show');
         });
 
         // 모달창에서 '등록' 버튼 클릭 시 이벤트
         $('#modalSubmitBtn').on('click', function() {
             const eqCode = $('#eqCode').val();
-            const eqName = $('#eqName').val();
             const useValue = $('#use').val();
             const selectedRowKey = $('#nOpModal').data('selectedRowKey');
 
+            // 가동 선택 시 - 비가동을 가동으로 전환하고 테이블에 반영
             if (useValue === 'Y') {
                 $.ajax({
                     type: "POST",
@@ -300,7 +281,7 @@ tbody > tr {
                     data: JSON.stringify({ eqCode: eqCode, use: useValue }),
                     success: function(response) {
                         if (response.result) {
-                            grid.setValue(selectedRowKey, 'use', '가동');
+                            grid.setValue(selectedRowKey, 'use', 'Y'); // 테이블에 가동 상태 반영
                             alert("설비가 '가동' 상태로 업데이트되었습니다.");
                         } else {
                             alert("업데이트에 실패했습니다.");
@@ -315,7 +296,7 @@ tbody > tr {
                 return;
             }
 
-            // 비가동일 경우만 Ajax를 통해 서버에 전송
+            // 비가동일 경우 - 서버에 데이터 전송
             const startDate = $('#modalStartDate').val();
             const endDate = $('#modalEndDate').val();
             const reason = $('#reason').val();
@@ -326,14 +307,13 @@ tbody > tr {
                 contentType: "application/json",
                 data: JSON.stringify({
                     eqCode: eqCode,
-                    eqName: eqName,
                     startDate: startDate,
                     endDate: endDate,
                     reason: reason,
                     use: useValue
                 }),
                 success: function(response) {
-                    grid.setValue(selectedRowKey, 'use', '비가동');
+                    grid.setValue(selectedRowKey, 'use', 'N'); // 테이블에 비가동 상태 반영
                     alert("비가동 상태로 등록되었습니다.");
                     $('#nOpModal').modal('hide');
                     location.reload();
@@ -346,7 +326,6 @@ tbody > tr {
         });
     });
 </script>
-
 
 </body>
 </html>
