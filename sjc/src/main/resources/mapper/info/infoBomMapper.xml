@@ -157,5 +157,16 @@
 	    </foreach>
 	</insert>	
 	 -->
+	<delete id="deleteBom">
+		delete
+		from	bom
+		where	bom_code = #{bomCode}
+	</delete>
+		 
+	<delete id="deleteBomDetail">
+		delete
+		from	b_detail
+		where	b_detail_code = #{bDetailCode}
+	</delete>	 
 	
 </mapper>

@@ -435,10 +435,12 @@ document.addEventListener('DOMContentLoaded', function() {
         ],
 	    bodyHeight: 160,
         rowHeaders: ['rowNum'],
+        /*
         pageOptions: {
             useClient: true,
             perPage: 4
         } 
+        */
         /*
 	    bodyHeight: 200,
 		pageOptions: {

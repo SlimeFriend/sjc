@@ -8,8 +8,8 @@ public interface InfoCpMapper {
 	// 업체 조회
 	public List<CpVO> selectCpAllList(CpVO cpVO);
 	// 업체 수정
-    int updateCp(CpVO cpVO);
+	public int updateCp(CpVO cpVO);
     // 업체 등록
-    int insertCp(CpVO cpVO);	
+	public int insertCp(CpVO cpVO);	
 }
 
