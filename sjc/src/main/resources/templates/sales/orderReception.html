@@ -177,7 +177,11 @@
 		    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
 
 		    if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
-		        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
+		        Swal.fire({
+                    icon: 'error',
+                    title: '입력오류',
+                    text: '올바르지 않은 값이 들어왔습니다.',
+                });
 		        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
 		        console.log(rowKey);
 		    }
@@ -301,19 +305,31 @@
 
 	    // 업체 및 납기일자 유효성 검사
 	    if (!formObj.cpName) {
-	        alert('업체를 선택해주세요.');
+	        Swal.fire({
+                icon: 'warning',
+                title: '업체선택',
+                text: '업체를 선택해주세요.',
+            });
 	        return;
 	    }
 	    
 	    if (!formObj.dlvReqDate) {
-	        alert('납기일자를 설정해주세요.');
+	        Swal.fire({
+                icon: 'warning',
+                title: '납기일자 설정',
+                text: '납기일자를 설정해주세요.',
+            });
 	        return;
 	    }
 	    
 	    let checkedRows = grid.getCheckedRows();
 	    
 	    if (checkedRows.length === 0) {
-	        alert('제품을 선택해주세요.');
+	    	Swal.fire({
+                icon: 'warning',
+                title: '제품선택',
+                text: '제품을 선택해주세요.',
+            });
 	        return;
 	    }
 	    
@@ -322,7 +338,11 @@
 	        const quantity = grid.getValue(rowKey, 'ordQuantity');
 
 	        if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
-	            alert(`수량을 입력해주세요.`);
+	            Swal.fire({
+	                icon: 'warning',
+	                title: '수량설정',
+	                text: '수량을 입력해주세요.',
+	            });
 	            return;
 	        }
 	    }
@@ -338,40 +358,57 @@
 	
 	function sendCheckedRows() {
 
-	    const isConfirmed = confirm("주문을 접수하시겠습니까?");
+	    const isConfirmed = Swal.fire({
+            title: '주문접수',
+            text: "주문을 접수하시겠습니까?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '주문',
+            cancelButtonText: '취소'
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	            	const formArr = $("form[name=form]").serializeArray();
+	    	        const formObj = {};
+	    	        
+	    	        $.each(formArr, function(idx, tag) {
+	    	            formObj[tag.name] = tag.value;
+	    	        });
+	
+	    	        let checkedRows = grid.getCheckedRows();
+	    	        
+	    	        const payload = {
+	    	            orderVO: formObj,    // 폼 데이터 (주문 정보)
+	    	            productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+	    	        };
+	
+	    	        $.ajax({
+	    	            url: '/orderReception',
+	    	            type: 'POST',
+	    	            contentType: 'application/json',
+	    	            data: JSON.stringify(payload),
+	    	            success: function(response) {
+	    	                Swal.fire({
+	    	                    icon: 'success',
+	    	                    title: '주문접수 완료',
+	    	                    text: '주문이 접수되었습니다.',
+	    	                }).then(() => {
+    		                    window.location.href = "orderHistory";
+    		                });
+	    	            },
+	    	            error: function(xhr, status, error) {
+	    	                console.error('Error during AJAX request:', error);
+	    	                Swal.fire({
+	    	                    icon: 'error',
+	    	                    title: '주문접수 실패',
+	    	                    text: '주문 접수 중 오류가 발생했습니다.',
+	    	                });
+	    	            }
+	    	        });  
+            	}
+        })
 	    
-	    if (isConfirmed) {
-	        const formArr = $("form[name=form]").serializeArray();
-	        const formObj = {};
-	        
-	        $.each(formArr, function(idx, tag) {
-	            formObj[tag.name] = tag.value;
-	        });
-
-	        let checkedRows = grid.getCheckedRows();
-	        
-	        const payload = {
-	            orderVO: formObj,    // 폼 데이터 (주문 정보)
-	            productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
-	        };
-
-	        $.ajax({
-	            url: '/orderReception',
-	            type: 'POST',
-	            contentType: 'application/json',
-	            data: JSON.stringify(payload),
-	            success: function(response) {
-	                alert('주문이 성공적으로 접수되었습니다!');
-	                window.location.href = "orderHistory";
-	            },
-	            error: function(xhr, status, error) {
-	                console.error('Error during AJAX request:', error);
-	                alert('주문 접수 중 오류가 발생했습니다.');
-	            }
-	        });
-	    } else {
-	        alert('주문 접수가 취소되었습니다.');
-	    }
 	}
 		
 	</script>

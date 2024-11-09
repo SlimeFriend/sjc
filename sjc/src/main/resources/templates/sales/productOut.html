@@ -7,20 +7,16 @@
 	<head>
     	<title>출고관리</title>
     	<style>
-    		#submitBtn {
-    			border: 1px solid #0b132b; 
-    			color: #0b132b;
-    		}
-    		
+    		#submitBtn, 
     		#cancelBtn {
-    			border: 1px solid #0b132b; 
-    			color: #0b132b;
+	    		background-color: #0b132b; 
+	    		color: #ffffff;
     		}
     		
 	    	#submitBtn:hover,
 			#cancelBtn:hover {
-	    		background-color: #0b132b;
-	    		color: #ffffff;
+			    background-color: #2f08cc;
+			    color: #ffffff;
 			}
 			
 	    	#gridOrder:hover {
@@ -63,7 +59,7 @@
 				</div>
 				<!-- Modal footer -->
 				<div class="modal-footer justify-content-center">
-					<button type="button" class="btn" id="submitBtn">등록</button>
+					<button type="button" class="btn" id="submitBtn">출고</button>
 					<button type="button" class="btn" data-dismiss="modal" id="cancelBtn">취소</button>
 				</div>
 			</div>
@@ -346,32 +342,8 @@
 			                $('#myModal').modal('show');
 			                gridModal.refreshLayout(); 
 
-			                // 두 번째 AJAX 요청: 잔여 정보 가져오기
-			                const remainData = gridModal.getData().map(item => ({
-			                    ordCode: item.ORDCODE,
-			                    prdCode: item.PRDCODE
-			                }));
-			                
-			                const requestData = {
-			                	outRemainData: remainData
-			                };
-			                
-			                $.ajax({
-			                    url: '/remainInfo',
-			                    type: 'POST',
-			                    contentType: 'application/json',
-			                    data: JSON.stringify(requestData),
-			                    success: function(response) {
-			                        console.log('Grid modal received:', response);
-			                    },
-			                    error: function(xhr, status, error) {
-			                        console.error('Error fetching remain info:', error);
-			                    }
-			                });
 			            },
-			            error: function(xhr, status, error) {
-			                console.error('Error fetching order details:', error);
-			            }
+
 			        });
 			    }
 			});
@@ -388,7 +360,11 @@
 			    
 			 	// 가격과 수량 검증
 			    if (isNaN(lotOutQuantity) || lotOutQuantity === '' || Number(lotOutQuantity) <= 0) {
-			        alert('숫자를 입력해주세요.');
+			        Swal.fire({
+	                    icon: 'error',
+	                    title: '입력오류',
+	                    text: '올바르지 않은 값이 들어왔습니다.',
+	                });
 			        productLotGrid.setValue(rowKey, 'OUT_QUANTITY', '');
 			    }
 			    
@@ -407,7 +383,11 @@
 			        
 			        if (Number(currentOrdQuantity) < Number(currentOutQuantity)) {
 			            if (!alertTriggered) { // 알림이 아직 발생하지 않았다면
-			                alert('해당 제품은 재고가 부족합니다.');
+			                Swal.fire({
+			                    icon: 'warning',
+			                    title: '재고부족',
+			                    text: '해당 제품은 재고가 부족합니다.',
+			                });
 			                alertTriggered = true; // 알림이 발생했음을 기록
 			            }
 			            productLotGrid.setValue(i, 'OUT_QUANTITY', ""); // 출고량 초기화
@@ -455,7 +435,11 @@
 			                    const updatedOutQuantity = gridModal.getValue(j, 'totalOutQuantity');
 			                    if (Number(orderQuantity) < Number(updatedOutQuantity)) {
 			                        if (!alertTriggered) { // 알림이 아직 발생하지 않았다면
-			                            alert("주문량을 초과했습니다.");
+			                            Swal.fire({
+						                    icon: 'warning',
+						                    title: '주문초과',
+						                    text: '주문량을 초과했습니다.',
+						                });
 			                            gridModal.setValue(j, 'remainQuantity', "");
 			                            alertTriggered = true; // 알림이 발생했음을 기록
 			                        }
@@ -488,7 +472,11 @@
 			    	let totalOutQuantity = gridModal.getValue(i, 'totalOutQuantity');
 			    	
 			    	if(orderQuantity != totalOutQuantity) {
-			    		alert('제품 주문량과 출고량을 확인해주세요.')
+			    		Swal.fire({
+		                    icon: 'warning',
+		                    title: '주문량 확인',
+		                    text: '제품 주문량과 출고량을 확인해주세요.',
+		                });
 			    		isTrue = false;
 			    		return;
 			    	}
@@ -511,40 +499,54 @@
 				    }
 				    
 				   // 사용자의 확인을 받기 위해 confirm 창 띄우기
-				   const isConfirmed = confirm("출고 접수하시겠습니까?");
-				   
-				   if(isConfirmed) {
-				   const requestData = {
-				    	    outLotData: outLotData,
-				    	    outPrdData: outPrdData,
-				    };
-				   
-				   $.ajax({
-			    		url: '/getPrdOutInfo',
-			    		type: 'POST',
-			    		contentType: 'application/json',
-			    		data: JSON.stringify(requestData),
-						success: function(response) {
-			    			alert("출고가 정상적으로 접수되었습니다.");
-			    			$('#myModal').modal('hide');
-			    			fetchGrid();
-			    			fetchOutGrid();
-			    		}
-			    	});
-				   } else {
-					   alert('출고 접수가 취소되었습니다.');
-					   
-					   const modalCount = gridModal.getRowCount();
-					   
-					   for(let i = 0; i < modalCount; i++) {
-					   	gridModal.setValue(i, 'totalOutQuantity', "")
-					   	gridModal.setValue(i, 'remainQuantity', "")
-					   }
-				   }
+				   const isConfirmed = Swal.fire({
+			            title: '출고접수',
+			            text: "출고 접수하시겠습니까?",
+			            icon: 'warning',
+			            showCancelButton: true,
+			            confirmButtonColor: '#3085d6',
+			            cancelButtonColor: '#d33',
+			            confirmButtonText: '출고',
+			            cancelButtonText: '취소'
+				        }).then((result) => {
+				            if (result.isConfirmed) {
+			            	const requestData = {
+						    	    outLotData: outLotData,
+						    	    outPrdData: outPrdData,
+						    };
+
+			            	$.ajax({
+					    		url: '/getPrdOutInfo',
+					    		type: 'POST',
+					    		contentType: 'application/json',
+					    		data: JSON.stringify(requestData),
+								success: function(response) {
+		    		            	Swal.fire({
+		    		                    icon: 'success',
+		    		                    title: '출고접수 완료',
+		    		                    text: '출고가 정상적으로 접수되었습니다.',
+		    		                }).then(() => {
+		    		                	$('#myModal').modal('hide');
+		    			    			fetchGrid();
+		    			    			fetchOutGrid();
+		    		                });
+					    		}
+					    	});
+				    	   } else {
+							   
+							   const modalCount = gridModal.getRowCount();
+							   
+							   for(let i = 0; i < modalCount; i++) {
+							   	gridModal.setValue(i, 'totalOutQuantity', "")
+							   	gridModal.setValue(i, 'remainQuantity', "")
+						   }
+				    	 }
+				            
+						 outLotData = [];
+						 outPrdData = [];
+						 
+			        });
 			    }
-			    
-			    outLotData = [];
-			    outPrdData = [];
 			    
 			});
 			
@@ -562,7 +564,6 @@
 			 	// 그리드 레이아웃 새로고침
 			    productLotGrid.refreshLayout();
 			});
-
 		});
 	</script>
 </div>
