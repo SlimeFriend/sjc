@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
    
     
     
-    tui.Grid.applyTheme('striped');
-    
+    //tui.Grid.applyTheme('striped');
+    tui.Grid.applyTheme('default');
+	    
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -275,6 +276,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	        const selectedRowData = gridBom.getRow(ev.rowKey);
 	        console.log('gridBom : ', selectedRowData);
 	    }
+	    
+		gridBom.setSelectionRange({
+		    start: [ev.rowKey, 0],
+		    end: [ev.rowKey, gridBom.getColumns().length]
+		});
+	    
 	});
 
     document.getElementById('bomBtn').addEventListener('click', function() {
@@ -427,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
             */
         ],
 	    bodyHeight: 160,
-        rowHeaders: ['checkbox', 'rowNum'],
+        rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 4
@@ -531,6 +538,7 @@ document.addEventListener('DOMContentLoaded', function() {
         el: document.getElementById('gridPrd'),
         scrollX: false,
         scrollY: false,
+	    //selectionUnit: 'row',  // 행 단위 선택으로 설정
         columns: [
             {
                 header: '제품코드',
@@ -599,6 +607,84 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+	/*
+	tui.Grid.applyTheme('default', {
+	  	cell: {
+	        rowHeader: {
+	            border: '#fff',
+	            showVerticalBorder: true,
+	            verticalBorder: '#fff'
+	        },
+		    focused: {
+		      border: 'none'
+	    	},
+	        selected: {
+	            background: 'none',
+	            border: 'none'
+	        },    	
+		    normal: {
+		      background: '#eee',
+		      border: '#fff',    
+		      // text: '#000'
+		    },
+		    evenRow: {
+		      background: '#fff',
+		      border: '#000'    
+		    },
+		    oddRow: {
+		      background: '#fff',
+		      border: '#000'
+		    }
+	  	}
+	});
+	*/
+	const customTheme = {
+	  	cell: {
+	        rowHeader: {
+	            border: '#fff',
+	            showVerticalBorder: true,
+	            verticalBorder: '#fff'
+	        },
+		    focused: {
+		      border: 'none'
+	    	},
+	        selected: {
+	            background: 'none',
+	            border: 'none'
+	        },
+	            	
+		    normal: {
+		      background: '#eee',
+		      border: '#fff',    
+		      // text: '#000'
+		    },
+		    head: {
+		      background: '#eee',
+		      border: '#fff',
+		      text: '#208be4',
+		    },
+		    rowHead: {
+		      border: ''
+		    },
+		    selectedHead: {
+		      background: '#eee',
+		    },		    
+		    evenRow: {
+		      background: '#fff',
+		      border: '#000'    
+		    },
+		    oddRow: {
+		      background: '#fff',
+		      border: '#000'
+		    }
+	  	}
+	};
+	
+	tui.Grid.applyTheme('custom', customTheme);
+
+
+
+
 	gridPrd.on('check', (ev) => {
 	    const checkedRows = gridPrd.getCheckedRows();
 	    if (checkedRows.length > 1) {
@@ -609,6 +695,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        });
 	    }
 	});
+	
 	gridPrd.on('click', (ev) => {
 	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
 	    if (ev.columnName !== '_checked') {
@@ -622,6 +709,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	        const selectedRowData = gridPrd.getRow(ev.rowKey);
 	        console.log('gridPrd : ', selectedRowData);
 	    }
+	    
+		gridPrd.setSelectionRange({
+		    start: [ev.rowKey, 0],
+		    end: [ev.rowKey, gridPrd.getColumns().length]
+		});	    
+	    
 	});
 
 
