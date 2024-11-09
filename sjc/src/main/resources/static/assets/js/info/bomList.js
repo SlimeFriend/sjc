@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
-        scrollY: false,
+        scrollY: true,
         columns: [
             {
                 header: '자재코드',
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const gridBom = new tui.Grid({
         el: document.getElementById('gridBom'),
         scrollX: false,
-        scrollY: false,
+        scrollY: true,
         columns: [
             {
                 header: 'BOM코드',
@@ -239,10 +239,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         ],
         rowHeaders: ['rowNum'],
+	    bodyHeight: 160,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},
+		/*          
         pageOptions: {
             useClient: true,
             perPage: 4
-        }        
+        }
+        */        
     });
     
     const gridBomDetail = new tui.Grid({
@@ -648,5 +655,41 @@ document.addEventListener('DOMContentLoaded', function() {
 	    grid.finishEditing();
 	    gridBom.finishEditing();
 	});
+
+    document.getElementById('BomDetailModalDeleteBtn').addEventListener('click', function() {
+		const getData = gridBomDetailModal.getData();
+		console.log(getData);
+		
+		// id와 sub_id만 추출하여 배열로 만들기
+		const map = getData.map(row => ({
+		    bomCode: row.bomCode,
+		    bdetailCode: row.bdetailCode
+		}));
+		console.log(map);
+		
+		deleteBoms(map);
+    });
+    function deleteBoms(bomVOs) {
+		fetch('boms', {
+			method: 'DELETE',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(bomVOs)
+			})
+		.then(response => response.json())
+		.then(result => {
+			console.log('Delete result:', result);
+			fetchBoms();
+			fetchBomDetails();
+			$('#BomDetailModal').modal('hide');
+		})
+		.catch(error => {
+			console.error('Delete error:', error);
+			alert('삭제 중 오류가 발생했습니다.');
+		});
+    }
+
+
 
 });		 

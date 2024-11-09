@@ -154,4 +154,14 @@ public class InfoBomServiceImpl implements InfoBomService {
 	    
 	    return response;
 	}
+
+	@Override
+	@Transactional
+	public List<BomVO> deleteBoms(List<BomVO> bomVOs) {
+		for(BomVO bomVO : bomVOs) {
+			infoBomMapper.deleteBom(bomVO);
+			infoBomMapper.deleteBomDetail(bomVO);
+		}
+		return bomVOs;
+	}
 }

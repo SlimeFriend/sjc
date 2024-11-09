@@ -8,9 +8,9 @@ public interface InfoPrdMapper {
 	// 제품 조회
 	public List<ProductVO> selectPrdAllList(ProductVO prductVO);
 	// 제품 입력
-    int insertProduct(ProductVO productVO);
+	public int insertProduct(ProductVO productVO);
     // 제품 삭제
-    void deletePrds(String prdCode);    
+	public void deletePrds(String prdCode);    
     // 사용자 정보 수정
-    int updatePrds(ProductVO productVO);    
+	public int updatePrds(ProductVO productVO);    
 }

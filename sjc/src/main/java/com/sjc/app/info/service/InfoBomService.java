@@ -18,7 +18,9 @@ public interface InfoBomService {
     public Map<String, Object> modifyPrdBom(PrdBomDTO prdBomDTO);
     // 제품 수정
     public int modifyPrd(ProductVO productVO);
-    // BO 수정
+    // BOM 수정
     public int modifyBom(BomVO bomVO);
+    // BOM, BOM 상세 삭제
+    public List<BomVO> deleteBoms(List<BomVO> bomVOs);    
 	
 }
