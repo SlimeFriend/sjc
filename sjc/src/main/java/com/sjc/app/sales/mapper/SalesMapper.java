@@ -22,6 +22,12 @@ public interface SalesMapper {
 	// 주문내역
 	public List<OrderVO> selectOrder();
 	
+	// 주문내역 삭제 리스트
+	public List<OrderVO> selectDeleteOrder();
+	
+	// 주문내역 삭제
+	public int deleteOrder(String ordCodes);
+	
 	// 특정 제품에 대한 총 주문량 조회
 	public Integer getTotalOrderQuantity(@Param("prdCode") String prdCode, String ordCode);
     

@@ -5,15 +5,21 @@ import java.util.Map;
 
 public interface SalesService {
 	
-	
 	// 업체 선택
 	public List<CpVO> cpList();
 	
 	// 주문접수 프로세스
     public int insertOrder(SalesDTO salesDTO);
-	public List<OrderVO> order();
 	public List<Map<String, Object>> orderDetail(String ordCode);
 	
+	// 주문내역 조회
+	public List<OrderVO> order();
+	
+	// 주문내역 삭제 조회
+	public List<OrderVO> deleteOrderList();
+	
+	// 주문내역 삭제
+	public int deleteOrder(List<String> ordCodes);
     
 	// 출고접수 프로세스
 	public List<OrderVO> getOrdersByStatus(String status);

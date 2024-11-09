@@ -22,6 +22,13 @@
 			    color: #ffffff;
 			}
 			
+			.modal-dialog-centered {
+    			display: flex;
+    			align-items: center;
+    			justify-content: center;
+    			margin: auto;
+			}
+			
     	</style>
 	</head>
 
@@ -103,26 +110,62 @@
 			</form>
 		</div>
 		
-		<div class="pd-30 card-box mb-20">
-			<h2 class="h5 mb-20">주문조회</h2>
-			<div id="gridOrder"></div>
+		<div class="pd-30 card-box mb-20" id="orderCard">
+			<div class="d-flex justify-content-between align-items-center mb-20">
+				<h2 class="h5">주문목록</h2>
+				<div class="d-flex">
+					<div style="text-align: center">
+						<button class="btn" type="button" onclick="deleteGrid()">주문삭제</button>
+					</div>
+				</div>
+			</div>
+			<div id="orderGrid"></div>
 		</div>
 		
 		<div class="pd-30 card-box mb-20" id="orderDetail" style="display : none">
-			<h2 class="h5 mb-20">주문상세 조회</h2>
+			<h2 class="h5 mb-20">주문상세</h2>
 			<div id="gridOrderDetail"></div>
+		</div>
+		
+		<div class="modal" id="orderDeleteModal">
+			<div class="modal-dialog-centered modal-xl">
+				<div class="modal-content">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">주문삭제</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal body -->
+					<div class="modal-body">
+						    <h5 class="h5 mb-20">주문목록</h5>
+							<div class="mb-20" id="deleteOrderGrid"></div>
+							
+							<h5 class="h5 mb-20" id="deleteOrderGridTitle" style="display: none">주문상세</h5>
+							<div id="deleteOrderDetailGrid" style="display: none"></div>
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn" onclick="deleteSendCheckedRows()">삭제</button>
+						<button type="button" class="btn" data-dismiss="modal" id="cancelBtn">취소</button>
+					</div>
+				</div>
+			</div>
 		</div>
 			
 	<script th:inline="javascript">
 		let grid;
+		let deleteOrderGrid;
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			
 			const gridData = /*[[${ord}]]*/[];
+			const gridDeleteData = /*[[${ordDelete}]]*/[];
+			
 			const gridModalData = /*[[${ordDetail}]]*/[];
+			const gridDeleteModalData = /*[[${ordDetail}]]*/[];
 
 			grid = new tui.Grid({
-				el : document.getElementById('gridOrder'),
+				el : document.getElementById('orderGrid'),
 				data : gridData,
 				scrollX : false,
 				scrollY : true,
@@ -156,12 +199,170 @@
 					align : 'center',
 				},],
 				rowHeaders : [ 'rowNum' ],
-				bodyHeight: 320,
+				bodyHeight: 200,
 				pageOptions: {
 				    type: 'scroll',
 				    perPage: 10 
 				},
 			});
+			
+			function fetchGrid() {
+				fetch('/getOrder')
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Network response was not ok');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                grid.resetData(data); // TOAST UI Grid에 데이터 설정
+	    			grid.getData().forEach(row => {
+	    			    if (row.ordStatus === '재고부족') {
+	    			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
+	    			    } else if (row.ordStatus === '계획반영') {
+	    			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-warning');
+	    			    }
+	    			});
+	            })
+	            .catch(error => {
+	                console.error('Error fetching out orders:', error);
+	            });
+			}
+			
+			fetchGrid();
+			
+			deleteOrderGrid = new tui.Grid({
+				el : document.getElementById('deleteOrderGrid'),
+				data : gridDeleteData,
+				scrollX : false,
+				scrollY : true,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				},{
+					header : '담당자',
+					name : 'userName',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+				}, {
+					header : '주문일자',
+					name : 'ordDate',
+					align : 'center',
+				}, {
+					header : '납기일자',
+					name : 'dlvReqDate',
+					align : 'center',
+				}, {
+					header : '진행상황',
+					name : 'ordStatus',
+					align : 'center',
+				}, {
+					header : '요청사항',
+					name : 'comm',
+					align : 'center',
+				},],
+				rowHeaders : [ 'checkbox' ],
+				bodyHeight: 200,
+				pageOptions: {
+				    type: 'scroll',
+				    perPage: 10 
+				},
+			});
+			
+			const deleteOrderDetailGrid = new tui.Grid({
+				el : document.getElementById('deleteOrderDetailGrid'),
+				data : gridDeleteModalData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ORDCODE',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'PRDNAME',
+					align : 'center',
+				}, {
+					header : '제품코드',
+					name : 'PRDCODE',
+					align : 'center',
+				}, {
+					header : '주문량',
+					name : 'ORDQUANTITY',
+					align : 'center',
+				}, {
+					header : '부족량',
+					name : 'LACKQUANTITY',
+					align : 'center',
+				},],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 5
+				}
+			});
+			
+			function fetchDeleteGrid() {
+				fetch('/getDeleteOrder')
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Network response was not ok');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                deleteOrderGrid.resetData(data); // TOAST UI Grid에 데이터 설정
+	    			deleteOrderGrid.getData().forEach(row => {
+	    			    if (row.ordStatus === '재고부족') {
+	    			    	deleteOrderGrid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
+	    			    }
+	    			});
+	    			deleteOrderGrid.on('click', (ev) => {
+	    			    const rowKey = ev.rowKey;
+	    			    const ordCodeValue = deleteOrderGrid.getValue(rowKey, 'ordCode');
+	    			    if(ordCodeValue) {
+	    			    	$.ajax({
+	    			    		url : '/getOrderDetail',
+	    			    		type : 'POST',
+	    			    		contentType : 'application/json',
+	    			    		data : JSON.stringify({ordCode : ordCodeValue}),
+	    			    		success: function(response) {
+	    			    			document.getElementById('deleteOrderDetailGrid').style.display = 'block';
+	    			    			document.getElementById('deleteOrderGridTitle').style.display = 'block';
+	    			    			deleteOrderDetailGrid.resetData(response);
+	    			    			deleteOrderDetailGrid.refreshLayout();
+
+	    			    			// 재고부족인 경우 배경색 변경
+	    			    			const lackOrdCodes = grid.getData()
+	    			    			    .filter(row => row.ordStatus === '재고부족')
+	    			    			    .map(row => row.ordCode);
+
+	    			    			// 각 lackOrdCode에 대해 rowKey를 찾고 배경색 변경
+	    			    			lackOrdCodes.forEach(lackOrdCode => {
+	    			    				deleteOrderDetailGrid.getData().forEach(row => {
+	    			    			        if (row.ORDCODE === lackOrdCode) {
+	    			    			        	deleteOrderDetailGrid.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-light-pink');
+	    			    			        }
+	    			    			    });
+	    			    			});	                
+	    			    		},
+	    			    		error: function(xhr, status, error) {
+	    			    			console.error('error during request', error);
+	    			    		}
+	    			    	});
+	    			    }  
+	    			});
+	            })
+	            .catch(error => {
+	                console.error('Error fetching out orders:', error);
+	            });
+			}
+			
+			fetchDeleteGrid();
 			
 			const gridModal = new tui.Grid({
 				el : document.getElementById('gridOrderDetail'),
@@ -194,14 +395,6 @@
 					useClient : true,
 					perPage : 5
 				}
-			});
-			
-			grid.getData().forEach(row => {
-			    if (row.ordStatus === '재고부족') {
-			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-light-pink'); // ordStatus 열의 클래스 추가
-			    } else if (row.ordStatus === '계획반영') {
-			    	grid.addCellClassName(row.rowKey, 'ordStatus', 'bg-warning');
-			    }
 			});
 			
 			grid.on('click', (ev) => {
@@ -254,7 +447,6 @@
 			    	});
 			    }  
 			});
-			
 		});
 		
 		const radioButtons = document.querySelectorAll('input[name="option"]');
@@ -321,6 +513,51 @@
 		            console.error('Error fetching search results:', error);
 		        }
 		    });
+		}
+		
+		function deleteGrid() {
+			$('#orderDeleteModal').modal('show');
+			document.getElementById('deleteOrderGridTitle').style.display = 'none';
+			document.getElementById('deleteOrderDetailGrid').style.display = 'none';
+			deleteOrderGrid.refreshLayout();
+		}
+		
+		function deleteSendCheckedRows() {
+			
+		    let checkedRows = deleteOrderGrid.getCheckedRows();
+		    
+		    if (checkedRows.length === 0) {
+		        alert('삭제할 주문을 선택해주세요.');
+		        return;
+		    }
+		    
+		    let ordCodes = checkedRows.map(row => row.ordCode);
+
+		    const isConfirmed = confirm("주문을 삭제하시겠습니까?");
+		    
+		    if (isConfirmed) {
+				
+		        const payload = {
+		            orderVO: ordCodes,    // 폼 데이터 (주문 정보)
+		        };
+
+		        $.ajax({
+		            url: '/orderDelete',
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(payload),
+		            success: function(response) {
+		                alert('주문이 성공적으로 삭제되었습니다.');
+		                window.location.href = "orderHistory";
+		            },
+		            error: function(xhr, status, error) {
+		                console.error('Error during AJAX request:', error);
+		                alert('주문 삭제 중 오류가 발생했습니다.');
+		            }
+		       });
+		    } else {
+		        alert('주문 삭제가 취소되었습니다.');
+		    }
 		}
 	</script>
 </div>
