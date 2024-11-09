@@ -12,22 +12,29 @@
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 <style>
-    .custom-tooltip {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        z-index: 1000;
-        display: none;
-        font-size: 12px;
-        pointer-events: none;
-    }
 	#gridMtModal td.tui-grid-cell-editable ,
 	#gridPrd div.tui-grid-body-container,
 	#gridBom div.tui-grid-body-container {
 	  cursor: pointer;
-	}    
+	}
+	#gridPrd th,
+	#gridBom th,
+	#gridBomDetail th
+	{
+  		background-color: #eee; 
+	}
+	/*
+	#gridPrd tr.tui-grid-row-even {
+  		background-color: #eee; 
+	} 
+	*/
+	/*   
+	#gridPrd tr.tui-grid-row-odd {
+  		background-color: #fff; 
+	}
+	*/
+
+	   
 </style>   
 </head>
 <body>

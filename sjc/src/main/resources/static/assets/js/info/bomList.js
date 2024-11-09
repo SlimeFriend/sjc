@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
             {
-                header: '자재이름',
+                header: '자재명',
                 name: 'mtName',
                 align: 'center',
                 sortingType: 'desc',
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             */
 
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
+        rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 4
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             */
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
+        rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 4
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true                
             },
         ],
-        rowHeaders: ['checkbox', 'rowNum'],
+        rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
             perPage: 10
@@ -602,6 +602,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	grid.on('uncheck', (ev) => {
 	    grid.removeRowClassName(ev.rowKey, 'bg-light');
+	});
+	*/
+	
+	/*
+	grid.on('click', (ev) => {
+	    const rowKey = ev.rowKey;
+	    const rowData = grid.getRow(rowKey);
+	    if (rowData._attributes.checked) {
+	        grid.uncheck(rowKey);
+	    } else {
+	        grid.check(rowKey);
+	    }
 	});
 	*/
 	

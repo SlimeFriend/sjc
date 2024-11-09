@@ -43,7 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'address',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                 
             },
             {
                 header: '비고',
@@ -79,10 +83,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+                /*
                 validation: {
 					required: true,
 			        regExp: /^[가-힣a-zA-Z]+$/
-                },                
+                },
+                */                
             },
             {
                 header: '업체구분',
@@ -90,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
+                /*
                 editor: {
                   type: 'select',
                   options: {
@@ -99,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ]
                   }
                 },                
-                                  
+                */                  
             },
             {
                 header: '사업자번호',
@@ -107,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',                                  
                                   
             },
             {
@@ -116,7 +123,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                
+                                                  
                                   
             },
             {
@@ -125,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',                                  
                                   
             }
         ],
@@ -200,7 +212,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                editor: 'text',
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                                   
             },
             {
                 header: '비고',
