@@ -606,6 +606,85 @@ document.addEventListener('DOMContentLoaded', function() {
             perPage: 13
         }
     });
+    
+    const gridPrdModal = new tui.Grid({
+        el: document.getElementById('gridPrdModal'),
+        scrollX: false,
+        scrollY: false,
+	    //selectionUnit: 'row',  // 행 단위 선택으로 설정
+        columns: [
+            {
+                header: '제품코드',
+                name: 'prdCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+            },
+            {
+                header: '제품명',
+                name: 'prdName',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}
+            },
+            {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+            },
+            {
+                header: '단가',
+                name: 'unitPrice',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+            },
+            {
+                header: '설명',
+                name: 'description',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                
+                ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}
+            },
+            {
+                header: '비고',
+                name: 'comm',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+            },
+        ],
+        /*
+	    rowHeaders: [
+			{
+	        type: 'checkbox',
+	        header: ' ',
+	        checkAll: false,
+	    	},
+		    {
+		        type: 'rowNum',
+			},
+	    ],
+	    */
+	    pageOptions: {
+		    useClient: true,
+		    perPage: 13
+        }
+    });
 
 	/*
 	tui.Grid.applyTheme('default', {
@@ -641,7 +720,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const customTheme = {
 	  	cell: {
 	        rowHeader: {
-	            border: '#fff',
+	            //border: '#fff',
 	            showVerticalBorder: true,
 	            verticalBorder: '#fff'
 	        },
@@ -655,27 +734,27 @@ document.addEventListener('DOMContentLoaded', function() {
 	            	
 		    normal: {
 		      background: '#eee',
-		      border: '#fff',    
+		      //border: '',    
 		      // text: '#000'
 		    },
 		    head: {
 		      background: '#eee',
-		      border: '#fff',
+		      //border: '#fff',
 		      text: '#208be4',
 		    },
 		    rowHead: {
-		      border: ''
+		      //border: ''
 		    },
 		    selectedHead: {
 		      background: '#eee',
 		    },		    
 		    evenRow: {
 		      background: '#fff',
-		      border: '#000'    
+		      //border: ''    
 		    },
 		    oddRow: {
 		      background: '#fff',
-		      border: '#000'
+		      //border: ''
 		    }
 	  	}
 	};
@@ -1045,6 +1124,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    document.getElementById('updatePrdBtn').addEventListener('click', function() {
+    
+		const checkedRows = gridPrd.getCheckedRows();
+		
+		if (checkedRows.length === 0) {
+			alert('수정할 제품을 선택해주세요.');
+	    	return;
+		}
+		/*
+		// get
+		fetchPrdModal({
+			prdCode: checkedRows.map(row => row.prdCode)
+		});
+		*/
+		//post 
+		fetchPrdModal({
+			prdCode : checkedRows[0].prdCode,
+		});
+		
+    });
+
+
+    function fetchPrdModal(prdCodes){
+		/*
+		// get
+        const params = new URLSearchParams(prdCodes);
+        const url = `prds?${params.toString()}`;		
+		fetch(url)
+		*/
+		
+		// post
+		fetch("prds",{
+			method: "POST",
+			headers: {
+				"Content-Type" : "application/json"
+			},
+			body: JSON.stringify(prdCodes),
+		})
+		
+		.then(response => response.json())
+		.then(result => {
+        	$('#prdModal').modal('show');
+			gridPrdModal.resetData(result);
+        	gridPrdModal.refreshLayout();			
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	}
+
+    
 	document.addEventListener('click', (e) => {
 	    gridMtModal.finishEditing();
 	});    
@@ -1064,4 +1194,77 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		
     });
+    
+    
+	document.getElementById('deletePrdBtn').addEventListener('click', function() {
+		
+		const checkedRows = gridPrd.getCheckedRows();
+		if (checkedRows.length === 0) {
+			alert('삭제할 제품을 선택해주세요.');
+	    	return;
+		}
+	  
+		if (confirm("삭제 하시겠습니까??")){
+			deletePrds(checkedRows.map(row => row.prdCode));
+		}else{
+			return;
+		}
+	});    
+    function deletePrds(prdCodes){
+		fetch("prds",{
+			method: "DELETE",
+			headers: {
+				"Content-Type" : "application/json"
+			},
+			body: JSON.stringify(prdCodes),
+		})
+		.then(response => response.json())
+		.then(result => {
+			gridPrd.removeCheckedRows();
+			fetchBoms();
+			
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	}
+    
+    document.getElementById('prdModalUpdateBtn').addEventListener('click', function() {
+	    //const modifiedRows = grid.getModifiedRows();
+	    const updatedRows = gridPrdModal.getModifiedRows().updatedRows;
+	    
+	    if (updatedRows.length > 0) {
+			if (confirm("수정 하시겠습니까??")){
+				updatePrds(updatedRows);
+			}else{
+				return;
+			}	
+	    }
+	});
+    function updatePrds(updatedRows) {
+	    fetch('prds', {
+	        method: 'PUT',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify(updatedRows),
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	        console.log(result);
+	        //fetchUsers();
+	        $('#prdModal').modal('hide');
+	        fetchPrds();
+	    })
+	    .catch(error => {
+	        console.error('Error: ', error);
+	    })
+	    .finally(() => {
+	    	
+	    });
+    }	
+	    
+	document.addEventListener('click', (e) => {
+	    gridPrdModal.finishEditing();
+	});    
 });		 

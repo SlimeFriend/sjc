@@ -12,7 +12,7 @@
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 <style>
-	#gridMtModal td.tui-grid-cell-editable ,
+	.tui-grid-cell-editable,
 	#gridPrd div.tui-grid-body-container,
 	#gridBom div.tui-grid-body-container {
 	  cursor: pointer;
@@ -23,6 +23,11 @@
 	{
   		background-color: #eee; 
 	}
+	
+	.tui-grid-cell-editable {
+  		background-color: #eee; 
+	}
+	
 	/*
 	#gridPrd tr.tui-grid-row-even {
   		background-color: #eee; 
@@ -132,6 +137,30 @@
 	</div>
 	 -->	        
 
+	<div class="modal" id="prdModal">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
+	            <div class="pd-20 card-box mb-20" style="width: 100%;">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">기준정보 > 제품관리 > 제품목록</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal body -->
+					<div class="modal-body">
+						    <h5 class="h5">제품 상세</h5>
+							<div id="gridPrdModal"></div>
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-warning" id="prdModalUpdateBtn">수정</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="prdModalBtn">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div class="modal" id="bomDetailModal">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
