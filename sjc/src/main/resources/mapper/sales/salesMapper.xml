@@ -110,6 +110,26 @@
 		ORDER BY o.ord_date DESC, o.ord_status
 	</select>
 	
+	<!-- 주문내역 조회 -->
+	<select id="selectDeleteOrder" resultType="OrderVO">
+		SELECT   o.ord_code,
+		         o.manager,
+		         c.cp_name,
+		         o.ord_date,
+		         o.dlv_req_date,
+		         o.ord_status,
+		         o.comm,
+		         u.user_name,
+		         o.out_date
+		       
+		FROM     ord o LEFT JOIN cp c
+		ON       o.cp_code = c.cp_code
+		JOIN     sjc_user u
+		ON       u.user_id = o.manager
+		WHERE    o.ord_status IN ('주문접수', '재고부족')
+		ORDER BY o.ord_date DESC, o.ord_status
+	</select>
+	
 	<!-- 주문내역 검색 기능 -->
 	<select id="searchOrder" resultType="orderVO">
 	    SELECT o.ord_code,
@@ -174,6 +194,11 @@
 		WHERE 
 		    o.ord_code = #{ordCode}
 	</select>
+	
+	<delete id="deleteOrder" parameterType="String">
+    	DELETE FROM ord
+    	WHERE ord_code = #{ordCode}
+	</delete>
 	
 	<!-- 제품관리 조회 -->
 	<select id="selectProductManagement" resultType="ProductVO">
