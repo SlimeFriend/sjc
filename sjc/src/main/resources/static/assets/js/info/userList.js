@@ -602,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
             //fetchUsers();
             fetchCopyLogs();
             fetchCopyDetails();
-            console.error('result:', result);
         })
         .catch(error => {
             console.error('Error:', error);

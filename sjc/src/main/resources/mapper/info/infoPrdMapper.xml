@@ -55,5 +55,20 @@
 	    	,#{unitPrice}
 	    	,#{bomCode}
 	    )
-	</insert>	
+	</insert>
+	
+	<delete id="deletePrds">
+		delete
+		from	prd
+		where	prd_code = #{prdCode}
+	</delete>
+		
+	<delete id="updatePrds">
+		update	prd
+		set		prd_name = #{prdName}
+				,description = #{description}
+				,comm = #{comm}
+				,unit_price = #{unitPrice}
+		where	prd_code = #{prdCode}
+	</delete>	
 </mapper>
