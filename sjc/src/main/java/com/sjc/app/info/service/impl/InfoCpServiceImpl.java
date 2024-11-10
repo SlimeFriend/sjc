@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoCpMapper;
-import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoCpService;
-import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.sales.service.CpVO;
 
 import io.micrometer.core.annotation.Timed;
@@ -50,6 +48,15 @@ public class InfoCpServiceImpl implements InfoCpService {
 	public List<CpVO> deleteCps(List<CpVO> cpVOs) {
 		for(CpVO cpVO : cpVOs) {
 			infoCpMapper.deleteCp(cpVO);
+		}
+		return cpVOs;
+	}
+
+	@Override
+	@Transactional
+	public List<CpVO> updateCps(List<CpVO> cpVOs) {
+		for(CpVO cpVO : cpVOs) {
+			infoCpMapper.updateCp(cpVO);
 		}
 		return cpVOs;
 	}

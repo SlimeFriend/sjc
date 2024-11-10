@@ -30,15 +30,26 @@
 				</div>
 				
 				<div class="form-group row align-items-center">
-				   <label class="col-sm-2 col-form-label text-nowrap h4 mb-0">업체코드</label>
-				   <div class="col-sm-3 mb-0 py-0">
-				       <input class="form-control form-control-sm" type="text" id="inputCpCode" placeholder="업체코드 입력">
+				   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">업체코드</label>
+				   <div class="col-sm-2 mb-0 py-0">
+				       <input class="form-control form-control-sm" type="text" id="inputCpCode" placeholder="">
 				   </div>
 				
-				   <label class="col-sm-2 col-form-label text-nowrap h4 mb-0">업체명</label>
-				   <div class="col-sm-3 mb-0 py-0">
-				       <input class="form-control form-control-sm" type="text" id="inputCpName" placeholder="업체명 입력">
+				   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">업체명</label>
+				   <div class="col-sm-2 mb-0 py-0">
+				       <input class="form-control form-control-sm" type="text" id="inputCpName" placeholder="">
 				   </div>
+				   
+				   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">업체구분</label>
+				   <div class="col-sm-2 mb-0 py-0">
+						<select id="inputCpType" name="inputCpType" class="form-control form-control-sm text-center">
+							<option value="" selected>전체</option>
+							<option value="완제품">완제품</option>
+							<option value="자재">자재</option>
+						</select>			            
+				   </div>
+
+
 				
 				   <div class="col-auto ml-auto">
 				       <button class="btn btn-sm btn-primary mr-3 text-nowrap" id="searchBtn" style="display: none;">검색</button>

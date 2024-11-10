@@ -13,10 +13,13 @@
 		from    CP
 	    <where>
 	        <if test="cpCode != null and cpCode != ''">
-	            AND UPPER(cp_code) = UPPER(#{cpCode})
+	            AND UPPER(cp_code) LIKE UPPER('%' || #{cpCode} || '%')
 	        </if>
 	        <if test="cpName != null and cpName != ''">
 	            AND UPPER(cp_name) LIKE UPPER('%' || #{cpName} || '%')
+	        </if>
+	        <if test="cpType != null and cpType != ''">
+	            AND UPPER(cp_type) LIKE UPPER('%' || #{cpType} || '%')
 	        </if>
 	    </where>
 	    --ORDER BY CP_CODE

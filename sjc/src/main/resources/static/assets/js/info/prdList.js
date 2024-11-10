@@ -253,36 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}, 
     });
 
-	gridBom.on('check', (ev) => {
-	    const checkedRows = gridBom.getCheckedRows();
-	    if (checkedRows.length > 1) {
-	        checkedRows.forEach(row => {
-	            if (row.rowKey !== ev.rowKey) {
-	                gridBom.uncheck(row.rowKey);
-	            }
-	        });
-	    }
-	});
-	gridBom.on('click', (ev) => {
-	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
-	    if (ev.columnName !== '_checked') {
-	        // 모든 행의 체크 해제
-	        gridBom.uncheckAll();
-	        
-	        // 클릭한 행 체크
-	        gridBom.check(ev.rowKey);
-	        
-	        // 선택된 행의 데이터
-	        const selectedRowData = gridBom.getRow(ev.rowKey);
-	        console.log('gridBom : ', selectedRowData);
-	    }
-	    
-		gridBom.setSelectionRange({
-		    start: [ev.rowKey, 0],
-		    end: [ev.rowKey, gridBom.getColumns().length]
-		});
-	    
-	});
+
 
     document.getElementById('bomBtn').addEventListener('click', function() {
 		
@@ -682,10 +653,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			},
 	    ],
 	    */
+		/*	   	
 	    pageOptions: {
 		    useClient: true,
 		    perPage: 13
         }
+        */
     });
 
 	/*
@@ -764,31 +737,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	tui.Grid.applyTheme('custom', customTheme);
 
 
-
-
-	gridPrd.on('check', (ev) => {
-	    const checkedRows = gridPrd.getCheckedRows();
-	    if (checkedRows.length > 1) {
-	        checkedRows.forEach(row => {
-	            if (row.rowKey !== ev.rowKey) {
-	                gridPrd.uncheck(row.rowKey);
-	            }
-	        });
-	    }
-	});
+	/*
+	
 	
 	gridPrd.on('click', (ev) => {
 	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
 	    if (ev.columnName !== '_checked') {
-	        // 모든 행의 체크 해제
 	        gridPrd.uncheckAll();
 	        
-	        // 클릭한 행 체크
 	        gridPrd.check(ev.rowKey);
 	        
-	        // 선택된 행의 데이터
 	        const selectedRowData = gridPrd.getRow(ev.rowKey);
 	        console.log('gridPrd : ', selectedRowData);
+	        
+	        if(selectedRowData == null){
+				return false;
+			}
 	    }
 	    
 		gridPrd.setSelectionRange({
@@ -797,6 +761,202 @@ document.addEventListener('DOMContentLoaded', function() {
 		});	    
 	    
 	});
+	*/
+/*
+const events = [
+    // 셀 관련 이벤트
+    'beforeChange',
+    'afterChange',
+    'click',
+    'dblclick',
+    'mousedown',
+    //'mouseover',
+    //'mouseout',
+    'focusChange',
+    'focusedCell',
+    'key',
+    'beforeKeyDown',
+    'afterKeyDown',
+    
+    // 체크박스 관련
+    'check',
+    'uncheck',
+    
+    // 선택 관련
+    'selection',
+    'selectionStart',
+    'selectionEnd',
+    
+    // 편집 관련
+    'editingStart',
+    'editingFinish',
+    'beforeEditStart',
+    'afterEditStart',
+    'beforeComplete',
+    'afterComplete',
+    
+    // 행 관련
+    'expand',
+    'collapse',
+    'beforeExpandAll',
+    'expandAll',
+    'beforeCollapseAll',
+    'collapseAll',
+    'rowMounted',
+    'rowUpdated',
+    
+    // 정렬/필터 관련
+    'sort',
+    'filter',
+    
+    // 스크롤 관련
+    'scrollEnd',
+    'beforeScroll',
+    'afterScroll',
+    
+    // 컬럼 관련
+    'columnResize',
+    'beforeCreateEditor',
+    'afterCreateEditor',
+    
+    // 기타
+    'paste',
+    'drag',
+    'drop'
+];
+
+// 모든 이벤트 리스너 등록
+events.forEach(eventName => {
+    gridPrd.on(eventName, (ev) => {
+        console.log(`${eventName} event:`, ev);
+    });
+});
+*/
+
+
+	gridPrd.on('check', (ev) => {
+		const grid = gridPrd;
+			
+	    const checkedRows = grid.getCheckedRows();
+	    if (checkedRows.length == 0) return false;
+	    
+	    if (checkedRows.length > 1 && checkedRows != null) {
+	        checkedRows.forEach(row => {
+	            if (row.rowKey !== ev.rowKey) {
+	                grid.uncheck(row.rowKey);
+	            }
+	        });
+	    }
+	});
+
+	gridPrd.on('mousedown', (ev) => {
+		
+		const grid = gridPrd;	
+	    // 체크박스 칼럼을 직접 클릭한 경우는 제외
+		if (ev.columnName !== '_checked') {
+	        const checkedRowKeys = grid.getCheckedRowKeys();
+	        const currentRowChecked = checkedRowKeys[0] === ev.rowKey;
+	
+	        if (currentRowChecked) {
+	            grid.uncheck(ev.rowKey);
+	        } else {
+		    	grid.uncheckAll();
+		    	grid.check(ev.rowKey);
+		    	const selectedRowData = grid.getRow(ev.rowKey);
+		    	console.log('mousedown1 : ', selectedRowData);
+	
+	    		if(selectedRowData == null){
+	            	return false;
+	        	}
+	        }
+	
+	       	grid.setSelectionRange({
+	        	start: [ev.rowKey, 0],
+	        	end: [ev.rowKey, grid.getColumns().length]
+	    	});
+		}
+	});
+
+
+
+	gridBom.on('mousedown', (ev) => {
+		const grid = gridBom;	
+	   // 체크박스 칼럼을 직접 클릭한 경우는 제외
+	   if (ev.columnName !== '_checked') {
+	       const checkedRowKeys = grid.getCheckedRowKeys();
+	       const currentRowChecked = checkedRowKeys[0] === ev.rowKey;
+	
+	       if (currentRowChecked) {
+	           grid.uncheck(ev.rowKey);
+	       } else {
+	           grid.uncheckAll();
+	           grid.check(ev.rowKey);
+	           const selectedRowData = grid.getRow(ev.rowKey);
+	           console.log('gridPrd : ', selectedRowData);
+	
+	           if(selectedRowData == null){
+	               return false;
+	           }
+	       }
+	
+	       grid.setSelectionRange({
+	           start: [ev.rowKey, 0],
+	           end: [ev.rowKey, grid.getColumns().length]
+	       });
+	   }
+	   
+	    const rowKey = ev.rowKey;
+		const bomCode = gridBom.getValue(rowKey, 'bomCode');
+		if(bomCode){
+	        const params = new URLSearchParams({
+			    bomCode: bomCode,
+			}); 
+	        const url = `/bomDetails?${params.toString()}`;
+		
+	        fetch(url)
+	        .then(response => response.json())
+	        .then(result => {
+	            //gridBomDetailModal.resetData(result);
+	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
+	            //$('#bomDetailModal').modal('show');
+	            //gridBomDetailModal.refreshLayout();
+	            gridBomDetail.resetData(result);
+	            //gridBomDetail.refreshLayout();            
+	        })
+	        .catch(error => {
+	            console.error(error);
+	        });
+		}
+		   
+	});
+	
+
+
+
+	gridBom.on('click', (ev) => {
+	    const rowKey = ev.rowKey;
+		const bomCode = gridBom.getValue(rowKey, 'bomCode');
+		if(bomCode){
+	        const params = new URLSearchParams({
+			    bomCode: bomCode,
+			}); 
+	        const url = `/bomDetails?${params.toString()}`;
+		
+	        fetch(url)
+	        .then(response => response.json())
+	        .then(result => {
+	            //gridBomDetailModal.resetData(result);
+	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
+	            //$('#bomDetailModal').modal('show');
+	            //gridBomDetailModal.refreshLayout();
+	            gridBomDetail.resetData(result);
+	            //gridBomDetail.refreshLayout();            
+	        })
+	        .catch(error => {
+	            console.error(error);
+	        });
+		}
+    });
 
 
     function fetchMtList(search = {}) {
@@ -1056,52 +1216,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     fetchPrds();
 
-	/*
-	gridBom.on('onGridUpdated', (ev) => {
-	    gridBom.getData().map(row => {
-	        //gridBom.addRowClassName(row.rowKey,'bg-warning');
-	        gridBom.addCellClassName(row.rowKey, 'manager', 'bg-warning');
-	        
-	    });
-	});
-	*/
-	/*
-	grid.on('check', (ev) => {
-	    grid.addRowClassName(ev.rowKey, 'bg-light');
-	});
-	
-	grid.on('uncheck', (ev) => {
-	    grid.removeRowClassName(ev.rowKey, 'bg-light');
-	});
-	*/
-	
-	gridBom.on('click', (ev) => {
-	    const rowKey = ev.rowKey;
-	    
-		const bomCode = gridBom.getValue(rowKey, 'bomCode');
-		
-		if(bomCode){
-	        const params = new URLSearchParams({
-			    bomCode: bomCode,
-			}); 
-	        
-	        const url = `/bomDetails?${params.toString()}`;
-		
-	        fetch(url)
-	        .then(response => response.json())
-	        .then(result => {
-	            //gridBomDetailModal.resetData(result);
-	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
-	            //$('#bomDetailModal').modal('show');
-	            //gridBomDetailModal.refreshLayout();
-	            gridBomDetail.resetData(result);
-	            //gridBomDetail.refreshLayout();            
-	        })
-	        .catch(error => {
-	            console.error(error);
-	        });
-		}
-    });
     
     document.getElementById('openPrdBtn').addEventListener('click', function() {
 		fetchMtModal();
@@ -1169,18 +1283,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		.then(result => {
         	$('#prdModal').modal('show');
 			gridPrdModal.resetData(result);
-        	gridPrdModal.refreshLayout();			
+        	gridPrdModal.refreshLayout();
+        	
+			const gridData = gridPrdModal.getData();
+			gridData.forEach((row) => {
+			  	gridPrdModal.addCellClassName(row.rowKey,'prdName' ,'bg-warning');
+			  	gridPrdModal.addCellClassName(row.rowKey,'unitPrice' ,'bg-warning');
+			  	gridPrdModal.addCellClassName(row.rowKey,'description' ,'bg-warning');
+			  	gridPrdModal.addCellClassName(row.rowKey,'comm' ,'bg-warning');
+			});
+        				
 		})
 		.catch(err => {
 			console.log(err);
 		})
 	}
-
-    
-	document.addEventListener('click', (e) => {
-	    gridMtModal.finishEditing();
-	});    
-
 
 
     document.getElementById('customSwitchBom').addEventListener('change', function() {
@@ -1265,8 +1382,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	    	
 	    });
     }	
-	    
+	
 	document.addEventListener('click', (e) => {
+	    gridMtModal.finishEditing();
 	    gridPrdModal.finishEditing();
 	});    
+	
 });		 
