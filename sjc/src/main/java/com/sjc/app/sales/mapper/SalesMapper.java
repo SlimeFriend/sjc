@@ -46,6 +46,9 @@ public interface SalesMapper {
 	// 주문상세 테이블
 	public List<Map<String, Object>> selectOrderDetail(String ordCode);
 	
+	// 출고내역상세
+	public List<Map<String, Object>> selectOutDetail(String ordCode);
+	
 	// 재고부족 상세 테이블
 	public List<Map<String, Object>> selectLackOrderDetail(String ordCode);
 	
@@ -86,5 +89,6 @@ public interface SalesMapper {
 
 	public int updateOrdStatus(@Param("ordStatus") String ordStatus, @Param("ordCode") String ordCode);
 	public int updateOrdOutDate(String ordCode);
+
 	
 }
