@@ -27,99 +27,62 @@
 			<h2 class="h2 mb-20">기준정보 > 라인/공정 관리</h2>
 	        <div style="display: flex; width: 100%; gap: 20px;">
 				<div class="pd-30 card-box mb-20" style="width: 50%;">
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-						<div>
-					        <h4 class="h5 col-form-label mr-3 text-nowrap">라인 목록</h4>
-						</div>
-						<div>
-						  	<div class="d-flex align-items-center">
-							    <div class="d-flex align-items-center">
-									<label class="col-form-label h5 mr-3 text-nowrap" style="opacity: 0;">라인코드</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputLineCode" placeholder="라인코드 입력" style="opacity: 0;">
-									<!-- 
-									<label class="col-form-label h5 mr-3 text-nowrap">업체명</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputCpName" placeholder="업체명 입력">
-									 -->
-									<button class="btn btn-primary mr-3 text-nowrap" id="searchLineBtn" style="opacity: 0;">검색</button>
-							  	</div>
-							    <div class="d-flex align-items-center">
-							        <button class="btn btn-success mr-3 text-nowrap" id="" style="opacity: 0;">빈 버튼</button>
-							    </div>
-							</div>
-						</div>
+					<div>
+				        <h4 class="h5 mb-20 text-nowrap">라인 목록</h4>
 					</div>
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-						<!-- 
-						<div>
-					        <h2 class="col-form-label h3 mr-3 text-nowrap">라인 목록</h2>
-						</div>
-						 -->
-						<div>
-						  	<div class="d-flex align-items-center">
-							    <div class="d-flex align-items-center">
-									<label class="col-form-label h5 mr-3 text-nowrap">라인코드</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputLineCode" placeholder="">
-									<label class="col-form-label h5 mr-3 text-nowrap">제품코드</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputPrdCode" placeholder="">
-									<button class="btn btn-primary mr-3 text-nowrap" id="searchLineBtn">검색</button>
-							  	</div>
-							    <div class="d-flex align-items-center">
-							        <button class="btn btn-success mr-3 text-nowrap" id="insertLineBtn">등록</button>
-							        <button class="btn btn-warning mr-3 text-nowrap" id="updateLineBtn">수정</button>
-							        <button class="btn btn-danger text-nowrap" id="deleteLineBtn">삭제</button>
-							    </div>
-							</div>
-						</div>
+					
+					<div class="form-group row align-items-center">
+					    
+					    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">라인코드</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputLineCode" placeholder="">
+					   </div>
+					   						    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">제품코드</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputPrdCode" placeholder="">
+					   </div>						    
+						
+						<div class="col-auto ml-auto">
+					        <button class="btn btn-sm btn-success mr-3 text-nowrap" id="insertLineBtn">등록</button>
+					        <button class="btn btn-sm btn-warning mr-3 text-nowrap" id="updateLineBtn">수정</button>
+					        <button class="btn btn-sm btn-danger text-nowrap" id="deleteLineBtn">삭제</button>						    
+						</div>						
 					</div>
+
 					<div class="gridClass" id="gridLine"></div>
 				</div>
+				
 				<div class="pd-30 card-box mb-20" style="width: 50%;">
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-						<div>
-					        <h4 class="col-form-label h5 mr-3 text-nowrap">공정 목록</h4>
-						</div>
-						<div>
-						  	<div class="d-flex align-items-center">
-							    <div class="d-flex align-items-center">
-									<label class="col-form-label h5 mr-3 text-nowrap" style="opacity: 0;">라인코드</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputLineCode" placeholder="라인코드 입력" style="opacity: 0;">
-									<!-- 
-									<label class="col-form-label h5 mr-3 text-nowrap">업체명</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputCpName" placeholder="업체명 입력">
-									 -->
-									<button class="btn btn-primary mr-3 text-nowrap" id="searchLineBtn" style="opacity: 0;">검색</button>
-							  	</div>
-							    <div class="d-flex align-items-center">
-							        <button class="btn btn-success mr-3 text-nowrap" id="" style="opacity: 0;">빈 버튼</button>
-							    </div>
-							</div>
-						</div>
+					<div>
+				        <h4 class="h5 mb-20 text-nowrap">공정 목록</h4>
 					</div>
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-						<!-- 
-						<div>
-					        <h2 class="col-form-label h3 mr-3 text-nowrap">라인 목록</h2>
-						</div>
-						 -->
-						<div>
-						  	<div class="d-flex align-items-center">
-							    <div class="d-flex align-items-center">
-									<label class="col-form-label h5 mr-3 text-nowrap">공정코드</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputProcessCode" placeholder="">
-									<label class="col-form-label h5 mr-3 text-nowrap">공정명</label>
-									<input class="form-control mr-3 w-25" type="text" id="inputPrdCode" placeholder="">
-									<button class="btn btn-primary mr-3 text-nowrap" id="searchProcessBtn">검색</button>
-							  	</div>
-							    <div class="d-flex align-items-center">
-							        <button class="btn btn-success mr-3 text-nowrap" id="insertProcessBtn">등록</button>
-							        <button class="btn btn-warning mr-3 text-nowrap" id="updateProcessBtn">수정</button>
-							        <button class="btn btn-danger text-nowrap" id="deleteProcessBtn">삭제</button>
-							    </div>
-							</div>
-						</div>
+					
+					<div class="form-group row align-items-center">
+					    
+					    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">공정코드</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputProcessCode" placeholder="">
+					   </div>
+					   						    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">공정명</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputProcessName" placeholder="">
+					   </div>						    
+						
+						<div class="col-auto ml-auto">
+					        <button class="btn btn-sm btn-success mr-3 text-nowrap" id="insertProcessBtn">등록</button>
+					        <button class="btn btn-sm btn-warning mr-3 text-nowrap" id="updateProcessBtn">수정</button>
+					        <button class="btn btn-sm btn-danger text-nowrap" id="deleteProcessBtn">삭제</button>						    
+						</div>						
 					</div>
-					<div id="gridProcess"></div>
+
+					<div class="gridClass" id="gridProcess"></div>
 				</div>
+				
+
 
 				
 			</div>

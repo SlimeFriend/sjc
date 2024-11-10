@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                  
             },
             {
                 header: '사용여부',
@@ -48,13 +47,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+	/*
     document.getElementById('searchProcessBtn').addEventListener('click', function() {
         const search = {
         		lineCode: document.getElementById('inputLineCode').value,
         };
         fetchlines(search);
     });
-
+	*/
     function fetchlines(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/lines?${params.toString()}`;
@@ -118,13 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+	/*
     document.getElementById('searchProcessBtn').addEventListener('click', function() {
         const search = {
         		processCode: document.getElementById('inputProcessCode').value,
         };
         fetchprocesses(search);
     });
-
+	*/
     function fetchprocesses(search = {}) {
         const params = new URLSearchParams(search);
         const url = `/processes?${params.toString()}`;
@@ -192,6 +193,55 @@ document.addEventListener('DOMContentLoaded', function() {
 	    .finally(() => {
 	    	
 	    });
-    }    
+    }
+    
+    
+    
+	function searchlines() {
+	    const lineVO = {
+	        lineCode: $('#inputLineCode').val(),
+	        prdCode: $('#inputPrdCode').val(),
+	    };
+	
+	    $.ajax({
+	        url: "lines",
+	        method: "GET",
+	        data: lineVO,
+	        success: function(response) {
+	            gridLine.resetData(response);
+	        },
+	        error: function(error) {
+	            console.log(error);
+	        }
+	    });
+	}
+	$('#inputLineCode, #inputPrdCode').on('input', searchlines);
+	
+	    
+	function searchProcesses() {
+	    const processVO = {
+	        ProcessCode: $('#inputProcessCode').val(),
+	        ProcessName: $('#inputProcessName').val(),
+	    };
+	
+	    $.ajax({
+	        url: "processes",
+	        method: "GET",
+	        data: processVO,
+	        success: function(response) {
+	            gridProcess.resetData(response);
+	        },
+	        error: function(error) {
+	            console.log(error);
+	        }
+	    });
+	}
+	$('#inputProcessCode, #inputProcessName').on('input', searchProcesses);    
+        
+
+	document.addEventListener('click', (e) => {
+	    gridLine.finishEditing();
+	    gridProcess.finishEditing();
+	});
         
 });

@@ -21,7 +21,7 @@
 	            AND UPPER(mt_code) LIKE UPPER('%' || #{mtCode} || '%')
 	        </if>
 	        <if test="mtName != null and mtName != ''">
-	            AND UPPER(mt_ame) LIKE UPPER('%' || #{mtName} || '%')
+	            AND UPPER(mt_name) LIKE UPPER('%' || #{mtName} || '%')
 	        </if>
 	        <if test="materialType != null and materialType != ''">
 	            AND UPPER(material_type) LIKE UPPER('%' || #{materialType} || '%')

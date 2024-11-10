@@ -549,13 +549,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.getElementById('deleteMtBtn').addEventListener('click', function() {
 		
 		const checkedRows = grid.getCheckedRows();
+		console.log(checkedRows);
 		if (checkedRows.length === 0) {
 			alert('삭제할 자재를 선택해주세요.');
 	    	return;
 		}
 	  
 		if (confirm("삭제하시겠습니까??")){
-			deleteMts(checkedRows.map(row => row.userId));
+			//deleteMts(checkedRows.map(row => row.MtCode)); // List<String>
+			deleteMts(checkedRows); // List<MtVO>
 		}else{
 			return;
 		}
@@ -671,6 +673,69 @@ document.addEventListener('DOMContentLoaded', function() {
 	    	
 	    });
     }
+
+    $('#inputMtCode').on('input', function(){
+		const mtCode = $('#inputMtCode').val();
+		const mtName = $('#inputMtName').val();
+		const materialType = $('#materialType').val();
+		
+		const mtVO = {
+			mtCode : mtCode,
+			mtName : mtName,
+			materialType : materialType,
+		}
+		
+		$.ajax({
+			url : "mts",
+			method : "GET",
+			data : mtVO,	
+		})
+		.done(result => {
+			grid.resetData(result);
+		})
+	});
+	
+    $('#inputMtName').on('input', function(){
+		const mtCode = $('#inputMtCode').val();
+		const mtName = $('#inputMtName').val();
+		const materialType = $('#materialType').val();
+		
+		const mtVO = {
+			mtCode : mtCode,
+			mtName : mtName,
+			materialType : materialType,
+		}
+		
+		$.ajax({
+			url : "mts",
+			method : "GET",
+			data : mtVO,	
+		})
+		.done(result => {
+			grid.resetData(result);
+		})
+	});
+
+    $('#materialType').on('input', function(){
+		const mtCode = $('#inputMtCode').val();
+		const mtName = $('#inputMtName').val();
+		const materialType = $('#materialType').val();
+		
+		const mtVO = {
+			mtCode : mtCode,
+			mtName : mtName,
+			materialType : materialType,
+		}
+		
+		$.ajax({
+			url : "mts",
+			method : "GET",
+			data : mtVO,	
+		})
+		.done(result => {
+			grid.resetData(result);
+		})
+	});
 
 
 	document.addEventListener('click', (e) => {
