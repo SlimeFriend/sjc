@@ -564,8 +564,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     $('#inputCpCode').on('input', function(){
 		const cpCode = $('#inputCpCode').val();
+		const cpName = $('#inputCpName').val();
+		const cpType = $('#inputCpType').val();
+		
 		const cpVO = {
 			cpCode : cpCode,
+			cpName : cpName,
+			cpType : cpType,
 		}
 		
 		$.ajax({
@@ -579,10 +584,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
     $('#inputCpName').on('input', function(){
+		const cpCode = $('#inputCpCode').val();
 		const cpName = $('#inputCpName').val();
+		const cpType = $('#inputCpType').val();
+		
 		const cpVO = {
+			cpCode : cpCode,
 			cpName : cpName,
-		};
+			cpType : cpType,
+		}
 		
 		$.ajax({
 			url : "cps",
@@ -598,11 +608,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
     $('#inputCpType').on('change', function(){
-		console.log('change');
+		const cpCode = $('#inputCpCode').val();
+		const cpName = $('#inputCpName').val();
 		const cpType = $('#inputCpType').val();
+		
 		const cpVO = {
+			cpCode : cpCode,
+			cpName : cpName,
 			cpType : cpType,
-		};
+		}
 		
 	    $.get('cps', cpVO, function(response) {
 			grid.resetData(response);
