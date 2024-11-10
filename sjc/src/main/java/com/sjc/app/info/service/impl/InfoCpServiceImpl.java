@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoCpMapper;
+import com.sjc.app.info.service.BomVO;
 import com.sjc.app.info.service.InfoCpService;
 import com.sjc.app.info.service.InfoUserVO;
 import com.sjc.app.sales.service.CpVO;
@@ -44,4 +45,13 @@ public class InfoCpServiceImpl implements InfoCpService {
         return CpVOs;
 	}
 
+	@Override
+	@Transactional
+	public List<CpVO> deleteCps(List<CpVO> cpVOs) {
+		for(CpVO cpVO : cpVOs) {
+			infoCpMapper.deleteCp(cpVO);
+		}
+		return cpVOs;
+	}
+	
 }

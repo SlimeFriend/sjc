@@ -657,17 +657,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
     document.getElementById('BomDetailModalDeleteBtn').addEventListener('click', function() {
-		const getData = gridBomDetailModal.getData();
-		console.log(getData);
-		
-		// id와 sub_id만 추출하여 배열로 만들기
-		const map = getData.map(row => ({
-		    bomCode: row.bomCode,
-		    bdetailCode: row.bdetailCode
-		}));
-		console.log(map);
-		
-		deleteBoms(map);
+		if (confirm("삭제하시겠습니까??")){
+
+
+			const getData = gridBomDetailModal.getData();
+			console.log(getData);
+			
+			const map = getData.map(row => ({
+			    bomCode: row.bomCode,
+			    bdetailCode: row.bdetailCode
+			}));
+			console.log(map);
+			
+			deleteBoms(map);
+		}
     });
     function deleteBoms(bomVOs) {
 		fetch('boms', {
