@@ -345,6 +345,24 @@
 		    poh.OUT_DATE DESC, poh.LOT
 	</select>
 	
+	<!--출고내역 상세-->
+	<select id="selectOutDetail" parameterType="String" resultType="map">
+		SELECT    poh.LOT AS "lot",
+			      p.PRD_NAME AS "prdName",
+			      poh.OUT_QUANTITY AS "outQuantity",
+			      TO_CHAR(poh.OUT_DATE, 'YYYY-MM-DD') AS "outDate",
+			      poh.CP_NAME AS "cpName",
+			      poh.ORD_CODE AS "ordCode",
+			      u.user_name AS "userName",
+			      o.manager
+		FROM      prd_out_history poh
+		LEFT JOIN prd p ON p.prd_code = poh.prd_code
+		JOIN      ord o ON o.ord_code = poh.ord_code
+		JOIN      sjc_user u ON u.user_id = o.manager
+		WHERE     poh.ord_code = #{ord_code}
+		ORDER BY  poh.OUT_DATE DESC, poh.LOT
+	</select>
+	
 	<!-- 입고 검색 프로세스 -->
 	<select id="inSearch" resultType="PrdManagementVO">
 	    SELECT pm.lot,

@@ -26,6 +26,17 @@
 	    	#gridOrderDetail:hover {
 	    		cursor: pointer;
 	    	}
+	    	
+	    	#outGrid:hover {
+	    		cursor: pointer;
+	    	}
+	    	
+	    	.modal-dialog-centered {
+    			display: flex;
+    			align-items: center;
+    			justify-content: center;
+    			margin: auto;
+			}
 
     	</style>
 	</head>
@@ -70,6 +81,32 @@
 		<h4 class="h5 mb-20">출고현황</h4>
 		<div id="outGrid"></div>
 	</div>
+	
+	<!-- outListModal -->
+	<div class="modal" id="outModal">
+		<div class="modal-dialog-centered modal-xl">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">출고현황</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					    <h5 class="h5 mb-20">출고목록</h5>
+					    <div class="d-flex justify-content-between mb-20">
+						    <div>업체명 : <span id="modalCpName"></span></div>
+						    <div>담당자 : <span id="modalUserName"></span></div>
+					    </div>
+						<div id="outGridList"></div>
+				</div>
+				
+				<!-- Modal footer -->
+				<div class="modal-footer justify-content-center">
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
@@ -77,6 +114,7 @@
 			const gridModalData = /*[[${ordDetail}]]*/[];
 			const productLotGridData = /*[[${ordDetail}]]*/[];
 			const outGridData = /*[[${outGrid}]]*/[];
+			const outGridListData = /*[[${outGrid}]]*/[];
 			
 			let outValue = 0; // 출고량 값
 			let lotValue = 0; // LOT 값
@@ -345,6 +383,76 @@
 			            },
 
 			        });
+			    }
+			});
+			
+			const outGridList = new tui.Grid({
+				el : document.getElementById('outGridList'),
+				data : outGridListData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '주문코드',
+					name : 'ordCode',
+					align : 'center',
+				}, {
+					header : 'LOT',
+					name : 'lot',
+					align : 'center',
+				}, {
+					header : '제품명',
+					name : 'prdName',
+					align : 'center',
+				}, {
+					header : '업체명',
+					name : 'cpName',
+					align : 'center',
+					hidden: true,
+				}, {
+					header : '출고일자',
+					name : 'outDate',
+					align : 'center',
+					
+				}, {
+					header : '출고량',
+					name : 'outQuantity',
+					align : 'center',
+				}, {
+					header : '담당자',
+					name : 'userName',
+					align : 'center',
+					hidden: true,
+				},],
+				rowHeaders : [ 'rowNum' ],
+				pageOptions : {
+					useClient : true,
+					perPage : 10
+				}
+			});
+			
+			outGrid.on('click', (ev) => {
+				const rowKey = ev.rowKey;
+			    const ordCodeValue = outGrid.getValue(rowKey, 'ordCode');
+			    const cpName = outGrid.getValue(rowKey, 'cpName');
+			    const userName = outGrid.getValue(rowKey, 'userName');
+			    
+			    if(ordCodeValue) {
+			    	$.ajax({
+			    		url : '/getOutDetail',
+			    		type : 'POST',
+			    		contentType : 'application/json',
+			    		data : JSON.stringify({ordCode : ordCodeValue}),
+			    		success: function(response) {
+			    			$('#outModal').modal('show');
+			    			outGridList.resetData(response);
+			    			outGridList.refreshLayout();
+			    		    document.getElementById('modalCpName').innerText = cpName;
+			    		    document.getElementById('modalUserName').innerText = userName;
+			    		},
+			    		error: function(xhr, status, error) {
+			    			console.error('error during request', error);
+			    		}
+			    	});
 			    }
 			});
 

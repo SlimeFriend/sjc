@@ -102,6 +102,16 @@ public class SalesController {
 		return ordDetail;
 	}
 	
+	// 출고내역 상세페이지
+	@PostMapping("/getOutDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getOutDetail(@RequestBody Map<String, String> requestData) {
+		String ordCode = requestData.get("ordCode");
+		List<Map<String, Object>> outDetail = salesService.outDetail(ordCode);
+		
+		return outDetail;
+	}
+	
 
 	// 제품관리 페이지
 	@GetMapping("/productManagement")

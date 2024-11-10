@@ -11,6 +11,7 @@ public interface SalesService {
 	// 주문접수 프로세스
     public int insertOrder(SalesDTO salesDTO);
 	public List<Map<String, Object>> orderDetail(String ordCode);
+	public List<Map<String, Object>> outDetail(String ordCode);
 	
 	// 주문내역 조회
 	public List<OrderVO> order();

@@ -194,6 +194,15 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	@Override
+	public List<Map<String, Object>> outDetail(String ordCode) {
+		
+		List<Map<String, Object>> list = salesMapper.selectOutDetail(ordCode);
+		
+		return list;
+	}
+	
+	
+	@Override
 	public List<Map<String, Object>> lackOrderDetail(String ordCode) {
 		
 		List<Map<String, Object>> list = salesMapper.selectLackOrderDetail(ordCode);
