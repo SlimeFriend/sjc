@@ -28,7 +28,7 @@
 	        </if>
 
 	    </where>
-	    ORDER BY MT_CODE
+	    ORDER BY UPDATE_DATE DESC, MT_CODE
 	</select>
 	
 	<select id="selectMtStockList">
@@ -43,4 +43,60 @@
         ORDER BY MT_CODE
     ]]>
 	</select>
+	
+    <insert id="insertMt" parameterType="MtVO">
+	<selectKey keyProperty="mtCode" order="BEFORE" resultType="String">
+		select 'MT' || lpad(to_char(NVL(max(substr(mt_code, 3, 3)), 0) + 1), 3, 0)
+		from 	mt
+	</selectKey>
+	    INSERT INTO mt (
+	    	mt_code
+	    	,mt_name
+	    	,material_type
+	    	,specification
+	    	,unit
+	    	,unit_price
+	    	,safety_stock
+	    	,comm
+	    	,stc_code
+	    	,update_date
+	    	,current_stc
+	
+	    ) VALUES (
+	    	#{mtCode}
+	    	,#{mtName}
+	    	,#{materialType}
+	    	,#{specification}
+	    	,#{unit}
+	    	,#{unitPrice}
+	    	,#{safetyStock}
+	    	,#{comm}
+	    	,#{stcCode}
+	    	,SYSDATE
+	    	,#{currentStc}
+	    )
+    </insert>
+    
+    <update id="updateMt" parameterType="MtVO">
+    	update	mt
+    	set
+	    	mt_name = #{mtName}
+	    	,material_type = #{materialType}
+	    	,specification = #{specification}
+	    	,unit = #{unit}
+	    	,unit_price = #{unitPrice}
+	    	,safety_stock = #{safetyStock}
+	    	,comm = #{comm}
+	    	,stc_code = #{stcCode}
+	    	,update_date = SYSDATE
+	    	,current_stc = #{currentStc}
+		where mt_code = #{mtCode}
+    </update>
+    
+    <delete id="deleteMt">
+    	delete
+    	from	mt
+    	where	mt_code = #{mtCode}
+    </delete>
+    	
 </mapper>

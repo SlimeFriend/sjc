@@ -54,13 +54,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
-            {
-                header: '단가',
-                name: 'unitPrice',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                  
-            },
+{
+    header: '단가',
+    name: 'unitPrice',
+    align: 'right',
+    sortingType: 'desc',
+    sortable: true,
+    formatter: (props) => {
+        if (!props.value) return '';
+        return Number(props.value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+},
+
             {
                 header: '필요수량',
                 name: 'quantityRequired',
@@ -532,19 +537,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
             },
             {
-                header: 'BOM코드',
-                name: 'bomCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true                
-            },
-            {
                 header: '단가',
                 name: 'unitPrice',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+				formatter: function(e){
+				   if (!e.value) return '';
+				   return e.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				},                                   
             },
+            
             {
                 header: '설명',
                 name: 'description',
@@ -563,6 +566,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                
+            },            
         ],
 		    rowHeaders: [
 				{
@@ -603,14 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ellipsis: true,
 				renderer: {
 					type: TooltipRenderer
-				}
-            },
-            {
-                header: 'BOM코드',
-                name: 'bomCode',
-                align: 'center',
-                sortingType: 'desc',
-                sortable: true,
+				},
             },
             {
                 header: '단가',
@@ -618,7 +621,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                editor: 'text',
+
+                                                  
             },
             {
                 header: '설명',
@@ -640,6 +645,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true,
                 editor: 'text',                                  
             },
+            {
+                header: 'BOM코드',
+                name: 'bomCode',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+            },            
         ],
         /*
 	    rowHeaders: [
@@ -1358,7 +1370,11 @@ events.forEach(eventName => {
 			}else{
 				return;
 			}	
-	    }
+	    }else if(confirm("수정한 내용이 없습니다. 종료 하시겠습니까?")){
+	        $('#prdModal').modal('hide');
+			return false;
+			
+		}
 	});
     function updatePrds(updatedRows) {
 	    fetch('prds', {

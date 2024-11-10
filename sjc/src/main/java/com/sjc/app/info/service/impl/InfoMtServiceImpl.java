@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoMtMapper;
 import com.sjc.app.info.service.InfoMtService;
@@ -34,6 +35,33 @@ public class InfoMtServiceImpl implements InfoMtService {
 	@Override
 	public List<MtVO> mtStockList() {
 		return infoMtMapper.selectMtStockList();
+	}
+
+	@Override
+	@Transactional
+	public List<MtVO> insertMts(List<MtVO> mtVOs) {
+		for(MtVO mtVO : mtVOs) {
+			infoMtMapper.insertMt(mtVO);
+		}
+		return mtVOs;
+	}
+
+	@Override
+	@Transactional
+	public List<MtVO> deleteMts(List<MtVO> mtVOs) {
+		for(MtVO mtVO : mtVOs) {
+			infoMtMapper.deleteMt(mtVO);
+		}
+		return mtVOs;
+	}
+
+	@Override
+	@Transactional
+	public List<MtVO> updateMts(List<MtVO> mtVOs) {
+		for(MtVO mtVO : mtVOs) {
+			infoMtMapper.updateMt(mtVO);
+		}
+		return mtVOs;
 	}
 
 }
