@@ -48,7 +48,6 @@ cursor:pointer;
                     <th>지시량</th>
                     <th>생산량</th>
                     <th>상태</th>
-                    <th>비고</th>
                 </tr>
             </thead>    
             <tbody id="plan">
@@ -64,7 +63,6 @@ cursor:pointer;
                         <td th:if="${list.status=='b1'}">대기</td>
                         <td th:if="${list.status=='b2'}">진행</td>
                         <td th:if="${list.status=='b3'}">완료</td>
-                        <td th:text="${list.comm}"></td>
                     </tr>
                 </th:block>
             </tbody>
