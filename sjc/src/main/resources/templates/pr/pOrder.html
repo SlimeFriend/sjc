@@ -461,7 +461,11 @@
 	        		const currentStock = mtRow.currentStc; // 재고량
 
 	        		if (requiredQuantity > currentStock) {
-	            		alert(`${mtRow.mtName}의 필요 수량(${requiredQuantity})이 재고량(${currentStock})보다 큽니다.`);
+	        			Swal.fire({
+	                        icon: 'warning',
+	                        text: `${mtRow.mtName}의 필요 수량(${requiredQuantity})이 재고량(${currentStock})보다 큽니다.`,
+	                    })
+	            		
 	            		return;
 	        		}
 	    		}
