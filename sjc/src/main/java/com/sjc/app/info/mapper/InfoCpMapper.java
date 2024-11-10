@@ -10,6 +10,8 @@ public interface InfoCpMapper {
 	// 업체 수정
 	public int updateCp(CpVO cpVO);
     // 업체 등록
-	public int insertCp(CpVO cpVO);	
+	public int insertCp(CpVO cpVO);
+    // 업체 삭제
+    public int deleteCp(CpVO cpVO);	
 }
 

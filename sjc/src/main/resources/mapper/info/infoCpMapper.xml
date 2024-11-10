@@ -54,5 +54,11 @@
 	    	,#{comm}
 	    )
     </insert>
+    
+    <delete id="deleteCp">
+    	delete
+    	from	cp
+    	where	cp_code = #{cpCode}
+    </delete>
 	
 </mapper>

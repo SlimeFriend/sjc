@@ -378,7 +378,45 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.addEventListener('click', (e) => {
 	    gridCpModal.finishEditing();
 	    gridCpInsertModal.finishEditing();
-	});    
+	});
+	
+	
+    document.getElementById('deleteCpBtn').addEventListener('click', function() {
+		if (confirm("삭제하시겠습니까??")){
+			
+			const getData = gridCpModal.getData();
+			console.log(getData);
+			
+			const map = getData.map(row => ({
+			    cpCode: row.cpCode,
+			}));
+			console.log(map);
+			
+			deleteCps(map);
+		}else{
+			return false;
+		}
+    });
+    
+    function deleteCps(CpVOs) {
+		fetch('cps', {
+			method: 'DELETE',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(CpVOs)
+			})
+		.then(response => response.json())
+		.then(result => {
+			console.log('Delete result:', result);
+			fetchCps();
+			$('#CpModal').modal('hide');
+		})
+		.catch(error => {
+			console.error('Delete error:', error);
+			alert('삭제 중 오류가 발생했습니다.');
+		});
+    }
     
         
 });
