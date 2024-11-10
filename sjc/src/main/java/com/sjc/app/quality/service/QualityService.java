@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjc.app.mt.service.MtlOdVO;
-import com.sjc.app.pr.service.PDetailVO;
 
 
 public interface QualityService {

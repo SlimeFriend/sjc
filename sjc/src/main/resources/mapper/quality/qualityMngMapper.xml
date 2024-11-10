@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sjc.app.quality.mapper.QualityMngMapper">
+	<!-- Inspection 목록 -->
+	<select id="selectIns" resultType="InspectionVO" parameterType="InspectionVO">
+		SELECT  
+		    i.ins_code AS "insCode"
+		    , i.ins_date AS "insDate"
+		    , i.ins_status AS "insStatus"
+		    , i.number_of_tests AS "numberOfTests"
+		    , i.number_of_passes AS "numberOfPasses"
+		    , i.number_of_failed AS "numberOfFailed"
+		    , i.total_pass AS "totalPass"
+		    , i.number_of_total_pass AS "numberOfTotalPass"
+		    , i.user_id AS "userId"
+		    , i.user_name AS "userName"
+		    , m.mt_name AS "mtName"
+		    , p.prd_name AS "prdName"
+		    , COALESCE(i.mtl_od_detail_code, i.pdetail_code) AS "mtlPdetailCode"
+		FROM 
+		    inspection i
+		LEFT JOIN 
+		    mtl_od_detail mod 
+		ON i.mtl_od_detail_code = mod.mtl_od_detail_code
+		  LEFT JOIN
+		      mt m
+		  ON m.mt_code = mod.mt_code
+		LEFT JOIN 
+		    pdetail p 
+		ON i.pdetail_code = p.pdetail_code
+		    <where>
+		    i.ins_status = '검사완료'
+	        <if test="insCode != null and insCode != ''">
+	            AND UPPER(i.ins_code) LIKE UPPER('%' || #{insCode} || '%')
+	        </if>
+	        <if test="mtName != null and mtName != ''">
+	            AND UPPER(m.mt_name) LIKE UPPER('%' || #{mtName} || '%')
+	        </if>
+	        <if test="prdName != null and prdName != ''">
+	            AND UPPER(p.prd_name) LIKE UPPER('%' || #{prdName} || '%')
+	        </if>
+	    </where>
+		ORDER BY 
+		    i.ins_date DESC
+	</select>
+	
+	
+	
+	<select id="radioAllIns" resultType="InspectionVO">
+		SELECT  
+		    i.ins_code AS "insCode"
+		    , i.ins_date AS "insDate"
+		    , i.ins_status AS "insStatus"
+		    , i.number_of_tests AS "numberOfTests"
+		    , i.number_of_passes AS "numberOfPasses"
+		    , i.number_of_failed AS "numberOfFailed"
+		    , i.total_pass AS "totalPass"
+		    , i.number_of_total_pass AS "numberOfTotalPass"
+		    , i.user_id AS "userId"
+		    , i.user_name AS "userName"
+		    , m.mt_name AS "mtName"
+		    , p.prd_name AS "prdName"
+		    , COALESCE(i.mtl_od_detail_code, i.pdetail_code) AS "mtlPdetailCode"
+		FROM 
+		    inspection i
+		LEFT JOIN 
+		    mtl_od_detail mod 
+		ON i.mtl_od_detail_code = mod.mtl_od_detail_code
+		  LEFT JOIN
+		      mt m
+		  ON m.mt_code = mod.mt_code
+		LEFT JOIN 
+		    pdetail p 
+		ON i.pdetail_code = p.pdetail_code
+		WHERE
+		    i.ins_status = '검사완료'
+		ORDER BY 
+		    i.ins_date DESC
+	</select>
+	<select id="radioMTLDIns" resultType="InspectionVO">
+		SELECT  
+		    i.ins_code AS "insCode"
+		    , i.ins_date AS "insDate"
+		    , i.ins_status AS "insStatus"
+		    , i.number_of_tests AS "numberOfTests"
+		    , i.number_of_passes AS "numberOfPasses"
+		    , i.number_of_failed AS "numberOfFailed"
+		    , i.total_pass AS "totalPass"
+		    , i.number_of_total_pass AS "numberOfTotalPass"
+		    , i.user_id AS "userId"
+		    , i.user_name AS "userName"
+		    , m.mt_name AS "mtName"
+		    , i.mtl_od_detail_code AS "mtlPdetailCode"
+		FROM 
+		    inspection i
+		LEFT JOIN 
+		    mtl_od_detail mod 
+		ON i.mtl_od_detail_code = mod.mtl_od_detail_code
+		  LEFT JOIN
+		      mt m
+		  ON m.mt_code = mod.mt_code
+		WHERE
+		    i.ins_status = '검사완료'
+		AND i.mtl_od_detail_code LIKE 'MTLD%'
+		ORDER BY 
+		    i.ins_date DESC
+	</select>
+	<select id="radioPDIns" resultType="InspectionVO">
+		SELECT  
+		    i.ins_code AS "insCode"
+		    , i.ins_date AS "insDate"
+		    , i.ins_status AS "insStatus"
+		    , i.number_of_tests AS "numberOfTests"
+		    , i.number_of_passes AS "numberOfPasses"
+		    , i.number_of_failed AS "numberOfFailed"
+		    , i.total_pass AS "totalPass"
+		    , i.number_of_total_pass AS "numberOfTotalPass"
+		    , i.user_id AS "userId"
+		    , i.user_name AS "userName"
+		    , p.prd_name AS "prdName"
+		    , i.pdetail_code AS "mtlPdetailCode"
+		FROM 
+		    inspection i
+		LEFT JOIN 
+		    pdetail p 
+		ON i.pdetail_code = p.pdetail_code
+		WHERE
+		    i.ins_status = '검사완료'
+		AND i.pdetail_code LIKE 'PD%'
+		ORDER BY 
+		    i.ins_date DESC
+	</select>
+</mapper>
