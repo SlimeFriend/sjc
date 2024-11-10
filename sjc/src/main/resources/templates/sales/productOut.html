@@ -54,7 +54,7 @@
 	
 	<!-- The Modal -->
 	<div class="modal" id="myModal">
-		<div class="modal-dialog modal-xl">
+		<div class="modal-dialog-centered modal-xl">
 			<div class="modal-content">
 				<!-- Modal Header -->
 				<div class="modal-header">
@@ -547,9 +547,10 @@
 						                    icon: 'warning',
 						                    title: '주문초과',
 						                    text: '주문량을 초과했습니다.',
+						                }).then(() => {
+						                	gridModal.setValue(j, 'remainQuantity', "");
+				                            alertTriggered = true; // 알림이 발생했음을 기록
 						                });
-			                            gridModal.setValue(j, 'remainQuantity', "");
-			                            alertTriggered = true; // 알림이 발생했음을 기록
 			                        }
 			                        gridModal.setValue(j, 'totalOutQuantity', ""); // 출고량 초기화
 			                        for (let k = 0; k < rowCount; k++) {
