@@ -60,6 +60,8 @@ public interface QualityService {
 	
 	
 // 출고
+	// 생산지시목록검색
+	public List<InspectionVO> prdSearch(String porderCode, String userName, String poStartDate, String poEndDate);
 	// 완제품품질검사 대기목록1
 	public List<InspectionVO> pOrderSelect();
 	// 완제품품질검사 대기목록2
