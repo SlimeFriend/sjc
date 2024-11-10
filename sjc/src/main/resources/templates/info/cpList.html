@@ -22,33 +22,124 @@
 	<div class="main-container">
 		<div class="pd-ltr-20">
 	 -->
-			<h2 class="h2 mb-20">기준정보 > 업체 관리</h2>
-			<div class="pd-30 card-box mb-20">
-				<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-					<div>
-				        <h4 class="h5 mb-0">업체 목록</h4>
-					</div>
-					<div>
-					  <div class="d-flex align-items-center">
-					    <div class="d-flex align-items-center">
-							<label class="col-form-label h5 mr-3 text-nowrap">업체코드</label>
-							<input class="form-control mr-3 w-25" type="text" id="inputCpCode" placeholder="업체코드 입력">
-							<label class="col-form-label h5 mr-3 text-nowrap">업체명</label>
-							<input class="form-control mr-3 w-25" type="text" id="inputCpName" placeholder="업체명 입력">
-							<button class="btn btn-primary mr-3 text-nowrap" id="searchBtn">검색</button>
-					    </div>
-					  </div>
-					</div>
-					 <div>
-				        <button class="btn btn-success mr-3" id="insertBtn">등록</button>
-				        <!-- 
-				        <button class="btn btn-warning mr-3" id="updateBtn">수정</button>
-				        <button class="btn btn-danger" id="deleteBtn">삭제</button>
-				         -->
-					</div>
-				</div>			
+		<h2 class="h2 mb-20">기준정보 > 업체 관리</h2>
+        <div style="display: flex; width: 100%; gap: 20px;">
+			<div class="pd-30 card-box mb-20" style="width: 50%;">
+				<div>
+			        <h4 class="h5 mb-20 text-nowrap">업체 목록</h4>
+				</div>
+				
+				<div class="form-group row align-items-center">
+				   <label class="col-sm-2 col-form-label text-nowrap h4 mb-0">업체코드</label>
+				   <div class="col-sm-3 mb-0 py-0">
+				       <input class="form-control form-control-sm" type="text" id="inputCpCode" placeholder="업체코드 입력">
+				   </div>
+				
+				   <label class="col-sm-2 col-form-label text-nowrap h4 mb-0">업체명</label>
+				   <div class="col-sm-3 mb-0 py-0">
+				       <input class="form-control form-control-sm" type="text" id="inputCpName" placeholder="업체명 입력">
+				   </div>
+				
+				   <div class="col-auto ml-auto">
+				       <button class="btn btn-sm btn-primary mr-3 text-nowrap" id="searchBtn" style="display: none;">검색</button>
+				       <button class="btn btn-sm btn-primary text-nowrap" id="insertBtn">등록</button>
+				   </div>
+				</div>
+			
 				<div class="gridClass" id="grid"></div>
 			</div>
+			
+			<div class="pd-30 card-box mb-20" style="width: 50%;">
+				<div>
+			        <h4 class="h5 mb-20 text-nowrap">업체 정보</h4>
+				</div>
+				
+				<div class="form-group row align-items-center">
+				   <label class="col-sm-2 col-form-label text-nowrap h4"></label>
+
+					<div class="form-group d-flex align-items-center col-sm-7 mb-0 justify-content-center py-0">
+					    <label class="col-form-label text-nowrap mr-2 mb-0"></label>
+					    <div class="custom-control custom-switch mb-0 py-0">
+					        <input type="checkbox" class="custom-control-input" id="editModeSwitch">
+					        <label class="custom-control-label" for="editModeSwitch">수정모드</label>
+					    </div>
+					</div>
+				
+				   <div class="col-auto ml-auto">
+				       <button class="btn btn-sm btn-warning text-nowrap mr-3" id="updateBtn" disabled>수정</button>
+				       <button class="btn btn-sm btn-danger text-nowrap" id="deleteBtn" disabled>삭제</button>
+				   </div>
+				</div>
+			
+		    	<!-- 
+			    <div class="row">
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>담당자</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="manager" name="manager" placeholder="담당자" th:value="${#authentication.principal.authorities[2]}" readonly>
+			            </div>
+			        </div>
+			        
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>등록일자</label>
+			                <input class="form-control form-control-sm text-center" type="date" id="regDate" name="regDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
+			            </div>
+			        </div>
+			    </div>
+		    	 -->
+			    <div class="row">
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>업체코드</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="cpCode" name="cpCode" placeholder="" value="" readonly >
+			            </div>
+			        </div>
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>업체명</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="cpName" name="cpName" placeholder="" value="" disabled>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="row">
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>업체구분</label>
+							<select id="cpType" name="cpType" class="form-control form-control-sm text-center" disabled>
+								<option value="" disabled selected>선택</option>
+								<option value="완제품">완제품</option>
+								<option value="자재">자재</option>
+							</select>			            
+			            </div>
+			        </div>
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>사업자번호</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="businessNo" name="businessNo" placeholder="" value="" disabled>
+			            </div>
+			        </div>
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>주소</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="address" name="address" placeholder="" value="" disabled>
+			            </div>
+			        </div>
+			        <div class="col-md-6">
+			            <div class="form-group">
+			                <label>전화번호</label>
+			                <input class="form-control form-control-sm text-center" type="text" id="tel" name="tel" placeholder="" value="" disabled>
+			            </div>
+			        </div>
+			    </div>
+				<div class="form-group">
+					<label>비고</label>
+					<textarea class="form-control" id="comm" name="comm" style="height: 140px;" disabled></textarea>				
+	        	</div>
+				
+				
+			</div>
+		</div>
 	<!-- 
 		</div>
 	</div>
@@ -107,7 +198,9 @@
 						        <h2 class="h5 mb-0">업체 수정/삭제</h2>
 							</div>
 							<div>
+								<!-- 
 						        <button class="btn btn-primary mr-3" id="updateCpBtn">수정</button>
+								 -->
 						        <button class="btn btn-danger" id="deleteCpBtn">삭제</button>
 						        <!-- 
 						        <button class="btn btn-success mr-3" id="insertCpBtn">등록</button>

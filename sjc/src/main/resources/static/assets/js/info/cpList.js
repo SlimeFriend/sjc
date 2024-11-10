@@ -50,17 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
 				}                                 
             },
             {
+                header: '전화번호',
+                name: 'tel',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true                  
+            },
+            {
                 header: '비고',
                 name: 'comm',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                  
             }
         ],
         rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 10
         }
     });
     
@@ -219,6 +230,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				}                                                   
             },
             {
+                header: '전화번호',
+                name: 'tel',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
+                editor: 'text',                                  
+            },
+            {
                 header: '비고',
                 name: 'comm',
                 align: 'center',
@@ -364,16 +383,56 @@ document.addEventListener('DOMContentLoaded', function() {
 	        fetch(url)
 	        .then(response => response.json())
 	        .then(result => {
-	            gridCpModal.resetData(result);
-	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
-	            $('#CpModal').modal('show');
-	            gridCpModal.refreshLayout();            
+				console.log(result);
+	            //gridCpModal.resetData(result);
+	            //$('#CpModal').modal('show');
+	            //gridCpModal.refreshLayout();
+	            setSidePanel(result[0]);
+    			//$('#updateBtn, .custom-switch').toggle(true);            
 	        })
 	        .catch(error => {
 	            console.error(error);
 	        });
 		}
     });    
+    
+    function setSidePanel(cpVO){
+		$('#cpCode').val(cpVO.cpCode);
+		$('#cpName').val(cpVO.cpName);
+		$('#cpType').val(cpVO.cpType);
+		$('#businessNo').val(cpVO.businessNo);
+		$('#address').val(cpVO.address);
+		$('#tel').val(cpVO.tel);
+		$('#comm').val(cpVO.comm);
+		
+	    $('#deleteBtn').prop('disabled', false);
+
+	}
+	
+	function clearSidePanel() {
+	    
+	    $('#cpCode').val("");
+	    $('#cpName').val("");
+	    $('#cpType').val("");
+	    $('#businessNo').val("");
+	    $('#addressNo').val("");
+	    $('#tel').val("");
+	    $('#comm').val("");
+	
+	    $('#deleteBtn, #updateBtn').prop('disabled', true);
+	}
+
+	$('#editModeSwitch').on('change', function() {
+	    if(!$('#cpCode').val()) {
+	        $(this).prop('checked', false);
+	        alert('업체를 선택하세요.');
+	        return false;
+	    }
+	
+	    const isEnabled = $(this).is(':checked');
+	    $('#updateBtn, #cpName, #cpType, #businessNo, #address, #tel, #comm').prop('disabled', !isEnabled);
+	});
+
     
 	document.addEventListener('click', (e) => {
 	    gridCpModal.finishEditing();
@@ -382,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	
     document.getElementById('deleteCpBtn').addEventListener('click', function() {
-		if (confirm("삭제하시겠습니까??")){
+		if (confirm("삭제하시겠습니까?")){
 			
 			const getData = gridCpModal.getData();
 			console.log(getData);
@@ -397,6 +456,27 @@ document.addEventListener('DOMContentLoaded', function() {
 			return false;
 		}
     });
+	
+	$('#deleteBtn').on('click', function(){
+		if (confirm("삭제 하시겠습니까?")){
+			
+			const getData = $('#cpCode').val();
+			console.log(getData);
+			
+			const map = {
+			    cpCode: getData,
+			};
+			const mapAry = [{
+			    cpCode: getData,
+			}];
+			
+			console.log(mapAry);
+			deleteCps(mapAry);
+		}else{
+			return false;
+		}
+	});    
+    
     
     function deleteCps(CpVOs) {
 		fetch('cps', {
@@ -410,7 +490,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		.then(result => {
 			console.log('Delete result:', result);
 			fetchCps();
-			$('#CpModal').modal('hide');
+			//$('#CpModal').modal('hide');
+			clearSidePanel();
 		})
 		.catch(error => {
 			console.error('Delete error:', error);
