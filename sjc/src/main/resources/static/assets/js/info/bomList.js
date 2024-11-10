@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const gridBomDetail = new tui.Grid({
         el: document.getElementById('gridBomDetail'),
         scrollX: false,
-        scrollY: false,
+        scrollY: true,
         columns: [
             {
                 header: 'BOM코드',
@@ -339,10 +339,17 @@ document.addEventListener('DOMContentLoaded', function() {
             */
         ],
         rowHeaders: ['rowNum'],
+	    bodyHeight: 160,
+		pageOptions: {
+		    type: 'scroll', 
+		    perPage: 10 
+		},
+		/*        
         pageOptions: {
             useClient: true,
             perPage: 4
-        }        
+        } 
+        */       
     });
     
     const gridBomDetailModal = new tui.Grid({
@@ -382,10 +389,12 @@ document.addEventListener('DOMContentLoaded', function() {
             },
         ],
         rowHeaders: ['rowNum'],
+        /*
         pageOptions: {
             useClient: true,
             perPage: 10
-        }        
+        }
+        */        
     });
 
 	/*

@@ -499,5 +499,115 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
     }
     
+    $('#updateBtn').on('click', function(){
+		if (confirm("수정 하시겠습니까?")){
+			
+			/*
+			const getData = $('#cpCode').val();
+			console.log(getData);
+			const map = {
+			    cpCode: getData,
+			};
+			*/
+			
+			const mapAry = [{
+			    cpCode: $('#cpCode').val(),
+			    cpName: $('#cpName').val(),
+			    cpType: $('#cpType').val(),
+			    businessNo: $('#businessNo').val(),
+			    address: $('#address').val(),
+			    tel: $('#tel').val(),
+			    comm: $('#comm').val(),
+			}];
+			console.log(mapAry);
+			updateCps(mapAry);
+		}else{
+			return false;
+		}		
+	});
+    function updateCps(CpVOs) {
+		/*
+		fetch('cps', {
+			method: 'PUT',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(CpVOs)
+			})
+		.then(response => response.json())
+		.then(result => {
+			console.log(result);
+			fetchCps();
+		})
+		.catch(error => {
+			console.error(error);
+		});
+		*/
+		
+		$.ajax("cps", {
+			method : 'POST', // method
+			contentType : 'application/json',
+			data: JSON.stringify(CpVOs)
+		})
+		.done(result => {
+			console.log(result);
+			//clearSidePanel();
+			fetchCps();
+			
+			//$('#editModeSwitch').prop('checked', false).change();
+			
+			const checkbox = document.getElementById('editModeSwitch');
+			checkbox.checked = false;
+			checkbox.dispatchEvent(new Event('change'));
+		});
+    }
+    
+    $('#inputCpCode').on('input', function(){
+		const cpCode = $('#inputCpCode').val();
+		const cpVO = {
+			cpCode : cpCode,
+		}
+		
+		$.ajax({
+			url : "cps",
+			method : "GET",
+			data : cpVO,	
+		})
+		.done(result => {
+			grid.resetData(result);
+		})
+	});
+	
+    $('#inputCpName').on('input', function(){
+		const cpName = $('#inputCpName').val();
+		const cpVO = {
+			cpName : cpName,
+		};
+		
+		$.ajax({
+			url : "cps",
+			type : "GET",
+			data : cpVO,
+			success : function(response){
+				grid.resetData(response);
+			},
+			error : function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+    $('#inputCpType').on('change', function(){
+		console.log('change');
+		const cpType = $('#inputCpType').val();
+		const cpVO = {
+			cpType : cpType,
+		};
+		
+	    $.get('cps', cpVO, function(response) {
+			grid.resetData(response);
+	    });
+	});
+				
         
 });
