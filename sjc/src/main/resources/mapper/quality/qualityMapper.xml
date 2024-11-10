@@ -374,76 +374,6 @@
 	
 
 
-
-
-
-
-
-
-<!-- 	<select id="selectQualityWaitInfo" resultType="MtlOdVO">
-		SELECT mtl_od_code
-               , mtl_od_quantity
-               , mtl_od_date
-               , dilivery_date
-               , price
-               , mt_code 수정해야함 수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함수정해야함
-               , cp_code
-               , user_id
-               , mtl_od_status
-
-
-		
-		FROM mtl_od
-		WHERE mtl_od_status = '입고품질검사대기'
-
-	</select> -->
-
-	
-<!-- 	<select id="selectQualityRegistrationInfo" resultType="InspectionVO">
-		SELECT i.ins_code ins_code
-		       , i.ins_status
-		       , i.ins_type_code
-		       , o.mtl_od_code
-		       , o.mtl_od_quantity
-		       , o.mtl_od_date
-		       , o.dilivery_date
-		       , o.price
-		       , o.mt_code
-		       , o.cp_code
-		       , m.mt_name
-		FROM mtl_od o
-		    JOIN inspection i
-		        ON o.mtl_od_code = i.mtl_od_code
-		    JOIN mt m
-		        ON o.mt_code = m.mt_code
-		 WHERE
-		 	o.mtl_od_code = #{mtlOdCode}
-	</select> -->
-	
-<!-- 	<select id="selectQualityTestInfo" resultType="InspectionVO">
-		SELECT  i.ins_item_name ins_item_name
-        		,i.ins_item_citeria ins_item_citeria
-                , d.ins_value
-                , d.ins_result
-        FROM ins_detail d
-        JOIN ins_item i
-        ON d.ins_item_code = i.ins_item_code
-        WHERE i.ins_type_code = (SELECT material_type_code
-                                 FROM mt
-                                 WHERE mt_code = (
-                                                        SELECT MATERIAL_TYPE
-                                                        FROM    mt
-                                                        WHERE   mt_code = (
-                                                                            SELECT  mt_code
-                                                                            FROM    mtl_od
-                                                                            WHERE   mtl_od_code = #{mtlOdCode}
-                                                                            )
-                                                        )
-                                                        
-                                )
-	</select> -->
-
-
 <!--   // 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료 -->
 	<update id="updateInspectionDone" parameterType="InspectionVO">
 		UPDATE inspection
@@ -506,7 +436,37 @@
 
 
 
-
+	<!-- 완제품입고품질검사 검색기능 -->
+	<select id="searchPrd" resultType="InspectionVO">
+	SELECT po.porder_code AS "porderCode"
+			, MAX(po.plan_code) AS "planCode"
+			, FLOOR(SUM(pd.output)) AS "output"
+			, MIN(pd.no) AS "pdetailNo"
+			, MAX(u.user_name) AS "userName"
+			, po.porder_date AS "porderDate"
+	FROM porder po
+		JOIN pdetail pd
+		ON pd.porder_code = po.porder_code
+		JOIN sjc_user u
+		ON u.user_id = po.manager
+	WHERE 1=1
+	AND po.status = 'b3'
+	<if test="poStartDate != null and poStartDate != ''">
+            AND po.porder_date <![CDATA[>=]]> TO_DATE(#{poStartDate}, 'YYYY-MM-DD')
+        </if>
+        <if test="poEndDate != null and poEndDate != ''">
+            AND po.porder_date <![CDATA[<=]]> TO_DATE(#{poEndDate}, 'YYYY-MM-DD') + 1
+        </if>
+    <if test="porderCode != null and porderCode != ''">
+        AND po.porder_code LIKE '%' || #{porderCode} || '%'
+    </if>
+    <if test="userName != null and userName != ''">
+        AND u.user_name LIKE '%' || #{userName} || '%'
+    </if>
+	GROUP BY po.porder_code
+			, po.porder_date
+	ORDER BY po.porder_date DESC
+</select>
 
 
 	<!-- 완제품품질검사 대기목록1 -->
@@ -687,7 +647,7 @@
 
 
 
-	
+
 	<!-- 완제품품질검사 완료목록 1 -->
 	<select id="selectOutDoneInfo1" resultType="PDetailVO">
 		SELECT 	po.porder_code	    AS "porderCode"

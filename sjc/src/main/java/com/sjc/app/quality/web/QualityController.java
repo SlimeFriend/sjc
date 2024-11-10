@@ -224,6 +224,18 @@ public class QualityController {
 		
 		
 // 출고
+	    // 생산지시목록 검색
+	    @PostMapping("/searchPrd")
+	    @ResponseBody
+	    public List<InspectionVO> prdSearch(@RequestBody Map<String, Object> request) {
+	    	String porderCode = (String) request.get("porderCode");
+		    String userName = (String) request.get("userName");
+		    String poStartDate = (String) request.get("poStartDate");
+		    String poEndDate = (String) request.get("poEndDate");
+		    
+		    
+		    return qualityService.prdSearch(porderCode, userName, poStartDate, poEndDate);
+	    }
 		// 완제품품질검사 대기목록1
 		@GetMapping("finishQualityWait")
 		public String pOrderSelect(Model model) {

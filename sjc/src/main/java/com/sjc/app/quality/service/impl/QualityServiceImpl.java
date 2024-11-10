@@ -55,7 +55,6 @@ public class QualityServiceImpl implements QualityService{
 	// 발주목록검색
 	@Override
 	public List<InspectionVO> moSearch(String cpCode, String cpName, String moStartDate, String moEndDate) {
-		// TODO Auto-generated method stub
 		return qualityMapper.searchMO(cpCode, cpName, moStartDate, moEndDate);
 	}
 	
@@ -216,6 +215,11 @@ public class QualityServiceImpl implements QualityService{
 	
 	
 // 출고
+	// 생산지시목록검색
+	@Override
+	public List<InspectionVO> prdSearch(String porderCode, String userName, String poStartDate, String poEndDate) {
+		return qualityMapper.searchPrd(porderCode, userName, poStartDate, poEndDate);
+	}
 	// 완제품품질검사 대기목록1
 	@Override
 	public List<InspectionVO> pOrderSelect() {
