@@ -50,7 +50,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'unitPrice',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+				formatter: function(e){
+				   if (!e.value) return '';
+				   return e.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				},                                   
             },
             /*
             {
@@ -661,7 +665,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 	document.addEventListener('click', (e) => {
-	    grid.finishEditing();
+	    grid.finishEditing(	);
 	    gridBom.finishEditing();
 	});
 

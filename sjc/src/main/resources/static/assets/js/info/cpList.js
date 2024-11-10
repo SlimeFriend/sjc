@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 3
         }
     });
 
