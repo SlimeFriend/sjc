@@ -428,7 +428,7 @@
 			    			// 각 lackOrdCode에 대해 rowKey를 찾고 배경색 변경
 			    			lackOrdCodes.forEach(lackOrdCode => {
 			    			    gridModal.getData().forEach(row => {
-			    			        if (row.ORDCODE === lackOrdCode) {
+			    			        if (row.ORDCODE === lackOrdCode && row.LACKQUANTITY > 0) {
 			    			            gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-light-pink');
 			    			        }
 			    			    });
@@ -442,7 +442,7 @@
 			    			// 각 planOrdCode에 대해 rowKey를 찾고 배경색 변경
 			    			planOrdCodes.forEach(planOrdCode => {
 			    			    gridModal.getData().forEach(row => {
-			    			        if (row.ORDCODE === planOrdCode) {
+			    			        if (row.ORDCODE === planOrdCode && row.LACKQUANTITY > 0) {
 			    			            gridModal.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-warning');
 			    			        }
 			    			    });
