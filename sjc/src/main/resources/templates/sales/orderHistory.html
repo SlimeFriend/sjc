@@ -355,7 +355,7 @@
 	    			    			// 각 lackOrdCode에 대해 rowKey를 찾고 배경색 변경
 	    			    			lackOrdCodes.forEach(lackOrdCode => {
 	    			    				deleteOrderDetailGrid.getData().forEach(row => {
-	    			    			        if (row.ORDCODE === lackOrdCode) {
+	    			    			        if (row.ORDCODE === lackOrdCode && row.LACKQUANTITY > 0) {
 	    			    			        	deleteOrderDetailGrid.addCellClassName(row.rowKey, 'LACKQUANTITY', 'bg-light-pink');
 	    			    			        }
 	    			    			    });
