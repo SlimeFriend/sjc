@@ -158,6 +158,7 @@ public class QualityServiceImpl implements QualityService{
 	        
 			// mtl_od.mtl_od_status 입고품질검사완료
 			qualityMapper.updateMtlOdSt(inspection);
+			qualityMapper.updateMtlOdDetailSt(inspection);
 	    }
 	    return insData;
 	}
