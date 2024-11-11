@@ -34,7 +34,10 @@
 </head>
 
 <body>
-	<h2 class="h2 mb-20">발주 등록, 관리</h2>
+	 <h2 class="h2 mb-10" style="font-size: 32px;">발주 등록, 관리</h2>
+    <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+        <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 자재  >  <span style="color: #575757; margin-left : 8px;">발주 등록, 관리</span>
+    </div>
 	<div class="pd-30 card-box mb-20">
 		<h4 class="h5 mb-20">발주 요청 목록</h4>
 
@@ -325,9 +328,14 @@
                     	  Swal.fire({
                               icon: 'warning',
                               text: '발주요청이 삭제되었습니다.',
-                          });
-                          // 페이지 새로고침
-                          window.location.reload();
+                          }).then((result) => {
+                              if (result.isConfirmed) {
+                            	  // 페이지 새로고침
+                                  window.location.reload();
+                              }
+                      })
+                    	  
+                          
                       } else {
                     	  Swal.fire({
                               icon: 'error',
