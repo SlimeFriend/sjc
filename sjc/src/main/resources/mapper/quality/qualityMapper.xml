@@ -56,6 +56,11 @@
 						AND 
 					od.MTL_OD_DETAIL_STATUS IS NULL
 				)
+			OR (
+					o.mtl_od_status = '입고품질검사중'
+						AND 
+					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
+				)
 		GROUP BY ROLLUP ((o.mtl_od_code 
 							, o.cp_code
 							, c.cp_name
@@ -86,6 +91,10 @@
 			ON 		d.mt_code = m.mt_code
 		WHERE 	d.mtl_od_code = #{mtlOdCode}
 		and 	d.mtl_od_detail_status is null
+		OR (		d.mtl_od_code = #{mtlOdCode}
+						AND
+					d.mtl_od_detail_status = '개별입고품질검사중'
+				)
 	</select>
 	
 

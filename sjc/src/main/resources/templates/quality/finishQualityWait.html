@@ -651,8 +651,7 @@
 					success: function(response) {
 					alert("품질검사가 완료되었습니다.");
 					$('#myModal').modal('hide');
-					griddetail.resetData(response);
-					griddetail.refreshLayout();
+					location.reload();
 					},
 					error: function(xhr, status, error) {
 					console.error('Error during request', error);
