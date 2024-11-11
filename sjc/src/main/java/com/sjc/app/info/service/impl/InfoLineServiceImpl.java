@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sjc.app.info.mapper.InfoLineMapper;
 import com.sjc.app.info.service.LineVO;
+import com.sjc.app.mt.service.MtVO;
+import com.sjc.app.sales.service.CpVO;
 import com.sjc.app.info.service.InfoLineService;
 import com.sjc.app.info.service.InfoUserVO;
 
@@ -49,5 +51,23 @@ public class InfoLineServiceImpl implements InfoLineService {
         }
         return lineVOs;
     }
+
+	@Override
+    @Transactional
+	public List<LineVO> insertLines(List<LineVO> lineVOs) {
+        for (LineVO lineVO : lineVOs) {
+        	infoLineMapper.insertLine(lineVO);
+        }
+        return lineVOs;
+	}
+
+	@Override
+	@Transactional
+	public List<LineVO> deleteLines(List<LineVO> lineVOs) {
+		for(LineVO lineVO : lineVOs) {
+			infoLineMapper.deleteLine(lineVO);
+		}
+		return lineVOs;
+	}
 
 }

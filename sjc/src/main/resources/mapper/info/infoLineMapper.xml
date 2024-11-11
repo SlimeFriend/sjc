@@ -7,6 +7,8 @@
 		        ,l.PRD_CODE
                 ,p.prd_name
 				,l.USE
+				,l.line_name
+				,l.line_date
 		from    LINE    l
 		left outer
         join    prd     p
@@ -29,7 +31,38 @@
         UPDATE 	line
         SET 	
             	prd_code = #{prdCode}
+	        <if test="lineName != null and lineName != ''">
+	            ,line_name = #{lineName}
+	        </if>            	
         WHERE 	line_code = #{lineCode}
     </update>
+
+
+    <insert id="insertLine" parameterType="LineVO">
+	<selectKey keyProperty="lineCode" order="BEFORE" resultType="String">
+		select 'L' || lpad(to_char(NVL(max(substr(line_code, 2, 2)), 0) + 1), 2, 0)
+		from 	line
+	</selectKey>
+	    INSERT INTO line (
+	    	line_code
+	    	,line_name
+	    	,prd_code
+	    	,use
+	    	,line_date
+	
+	    ) VALUES (
+	    	#{lineCode}
+	    	,#{lineName}
+	    	,#{prdCode}
+	    	,#{use}
+	    	,SYSDATE
+	    )
+    </insert>
+
+    <delete id="deleteLine">
+    	delete
+    	from	line
+    	where	line_code = #{lineCode}
+    </delete>
     	
 </mapper>
