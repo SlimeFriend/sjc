@@ -64,4 +64,9 @@ public class InfoPrdServiceImpl implements InfoPrdService {
 		return productVOs;
 	}
 
+	@Override
+	public int checkPrdCode(ProductVO productVO) {
+		return infoPrdMapper.checkPrdCode(productVO);
+	}
+
 }

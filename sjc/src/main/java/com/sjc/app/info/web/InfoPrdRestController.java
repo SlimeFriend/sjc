@@ -26,6 +26,11 @@ public class InfoPrdRestController {
 	public List<ProductVO> prdList(ProductVO productVO){
 		return prdService.prdList(productVO);
 	}
+    // 제품 코드 존재 확인
+	@GetMapping("checkPrdCode")
+	public int checkPrdCode(ProductVO productVO){
+		return prdService.checkPrdCode(productVO);
+	}
 	// 제품 조회
 	@PostMapping("prds")
 //	public List<ProductVO> getPrd(@ModelAttribute ProductVO productVO){

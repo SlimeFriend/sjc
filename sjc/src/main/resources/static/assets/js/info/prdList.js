@@ -1626,6 +1626,36 @@ events.forEach(eventName => {
 	    	
 	    });
     }	
+
+
+	function checkPrdCode() {
+	    const productVO = {
+	        prdCode: $('#prdCode').val(),
+	    };
+	
+	    $.ajax({
+	        url: "checkPrdCode",
+	        method: "GET",
+	        data: productVO,
+	        success: function(response) {
+	            console.log(response);
+				if(response) {
+				    //$('#validPrdCode').show();
+					$('#validPrdCode').css('display', 'block');
+					$('#mtModalRegisterBtn').prop('disabled', true);
+				} else {
+					$('#mtModalRegisterBtn').prop('disabled', false);
+				    $('#validPrdCode').hide();
+				    
+				}
+	        },
+	        error: function(error) {
+	            console.log(error);
+	        }
+	    });
+	}
+	$('#prdCode').on('input', checkPrdCode);
+
 	
 	document.addEventListener('click', (e) => {
 	    gridMtModal.finishEditing();
