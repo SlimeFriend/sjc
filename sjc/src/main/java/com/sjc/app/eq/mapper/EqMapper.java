@@ -43,6 +43,9 @@ public interface EqMapper {
 	// 비가동 목록 "가동"으로 변경
 	public int updateEqChckInfo(EqVO eqVO);
 	
+	// 비가동 목록 "가동"으로 변경 New
+	public int updateEqChckNew(EqVO eqVO);
+	
 
 	// 라인 수정
 	int updateLine(EqVO eqVO);	
