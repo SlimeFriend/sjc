@@ -84,6 +84,48 @@ public class SalesServiceImpl implements SalesService {
 	    
 	    return 1;
 	}
+	
+	
+	// 주문내역 조회
+	@Override
+	public List<OrderVO> order() {
+		return salesMapper.selectOrder();
+	}
+	
+	// 주문내역 상세 조회
+	@Override
+	public List<Map<String, Object>> orderDetail(String ordCode) {
+		
+		List<Map<String, Object>> list = salesMapper.selectOrderDetail(ordCode);
+		
+		return list;
+	}
+	
+	// 주문내역 검색
+	@Override
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus) {
+		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate, orderStatus);
+	}
+	
+	// 주문내역 삭제 조회
+	@Override
+	public List<OrderVO> deleteOrderList() {
+		return salesMapper.selectDeleteOrder();
+	}
+	
+	// 주문내역 삭제
+	@Override
+	public int deleteOrder(List<String> ordCodes) {
+		
+		int totalDeletedCount = 0;
+	    
+	    for (String ordCode : ordCodes) {
+	    	totalDeletedCount = salesMapper.deleteOrder(ordCode);
+	    }
+	    
+	    return totalDeletedCount;
+	    
+	}
 
 
 	
@@ -119,80 +161,28 @@ public class SalesServiceImpl implements SalesService {
 		salesMapper.updateOrdFinish(ordCode);
 		salesMapper.updateOrdOutDate(ordCode);
 		
-	    
 		return totalRowsAffected;
 	}
 	
-	
-	
-	// 미출고량 계산 프로세스
-	@Override
-	public int remainProcess(List<Map<String, Object>> outRemainData) {
-		int totalRowsAffected = 0;
-		
-		for(Map<String, Object> item : outRemainData) {
-			String ordCode = (String) item.get("ordCode");
-			String prdCode = (String) item.get("prdCode");
-			
-			System.err.println("이 놈은" + ordCode + " " + prdCode);
-			
-			Integer remainQuantity = salesMapper.selectRemainData(ordCode, prdCode);
-		}
-		return totalRowsAffected;
-	}
-	
-	// 입고 접수
-	@Override
-	public List<ProductVO> productIn() {
-		String lot = salesMapper.getLot();
-		return salesMapper.selectProductIn();
-	}
-	
-	// 주문내역 조회
-	@Override
-	public List<OrderVO> order() {
-		return salesMapper.selectOrder();
-	}
-	
-	// 주문내역 삭제 조회
-	@Override
-	public List<OrderVO> deleteOrderList() {
-		return salesMapper.selectDeleteOrder();
-	}
-	
-	// 주문내역 삭제
-	@Override
-	public int deleteOrder(List<String> ordCodes) {
-		
-		int totalDeletedCount = 0;
-	    
-	    for (String ordCode : ordCodes) {
-	    	totalDeletedCount = salesMapper.deleteOrder(ordCode);
-	    }
-	    
-	    return totalDeletedCount;
-	    
-	}
-	
-	// 주문내역 검색
-	@Override
-	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus) {
-		 return salesMapper.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate, orderStatus);
-	}
-	
+	// 제품조회
 	@Override
 	public List<ProductVO> productList() {
 		return salesMapper.selectProduct();
 	}
 	
+	// 제품관리 페이지
 	@Override
-	public List<Map<String, Object>> orderDetail(String ordCode) {
-		
-		List<Map<String, Object>> list = salesMapper.selectOrderDetail(ordCode);
-		
-		return list;
+	public List<ProductVO> productManagement() {
+		return salesMapper.selectProductManagement();
 	}
 	
+	// 제품상세 조회
+	@Override
+	public List<Map<String, Object>> productDetail(String prdCode) {
+		return salesMapper.selectProductDetail(prdCode);
+	}
+	
+	// 출고내역 상세
 	@Override
 	public List<Map<String, Object>> outDetail(String ordCode) {
 		
@@ -201,44 +191,28 @@ public class SalesServiceImpl implements SalesService {
 		return list;
 	}
 	
-	
-	@Override
-	public List<Map<String, Object>> lackOrderDetail(String ordCode) {
-		
-		List<Map<String, Object>> list = salesMapper.selectLackOrderDetail(ordCode);
-		
-		return list;
-	}
-	
-	@Override
-	public List<Map<String, Object>> productDetail(String prdCode) {
-		return salesMapper.selectProductDetail(prdCode);
-	}
-
+	// 제품 LOT
 	@Override
 	public List<ProductVO> productLot() {
 		return salesMapper.selectProductLot();
 	}
-
-	@Override
-	public List<ProductVO> productManagement() {
-		return salesMapper.selectProductManagement();
-	}
 	
+	// 입고내역
 	@Override
 	public List<PrdManagementVO> inHistory() {
 		return salesMapper.selectInHistory();
-	}
-
-	@Override
-	public List<outHistoryVO> outHistory() {
-		return salesMapper.selectOutHistory();
 	}
 	
 	// 입고 내역 검색 프로세스
 	@Override
 	public List<PrdManagementVO> inSearch(String prdName, String inStartDate, String inEndDate) {
 		return salesMapper.inSearch(prdName, inStartDate, inEndDate);
+	}
+	
+	// 출고내역
+	@Override
+	public List<outHistoryVO> outHistory() {
+		return salesMapper.selectOutHistory();
 	}
 	
 	// 출고 내역 검색 프로세스

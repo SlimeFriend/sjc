@@ -46,22 +46,19 @@ public interface SalesMapper {
 	// 주문상세 테이블
 	public List<Map<String, Object>> selectOrderDetail(String ordCode);
 	
+	// 주문내역 검색
+	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus);
+	
 	// 출고내역상세
 	public List<Map<String, Object>> selectOutDetail(String ordCode);
-	
-	// 재고부족 상세 테이블
-	public List<Map<String, Object>> selectLackOrderDetail(String ordCode);
 	
 	// 제품 테이블
 	public List<ProductVO> selectProduct();
 
-	// 제품관리
+	// LOT별제품 관리
 	public List<ProductVO> selectProductManagement();
 	public List<ProductVO> selectProductLot();
 	public List<Map<String, Object>> selectProductDetail(String prdCode);
-
-	// 제품입고
-	public List<ProductVO> selectProductIn();
 
 	// 제품 출고
 	public List<OrderVO> selectOrdersByStatus(@Param("status") String status);
@@ -70,19 +67,11 @@ public interface SalesMapper {
 	public List<PrdManagementVO> selectInHistory();
 	public List<outHistoryVO> selectOutHistory();
 	
-	
-	// 제품 출고 프로세스
-	
-	// 미출고량 계산
-	public int selectRemainData(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode);
-	
 	// 출고내역 등록
 	public int insertOutHistory(@Param("ordCode") String ordCode, @Param("prdCode") String prdCode, @Param("lot") String lot, @Param("outQuantity") int outQuantity, @Param("cpName") String cpName, @Param("manager") String manager);
 	public int prdLotOutProcess(@Param("outQuantity") int outQuantity, @Param("lot") String lot);
 	public int updateOrdFinish(@Param("ordCode") String ordCode);
 
-	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus);
-	
 	// 입/출고 내역 검색 프로세스
 	public List<PrdManagementVO> inSearch(String prdName, String inStartDate, String inEndDate);
 	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate);
