@@ -306,6 +306,8 @@ tbody > tr {
                             alert("업데이트에 실패했습니다.");
                         }
                         $('#nOpModal').modal('hide');
+                        $('#nOpModal').reset();
+                        
                     },
                     error: function(error) {
                         alert("업데이트 중 오류가 발생했습니다.");
@@ -319,7 +321,8 @@ tbody > tr {
             const startDate = $('#modalStartDate').val();
             const endDate = $('#modalEndDate').val();
             const reason = $('#reason').val();
-
+			console.log(startDate);
+			console.log(endDate);
             $.ajax({
                 type: "POST",
                 url: "/nOpRegister",
