@@ -21,7 +21,10 @@ tbody>tr {
 
 <body>
 	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
-	<h2 class="h2 mb-20">설비 목록</h2>
+	<h2 class="h2 mb-10" style="font-size: 32px;">설비 목록</h2>
+    <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+        <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 설비 관리  >  <span style="color: #575757; margin-left : 8px;">설비 목록</span>
+    </div>
 		<div class="pd-30 card-box mb-20">
 				<div class="d-flex justify-content-between align-items-center mb-20">
 					<h4 class="h5 mb-20">설비 목록</h4>
@@ -87,6 +90,7 @@ tbody>tr {
                        			<div class="form-group">
                             		<label for="lineCode">라인코드</label>
                             		<select id="lineCode" name="lineCode" class="form-control">
+                                		<option value="대기">대기</option>
                                 		<option value="L01">L01</option>
                                 		<option value="L02">L02</option>
                                 		<option value="L03">L03</option>
@@ -103,59 +107,6 @@ tbody>tr {
 				</div>
 			</div>
 
-<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-	 <!-- 수정 모달 -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">설비 목록 수정</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="eqProject">
-                        <div class="mb-3">
-                            <label for="eqCode" class="form-label">설비코드</label>
-                            <input type="text" id="eqCode" name="eqCode" readonly class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="eqName" class="form-label">설비명</label>
-                            <input type="text" id="eqName" name="eqName" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="eqMin" class="form-label">최저온도</label>
-                            <input type="text" id="eqMin" name="eqMin" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="eqMax" class="form-label">최고온도</label>
-                            <input type="text" id="eqMax" name="eqMax" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="use" class="form-label">사용여부</label> 
-                            <input type="radio" id="use" name="use" value="Y"> 사용가능
-                            <input type="radio" id="use" name="use" value="N"> 사용불가
-                        </div>
-                        <div class="form-group">
-                            <label for="lineCode">라인코드</label>
-                            <select id="lineCode" name="lineCode" class="form-control">
-                                <option value="L01">L01</option>
-                                <option value="L02">L02</option>
-                                <option value="L03">L03</option>
-                                <option value="L04">L04</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="saveChanges">수정</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
     
 	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
@@ -191,13 +142,9 @@ tbody>tr {
 			align : 'center',
 		}, {
 			header : '최고온도',
-			name : 'eqMin',
-			align : 'center',
-		}, {
-			header : '최저온도',
 			name : 'eqMax',
 			align : 'center',
-		},{
+		}, {
 			header : '사용여부',
 			name : 'use',
 			align : 'center',
@@ -210,7 +157,7 @@ tbody>tr {
 			header : '라인코드',
 			name : 'lineCode',
 			align : 'center',
-            // 특정 lineCode로 구분선 생성
+           // 특정 lineCode로 구분선 생성
             formatter: function(item) {
                 const rowIndex = item.row.rowKey;
                 const prevRow = gridData[rowIndex - 1];
@@ -219,7 +166,7 @@ tbody>tr {
                 } else {
                     return item.value;
                 }
-            }
+            } 
 		}
 		],
 		rowHeaders : [ 'checkbox' ],
@@ -248,13 +195,19 @@ tbody>tr {
 
         // 체크된 항목이 없을 때
         if (checkedRows.length === 0) {
-            alert('수정할 설비를 선택하세요.');
+        	Swal.fire({
+                icon: 'warning',
+                text: '수정할 설비를 선택하세요.',
+            });
             return;
         }
 
         // 여러 항목이 선택된 경우 경고
         if (checkedRows.length > 1) {
-            alert('하나의 설비만 수정할 수 있습니다.');
+        	Swal.fire({
+                icon: 'warning',
+                text: '하나의 설비만 수정이 가능합니다.',
+            });
             return;
         }
 
@@ -285,7 +238,7 @@ tbody>tr {
     });
 
     // 모달 창에서 수정 처리
-    $('#saveChanges').on('click', function (event) {
+    $('#saveChanges').on('click', function () {
         event.preventDefault(); // 기본 폼 제출 방지
 
         const eqData = {
@@ -297,27 +250,43 @@ tbody>tr {
             use: $('input[name="use"]:checked').val(),
             lineCode: $('#lineCode').val()
         };
-
-        $.ajax({
-            type: 'POST',
-            url: '/eqUpdate',
-            contentType: 'application/json',
-            data: JSON.stringify(eqData),
-            success: function (response) {
-                if (response.result) {
-                    alert('수정이 완료되었습니다.');
-                    location.reload(); // 페이지 새로고침
-                } else {
-                    alert('수정에 실패했습니다.');
-                }
-            },
-            error: function () {
-                alert('서버 오류가 발생했습니다.');
+		
+     // Swal 창으로 수정 확인 메시지 표시
+        Swal.fire({
+            icon: 'warning',
+            text: '정말로 수정하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 사용자가 확인을 누른 경우에만 서버로 요청 전송
+                $.ajax({
+                    type: 'POST',
+                    url: '/eqUpdate',
+                    contentType: 'application/json',
+                    data: JSON.stringify(eqData),
+                    success: function (response) {
+                        Swal.fire({
+                            icon: response.result ? 'success' : 'warning',
+                            text: response.result ? '수정이 완료되었습니다.' : '수정에 실패하였습니다.'
+                        }).then(() => {
+                            if (response.result) {
+                                location.reload(); // 수정 성공 시 페이지 새로고침
+                            }
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            text: '적합한 값을 입력해 주세요.'
+                        });
+                    }
+                });
+                // 모달 창 닫기
+                $('#myModal').modal('hide');
             }
         });
-
-        // 모달 창 닫기
-        $('#myModal').modal('hide');
     });
 	</script>
 

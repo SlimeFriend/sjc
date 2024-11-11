@@ -83,12 +83,6 @@
                                             <th class="bg-light text-right align-middle py-3">담당자</th>
                                             <td class="py-3">[[${equip.manager}]]</td>
                                         </tr>
-                                        <!-- 
-                                        <tr>
-                                            <th class="bg-light text-right align-middle py-3">기준온도</th>
-                                            <td class="py-3">[[${equip.eqStandTemp}]]</td>
-                                        </tr>
-                                         -->
                                         <tr>
                                             <th class="bg-light text-right align-middle py-3">라인코드</th>
                                             <td class="py-3">[[${equip.lineCode}]]</td>
@@ -149,6 +143,7 @@
                         <div class="form-group">
                             <label for="lineCode">라인코드</label>
                             <select id="lineCode" name="lineCode" class="form-control">
+                                <option value="대기">대기</option>
                                 <option value="L01">L01</option>
                                 <option value="L02">L02</option>
                                 <option value="L03">L03</option>
@@ -241,15 +236,20 @@
 	                contentType: 'application/json',
 	                data: JSON.stringify(eqData),
 	                success: function (response) {
-	                    if (response.result) {
-	                        alert('수정이 완료되었습니다.');
-	                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 목록 페이지로 이동
-	                    } else {
-	                        alert('수정에 실패했습니다.');
-	                    }
-	                },
-	                error: function () {
-	                    alert('서버 오류가 발생했습니다.');
+	                	 Swal.fire({
+	                            icon: response.result ? 'success' : 'error',
+	                            text: response.result ? '수정이 완료되었습니다.' : '수정에 실패하였습니다.'
+	                        }).then(() => {
+	                            if (response.result) {
+	                                location.href = '/eqInfo?eqCode=' + eqData.eqCode;
+	                            }
+	                        });
+	                    },
+	                    error: function () {
+	                        Swal.fire({
+	                            icon: 'error',
+	                            text: '적합한 값을 입력해 주세요.'
+	                        });
 	                }
 	            });
 	
@@ -262,7 +262,10 @@
 	            const useStatus = '[[${equip.use}]]'; // 현재 사용여부 가져오기
 
 	            if (useStatus === 'Y') {
-	                alert('가동 중인 설비는 삭제할 수 없습니다.');
+	            	Swal.fire({
+	                    icon: 'error',
+	                    text: '가동 중인 설비는 삭제할 수 없습니다.',
+	                });
 	            } else {
 	                $('#deleteConfirmModal').modal('show'); // 사용 불가일 때만 모달 표시
 	            }
@@ -279,10 +282,16 @@
 	                data: { eqCode: eqCode },
 	                success: function (response) {
 	                    if (response == "1") {
-	                        alert('삭제가 완료되었습니다.');
+	                    	Swal.fire({
+	                            icon: 'success',
+	                            text: '삭제가 완료되었습니다.',
+	                        });
 	                        location.href = '/eqList'; // 삭제 후 목록 페이지로 이동
 	                    } else {
-	                        alert('삭제에 실패했습니다.');
+	                    	Swal.fire({
+	                            icon: 'error',
+	                            text: '삭제에 실패했습니다.',
+	                        });
 	                    }
 	                },
 	                error: function () {
@@ -295,40 +304,6 @@
 	        });
 
 	    });
-	    </script>
-	    <script>
-	 // 모달 창에서 수정 처리
-	    $('#saveChanges').on('click', function () {
-	        const eqData = {
-	            eqCode: $('#eqCode').val(),
-	            eqMdnm: $('#eqMdnm').val(),
-	            eqMdno: $('#eqMdno').val(),
-	            use: $('input[name="use"]:checked').val()
-	        };
-	
-	        if (eqData.use === 'Y') {
-	            $.ajax({
-	                type: 'POST',
-	                url: '/updateUseStatus',
-	                contentType: 'application/json',
-	                data: JSON.stringify(eqData),
-	                success: function (response) {
-	                    if (response.result) {
-	                        alert('설비 사용여부가 "가동"으로 업데이트되었습니다.');
-	                        location.href = '/eqInfo?eqCode=' + eqData.eqCode; // 수정 후 상세 페이지로 이동
-	                    } else {
-	                        alert('업데이트에 실패했습니다.');
-	                    }
-	                },
-	                error: function () {
-	                    alert('서버 오류가 발생했습니다.');
-	                }
-	            });
-	        }
-	
-	        $('#modifyModal').modal('hide');
-	    });
-	
 	    </script>
 	</body>
 	</html>
