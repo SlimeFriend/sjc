@@ -33,7 +33,10 @@ tbody > tr {
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
 <body>
-    <h2 class="h2 mb-20">설비 비가동 관리</h2>
+        <h2 class="h2 mb-10" style="font-size: 32px;">설비 비가동 관리</h2>
+    <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+        <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 설비 비가동 관리  >  <span style="color: #575757; margin-left : 8px;">설비 목록 & 비가동 내역</span>
+    </div>
                 <div class="pd-30 card-box mb-20">
                     <div class="d-flex justify-content-between align-items-center mb-20">
                         <h4 class="h5 mb-20">설비 목록</h4>
@@ -190,6 +193,26 @@ tbody > tr {
                 perPage : 5
             }, 
         });
+        
+        // 라디오 버튼에 따른 필터링 및 번호 초기화
+        $('input[name="section"]').on('change', function() {
+            const selectedValue = $('input[name="section"]:checked').val();
+
+            const filteredData = gridData.filter(row => {
+                const useStatus = row.use === 'Y' ? '가동' : '비가동';
+                return selectedValue === 'all' || 
+                    (selectedValue === 'op' && useStatus === '가동') || 
+                    (selectedValue === 'nOp' && useStatus === '비가동');
+            });
+
+            // 필터링된 데이터에 번호를 다시 설정
+            const updatedData = filteredData.map((item, index) => ({
+                ...item,
+                rowNum: index + 1
+            }));
+
+            grid.resetData(updatedData);
+        });
 
         const grid2 = new tui.Grid({
             el : document.getElementById('grid2'),
@@ -282,15 +305,25 @@ tbody > tr {
                     success: function(response) {
                         if (response.result) {
                             grid.setValue(selectedRowKey, 'use', 'Y'); // 테이블에 가동 상태 반영
-                            alert("설비가 '가동' 상태로 업데이트되었습니다.");
+                            Swal.fire({
+                                icon: 'success',
+                                text: '"가동" 상태로 업데이트 되었습니다.',
+                            });
                         } else {
-                            alert("업데이트에 실패했습니다.");
+                        	Swal.fire({
+                                icon: 'error',
+                                text: '업데이트를 실패하였습니다.',
+                            });
                         }
                         $('#nOpModal').modal('hide');
+                        $('#nOpModal').reset();
+                        
                     },
                     error: function(error) {
-                        alert("업데이트 중 오류가 발생했습니다.");
-                        console.error(error);
+                    	Swal.fire({
+                            icon: 'error',
+                            text: '업데이트를 실패하였습니다.',
+                        });
                     }
                 });
                 return;
@@ -300,7 +333,8 @@ tbody > tr {
             const startDate = $('#modalStartDate').val();
             const endDate = $('#modalEndDate').val();
             const reason = $('#reason').val();
-
+			console.log(startDate);
+			console.log(endDate);
             $.ajax({
                 type: "POST",
                 url: "/nOpRegister",
@@ -314,13 +348,18 @@ tbody > tr {
                 }),
                 success: function(response) {
                     grid.setValue(selectedRowKey, 'use', 'N'); // 테이블에 비가동 상태 반영
-                    alert("비가동 상태로 등록되었습니다.");
+                    Swal.fire({
+                        icon: 'success',
+                        text: '"비가동 상태로 전환되었습니다.',
+                    });
                     $('#nOpModal').modal('hide');
-                    location.reload();
+                    $('#nOpModal').reset();
                 },
-                error: function(error) {
-                    alert("등록 중 오류가 발생했습니다.");
-                    console.error(error);
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: '적합한 값을 입력해 주세요.'
+                    });
                 }
             });
         });

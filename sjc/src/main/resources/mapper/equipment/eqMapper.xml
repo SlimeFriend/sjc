@@ -93,6 +93,7 @@ from    eq
 		 , eq_min = #{eqMin}
 		 , eq_max = #{eqMax}
 		 , use = #{use}
+		 , line_code = #{lineCode}
 	WHERE eq_code = #{eqCode}
 </update>
 
@@ -127,49 +128,6 @@ from    eq
 	DELETE from eq
 	WHERE eq_code = #{eqCode}
 </delete>
-
-<!-- 
-<insert id="insertEqInfo" parameterType="EqVO">
-	<selectKey keyProperty="eqCode"
-			   resultType="String"
-			   order="BEFORE">
-select
-    case
-        when (max(substr(eq_code, 2, 8))) = to_char(sysdate, 'yyyyMMdd') then ('O' || to_char(max(substr(eq_code, 2, 13)) + 1))
-        else ('O' || to_char(sysdate, 'yyyyMMdd') || to_char(lpad(1, 4, 0)) )
-    end    eq_code
-from    eq
-    </selectKey>
-  	INSERT INTO eq
-  				(
-  				eq_mdnm
-  			  , use
-	    	  , eq_code
-	     	  , eq_mdno
-	    	  , eq_dep
-	    	  , eq_temp
-	    	  , eq_period
-	    	  , employee_no
-	    	  , manager
-	    	  , eq_location
-	    	  , eq_img
-  				)
-  	VALUES (
-  			#{eqMdnm}
-  			,#{use}
-  			,#{eqCode}
-  			,#{eqMdno}
-  			,#{eqDep}
-  			,#{eqTemp}
-  			,#{eqPeriod}
-  			,#{employeeNo}
-  			,#{manager}
-  			,#{eqLocation}
-  			,#{eqImg}
-  			
-  			)
-</insert>
- -->
 
     <!-- 단건조회 -->
 <select id="selectEqInfo" resultType="EqVO">

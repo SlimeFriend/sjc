@@ -81,7 +81,10 @@ select {
 }
 </style>
 <body>
-<h2 class="h2 mb-20">설비 등록</h2>
+    <h2 class="h2 mb-10" style="font-size: 32px;">설비 등록</h2>
+    <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+        <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 설비  >  <span style="color: #575757; margin-left : 8px;">설비 등록</span>
+    </div>
 		<div class="pd-30 card-box mb-20">				
 				<form th:action="@{/eqInsert}" name="insertForm" method="post">
 					<div>
@@ -140,19 +143,6 @@ select {
 						<input type="text" id="manager" name="manager" th:value="${#authentication.principal.authorities[2]}" readonly>
 					</div>
 					</th:block>
-
-					<div>
-						<!--
-						<label for="eqLocation">설비위치</label>
-						<select id="eqLocation" name="eqLocation">
-							<option value="">선택</option>
-							<option value="공장_1">공장_1</option>
-							<option value="공장_2">공장_2</option>
-							<option value="공장_3">공장_3</option>
-							<option value="공장_4">공장_4</option>
-						</select>
-						 -->
-					</div>
 					<div>
 						<label for="lineCode">라인코드</label>
 						<select id="lineCode" name="lineCode">
@@ -175,43 +165,55 @@ select {
 				</form>
 			</div>
 	<script>
-		$('[name=insertForm]').on('submit', equipInsertHandler);
-
-		function equipInsertHandler(event) {
-			event.preventDefault();
-
-			let eqMdnm = $('form [name="eqMdnm"]');
-			if (eqMdnm.val() == '') {
-				alert('모델명이 입력되지 않았습니다.');
+		document.querySelector('form[name="insertForm"]').addEventListener('submit', function(event) {
+			const eqMdnm = document.querySelector('input[name="eqMdnm"]');
+			if (!eqMdnm.value.trim()) {
+				Swal.fire({
+	                icon: 'warning',
+	                text: '모델명을 입력하시오.',
+	            });
 				eqMdnm.focus();
+				event.preventDefault();
 				return;
 			}
 
-			let eqMdno = $('form [name="eqMdno"]');
-			if (eqMdno.val() == '') {
-				alert('모델번호가 입력되지 않았습니다.');
+			const eqMdno = document.querySelector('input[name="eqMdno"]');
+			if (!eqMdno.value.trim()) {
+				Swal.fire({
+	                icon: 'warning',
+	                text: '모델번호를 입력하시오.',
+	            });
 				eqMdno.focus();
-				return;
-			}
-			
-			let eqType = $('form [name="eqType"]');
-			if (eqType.val() == '') {
-				alert('설비구분이 선택되지 않았습니다.');
-				eqType.focus();
+				event.preventDefault();
 				return;
 			}
 
-			alert('설비가 등록되었습니다.');
-			insertForm.submit();
+			const eqType = document.querySelector('input[name="eqType"]');
+			if (!eqType.value.trim()) {
+				Swal.fire({
+	                icon: 'warning',
+	                text: '설비구분을 선택하시오.',
+	            });
+				eqType.focus();
+				event.preventDefault();
+				return;
+			}
 			
-		}
-		
-		let sel = document.querySelector("#eqName");
-		sel.addEventListener('change', function(){
-			let name = sel.selectedOptions[0].parentElement.label
-			document.querySelector('[name="eqType"]').value = name;
-		})
-		
+			event.preventDefault();
+			Swal.fire({
+                icon: 'success',
+                text: '등록을 완료하였습니다.',
+            }).then((result) => {
+        		if (result.isConfirmed) {
+        			event.target.submit();  // 성공 메시지 확인 후 폼 수동 제출
+        		}
+			});
+		});
+
+		document.querySelector("#eqName").addEventListener('change', function() {
+			const selectedOptgroupLabel = this.selectedOptions[0].parentElement.label;
+			document.querySelector('[name="eqType"]').value = selectedOptgroupLabel;
+		});
 	</script>
 </body>
 

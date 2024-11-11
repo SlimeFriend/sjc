@@ -23,7 +23,10 @@ tbody > tr {
 <body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-	<h2 class="h2 mb-20">설비 점검</h2>
+	    <h2 class="h2 mb-10" style="font-size: 32px;">설비 점검 목록</h2>
+    <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+        <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 설비 점검  >  <span style="color: #575757; margin-left : 8px;">설비 점검 목록</span>
+    </div>
 		<div class="pd-30 card-box mb-20">
 			<div class="d-flex justify-content-between align-items-center mb-20">
 				<h4 class="h5 mb-20">설비 점검 목록</h4>
@@ -33,9 +36,6 @@ tbody > tr {
 			</div>
 			<!-- 버튼을 우측 상단으로 이동 -->
 			<div style="text-align: right; margin-bottom: 10px;"></div>
-			<!-- 
-			<table class="data-table table nowrap">
-			 -->
 			
 			<div id="grid"></div>
 
@@ -126,7 +126,10 @@ tbody > tr {
             const checkedRows = grid.getCheckedRows();
 
             if (checkedRows.length === 0) {
-                alert("점검할 설비를 선택하세요.");
+                Swal.fire({
+                    icon: 'warning',
+                    text: '점검할 설비를 선택하세요.',
+                });
                 return;
             }
 
@@ -136,7 +139,10 @@ tbody > tr {
 
                 // 점검유무가 "점검완료"인 경우 알림 표시 및 종료
                 if (checkStatus === "점검완료") {
-                    alert("이미 점검이 완료된 설비입니다.");
+                    Swal.fire({
+                        icon: 'question',
+                        text: '이미 점검이 완료된 설비입니다.',
+                    });
                     return;
                 }
 
@@ -159,11 +165,21 @@ tbody > tr {
                         eqChckOx: "점검완료"
                     }),
                     success: function () {
-                        alert("점검이 완료되었습니다.");
-                        window.location.href = "/eqChckList"; // 페이지 새로고침
+                        Swal.fire({
+                            icon: 'success',
+                            text: '점검이 완료되었습니다.',
+                            allowOutsideClick: false, // 사용자가 팝업 외부를 클릭해도 닫히지 않음
+                            allowEscapeKey: false, // Esc 키로 닫기 비활성화
+                            confirmButtonText: '확인' // 확인 버튼 표시
+                        }).then(() => {
+                            window.location.href = "/jgList"; // 확인 버튼 클릭 시 페이지 새로고침
+                        });
                     },
                     error: function (error) {
-                        alert("점검 완료 처리 중 오류가 발생했습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '점검 완료 처리 중 오류가 발생했습니다.',
+                        });
                         console.error(error);
                     }
                 });
@@ -171,6 +187,8 @@ tbody > tr {
         });
     });
 </script>
+
+
 
 
 
