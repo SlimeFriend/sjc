@@ -174,7 +174,11 @@
                     })
                     .catch(error => {
                         console.error('Error fetching materials:', error);
-                        alert(`Error fetching materials: ${error.message}`);
+                      
+                        Swal.fire({
+                            icon: 'error',
+                            text: `Error fetching materials: ${error.message}`,
+                        });
                     });
             }
         });
