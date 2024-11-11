@@ -294,10 +294,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
 			  },
         ],
+        /*
         pageOptions: {
             useClient: false,
             perPage: 3
         }
+        */
     });
     
     tui.Grid.applyTheme('striped');
