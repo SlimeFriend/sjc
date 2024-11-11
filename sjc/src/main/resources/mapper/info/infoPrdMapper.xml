@@ -48,7 +48,7 @@
 	    	,bom_code
     	)
 	    VALUES (
-	    	 #{prdCode}
+	    	 UPPER(#{prdCode})
 	    	,#{comm}
 	    	,#{prdName}
 	    	,#{description}
@@ -70,5 +70,11 @@
 				,comm = #{comm}
 				,unit_price = #{unitPrice}
 		where	prd_code = #{prdCode}
-	</delete>	
+	</delete>
+		
+	<select id="checkPrdCode">
+		select 	count(1)
+		from	prd
+		where	upper(prd_code) = upper(#{prdCode})
+	</select>	
 </mapper>

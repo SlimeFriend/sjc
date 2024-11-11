@@ -11,6 +11,8 @@ public interface InfoPrdMapper {
 	public int insertProduct(ProductVO productVO);
     // 제품 삭제
 	public void deletePrds(String prdCode);    
-    // 사용자 정보 수정
+    // 제품 수정
 	public int updatePrds(ProductVO productVO);    
+	// 제품 코드 존재 확인
+	public int checkPrdCode(ProductVO productVO);    
 }
