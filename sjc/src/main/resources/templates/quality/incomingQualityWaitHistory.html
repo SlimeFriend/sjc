@@ -123,10 +123,12 @@
 			document.getElementById('cpCode').addEventListener('input', () => {
 
 			    const cpCode = document.getElementById('cpCode').value;
+			    const cpName = document.getElementById('cpName').value;
 			    
 			    
 			    const searchCriteria = {
 			    		cpCode: cpCode,
+			    		cpName: cpName,
 			    };
 			    //alert("searchCriteria" + searchCriteria);
 			    searchAjax(searchCriteria);
@@ -735,6 +737,8 @@
 	                                	$('#myModal').modal('hide');
 	                					grid.resetData(gridData);
 	                					gridDetail.resetData(gridDetailData);
+	                					grid.refreshLayout(); 
+	                					gridDetail.refreshLayout(); 
 	                					//location.reload();
 	                                	
 	                                    Swal.fire({
