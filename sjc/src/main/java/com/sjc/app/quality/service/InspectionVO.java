@@ -60,6 +60,8 @@ public class InspectionVO {
 	// CpVO
 		private String cpName; //업체이름
 	// MtInVO
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 		private Date inputDate; //입고일
 		private Integer inquantity; //입고수량
 		@DateTimeFormat(pattern = "yyyy-MM-dd")
