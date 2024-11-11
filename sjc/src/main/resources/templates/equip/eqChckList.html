@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<div xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
     xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
     layout:decorate="~{common/layouts/default_layout}"
@@ -33,129 +32,127 @@ tbody > tr {
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 
 <body>
-        <h2 class="h2 mb-10" style="font-size: 32px;">설비 비가동 관리</h2>
+    <h2 class="h2 mb-10" style="font-size: 32px;">설비 비가동 관리</h2>
     <div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
         <i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 설비 비가동 관리  >  <span style="color: #575757; margin-left : 8px;">설비 목록 & 비가동 내역</span>
     </div>
-                <div class="pd-30 card-box mb-20">
-                    <div class="d-flex justify-content-between align-items-center mb-20">
-                        <h4 class="h5 mb-20">설비 목록</h4>
-                    </div>
-                    <section>
-                        <div>
-                            <p style="font-size: 100%">
-                                <label style="font-size: 120%;">구분</label>&nbsp;&nbsp;&nbsp;&nbsp; 
-                                <input type="radio" id="all" name="section" value="all" checked> 
-                                <label>전체</label>&nbsp;&nbsp;
-                                <input type="radio" id="operating" name="section" value="op">
-                                <label>가동</label>&nbsp;&nbsp; 
-                                <input type="radio" id="nOperating" name="section" value="nOp"> <label>비가동</label>
-                        </div>
-                    </section>
-                    
-                    <div id="grid"></div>
+    <div class="pd-30 card-box mb-20">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h4 class="h5 mb-20">설비 목록</h4>
+        </div>
+        <section>
+            <div>
+                <p style="font-size: 100%">
+                    <label style="font-size: 120%;">구분</label>&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" id="all" name="section" value="all" checked> 
+                    <label>전체</label>&nbsp;&nbsp;
+                    <input type="radio" id="operating" name="section" value="op">
+                    <label>가동</label>&nbsp;&nbsp; 
+                    <input type="radio" id="nOperating" name="section" value="nOp"> <label>비가동</label>
+            </div>
+        </section>
+        
+        <div id="grid"></div>
+    </div>
+    
+    <div class="card-box pd-20 mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h4 class="h5 mb-20">비가동 내역</h4>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
+            <div class="col-sm-12 col-md-2">
+                <input class="form-control" id="searchEqCode" type="text" placeholder="설비코드" oninput="searchEq()" style="width: 180px;">
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-1 col-form-label">시작일자</label>
+                <div class="col-sm-12 col-md-2">
+                    <input class="form-control" id="startDate" type="date" oninput="searchEq()" style="width: 180px;">
                 </div>
                 
-                <div class="card-box pd-20 mb-30">
-                <!-- 두번째 페이지 -->
-
-                    <div class="d-flex justify-content-between align-items-center mb-20">
-                        <h4 class="h5 mb-20">비가동 내역</h4>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-1 col-form-label">설비코드</label>
-                        <div class="col-sm-12 col-md-2">
-                            <input class="form-control" id="searchEqCode" type="text" placeholder="설비코드" oninput="search()" style="width: 150px;">
+                <label class="col-sm-12 col-md-1 col-form-label">이후부터</label>
+        </div>
+        <div class="form-group row">
+                <label class="col-sm-12 col-md-1 col-form-label">종료일자</label>
+                
+                <div class="col-sm-12 col-md-2">
+                    <input class="form-control" id="endDate" type="date" oninput="searchEq()" style="width: 180px;">
+                </div>
+                <label class="col-sm-12 col-md-1 col-form-label">이전까지</label>
+        </div>
+        
+        <div id="grid2"></div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="nOpModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">비가동 설비 등록</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="NeqModal" action="">
+                        <div class="mb-3 form-group">
+                            <label for="eqCode" class="form-label">설비코드 :</label> 
+                            <input type="text" id="eqCode" name="eqCode" value="" readonly class="form-control">
                         </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-1 col-form-label">시작일자</label>
-                            <div class="col-sm-12 col-md-2">
-                                <input class="form-control" id="startDate" type="date" oninput="search()" style="width: 150px;">
-                            </div>
-                            
-                            <label class="col-sm-12 col-md-1 col-form-label">이후부터</label>
-                    </div>
-                    <div class="form-group row">
-                            <label class="col-sm-12 col-md-1 col-form-label">종료일자</label>
-                            
-                            <div class="col-sm-12 col-md-2">
-                                <input class="form-control" id="endDate" type="date" oninput="search()" style="width: 150px;">
-                            </div>
-                            <label class="col-sm-12 col-md-1 col-form-label">이전까지</label>
-                    </div>
-                    
-                    <div id="grid2"></div>
-            </div>
-            <!-- The Modal -->
-            <div class="modal fade" id="nOpModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">비가동 설비 등록</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="mb-3">
+                            <label for="eqName" class="form-label">설비명 :</label> 
+                            <input type="text" id="eqName" name="eqName" value="" readonly class="form-control">
                         </div>
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <form id="NeqModal" action="">
-                                <div class="mb-3 form-group">
-                                    <label for="eqCode" class="form-label">설비코드 :</label> 
-                                    <input type="text" id="eqCode" name="eqCode" value="" readonly class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="eqName" class="form-label">설비명 :</label> 
-                                    <input type="text" id="eqName" name="eqName" value="" readonly class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="nOpTime" class="form-label">비가동 기간 :
-                                    </label> 시작 <input type="date" id="modalStartDate" name="startDate" class="form-control">
-                                             <br />
-                                             종료 <input type="date" id="modalEndDate" name="endDate" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="reason" class="form-label">사유 :</label> 
-                                    <select id="reason" name="reason" class="form-control">
-                                        <option value="">선택
-                                        <option value="상시점검">상시점검
-                                        <option value="임시점검">임시점검
-                                        <option value="고장">고장
-                                        <option value="부품교체">부품교체
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="use" class="form-label">사용여부</label> 
-                                    <select name="use" id="use" class="form-control">
-                                        <option value="" selected>선택
-                                        <option id="use" value="Y">가동
-                                        <option id="use" value="N">비가동
-                                    </select>
-                                </div>
-                            </form>
+                        <div class="mb-3">
+                            <label for="nOpTime" class="form-label">비가동 기간 :</label>
+                            시작 <input type="date" id="modalStartDate" name="startDate" class="form-control">
+                            <br />
+                            종료 <input type="date" id="modalEndDate" name="endDate" class="form-control">
                         </div>
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" id="modalSubmitBtn" class="btn btn-success">등록</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">사유 :</label> 
+                            <select id="reason" name="reason" class="form-control">
+                                <option value="">선택</option>
+                                <option value="상시점검">상시점검</option>
+                                <option value="임시점검">임시점검</option>
+                                <option value="고장">고장</option>
+                                <option value="부품교체">부품교체</option>
+                            </select>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="use" class="form-label">사용여부</label> 
+                            <select name="use" id="use" class="form-control">
+                                <option value="" selected>선택</option>
+                                <option id="use" value="Y">가동</option>
+                                <option id="use" value="N">비가동</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" id="modalSubmitBtn" class="btn btn-success">등록</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
                 </div>
             </div>
-        
+        </div>
+    </div>
 
 <script th:inline="javascript">
+ let grid2;
+
     $(document).ready(function() {
         const gridData = /*[[${equips}]]*/[];
         const gridData2 = /*[[${equipChck}]]*/[];
 
         const grid = new tui.Grid({
-            el : document.getElementById('grid'),
-            data : gridData,
-            scrollX : false,
-            scrollY : false,
-            columns : [ 
+            el: document.getElementById('grid'),
+            data: gridData,
+            scrollX: false,
+            scrollY: false,
+            columns: [ 
                 {
                     header : '설비코드',
                     name : 'eqCode',
@@ -187,14 +184,13 @@ tbody > tr {
                     }
                 }, 
             ],
-            rowHeaders : [ 'rowNum' ],
+            rowHeaders: [ 'rowNum' ],
             pageOptions: {
-                useClient : true,
-                perPage : 5
+                useClient: true,
+                perPage: 5
             }, 
         });
         
-        // 라디오 버튼에 따른 필터링 및 번호 초기화
         $('input[name="section"]').on('change', function() {
             const selectedValue = $('input[name="section"]:checked').val();
 
@@ -205,7 +201,6 @@ tbody > tr {
                     (selectedValue === 'nOp' && useStatus === '비가동');
             });
 
-            // 필터링된 데이터에 번호를 다시 설정
             const updatedData = filteredData.map((item, index) => ({
                 ...item,
                 rowNum: index + 1
@@ -214,7 +209,7 @@ tbody > tr {
             grid.resetData(updatedData);
         });
 
-        const grid2 = new tui.Grid({
+        grid2 = new tui.Grid({
             el : document.getElementById('grid2'),
             data : gridData2,
             scrollX : false,
@@ -269,14 +264,12 @@ tbody > tr {
             }, 
         });
 
-        // 모달창에서 "가동" 선택 시 날짜 및 사유 비활성화
         $('#use').on('change', function() {
             const useValue = $(this).val();
-            const isOperating = useValue === 'Y'; // '가동'이 선택되었는지 확인
+            const isOperating = useValue === 'Y';
             $('#modalStartDate, #modalEndDate, #reason').prop('disabled', isOperating);
         });
 
-        // 그리드 클릭 이벤트 - 모달창 열기
         grid.on('click', (event) => {
             const rowKey = event.rowKey;
             const rowData = grid.getRow(rowKey);
@@ -285,18 +278,16 @@ tbody > tr {
 
             $('#eqCode').val(eqCode);
             $('#eqName').val(eqName);
-            $('#use').val(rowData.use === 'Y' ? 'Y' : 'N').trigger('change'); // 가동상태 반영 및 트리거로 비활성화 제어
-            $('#nOpModal').data('selectedRowKey', rowKey); // 행 키를 저장
+            $('#use').val(rowData.use === 'Y' ? 'Y' : 'N').trigger('change'); 
+            $('#nOpModal').data('selectedRowKey', rowKey); 
             $('#nOpModal').modal('show');
         });
 
-        // 모달창에서 '등록' 버튼 클릭 시 이벤트
         $('#modalSubmitBtn').on('click', function() {
             const eqCode = $('#eqCode').val();
             const useValue = $('#use').val();
             const selectedRowKey = $('#nOpModal').data('selectedRowKey');
 
-            // 가동 선택 시 - 비가동을 가동으로 전환하고 테이블에 반영
             if (useValue === 'Y') {
                 $.ajax({
                     type: "POST",
@@ -305,12 +296,12 @@ tbody > tr {
                     data: JSON.stringify({ eqCode: eqCode, use: useValue }),
                     success: function(response) {
                         if (response.result) {
-                            grid.setValue(selectedRowKey, 'use', 'Y'); // 테이블에 가동 상태 반영
+                            grid.setValue(selectedRowKey, 'use', 'Y');
                             Swal.fire({
                                 icon: 'success',
                                 text: '"가동" 상태로 업데이트 되었습니다.',
                             }).then(() => {
-                                location.reload(); // 페이지 새로고침
+                                location.reload();
                             });
                         } else {
                             Swal.fire({
@@ -330,7 +321,6 @@ tbody > tr {
                 return;
             }
 
-            // 비가동일 경우 - 서버에 데이터 전송
             const startDate = $('#modalStartDate').val();
             const endDate = $('#modalEndDate').val();
             const reason = $('#reason').val();
@@ -346,12 +336,12 @@ tbody > tr {
                     use: useValue
                 }),
                 success: function(response) {
-                    grid.setValue(selectedRowKey, 'use', 'N'); // 테이블에 비가동 상태 반영
+                    grid.setValue(selectedRowKey, 'use', 'N');
                     Swal.fire({
                         icon: 'success',
                         text: '"비가동" 상태로 전환되었습니다.',
                     }).then(() => {
-                        location.reload(); // 페이지 새로고침
+                        location.reload();
                     });
                     $('#nOpModal').modal('hide');
                 },
@@ -363,9 +353,54 @@ tbody > tr {
                 }
             });
         });
+        
+        
+        
     });
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+    function searchEq() {
+        const eqCode = document.getElementById('searchEqCode').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        const searchCriteria = {
+            eqCode: eqCode,
+            startDate: startDate,
+            endDate: endDate
+        };
+
+        $.ajax({
+            url: '/eqSearch',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(searchCriteria),
+            success: function(response) {
+                grid2.resetData(response.map((item, index) => ({
+                    rowNum: index + 1,
+                    eqChckOpcd: item.eqChckOpcd,
+                    eqCode: item.eqCode,
+                    eqName: item.eqName,
+                    reason: item.reason || '-',
+                    eqChckOx: item.eqChckOx || '-',
+                    startDate: item.startDate ? formatDate(item.startDate) : '-',
+                    endDate: item.endDate ? formatDate(item.endDate) : '-'
+                })));
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching search results:', error);
+            }
+        });
+    }
 </script>
 
-
 </body>
-</html>
+</div>
