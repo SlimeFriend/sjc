@@ -382,6 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortable: true,
                 editor: 'text',                                  
             },
+            /*
             {
                 header: '재고변동일',
                 name: 'updateDate',
@@ -401,6 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				   return e.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 				},                                   
             },
+            */
             /*
             {
                 header: '리드타임',

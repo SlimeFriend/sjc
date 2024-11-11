@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            /*
             {
                 header: '공정구분',
                 name: 'prccessType',
@@ -96,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true                  
             },
+            */
             {
                 header: '설명',
                 name: 'description',
