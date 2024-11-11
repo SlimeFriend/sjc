@@ -50,7 +50,9 @@ public class SalesController {
 	    return "redirect:/main";
 	}
 	
-	// 주문내역 페이지
+	
+	
+	// 주문내역 페이지 이동
 	@GetMapping("/orderHistory")
 	public String orderHistoryPage() {
 		return "sales/orderHistory";
@@ -63,19 +65,14 @@ public class SalesController {
 	    return salesService.order();
 	}
 	
-	// 주문내역 삭제 페이지 주문 목록
-	@GetMapping("/getDeleteOrder")
+	// 주문내역 상세페이지
+	@PostMapping("/getOrderDetail")
 	@ResponseBody
-	public List<OrderVO> getDeleteOrder() {
-	    return salesService.deleteOrderList();
-	}
-	
-	// 주문내역 삭제 프로세스
-	@PostMapping("/orderDelete")
-	@ResponseBody
-	public int deleteOrder(@RequestBody Map<String, List<String>> payload) {
-	    List<String> ordCodes = payload.get("orderVO");
-	    return salesService.deleteOrder(ordCodes);
+	public List<Map<String, Object>> getOrderDetail(@RequestBody Map<String, String> requestData) {
+		String ordCode = requestData.get("ordCode");
+		List<Map<String, Object>> ordDetail = salesService.orderDetail(ordCode);
+		
+		return ordDetail;
 	}
 	
 	// 주문내역 검색 프로세스
@@ -92,94 +89,24 @@ public class SalesController {
 	    return salesService.searchOrder(companyName, orderStartDate, orderEndDate, deliveryStartDate, deliveryEndDate, orderStatus);
 	}
 	
-	// 주문내역 상세페이지
-	@PostMapping("/getOrderDetail")
+	
+	
+	// 주문내역 삭제 페이지 주문 목록
+	@GetMapping("/getDeleteOrder")
 	@ResponseBody
-	public List<Map<String, Object>> getOrderDetail(@RequestBody Map<String, String> requestData) {
-		String ordCode = requestData.get("ordCode");
-		List<Map<String, Object>> ordDetail = salesService.orderDetail(ordCode);
-		
-		return ordDetail;
+	public List<OrderVO> getDeleteOrder() {
+	    return salesService.deleteOrderList();
 	}
 	
-	// 출고내역 상세페이지
-	@PostMapping("/getOutDetail")
+	// 주문내역 삭제 프로세스
+	@PostMapping("/orderDelete")
 	@ResponseBody
-	public List<Map<String, Object>> getOutDetail(@RequestBody Map<String, String> requestData) {
-		String ordCode = requestData.get("ordCode");
-		List<Map<String, Object>> outDetail = salesService.outDetail(ordCode);
-		
-		return outDetail;
-	}
-	
-
-	// 제품관리 페이지
-	@GetMapping("/productManagement")
-	public String productManagementPage(Model model) {
-		List<ProductVO> productList = salesService.productManagement();
-		List<ProductVO> productLotList = salesService.productLot();
-		model.addAttribute("products", productList);
-		model.addAttribute("productManagement", productLotList);
-
-		return "sales/productManagement";
-	}
-	
-	// 제품관리 상세 페이지
-	@PostMapping("/getProductDetail")
-	@ResponseBody
-	public List<Map<String, Object>> getProductDetail(@RequestBody Map<String, String> requestData) {
-		String prdCode = requestData.get("prdCode");
-		
-		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
-		
-		return prdDetail;
-	}
-
-	// 제품 입고 페이지
-	@GetMapping("/productIn")
-	public String productInPage(Model model) {
-		List<ProductVO> list = salesService.productIn();
-		model.addAttribute("productIn", list);
-		return "sales/productIn";
-	}
-
-	// 제품 출고 페이지
-	@GetMapping("/productOut")
-	public String productOutPage(Model model) {
-		return "sales/productOut";
-	}
-	
-	// 출고완료 상태의 주문 목록
-	@GetMapping("/getOrders")
-	@ResponseBody
-	public List<OrderVO> getOrders() {
-	    return salesService.getOrdersByStatus("주문접수");
+	public int deleteOrder(@RequestBody Map<String, List<String>> payload) {
+	    List<String> ordCodes = payload.get("orderVO");
+	    return salesService.deleteOrder(ordCodes);
 	}
 	
 	
-	// 출고완료 상태의 주문 목록
-	@GetMapping("/getOutOrders")
-	@ResponseBody
-	public List<OrderVO> getOutOrders() {
-	    return salesService.getOrdersByStatus("출고완료");
-	}
-	
-	// 제품 출고 상세 페이지
-	@PostMapping("/getOrdDetail")
-	@ResponseBody
-	public List<Map<String, Object>> getOrdDetail(@RequestBody Map<String, String> requestData) {
-	    String ordCode = requestData.get("ordCode");
-	    return salesService.orderDetail(ordCode);  // 서비스 계층에서 제품 상세 정보를 가져옴
-	}
-	
-	// 제품 출고 상세 페이지 LOT
-	@PostMapping("/getPrdLotDetail")
-	@ResponseBody
-	public List<Map<String, Object>> getPrdLotDetail(@RequestBody Map<String, String> requestData) {
-		String prdCode = requestData.get("prdCode");
-		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
-		return prdDetail;
-	}
 	
 	// 제품출고 프로세스
 	@PostMapping("/getPrdOutInfo")
@@ -195,15 +122,61 @@ public class SalesController {
 	    
 	    int result = salesService.productOutProcess(combinedData);
 	    
-	    return result; // 적절한 응답 반환
+	    return result;
 	}
 	
-	@PostMapping("/remainInfo")
+	// 출고내역 상세페이지
+	@PostMapping("/getOutDetail")
 	@ResponseBody
-	public int remainProcess(@RequestBody Map<String, List<Map<String, Object>>> requestData) {
-		List<Map<String, Object>> outRemainData = requestData.get("outRemainData");
-		return salesService.remainProcess(outRemainData);
+	public List<Map<String, Object>> getOutDetail(@RequestBody Map<String, String> requestData) {
+		String ordCode = requestData.get("ordCode");
+		List<Map<String, Object>> outDetail = salesService.outDetail(ordCode);
+		
+		return outDetail;
 	}
+	
+
+	
+	// 제품관리 페이지
+	@GetMapping("/productManagement")
+	public String productManagementPage(Model model) {
+		List<ProductVO> productList = salesService.productManagement();
+		List<ProductVO> productLotList = salesService.productLot();
+		model.addAttribute("products", productList);
+		model.addAttribute("productManagement", productLotList);
+
+		return "sales/productManagement";
+	}
+	
+	// 제품관리 상세페이지
+	@PostMapping("/getProductDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getProductDetail(@RequestBody Map<String, String> requestData) {
+		String prdCode = requestData.get("prdCode");
+		
+		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
+		
+		return prdDetail;
+	}
+
+	
+	
+	// 제품출고현황 페이지
+	@GetMapping("/productOut")
+	public String productOutPage(Model model) {
+		return "sales/productOut";
+	}
+	
+	// 제품출고 상세페이지
+	@PostMapping("/getOrdDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getOrdDetail(@RequestBody Map<String, String> requestData) {
+	    String ordCode = requestData.get("ordCode");
+	    return salesService.orderDetail(ordCode);
+	}
+	
+
+	
 
 	// 입/출고 내역 페이지
 	@GetMapping("/inoutHistory")
@@ -240,10 +213,29 @@ public class SalesController {
 	    return salesService.outSearch(prdName, cpName, outStartDate, outEndDate);
 	}
 	
-	// 주문성공시 페이지
-	@GetMapping("/salesOrderHistory")
-	public String inoutHistoryPage() {
-		return "sales/orderHistory";
+	// 제품출고 상세페이지 LOT
+	@PostMapping("/getPrdLotDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getPrdLotDetail(@RequestBody Map<String, String> requestData) {
+		String prdCode = requestData.get("prdCode");
+		List<Map<String, Object>> prdDetail = salesService.productDetail(prdCode);
+		return prdDetail;
+	}
+	
+	
+	
+	// 주문접수 상태의 주문 목록
+	@GetMapping("/getOrders")
+	@ResponseBody
+	public List<OrderVO> getOrders() {
+	    return salesService.getOrdersByStatus("주문접수");
+	}
+	
+	// 출고완료 상태의 주문 목록
+	@GetMapping("/getOutOrders")
+	@ResponseBody
+	public List<OrderVO> getOutOrders() {
+	    return salesService.getOrdersByStatus("출고완료");
 	}
 
 }

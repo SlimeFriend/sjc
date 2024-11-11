@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.sales.mapper.SalesMapper">
-
+	
+	<!-- ORD코드 생성 -->
 	<select id="getOrdCode" resultType="String">
 		SELECT 
 		    CASE
@@ -9,7 +10,7 @@
 		            ('ORD' || TO_CHAR(MAX(SUBSTR(ord_code, 4, 12)) + 1))
 		        ELSE 
 		            ('ORD' || TO_CHAR(SYSDATE, 'yyyyMMdd') || TO_CHAR(LPAD(1, 3, '0')))
-		    END AS ord_code
+		        END AS ord_code
 		FROM ord
 	</select>
 
@@ -31,6 +32,7 @@
 		FROM   prd
 	</select>
 	
+	<!-- 제품상세 조회 -->
 	<select id="selectProductDetail" parameterType="String" resultType="map">
 		SELECT p.prd_name,
 		       p.prd_code,
@@ -78,6 +80,7 @@
 	    #{ordCode}, #{productVO.prdCode}, #{productVO.prdName}, #{productVO.ordQuantity}, #{productVO.price})
 	</insert>
 	
+	<!-- 재고 확인 -->
 	<select id="getTotalOrderQuantity" resultType="Integer">
 		SELECT COALESCE(SUM(od.ord_quantity), 0)
 		FROM   ord O JOIN ord_detail od
@@ -110,7 +113,7 @@
 		ORDER BY o.ord_date DESC, o.ord_status
 	</select>
 	
-	<!-- 주문내역 조회 -->
+	<!-- 주문삭제 내역 조회 -->
 	<select id="selectDeleteOrder" resultType="OrderVO">
 		SELECT   o.ord_code,
 		         o.manager,
@@ -195,6 +198,7 @@
 		    o.ord_code = #{ordCode}
 	</select>
 	
+	<!-- 주문삭제 프로세스 -->
 	<delete id="deleteOrder" parameterType="String">
     	DELETE FROM ord
     	WHERE ord_code = #{ordCode}
@@ -263,29 +267,7 @@
 		               ON o.cp_code = c.cp_code
 	</select>
 	
-	
-	<!-- 출고접수 프로세스 -->
-	
-	<!-- 미출고량 계산 -->
-	<select id="selectRemainData" parameterType="map" resultType="int">
-		WITH r AS (SELECT ord_code,
-                  prd_code,
-                  SUM(out_quantity) remain_Quantity
-        FROM      prd_out_history
-        GROUP BY  ord_code, prd_code)
-           
-	    SELECT o.ord_code AS ordCode,
-	           od.prd_name AS prdName,
-	           od.prd_code AS prdCode,
-	           od.ord_quantity AS ordQuantity,
-	           o.ord_status AS ordStatus,
-	           od.ord_quantity - r.remain_Quantity AS remainQuantity
-	    FROM   ord o 
-	    JOIN   ord_detail od ON o.ord_code = od.ord_code
-	    JOIN   r ON (r.ord_code = od.ord_code AND r.prd_code = od.prd_code)
-	    WHERE  o.ord_code = #{ordCode} AND r.prd_code = #{prdCode}
-	</select>
-	
+	<!-- 주문내역 상태 수정 -->
 	<update id="updateOrdFinish">
 		UPDATE ord
 		SET ord_status = '출고완료'
@@ -304,14 +286,14 @@
 		VALUES(out_seq.NEXTVAL + 3, #{lot}, #{prdCode}, #{outQuantity}, SYSDATE, #{ordCode}, #{cpName}, #{manager})
 	</insert>
 	
-	<!-- Prd출고접수 프로세스 -->
+	<!-- 제품출고 수량 변경 -->
 	<update id="prdLotOutProcess">
 		UPDATE prd_management
 		SET    out_quantity = out_quantity + #{outQuantity}
 		WHERE  lot = #{lot}
 	</update>
 	
-	<!-- 제품 입출고 내역 -->
+	<!-- 제품 입고 내역 -->
 	<select id="selectInHistory" resultType="PrdManagementVO">
        SELECT pm.lot,
               p.prd_name,
@@ -323,6 +305,7 @@
        ORDER BY pm.in_date DESC
 	</select>
 	
+	<!-- 제품 출고 내역 -->
 	<select id="selectOutHistory" resultType="outHistoryVO">
 		SELECT 
 		    poh.LOT AS "lot",
