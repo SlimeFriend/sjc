@@ -6,6 +6,6 @@ import com.sjc.app.info.service.InspectionDTO;
 
 public interface InfoQaMapper {
 	
-	List<InspectionDTO> selectQaPassRate();
+	public List<InspectionDTO> selectQaPassRate();
 }
 

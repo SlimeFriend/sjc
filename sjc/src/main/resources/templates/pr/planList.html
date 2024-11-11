@@ -3,6 +3,13 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	
+	<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+	
 	<head>
      	<title>생산 계획 조회</title>
         <style>
@@ -178,29 +185,48 @@
 		
 		
         dbtn.addEventListener('click', function(){
-        	console.log('as');
+        	
         	pCode = grid.getValue(selectedRow, 'planCode');
-        	$.ajax({
-        	    url: 'deletePlan', // 요청할 URL
-        	    type: 'POST', // HTTP 요청 방식
-        	    data: {
-        	        pCode : pCode
-        	    },
-        	    dataType: 'json', // 응답 데이터 형식
-        	    success: function(response) {
-        	        // 요청 성공 시 실행되는 콜백 함수
-        	        if(response == 1){
-        	        	alert('삭제 완료');
-        	        	
-        	        	performSearch();
-        	        	detailGrid.resetData([]);
-        	        }
-        	    },
-        	    error: function(xhr, status, error) {
-        	        // 요청 실패 시 실행되는 콜백 함수
-        	        console.error('Error:', error);
-        	    }
-        	});
+        	Swal.fire({
+                title: '삭제',
+                text: "생산계획을 삭제하시겠습니까?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+                }).
+                then((result) => {
+                    if (result.isConfirmed) {
+                    	$.ajax({
+                    	    url: 'deletePlan', // 요청할 URL
+                    	    type: 'POST', // HTTP 요청 방식
+                    	    data: {
+                    	        pCode : pCode
+                    	    },
+                    	    dataType: 'json', // 응답 데이터 형식
+                    	    success: function(response) {
+                    	        // 요청 성공 시 실행되는 콜백 함수
+                    	        if(response == 1){
+                    	        	Swal.fire({
+                                        icon: 'success',
+                                        title: '생산계획 삭제',
+                                        text: '생산계획이 삭제되었습니다.',
+                                    });
+                    	        	
+                    	        	performSearch();
+                    	        	detailGrid.resetData([]);
+                    	        }
+                    	    },
+                    	    error: function(xhr, status, error) {
+                    	        // 요청 실패 시 실행되는 콜백 함수
+                    	        console.error('Error:', error);
+                    	    }
+                    	});
+                    }
+            	})
+        	
         });
     });
     

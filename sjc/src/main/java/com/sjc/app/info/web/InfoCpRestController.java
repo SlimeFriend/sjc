@@ -2,7 +2,9 @@ package com.sjc.app.info.web;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +26,17 @@ public class InfoCpRestController {
 	}
 	// 업체 등록
     @PutMapping("cps")
-    public List<CpVO> updateUsers(@RequestBody List<CpVO> cpVOs) {
+    public List<CpVO> insertCps(@RequestBody List<CpVO> cpVOs) {
         return infoCpService.modifyCps(cpVOs);
     }	
-	
+    // 업체 삭제
+    @DeleteMapping("cps")
+    public List<CpVO> deleteCps(@RequestBody List<CpVO> cpVOs) {
+        return infoCpService.deleteCps(cpVOs);
+    }	
+    // 업체 수정
+    @PostMapping("cps")
+    public List<CpVO> updateCps(@RequestBody List<CpVO> cpVOs) {
+    	return infoCpService.updateCps(cpVOs);
+    }	
 }

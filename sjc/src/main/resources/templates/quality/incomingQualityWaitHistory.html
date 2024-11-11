@@ -1,33 +1,41 @@
-<div xmlns:th="http://www.thymeleaf.org"
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-	<head>
-<title>입/출고 내역</title>
-<style>
-#gridOrder:hover {
-	cursor: pointer;
-}
+<head>
+	<meta charset="UTF-8">
+	<title>입고 품질검사(자재)</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 
-#gridOrderDetail:hover {
-	cursor: pointer;
-}
-
-#modalInspection:hover {
-	cursor: pointer;
-}
-
-#modalInspectionDetail:hover {
-	cursor: pointer;
-}
-</style>
-	</head>
-	<!-- 페이징 필요하신분 -->
-	<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<style>
+		#gridOrder:hover {
+			cursor: pointer;
+		}
+		
+		#gridOrderDetail:hover {
+			cursor: pointer;
+		}
+		
+		#modalInspection:hover {
+			cursor: pointer;
+		}
+		
+		#modalInspectionDetail:hover {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+<!-- 페이징 필요하신분 -->
+<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 	<!-- 	<div class="main-container">
 		<div class="pd-ltr-20"> -->
-	<h2 class="h2 mb-20">입고 품질검사</h2>
+	<h2 class="h2 mb-20">입고 품질검사(자재)</h2>
 	<div class="pd-30 card-box mb-20">
 		<form>
 			<div class="form-group row">
@@ -100,8 +108,7 @@
 			</div>
 		</div>
 	</div>
-</div>
-
+</body>
 <script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			
@@ -188,6 +195,13 @@
 				scrollX : false,
 				scrollY : false,
 				columns : [ {
+					header : '발주날짜',
+					name : 'mtlOdDate',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+					rowSpan: true,
+				}, {
 					header : '발주코드',
 					name : 'mtlOdCode',
 					align : 'center',
@@ -208,12 +222,6 @@
 				}, {
 					header : '총 발주 수량',
 					name : 'mtlOdQuantity',
-					align : 'center',
-					resizable: true,
-					sortable: true,
-				}, {
-					header : '발주날짜',
-					name : 'mtlOdDate',
 					align : 'center',
 					resizable: true,
 					sortable: true,
@@ -483,11 +491,11 @@
 					editor : 'text',
 					resizable: true,
 					sortable: true,
-/* 					validation: {
+ 					validation: {
                         required: true,
                         dataType: 'int',
                         regExp: /^[0-9 ]*$/, //    [정규식] 영문 숫자에 대한 조합만 가능
-                    }, */
+                    }, 
 				}, {
 					header : '품질검사기준',
 					name : 'insItemCiteria',
@@ -517,31 +525,57 @@
 				}
 			});
 			
-			
-			document.addEventListener('click', (e) => {
-				gridInsDetailModal.finishEditing();
+			gridInsDetailModal.on('editingFinish', (ev) => {
+			    const rowKey = ev.rowKey; // 수정된 행의 키
+			    let insValue = gridInsDetailModal.getValue(rowKey, 'insValue'); // 검사값
+			    let insResult = gridInsDetailModal.getValue(rowKey, 'insResult'); // 결과 판정
+
+			    // 검사값이 빈 값일 경우 경고
+			    if (insValue.trim() === '') {
+			        Swal.fire({
+			            icon: 'error',
+			            title: '입력오류',
+			            text: '검사값을 입력해주세요.',
+			        });
+			        gridInsDetailModal.setValue(rowKey, 'insValue', ''); // 검사값 필드초기화
+			        return; // 아무 것도 입력하지 않으면 이후 처리를 멈추고 넘어가지 않도록
+			    }
+
+			    // 공백 제거 후 숫자 변환
+			    const numInsValue = Number(insValue.trim());
+
+			    // 검사값이 숫자가 아니거나 음수일 경우 경고
+			    if (isNaN(numInsValue) || numInsValue < 0) {
+			        Swal.fire({
+			            icon: 'error',
+			            title: '입력오류',
+			            text: '올바르지 않은 값이 들어왔습니다. 0 이상의 숫자만 가능합니다.',
+			        });
+			        gridInsDetailModal.setValue(rowKey, 'insValue', ''); // 검사값 필드 초기화
+			        return;
+			    }
+
+
 			});
-
-
-			
-			
-			
 			
 			
 			// gridInsDetailModal에서 데이터가 변경될 때마다 호출되는 함수
 			function updateTestCount() {
 			    const insDetailData = gridInsDetailModal.getData();
 			    const insCode = gridInsDetailModal.getValue(0, 'insCode'); // 현재 검사 코드 가져오기
-			   
-			    console.log('Current insCode:', insCode);
-			   
 			    
-			    // insDetailCode에 대해 insValue가 null이 아닌 수 세기
+			    console.log('insDetailData:', insDetailData);
+			    console.log('Current insCode:', insCode);
+			   	
+			    // 합격수가 infinity로 오류나서 검사수 전체에 대한 것으로 수정.
+			    countTest = insDetailData.length;
+			    
+			    /* // insDetailCode에 대해 insValue가 null이 아닌 수 세기
 			    const countTest = insDetailData.filter(item => 
 			        									item.insCode === insCode 
 			        								 && item.insValue !== null 
 			        								 && item.insValue !== ''
-			    									).length;
+			    									).length; */
 			    // insDetailCode에 대해 insResult가 null이 아니며 불합격이 아닌 수 세기
 			    const countPass = insDetailData.filter(item => 
 			        									item.insCode === insCode 
@@ -559,7 +593,7 @@
 			    									).length;
 			    console.log('Count of valid nonPasses:', countNonPass);
 			    // totalPass 값 일치하는지 검증하기.
-			    const totalPass = (countTest === countPass) ? '합격' : '불합격';;
+			    const totalPass = (countTest === countPass) ? '합격' : '불합격';
 			    
 			    
 			    // gridInspectionModal의 모든 데이터 가져오기
@@ -594,6 +628,22 @@
 	                const requestData = gridInsDetailModal.getData();
 	                
 	                console.log(requestData);
+	                
+	                const invalidRows = requestData.filter(item => 
+		                (item.insValue === null || item.insValue.trim() === '') || 
+		                (item.insResult === null || item.insResult.trim() === '')
+		            );
+	
+		            // 빈 값이 있는 행이 있을 경우
+		            if (invalidRows.length > 0) {
+		                Swal.fire({
+		                    icon: 'error',
+		                    title: '입력 오류',
+		                    text: '검사값과 결과를 모두 입력해주세요.'
+		                });
+		                return; // 값이 비어 있으면 AJAX 요청을 보내지 않도록 종료
+		            }
+	                
 	                
 	                $.ajax({
 	                    url: '/insValueUpdate',
@@ -633,6 +683,7 @@
 					success: function(response) {
 					alert("품질검사가 완료되었습니다.");
 					$('#myModal').modal('hide');
+					location.reload();
 					},
 					error: function(xhr, status, error) {
 					console.error('Error during request', error);
@@ -643,7 +694,9 @@
 						    			
 			
 			
-			
+			document.addEventListener('click', (e) => {
+			    grid.finishEditing();
+			});
 			
 			
 			
@@ -670,4 +723,4 @@
 		
 
 	</script>
-</div>
+</html>

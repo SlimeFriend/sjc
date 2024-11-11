@@ -1,5 +1,6 @@
 package com.sjc.app.sales.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -147,6 +148,32 @@ public class SalesServiceImpl implements SalesService {
 		return salesMapper.selectProductIn();
 	}
 	
+	// 주문내역 조회
+	@Override
+	public List<OrderVO> order() {
+		return salesMapper.selectOrder();
+	}
+	
+	// 주문내역 삭제 조회
+	@Override
+	public List<OrderVO> deleteOrderList() {
+		return salesMapper.selectDeleteOrder();
+	}
+	
+	// 주문내역 삭제
+	@Override
+	public int deleteOrder(List<String> ordCodes) {
+		
+		int totalDeletedCount = 0;
+	    
+	    for (String ordCode : ordCodes) {
+	    	totalDeletedCount = salesMapper.deleteOrder(ordCode);
+	    }
+	    
+	    return totalDeletedCount;
+	    
+	}
+	
 	// 주문내역 검색
 	@Override
 	public List<OrderVO> searchOrder(String companyName, String orderStartDate, String orderEndDate, String deliveryStartDate, String deliveryEndDate, String orderStatus) {
@@ -157,11 +184,6 @@ public class SalesServiceImpl implements SalesService {
 	public List<ProductVO> productList() {
 		return salesMapper.selectProduct();
 	}
-
-	@Override
-	public List<OrderVO> order() {
-		return salesMapper.selectOrder();
-	}
 	
 	@Override
 	public List<Map<String, Object>> orderDetail(String ordCode) {
@@ -170,6 +192,15 @@ public class SalesServiceImpl implements SalesService {
 		
 		return list;
 	}
+	
+	@Override
+	public List<Map<String, Object>> outDetail(String ordCode) {
+		
+		List<Map<String, Object>> list = salesMapper.selectOutDetail(ordCode);
+		
+		return list;
+	}
+	
 	
 	@Override
 	public List<Map<String, Object>> lackOrderDetail(String ordCode) {
@@ -215,6 +246,5 @@ public class SalesServiceImpl implements SalesService {
 	public List<outHistoryVO> outSearch(String prdName, String cpName, String outStartDate, String outEndDate) {
 		return salesMapper.outSearch(prdName, cpName, outStartDate, outEndDate);
 	}
-
 
 }

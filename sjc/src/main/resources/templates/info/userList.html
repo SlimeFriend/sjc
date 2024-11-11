@@ -14,8 +14,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
     
 <style>
-	.gridClass:hover{
-		cursor: pointer;
+	.gridClass td.tui-grid-cell-editable
+	{
+	  cursor: pointer;
 	}  
 </style>    
     
@@ -28,50 +29,50 @@
 		<h2 class="h2 mb-20">기준 정보 > 사용자관리</h2>
 		<div class="pd-30 card-box mb-20">
 		    <h2 class="h5 mb-20">사용자 관리</h2>
-		    <div class="form-group row">
+		    <div class="form-group row align-items-center">
 		    
 		        <label class="col-sm-12 col-md-1 col-form-label h4">사용자번호</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputUserId" placeholder="사용자번호 입력">
 		        </div>
 		
-		        <label class="col-sm-12 col-md-1 col-form-label">아이디</label>
+		        <label class="col-sm-12 col-md-1 col-form-label h4">아이디</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputLoginId" placeholder="아이디 입력">
 		        </div>
 		
-		        <label class="col-sm-12 col-md-1 col-form-label">권한</label>
+		        <label class="col-sm-12 col-md-1 col-form-label h4">권한</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputRoleName" placeholder="권한 입력">
 		        </div>
 		
-		        <button class="btn btn-primary mr-3 ml-5" id="searchBtn" style="opacity: 0;">검색</button>
-		        <button class="btn btn-success mr-3" id="insertBtn">추가</button>
-		        <button class="btn btn-secondary mr-3" id="saveBtn">저장</button>
-		        <button class="btn btn-info mr-3" id="userHistoryBtn">이력</button>
+		        <button class="btn btn-primary" id="searchBtn" style="display: none;" disabled>검색</button>
+		        <button class="btn btn-success ml-5" id="insertBtn">추가</button>
+		        <button class="btn btn-secondary ml-5" id="saveBtn">저장</button>
+		        <button class="btn btn-info ml-5" id="userHistoryBtn">이력</button>
 		        
 		    </div>
 	    
-		    <div class="form-group row">
+		    <div class="form-group row  align-items-center">
 		        <label class="col-sm-12 col-md-1 col-form-label h4">이름</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputUserName" placeholder="이름 입력">
 		        </div>
 		
-		        <label class="col-sm-12 col-md-1 col-form-label">부서코드</label>
+		        <label class="col-sm-12 col-md-1 col-form-label h4">부서코드</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputDeptCode" placeholder="부서코드 입력">
 		        </div>
 		
-		        <label class="col-sm-12 col-md-1 col-form-label">부서명</label>
+		        <label class="col-sm-12 col-md-1 col-form-label h4">부서명</label>
 		        <div class="col-sm-12 col-md-2">
 		            <input class="form-control" type="text" id="inputDeptName" placeholder="부서명 입력">
 		        </div>
 		        
-		        <button class="btn btn-info mr-3 ml-5" id="copyBtn" style="opacity: 0;">복사</button>
-		        <button class="btn btn-danger mr-3" id="deleteBtn">삭제</button>
-		        <button class="btn btn-warning mr-3" id="updateBtn">수정</button>
-		        <button class="btn btn-dark" id="xlsxBtn">xlsx</button>
+		        <button class="btn btn-info" id="copyBtn" style="display: none;" disabled>복사</button>
+		        <button class="btn btn-danger ml-5" id="deleteBtn">삭제</button>
+		        <button class="btn btn-warning ml-5" id="updateBtn">수정</button>
+		        <button class="btn btn-dark ml-5" id="xlsxBtn">xlsx</button>
 		        
 		    </div>
 	    	<div class="gridClass" id="grid"></div>

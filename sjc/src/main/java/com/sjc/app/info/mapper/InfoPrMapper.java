@@ -6,6 +6,6 @@ import com.sjc.app.info.service.PResultDTO;
 
 public interface InfoPrMapper {
 	
-	List<PResultDTO> selectPResultInOut();
+	public List<PResultDTO> selectPResultInOut();
 }
 

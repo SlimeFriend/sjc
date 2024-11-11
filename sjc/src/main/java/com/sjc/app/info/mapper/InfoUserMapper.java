@@ -20,34 +20,34 @@ public interface InfoUserMapper {
     public List<InfoUserVO> selectUserHistory(InfoUserVO userVO);
 
     // 사용자 정보 수정
-    int updateUser(InfoUserVO userVO);
+    public int updateUser(InfoUserVO userVO);
     
     // 사용자 권한 수정
-    int updateUserRole(InfoUserVO userVO);
+    public int updateUserRole(InfoUserVO userVO);
     
     // 사용자 권한 등록
-    int insertUserRole(InfoUserVO userVO);
+    public int insertUserRole(InfoUserVO userVO);
     
     // 사용자 정보 조회
-    InfoUserVO getUserById(String userId);
+    public InfoUserVO getUserById(String userId);
     
     // 사용자 정보 등록
-    void insertUser(InfoUserVO userVO);
+    public void insertUser(InfoUserVO userVO);
     
     // 선택한 사용자 삭제
-    void deleteUsers(List<String> userIds);
+    public void deleteUsers(List<String> userIds);
     
     // 선택한 사용자 권한 삭제
-    void deleteUserRoles(List<String> userIds);
+    public void deleteUserRoles(List<String> userIds);
     
     // 복사 등록
-    Long insertCopyLog();
+    public Long insertCopyLog();
     
     // 복사 상세 등록
-    void insertCopyDetail(List<InfoUserVO> userVOs);
+    public void insertCopyDetail(List<InfoUserVO> userVOs);
     
     // 사용자 정보 조회
-    List<InfoUserVO> getUsersByIds(List<String> userIds);
+    public List<InfoUserVO> getUsersByIds(List<String> userIds);
     
     // 복사 조회
     public List<InfoCopyLogVO> selectCopyLogAllList();
@@ -56,11 +56,11 @@ public interface InfoUserMapper {
     public List<InfoCopyDetailVO> selectCopyDetailAllList();
     
     // 사용자 목록 조회
-    List<InfoUserVO> selectUserList(Map<String, Object> params);
+    public List<InfoUserVO> selectUserList(Map<String, Object> params);
     
     // 사용자 수 조회
-    int countUserList(Map<String, Object> params);
+    public int countUserList(Map<String, Object> params);
     
     // 사용자정보, 권한 삭제 프로시저
-    List<InfoUserVO> deleteUsersProcedure(String userIds);    
+    public List<InfoUserVO> deleteUsersProcedure(String userIds);    
 }

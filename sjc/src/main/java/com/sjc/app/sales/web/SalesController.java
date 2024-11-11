@@ -52,10 +52,30 @@ public class SalesController {
 	
 	// 주문내역 페이지
 	@GetMapping("/orderHistory")
-	public String orderHistoryPage(Model model) {
-		List<OrderVO> order = salesService.order();
-		model.addAttribute("ord", order);
+	public String orderHistoryPage() {
 		return "sales/orderHistory";
+	}
+	
+	// 주문내역 페이지 주문 목록
+	@GetMapping("/getOrder")
+	@ResponseBody
+	public List<OrderVO> getOrder() {
+	    return salesService.order();
+	}
+	
+	// 주문내역 삭제 페이지 주문 목록
+	@GetMapping("/getDeleteOrder")
+	@ResponseBody
+	public List<OrderVO> getDeleteOrder() {
+	    return salesService.deleteOrderList();
+	}
+	
+	// 주문내역 삭제 프로세스
+	@PostMapping("/orderDelete")
+	@ResponseBody
+	public int deleteOrder(@RequestBody Map<String, List<String>> payload) {
+	    List<String> ordCodes = payload.get("orderVO");
+	    return salesService.deleteOrder(ordCodes);
 	}
 	
 	// 주문내역 검색 프로세스
@@ -77,10 +97,19 @@ public class SalesController {
 	@ResponseBody
 	public List<Map<String, Object>> getOrderDetail(@RequestBody Map<String, String> requestData) {
 		String ordCode = requestData.get("ordCode");
-		
 		List<Map<String, Object>> ordDetail = salesService.orderDetail(ordCode);
 		
 		return ordDetail;
+	}
+	
+	// 출고내역 상세페이지
+	@PostMapping("/getOutDetail")
+	@ResponseBody
+	public List<Map<String, Object>> getOutDetail(@RequestBody Map<String, String> requestData) {
+		String ordCode = requestData.get("ordCode");
+		List<Map<String, Object>> outDetail = salesService.outDetail(ordCode);
+		
+		return outDetail;
 	}
 	
 

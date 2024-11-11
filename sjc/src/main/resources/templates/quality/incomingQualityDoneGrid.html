@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+	<meta charset="UTF-8">
+	<title>입고 처리 대기 목록(자재)</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+
+	<style>
+		#gridOrder:hover {
+			cursor: pointer;
+		}
+		
+		#gridOrderDetail:hover {
+			cursor: pointer;
+		}
+		
+		#modalInspection:hover {
+			cursor: pointer;
+		}
+		
+		#modalInspectionDetail:hover {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+<!-- 페이징 필요하신분 -->
+<th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
+	<h2 class="h2 mb-20">입고 처리 대기 목록(자재)</h2>
+						<!-- <div class="card-box mb-20">
+							<div class="pd-30 card-box mb-20">
+								<form>
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="text" placeholder="업체명">
+										</div>
+									</div>
+				
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">주문일자</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div
+											class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+											<span style="font-size: 1rem;">~</span>
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+									</div>
+				
+									<div class="form-group row">
+										<label class="col-sm-12 col-md-1 col-form-label">납기일자</label>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div
+											class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+											<span style="font-size: 1rem;">~</span>
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<input class="form-control" type="date">
+										</div>
+										<div class="col-sm-12 col-md-3">
+											<button class="btn btn-dark">저장</button>
+											<button class="btn btn-dark">초기화</button>
+										</div>
+									</div>
+								</form>
+							</div> 
+						</div> -->
+<!-- 				</div> -->
+		<!-- <div class="pd-ltr-20 xs-pd-20-10"> -->
+
+	<div class="pd-30 card-box mb-20">
+			<div class="filter-buttons mb-3">
+				<button id="filter-pass" class="btn btn-secondary">합격</button>
+				<button id="filter-fail" class="btn btn-secondary">불합격</button>
+				<button id="filter-all" class="btn btn-secondary">전체</button>
+					<button type="button" class="btn btn-primary" id="success1" style="float: right;">입고처리</button>
+					<button type="button" class="btn btn-primary" id="failuer1" style="float: right;">반품처리</button>
+			</div>
+					<div id="gridInspection"></div>
+
+			</div>
+
+</body>
+<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			let outInsData = [];
+			tui.Grid.applyTheme('striped');
+			
+			
+		/* 	document.getElementById('cpCode').addEventListener('input', () => {
+
+			    const cpCode = document.getElementById('cpCode').value;
+			    
+			    
+			    const searchCriteria = {
+			    		cpCode: cpCode,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			}); */
+			/* document.getElementById('cpName').addEventListener('input', () => {
+
+			    const cpName = document.getElementById('cpName').value;
+			    
+			    
+			    const searchCriteria = {
+			    		cpName: cpName,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			}); */
+			/* document.getElementById('moStartDate').addEventListener('input', () => {
+
+			    const moStartDate = document.getElementById('moStartDate').value;
+			    
+			    
+			    const searchCriteria = {
+			    		moStartDate: moStartDate,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			}); */
+			/* document.getElementById('moEndDate').addEventListener('input', () => {
+
+			    const moEndDate = document.getElementById('moEndDate').value;
+			    
+			    
+			    const searchCriteria = {
+			    		moEndDate: moEndDate,
+			    };
+			    //alert("searchCriteria" + searchCriteria);
+			    searchAjax(searchCriteria);
+
+			}); */
+			
+			/* function searchAjax(searchCriteria){
+			    $.ajax({
+			        url: '/searchMO',
+			        type: 'POST',
+			        contentType: 'application/json',
+			        data: JSON.stringify(searchCriteria),
+			        success: function(response) {
+			            grid.resetData(response);
+			        },
+			        error: function(xhr, status, error) {
+			            console.error('Error fetching search results:', error);
+			            //alert("검색실패");
+			        }
+			    });				
+			} */
+			
+			// 합격 여부에 따라 필터링
+		    document.getElementById('filter-pass').addEventListener('click', function() {
+		        filterRows('합격');
+		    });
+		    
+		    document.getElementById('filter-fail').addEventListener('click', function() {
+		        filterRows('불합격');
+		    });
+		    
+		    document.getElementById('filter-all').addEventListener('click', function() {
+		        filterRows('전체');
+		    });
+
+
+			
+			const gridInspectionData = /*[[${incomingQualityDones}]]*/[];
+			
+			const gridInspection = new tui.Grid({
+				el : document.getElementById('gridInspection'),
+				data : gridInspectionData,
+				scrollX : false,
+				scrollY : false,
+				columns : [ {
+					header : '품질검사코드',
+					name : 'insCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사일자',
+					name : 'insDate',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '품질검사상태',
+					name : 'insStatus',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '거래처코드',
+					name : 'cpCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '검사수',
+					name : 'numberOfTests',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '합격수',
+					name : 'numberOfPasses',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '총합격여부',
+					name : 'totalPass',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '입고가능수량',
+					name : 'numberOfTotalPass',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, {
+					header : '자재발주코드',
+					name : 'mtlOdCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+					rowSpan: true,
+				}, {
+					header : '자재코드',
+					name : 'mtCode',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+					rowSpan: true,
+				}, {
+					header : '자재명',
+					name : 'mtName',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+					rowSpan: true,
+				},  {
+					header : '검사자번호',
+					name : 'userId',
+					align : 'center',
+					resizable: true,
+					sortable: true,
+				}, ],
+				rowHeaders : [ 'checkbox' ],
+			});
+			
+			$.ajax({
+	    		url : '/incomingQualityDoneGrid',
+	    		type : 'Get',
+	    		success: function(response) {
+	    			const gridInspectionData = response.data;
+	    			gridInspection.resetData(response); 
+	    		},
+	    		error: function(xhr, status, error) {
+	    			console.error('error during request', error);
+	    		}
+	    	});
+			
+/* 			
+			function filterRows(status) {
+			    const rows = gridInspection.getData();  // 그리드에서 데이터를 가져옴
+
+			    // 필터링된 데이터 배열
+			    let filteredData;
+
+			    if (status === '전체') {
+			        filteredData = rows;
+			    } else {
+			        filteredData = rows.filter(row => row.totalPass === status);
+			    }
+
+			    // 그리드에 필터링된 데이터 세팅
+			    gridInspection.setData(filteredData);
+			} */
+			
+			document.getElementById('success1').addEventListener('click', () => {
+
+				let checkedRows = gridInspection.getCheckedRows();
+			    const insRowCount = gridInspection.getRowCount();
+
+				    for(let i = 0; i < checkedRows; i++) {
+				    	
+				    	let insCode = gridInspection.getValue(i, 'insCode');
+				    	let cpCode = gridInspection.getValue(i, 'cpCode');
+				    	let numberOfTotalPass = gridInspection.getValue(i, 'numberOfTotalPass');
+				    	let mtlOdCode = gridInspection.getValue(i, 'mtlOdCode');
+				    	let mtCode = gridInspection.getValue(i, 'mtCode');
+				    	let userId = gridInspection.getValue(i, 'userId');
+				    	
+				    	
+					    	outInsData.push({
+					    		insCode : insCode,
+					    		cpCode : cpCode,
+					    		numberOfTotalPass : numberOfTotalPass,
+					    		mtlOdCode : mtlOdCode,
+					    		mtCode : mtCode,
+					    		userId : userId
+				            });
+				    	
+				    }
+				    
+				   // 사용자의 확인을 받기 위해 confirm 창 띄우기
+				   const isConfirmed = Swal.fire({
+			            title: '입고접수',
+			            text: "입고하시겠습니까?",
+			            icon: 'warning',
+			            showCancelButton: true,
+			            confirmButtonColor: '#3085d6',
+			            cancelButtonColor: '#d33',
+			            confirmButtonText: '입고',
+			            cancelButtonText: '취소'
+				        }).then((result) => {
+				            if (result.isConfirmed) {
+			            	const requestData = {
+			            			outInsData: outInsData,
+						    };
+
+			            	$.ajax({
+					    		url: '/updateIncoming',
+					    		type: 'POST',
+					    		contentType: 'application/json',
+					    		data: JSON.stringify(requestData),
+								success: function(response) {
+		    		            	Swal.fire({
+		    		                    icon: 'success',
+		    		                    title: '입고 성공',
+		    		                    text: '입고가 정상처리되었습니다.',
+		    		                }).then(() => {
+		    		                	location.reload();
+		    		                });
+					    		}
+					    	});
+				    	   }
+				            
+						 
+			        });
+			    
+			    
+			});
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+
+			
+			
+		});
+		
+
+	</script>
+</html>

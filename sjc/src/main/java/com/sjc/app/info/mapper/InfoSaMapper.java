@@ -6,6 +6,6 @@ import com.sjc.app.info.service.OrdDTO;
 
 public interface InfoSaMapper {
 	
-	List<OrdDTO> selectOrderCount();
+	public List<OrdDTO> selectOrderCount();
 }
 

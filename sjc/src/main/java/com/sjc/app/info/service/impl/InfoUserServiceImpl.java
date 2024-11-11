@@ -81,6 +81,7 @@ public class InfoUserServiceImpl implements InfoUserService {
     }
 
     // 사용자 삭제
+    // xml에서 반복문 처리
     @Override
     @Transactional
     public List<String> deleteUsers(List<String> userIds) {

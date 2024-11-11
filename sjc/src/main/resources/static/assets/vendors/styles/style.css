@@ -715,7 +715,8 @@ p {
 	vertical-align: unset;
 	width: auto;
 	height: auto;
-	border: 0 !important
+	border: 0 !important;
+	color: white;
 }
 
 .bootstrap-select .dropdown-toggle::after {
@@ -1557,11 +1558,11 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 
 .user-info-dropdown .dropdown-toggle .user-icon {
 	width: /*52px*/ 28px;
-	height: 52px;
+	height: 54px;
 	font-size: 24px;
-	background: #ebeff3;
-	color: #1b00ff;
-	line-height: 52px;
+	background: #0b132b;
+	color: #ffffff;
+	line-height: 60px;
 	text-align: center;
 	display: inline-block;
 	vertical-align: middle;

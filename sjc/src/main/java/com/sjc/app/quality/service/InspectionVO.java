@@ -24,6 +24,9 @@ public class InspectionVO {
 	private int numberOfFailed;// 불합격수
 	private int numberOfTotalPass;// 총합격수
 	private String totalPass; // 총합격여부
+	
+	
+	private String mtlPdetailCode; //제품코드(mtlod,Pdetail)
 
 	
 	
@@ -57,6 +60,8 @@ public class InspectionVO {
 	// CpVO
 		private String cpName; //업체이름
 	// MtInVO
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 		private Date inputDate; //입고일
 		private Integer inquantity; //입고수량
 		@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -104,7 +109,9 @@ public class InspectionVO {
     	@DateTimeFormat(pattern = "yyyy-MM-dd")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	    private Date startDate;
-	    private String porderDate;
+    	@DateTimeFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	    private Date porderDate;
 	    private String manager;
 	    private String pordercomm;
 	    private String porderStatus;

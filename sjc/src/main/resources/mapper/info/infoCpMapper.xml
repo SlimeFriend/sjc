@@ -9,26 +9,32 @@
 		        ,ADDRESS
 		        ,COMM
 		        ,CP_TYPE
+		        ,TEL
 		from    CP
 	    <where>
 	        <if test="cpCode != null and cpCode != ''">
-	            AND UPPER(cp_code) = UPPER(#{cpCode})
+	            AND UPPER(cp_code) LIKE UPPER('%' || #{cpCode} || '%')
 	        </if>
 	        <if test="cpName != null and cpName != ''">
 	            AND UPPER(cp_name) LIKE UPPER('%' || #{cpName} || '%')
 	        </if>
+	        <if test="cpType != null and cpType != ''">
+	            AND UPPER(cp_type) LIKE UPPER('%' || #{cpType} || '%')
+	        </if>
 	    </where>
-	    ORDER BY CP_CODE
+	    --ORDER BY CP_CODE
+		ORDER BY CP_DATE DESC, CP_CODE 	    
 	</select>
 	
     <update id="updateCp" parameterType="CpVO">
         UPDATE 	cp
         SET 	
             	cp_name = #{cpName}
-            	cp_type = #{cpType}
-            	business_no = #{businessNo}
-            	address = #{address}
-        		comm = #{comm}
+            	,cp_type = #{cpType}
+            	,business_no = #{businessNo}
+            	,address = #{address}
+        		,comm = #{comm}
+        		,tel = #{tel}
         WHERE 	cp_code = #{cpCode}
     </update>
     
@@ -44,6 +50,7 @@
 	    	,business_no
 	    	,address
 	    	,comm
+	    	,tel
 	
 	    ) VALUES (
 	    	#{cpCode}
@@ -52,7 +59,14 @@
 	    	,#{businessNo}
 	    	,#{address}
 	    	,#{comm}
+	    	,#{tel}
 	    )
     </insert>
+    
+    <delete id="deleteCp">
+    	delete
+    	from	cp
+    	where	cp_code = #{cpCode}
+    </delete>
 	
 </mapper>

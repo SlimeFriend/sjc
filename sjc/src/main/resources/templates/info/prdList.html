@@ -12,21 +12,30 @@
     <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 <style>
-    .custom-tooltip {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        z-index: 1000;
-        display: none;
-        font-size: 12px;
-        pointer-events: none;
-    }
-    
-	.gridClass:hover{
-		cursor: pointer;
-	}    
+	.tui-grid-cell-editable,
+	#gridPrd div.tui-grid-body-container,
+	#gridBom div.tui-grid-body-container {
+	  cursor: pointer;
+	}
+	#gridPrd th,
+	#gridBom th,
+	#gridBomDetail th
+	{
+  		background-color: #eee; 
+	}
+	
+	/*
+	#gridPrd tr.tui-grid-row-even {
+  		background-color: #eee; 
+	} 
+	*/
+	/*   
+	#gridPrd tr.tui-grid-row-odd {
+  		background-color: #fff; 
+	}
+	*/
+
+	   
 </style>   
 </head>
 <body>
@@ -39,7 +48,7 @@
 	        
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
 					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				        <h4 class="h5 mb-0">제품목록</h4>
+				        <h4 class="h5 mb-0">제품 목록</h4>
 						<div>
 							<!-- 
 							<button type="button" class="btn btn-success" id="openBomBtn">BOM 생성</button>
@@ -59,7 +68,7 @@
 				    <!-- 위쪽 card-box (BOM목록) -->
 				    <div class="pd-30 card-box mb-20">
 				        <div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				            <h4 class="h5 mb-0">BOM목록</h4>
+				            <h4 class="h5 mb-0">BOM 목록</h4>
 				            <div>
 				                <button type="button" class="btn btn-success" id="bomBtn">BOM 지정</button>
 				            </div>
@@ -124,6 +133,30 @@
 	</div>
 	 -->	        
 
+	<div class="modal" id="prdModal">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
+	            <div class="pd-20 card-box mb-20" style="width: 100%;">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">기준정보 > 제품관리 > 제품목록</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal body -->
+					<div class="modal-body">
+						    <h5 class="h5">제품 상세</h5>
+							<div id="gridPrdModal"></div>
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-warning" id="prdModalUpdateBtn">수정</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="prdModalBtn">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div class="modal" id="bomDetailModal">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
@@ -153,7 +186,7 @@
 	            <div class="pd-30 card-box mb-20" style="width: 100%;">
 					<!-- Modal Header -->
 					<div class="modal-header">
-						<h4 class="modal-title">제품/BOM 등록</h4>
+						<h4 class="modal-title">기준정보 > 제품관리 > 제품/BOM 등록</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<!-- Modal body -->
@@ -198,13 +231,13 @@
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>제품코드</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="prdCode" placeholder="제품코드" value="" >
+								                <input class="form-control form-control-sm text-center" type="text" name="prdCode" placeholder="" value="" >
 								            </div>
 								        </div>
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>제품명</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="prdName" placeholder="제품명" value="" >
+								                <input class="form-control form-control-sm text-center" type="text" name="prdName" placeholder="" value="" >
 								            </div>
 								        </div>
 								    </div>
@@ -212,13 +245,13 @@
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>단가</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="unitPrice" placeholder="단가" value="" >
+								                <input class="form-control form-control-sm text-center" type="text" name="unitPrice" placeholder="" value="" >
 								            </div>
 								        </div>
 								        <div class="col-md-6">
 								            <div class="form-group">
 								                <label>비고</label>
-								                <input class="form-control form-control-sm text-center" type="text" name="comm" placeholder="비고" value="" >
+								                <input class="form-control form-control-sm text-center" type="text" name="comm" placeholder="" value="" >
 								            </div>
 								        </div>
 								    </div>

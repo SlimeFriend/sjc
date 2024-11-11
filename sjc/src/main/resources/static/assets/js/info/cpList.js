@@ -43,6 +43,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'address',
                 align: 'center',
                 sortingType: 'desc',
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                 
+            },
+            {
+                header: '전화번호',
+                name: 'tel',
+                align: 'center',
+                sortingType: 'desc',
                 sortable: true                  
             },
             {
@@ -50,13 +61,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: 'comm',
                 align: 'center',
                 sortingType: 'desc',
-                sortable: true                  
+                sortable: true,
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                  
             }
         ],
         rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 10
         }
     });
     
@@ -79,10 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortingType: 'desc',
                 sortable: true,
                 editor: 'text',
+                /*
                 validation: {
 					required: true,
 			        regExp: /^[가-힣a-zA-Z]+$/
-                },                
+                },
+                */                
             },
             {
                 header: '업체구분',
@@ -90,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
+                /*
                 editor: {
                   type: 'select',
                   options: {
@@ -99,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ]
                   }
                 },                
-                                  
+                */                  
             },
             {
                 header: '사업자번호',
@@ -107,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',                                  
                                   
             },
             {
@@ -116,7 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                
+                                                  
                                   
             },
             {
@@ -125,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                                  
+                //editor: 'text',                                  
                                   
             }
         ],
@@ -200,6 +223,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
+                editor: 'text',
+				ellipsis: true,
+				renderer: {
+					type: TooltipRenderer
+				}                                                   
+            },
+            {
+                header: '전화번호',
+                name: 'tel',
+                align: 'center',
+                sortingType: 'desc',
+                sortable: true,
                 editor: 'text',                                  
             },
             {
@@ -214,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rowHeaders: ['rowNum'],
         pageOptions: {
             useClient: true,
-            perPage: 15
+            perPage: 3
         }
     });
 
@@ -348,10 +383,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	        fetch(url)
 	        .then(response => response.json())
 	        .then(result => {
-	            gridCpModal.resetData(result);
-	            //document.getElementById('gridBomDetailModal').style.opacity = 1;
-	            $('#CpModal').modal('show');
-	            gridCpModal.refreshLayout();            
+				console.log(result);
+	            //gridCpModal.resetData(result);
+	            //$('#CpModal').modal('show');
+	            //gridCpModal.refreshLayout();
+	            setSidePanel(result[0]);
+    			//$('#updateBtn, .custom-switch').toggle(true);            
 	        })
 	        .catch(error => {
 	            console.error(error);
@@ -359,10 +396,232 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
     });    
     
+    function setSidePanel(cpVO){
+		$('#cpCode').val(cpVO.cpCode);
+		$('#cpName').val(cpVO.cpName);
+		$('#cpType').val(cpVO.cpType);
+		$('#businessNo').val(cpVO.businessNo);
+		$('#address').val(cpVO.address);
+		$('#tel').val(cpVO.tel);
+		$('#comm').val(cpVO.comm);
+		
+	    $('#deleteBtn').prop('disabled', false);
+
+	}
+	
+	function clearSidePanel() {
+	    
+	    $('#cpCode').val("");
+	    $('#cpName').val("");
+	    $('#cpType').val("");
+	    $('#businessNo').val("");
+	    $('#addressNo').val("");
+	    $('#tel').val("");
+	    $('#comm').val("");
+	
+	    $('#deleteBtn, #updateBtn').prop('disabled', true);
+	}
+
+	$('#editModeSwitch').on('change', function() {
+	    if(!$('#cpCode').val()) {
+	        $(this).prop('checked', false);
+	        alert('업체를 선택하세요.');
+	        return false;
+	    }
+	
+	    const isEnabled = $(this).is(':checked');
+	    $('#updateBtn, #cpName, #cpType, #businessNo, #address, #tel, #comm').prop('disabled', !isEnabled);
+	});
+
+    
 	document.addEventListener('click', (e) => {
 	    gridCpModal.finishEditing();
 	    gridCpInsertModal.finishEditing();
+	});
+	
+	
+    document.getElementById('deleteCpBtn').addEventListener('click', function() {
+		if (confirm("삭제하시겠습니까?")){
+			
+			const getData = gridCpModal.getData();
+			console.log(getData);
+			
+			const map = getData.map(row => ({
+			    cpCode: row.cpCode,
+			}));
+			console.log(map);
+			
+			deleteCps(map);
+		}else{
+			return false;
+		}
+    });
+	
+	$('#deleteBtn').on('click', function(){
+		if (confirm("삭제 하시겠습니까?")){
+			
+			const getData = $('#cpCode').val();
+			console.log(getData);
+			
+			const map = {
+			    cpCode: getData,
+			};
+			const mapAry = [{
+			    cpCode: getData,
+			}];
+			
+			console.log(mapAry);
+			deleteCps(mapAry);
+		}else{
+			return false;
+		}
 	});    
     
+    
+    function deleteCps(CpVOs) {
+		fetch('cps', {
+			method: 'DELETE',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(CpVOs)
+			})
+		.then(response => response.json())
+		.then(result => {
+			console.log('Delete result:', result);
+			fetchCps();
+			//$('#CpModal').modal('hide');
+			clearSidePanel();
+		})
+		.catch(error => {
+			console.error('Delete error:', error);
+			alert('삭제 중 오류가 발생했습니다.');
+		});
+    }
+    
+    $('#updateBtn').on('click', function(){
+		if (confirm("수정 하시겠습니까?")){
+			
+			/*
+			const getData = $('#cpCode').val();
+			console.log(getData);
+			const map = {
+			    cpCode: getData,
+			};
+			*/
+			
+			const mapAry = [{
+			    cpCode: $('#cpCode').val(),
+			    cpName: $('#cpName').val(),
+			    cpType: $('#cpType').val(),
+			    businessNo: $('#businessNo').val(),
+			    address: $('#address').val(),
+			    tel: $('#tel').val(),
+			    comm: $('#comm').val(),
+			}];
+			console.log(mapAry);
+			updateCps(mapAry);
+		}else{
+			return false;
+		}		
+	});
+    function updateCps(CpVOs) {
+		/*
+		fetch('cps', {
+			method: 'PUT',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(CpVOs)
+			})
+		.then(response => response.json())
+		.then(result => {
+			console.log(result);
+			fetchCps();
+		})
+		.catch(error => {
+			console.error(error);
+		});
+		*/
+		
+		$.ajax("cps", {
+			method : 'POST', // method
+			contentType : 'application/json',
+			data: JSON.stringify(CpVOs)
+		})
+		.done(result => {
+			console.log(result);
+			//clearSidePanel();
+			fetchCps();
+			
+			//$('#editModeSwitch').prop('checked', false).change();
+			
+			const checkbox = document.getElementById('editModeSwitch');
+			checkbox.checked = false;
+			checkbox.dispatchEvent(new Event('change'));
+		});
+    }
+    
+    $('#inputCpCode').on('input', function(){
+		const cpCode = $('#inputCpCode').val();
+		const cpName = $('#inputCpName').val();
+		const cpType = $('#inputCpType').val();
+		
+		const cpVO = {
+			cpCode : cpCode,
+			cpName : cpName,
+			cpType : cpType,
+		}
+		
+		$.ajax({
+			url : "cps",
+			method : "GET",
+			data : cpVO,	
+		})
+		.done(result => {
+			grid.resetData(result);
+		})
+	});
+	
+    $('#inputCpName').on('input', function(){
+		const cpCode = $('#inputCpCode').val();
+		const cpName = $('#inputCpName').val();
+		const cpType = $('#inputCpType').val();
+		
+		const cpVO = {
+			cpCode : cpCode,
+			cpName : cpName,
+			cpType : cpType,
+		}
+		
+		$.ajax({
+			url : "cps",
+			type : "GET",
+			data : cpVO,
+			success : function(response){
+				grid.resetData(response);
+			},
+			error : function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+    $('#inputCpType').on('change', function(){
+		const cpCode = $('#inputCpCode').val();
+		const cpName = $('#inputCpName').val();
+		const cpType = $('#inputCpType').val();
+		
+		const cpVO = {
+			cpCode : cpCode,
+			cpName : cpName,
+			cpType : cpType,
+		}
+		
+	    $.get('cps', cpVO, function(response) {
+			grid.resetData(response);
+	    });
+	});
+				
         
 });

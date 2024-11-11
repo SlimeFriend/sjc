@@ -10,6 +10,7 @@
 	    <meta charset="UTF-8">
 	    <title>주문접수</title>
 	    <style>
+	    
 	    	.btn {
 	    		background-color: #0b132b; 
 	    		color: #ffffff;
@@ -19,84 +20,120 @@
 			    background-color: #2f08cc;
 			    color: #ffffff;
 			}
+			
+			.modal-dialog-centered {
+    			display: flex;
+    			align-items: center;
+    			justify-content: center;
+    			margin: auto;
+			}
+			
 	    </style>
 	</head>
 	
-			<h2 class="h2 mb-20">주문접수</h2>
-			<div class="row">
-				<div class="pd-30 card-box mb-20" style="width: 100%">
-					<div class="d-flex justify-content-between align-items-center">
-						<h2 class="h5">주문서 작성</h2>
-						<div class="d-flex">
-							<div style="text-align: center; margin-right: 10px;">
-								<button class="btn" type="button" onclick="sendCheckedRows(event)">주문접수</button>
-							</div>
-							<div style="text-align: center">
-								<button class="btn" type="button" onclick="resetForm()">초기화</button>
-							</div>
-						</div>
-					</div>
-					<hr style="border: 0; height: 2px; background: #ccc;">
-					<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label" for="cpInput" style="max-width: 100px;">업체명</label>
-							<div class="col-sm-12 col-md-10">
-								<input class="form-control" type="text" id="cpInput" name="cpName" style="width: 350px;" placeholder="업체를 선택해주세요.">
-								<input class="form-control" type="hidden" id="cpCode" name="cpCode">
-								<input type="hidden" th:value="${#authentication.principal.authorities[2]}">
-								<input type="hidden" th:value="${#authentication.principal.authorities[1]}" name="manager">
-							</div>
-						</div>
-						<hr>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label" for="dlvReqDate" style="max-width: 100px;">납기일자</label>
-							<div class="col-sm-12 col-md-10">
-								<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
-							</div>
-						</div>
-						<hr>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label" for="comm" style="max-width: 100px;">요청사항</label>
-							<div class="col-sm-12 col-md-10">
-								<textarea class="form-control" name="comm" style="width: 350px; height: 120px;"></textarea>
-							</div>
-						</div>
-					</form>
+	<h2 class="h2 mb-20">영업 > 주문접수</h2>
+	<div class="row">
+	<div class="pd-30 card-box mb-20" style="width: 100%">
+		<div class="d-flex justify-content-between align-items-center">
+			<h2 class="h5">주문서 작성</h2>
+			<div class="d-flex">
+				<div style="text-align: center; margin-right: 8px;">
+					<button class="btn" type="button" onclick="openOrderModal(event)">주문접수</button>
 				</div>
-				
-				<div class="pd-30 card-box mb-20" style="width: 100%">
-					<h2 class="h5 mb-20">제품 선택</h2>
-					<div id="grid"></div>
+				<div style="text-align: center">
+					<button class="btn" type="button" onclick="resetForm()">초기화</button>
 				</div>
-				
-				<!-- The Modal -->
-				<div class="modal" id="myModal">
-					<div class="modal-dialog modal-xl">
-						<div class="modal-content">
-							<!-- Modal Header -->
-							<div class="modal-header">
-								<h4 class="modal-title">업체선택</h4>
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-							</div>
-							<!-- Modal body -->
-							<div class="modal-body">
-								    <h5 class="h5 mb-20">업체목록</h5>
-									<div id="cpList"></div>
-							</div>
-							<!-- Modal footer -->
-							<div class="modal-footer justify-content-center">
-								<button type="button" class="btn" data-dismiss="modal" id="modalSubmitBtn">등록</button>
-								<button type="button" class="btn" data-dismiss="modal" id="modalCancelBtn">취소</button>
-							</div>
-						</div>
-					</div>
+			</div>
+		</div>
+		<hr style="border: 0; height: 2px; background: #ccc;">
+		<form th:action="@{/orderReception}" th:object="${orderVO}" name="form" method="post">
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-2 col-form-label" for="cpInput" style="max-width: 100px;">업체명</label>
+				<div class="col-sm-12 col-md-10">
+					<input class="form-control" type="text" id="cpInput" name="cpName" style="width: 350px;" placeholder="업체를 선택해주세요.">
+					<input class="form-control" type="hidden" id="cpCode" name="cpCode">
+					<input type="hidden" th:value="${#authentication.principal.authorities[2]}" id="orderUserNameHidden">
+					<input type="hidden" th:value="${#authentication.principal.authorities[1]}" name="manager">
 				</div>
+			</div>
+			<hr>
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-2 col-form-label" for="dlvReqDate" style="max-width: 100px;">납기일자</label>
+				<div class="col-sm-12 col-md-10">
+					<input class="form-control" type="date" id="dlvReqDate" name="dlvReqDate" style="width: 350px;">
+				</div>
+			</div>
+			<hr>
+			<div class="form-group row">
+				<label class="col-sm-12 col-md-2 col-form-label" for="comm" style="max-width: 100px;">요청사항</label>
+				<div class="col-sm-12 col-md-10">
+					<textarea class="form-control" name="comm" style="width: 350px; height: 120px;"></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div class="pd-30 card-box mb-20" style="width: 100%">
+		<h2 class="h5 mb-20">제품 선택</h2>
+		<div id="grid"></div>
+	</div>
+	
+	<!-- cpModal -->
+	<div class="modal" id="cpModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">업체선택</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					    <h5 class="h5 mb-20">업체목록</h5>
+						<div id="cpList"></div>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer justify-content-center">
+					<button type="button" class="btn" data-dismiss="modal" id="modalSubmitBtn">선택</button>
+					<button type="button" class="btn" data-dismiss="modal" id="modalCancelBtn">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- orderModal -->
+	<div class="modal" id="orderModal">
+		<div class="modal-dialog-centered modal-xl">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">주문확인</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					    <h5 class="h5 mb-20">주문목록</h5>
+					    <div class="d-flex justify-content-between mb-20">
+						    <div>업체명 : <span id="modalCpName"></span></div>
+						    <div>담당자 : <span id="modalUserName"></span></div>
+					    </div>
+						<div id="orderGrid"></div>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer justify-content-center">
+					<button type="button" class="btn" data-dismiss="modal" id="modalSubmitBtn" onclick="sendCheckedRows()">접수</button>
+					<button type="button" class="btn" data-dismiss="modal" id="modalCancelBtn">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script th:inline="javascript">
 	
 	let grid;
 	const gridData = /*[[${products}]]*/[];
 	const modalGridData = /*[[${cpList}]]*/[];
+	const orderGridData = /*[[${products}]]*/[]; 
 			
 	document.addEventListener('DOMContentLoaded', function() {
 
@@ -140,10 +177,19 @@
 		    const quantity = grid.getValue(rowKey, 'ordQuantity'); // 수량
 
 		    if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
-		        alert('수량은 숫자여야 하며 0보다 커야 합니다.');
+		        Swal.fire({
+                    icon: 'error',
+                    title: '입력오류',
+                    text: '올바르지 않은 값이 들어왔습니다.',
+                });
 		        grid.setValue(rowKey, 'ordQuantity', ''); // 수량 필드를 초기화
 		        console.log(rowKey);
 		    }
+		});
+		
+		grid.on('click', (ev) => {
+			let checkedRows = grid.getCheckedRows();
+			orderGrid.resetData(checkedRows);
 		});
 		
 		modalGrid = new tui.Grid({
@@ -183,6 +229,39 @@
 	        document.getElementById('cpInput').value = cpName; // 업체 이름
 		});
 		
+		orderGrid = new tui.Grid({
+			el : document.getElementById('orderGrid'),
+			data : orderGridData,
+			scrollX : false,
+			scrollY : true,
+			columns : [ {
+				header : '제품명',
+				name : 'prdName',
+				align : 'center',
+			}, {
+				header : '제품코드',
+				name : 'prdCode',
+				align : 'center',
+			},{
+				header : 'BOM',
+				name : 'bomCode',
+				align : 'center',
+			}, {
+				header : '단가',
+				name : 'unitPrice',
+				align : 'center',
+			}, {
+				header : '수량',
+				name : 'ordQuantity',
+				align : 'center',
+			}, ],
+			rowHeaders : [ 'rowNum' ],
+			pageOptions: {
+			    type: 'scroll',
+			    perPage: 10 
+			}, 
+		});
+		
 	    // 현재 날짜 가져오기
 	    const today = new Date();
 	 	
@@ -197,11 +276,10 @@
 
 	    // 납기일자 입력 필드에 min 속성 설정
 	    document.getElementById('dlvReqDate').setAttribute('min', formattedToday);
-			
 	});
 	
 	document.getElementById('cpInput').addEventListener('click', function() {
-		$('#myModal').modal('show'); // 모달 열기
+		$('#cpModal').modal('show'); // 모달 열기
 		modalGrid.refreshLayout();
 	});
 	
@@ -215,32 +293,43 @@
 	    grid.resetData(gridData);
 	}
 
-	function sendCheckedRows(ev) {
-
+	function openOrderModal(ev) {
 	    ev.preventDefault();
 	    
 	    const formArr = $("form[name=form]").serializeArray();
 	    const formObj = {};
-	    
+
 	    $.each(formArr, function(idx, tag) {
 	        formObj[tag.name] = tag.value;
 	    });
 
 	    // 업체 및 납기일자 유효성 검사
 	    if (!formObj.cpName) {
-	        alert('업체를 선택해주세요.');
+	        Swal.fire({
+                icon: 'warning',
+                title: '업체선택',
+                text: '업체를 선택해주세요.',
+            });
 	        return;
 	    }
 	    
 	    if (!formObj.dlvReqDate) {
-	        alert('납기일자를 설정해주세요.');
+	        Swal.fire({
+                icon: 'warning',
+                title: '납기일자 설정',
+                text: '납기일자를 설정해주세요.',
+            });
 	        return;
 	    }
 	    
 	    let checkedRows = grid.getCheckedRows();
 	    
 	    if (checkedRows.length === 0) {
-	        alert('제품을 선택해주세요.');
+	    	Swal.fire({
+                icon: 'warning',
+                title: '제품선택',
+                text: '제품을 선택해주세요.',
+            });
 	        return;
 	    }
 	    
@@ -249,38 +338,77 @@
 	        const quantity = grid.getValue(rowKey, 'ordQuantity');
 
 	        if (isNaN(quantity) || quantity === '' || Number(quantity) <= 0) {
-	            alert(`수량을 입력해주세요.`);
+	            Swal.fire({
+	                icon: 'warning',
+	                title: '수량설정',
+	                text: '수량을 입력해주세요.',
+	            });
 	            return;
 	        }
 	    }
 	    
-	 	// 사용자의 확인을 받기 위해 confirm 창 띄우기
-	    const isConfirmed = confirm("주문을 접수하시겠습니까?");
-	    if (isConfirmed) {
-	        // 병합된 데이터를 서버로 전송 (AJAX 요청)
-	        const payload = {
-	            orderVO: formObj,    // 폼 데이터 (주문 정보)
-	            productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
-	        };
+	    document.getElementById('modalCpName').innerText = document.getElementById('cpInput').value;
+	    document.getElementById('modalUserName').innerText = document.getElementById('orderUserNameHidden').value;
+	    
+	    // 유효성 검사를 통과한 후 orderModal을 열기
+	    $('#orderModal').modal('show');
+	    orderGrid.resetData(checkedRows);
+	    orderGrid.refreshLayout();
+	}
+	
+	function sendCheckedRows() {
 
-	        $.ajax({
-	            url: '/orderReception',
-	            type: 'POST',
-	            contentType: 'application/json',
-	            data: JSON.stringify(payload),
-	            success: function(response) {
-	                alert('주문이 성공적으로 접수되었습니다!');
-	                window.location.href = "orderHistory";
-	            },
-	            error: function(xhr, status, error) {
-	                console.error('Error during AJAX request:', error);
-	                alert('주문 접수 중 오류가 발생했습니다.');
-	            }
-	        });
-	    } else {
-	        alert('주문 접수가 취소되었습니다.');
-	    }
+	    const isConfirmed = Swal.fire({
+            title: '주문접수',
+            text: "주문을 접수하시겠습니까?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '주문',
+            cancelButtonText: '취소'
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	            	const formArr = $("form[name=form]").serializeArray();
+	    	        const formObj = {};
+	    	        
+	    	        $.each(formArr, function(idx, tag) {
+	    	            formObj[tag.name] = tag.value;
+	    	        });
+	
+	    	        let checkedRows = grid.getCheckedRows();
+	    	        
+	    	        const payload = {
+	    	            orderVO: formObj,    // 폼 데이터 (주문 정보)
+	    	            productVO: checkedRows  // 체크된 그리드 데이터 (상품 목록)
+	    	        };
+	
+	    	        $.ajax({
+	    	            url: '/orderReception',
+	    	            type: 'POST',
+	    	            contentType: 'application/json',
+	    	            data: JSON.stringify(payload),
+	    	            success: function(response) {
+	    	                Swal.fire({
+	    	                    icon: 'success',
+	    	                    title: '주문접수 완료',
+	    	                    text: '주문이 접수되었습니다.',
+	    	                }).then(() => {
+    		                    window.location.href = "orderHistory";
+    		                });
+	    	            },
+	    	            error: function(xhr, status, error) {
+	    	                console.error('Error during AJAX request:', error);
+	    	                Swal.fire({
+	    	                    icon: 'error',
+	    	                    title: '주문접수 실패',
+	    	                    text: '주문 접수 중 오류가 발생했습니다.',
+	    	                });
+	    	            }
+	    	        });  
+            	}
+        })
+	    
 	}
 		
-
 	</script>

@@ -18,8 +18,11 @@ tbody > tr {
 }
 
 </style>
+
 <th:block th:replace="~{common/configs/default_pageing :: pageing}"></th:block>
 <body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 	<h2 class="h2 mb-20">설비 점검</h2>
 		<div class="pd-30 card-box mb-20">
 			<div class="d-flex justify-content-between align-items-center mb-20">
@@ -36,45 +39,15 @@ tbody > tr {
 			
 			<div id="grid"></div>
 
-			<table class="table nowrap table-hover table-striped">
-				<thead>
-					<tr>
-						<th></th>
-						<th class="table-plus datatable-nosort">No.</th>
-						<th>설비코드</th>
-						<th>점검주기</th>
-						<th>점검일자</th>
-						<th>다음점검일</th>
-						<th>점검유무</th>
-					</tr>
-				</thead>
-				<tbody>
-					<th:block th:each="wait, sts : ${equipjg}">
-						<tr>
-							<td><div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="eqchck" value="option1"> 
-									<label class="form-check-label" for="eqchck"></label>
-								</div></td>
-							<td>[[${sts.count}]]</td>
-							<td>[[${wait.eqCode}]]</td>
-							<td>[[${wait.eqPeriod}]] 개월</td>
-							<td>[[ ${ #dates.format(wait.eqCkDate, "yyyy년 MM월 dd일" )}
-								]]</td>
-							<td>[[ ${ #dates.format(wait.eqNextChck, "yyyy년 MM월 dd일" )}
-								]]</td>
-							<td>[[${wait.eqChckOx}]]</td>
-						</tr>
-					</th:block>
-				</tbody>
-			</table>
 		</div>
 	
-	<script th:inline="javascript">
+<script th:inline="javascript">
     $(document).ready(function() {
         const gridData = /*[[${equipjg}]]*/[];
 
         // 날짜 포맷팅 함수 추가
         function formatDate(dateString) {
+            if (!dateString) return ''; // 날짜가 없으면 빈 문자열 반환
             const date = new Date(dateString);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -85,7 +58,13 @@ tbody > tr {
         // Toast UI Grid 초기화
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
-            data: gridData,
+            data: gridData.map(row => {
+                if (row.eqChckOx === "비가동") { // 비가동 상태인 경우
+                    row.eqCkDate = ""; // 점검일자 초기화
+                    row.eqNextChck = ""; // 다음점검일 초기화
+                }
+                return row;
+            }),
             scrollX: false,
             scrollY: false,
             columns: [
@@ -119,6 +98,12 @@ tbody > tr {
                     header: '점검유무',
                     name: 'eqChckOx',
                     align: 'center',
+                    formatter: function(item) {
+                        // "점검완료"인 경우 초록색으로 표시
+                        return item.value === '점검완료'
+                            ? `<span style="color: green;">${item.value}</span>`
+                            : item.value;
+                    }
                 },
             ],
             rowHeaders: ['checkbox'],
@@ -155,10 +140,12 @@ tbody > tr {
                     return;
                 }
 
-                // 그리드 데이터 업데이트
-                grid.setValue(row.rowKey, 'eqCkDate', formattedToday);
-                grid.setValue(row.rowKey, 'eqNextChck', formattedNextCheckDate);
-                grid.setValue(row.rowKey, 'eqChckOx', "점검완료");
+                // 비가동 상태인 경우 점검일자와 다음점검일을 업데이트하지 않음
+                if (checkStatus !== "비가동") {
+                    grid.setValue(row.rowKey, 'eqCkDate', formattedToday);
+                    grid.setValue(row.rowKey, 'eqNextChck', formattedNextCheckDate);
+                    grid.setValue(row.rowKey, 'eqChckOx', "점검완료");
+                }
 
                 // AJAX로 서버에 데이터 전송하여 DB 업데이트
                 $.ajax({
@@ -167,8 +154,8 @@ tbody > tr {
                     contentType: "application/json",
                     data: JSON.stringify({
                         eqCode: eqCode,
-                        eqCkDate: formattedToday,
-                        eqNextChck: formattedNextCheckDate,
+                        eqCkDate: checkStatus !== "비가동" ? formattedToday : null,
+                        eqNextChck: checkStatus !== "비가동" ? formattedNextCheckDate : null,
                         eqChckOx: "점검완료"
                     }),
                     success: function () {
@@ -184,6 +171,8 @@ tbody > tr {
         });
     });
 </script>
+
+
 
 
 

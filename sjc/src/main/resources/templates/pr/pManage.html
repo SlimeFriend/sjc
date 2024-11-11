@@ -4,6 +4,11 @@
 	xmlns:layout="http://www.ultraq.net/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 	<head>
      	<title>생산 공정</title>
         <style>
@@ -43,7 +48,6 @@ cursor:pointer;
                     <th>지시량</th>
                     <th>생산량</th>
                     <th>상태</th>
-                    <th>비고</th>
                 </tr>
             </thead>    
             <tbody id="plan">
@@ -59,7 +63,6 @@ cursor:pointer;
                         <td th:if="${list.status=='b1'}">대기</td>
                         <td th:if="${list.status=='b2'}">진행</td>
                         <td th:if="${list.status=='b3'}">완료</td>
-                        <td th:text="${list.comm}"></td>
                     </tr>
                 </th:block>
             </tbody>
@@ -319,7 +322,10 @@ cursor:pointer;
  	sBtn.addEventListener('click', function(){
  		// 미선택시 선택 요구
  		if(line == null){
- 			alert('생산지시를 선택해주세요.');
+ 			Swal.fire({
+                icon: 'warning',
+                text: '공정을 시작할 생산지시를 선택해주세요.',
+            })
  			
  			
  		// 선택한 지시가 있을 경우	
@@ -339,17 +345,25 @@ cursor:pointer;
  				})
  				.then(response => response.text())
  	            .then(data => {
- 	                alert(data); // 결과 출력 알림
  	                
  	                
  	                // 자재 충족 시 생산시작
  	                if(data == '생산을 시작합니다.'){
  	                	
+ 	            	Swal.fire({
+    	                icon: 'success',
+    	                text: data,
+    	            }) // 결과 출력 알림
  	                	
  	                   pstart();
 					
  	                // 자재 부족 시 아무것도 x
  	                } else{
+ 	                	
+ 	                	Swal.fire({
+ 	    	                icon: 'warning',
+ 	    	                text: data,
+ 	    	            })
  	                	
  	                }
  	            })
