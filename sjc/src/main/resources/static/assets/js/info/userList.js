@@ -377,15 +377,52 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const modifiedRows = grid.getModifiedRows().updatedRows;
 	    
 	    if (modifiedRows.length === 0) {
-	        alert('수정된 데이터가 없습니다.');
+	        //alert('수정된 데이터가 없습니다.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '수정된 데이터가 없습니다.',
+            });	        
 	        return;
 	    }
 	
+	
+		const isConfirmed = Swal.fire({
+	            title: '사용자 정보 수정',
+	            text: "사용자 정보를 수정 하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '수정', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					modifyUsers(modifiedRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '사용자정보 수정완료',
+                        text: '사용자정보 수정완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});	
+	
+		/*
 		if (confirm("수정 하시겠습니까??")){
 			modifyUsers(modifiedRows);
 		}else{
 			return;
-		}	
+		}
+		*/	
 	});
 
     function modifyUsers(modifiedRows) {
@@ -439,29 +476,76 @@ document.addEventListener('DOMContentLoaded', function() {
 	    
 	    modifiedRows.forEach(object => {
 			if	(object == null || object == ""){
-		        alert('데이터 입력하세요.');
+		        //alert('데이터 입력하세요.');
+				Swal.fire({
+	                icon: 
+	                'warning',		// !	
+	                text: '데이터 입력하세요.',
+	            });		        
 		        return false;
 			}
 			
 		});
 	    
 	    if (modifiedRows.length == 0) {
-	        alert('등록된 데이터가 없습니다.');
+	        //alert('등록된 데이터가 없습니다.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '등록된 데이터가 없습니다.',
+            });	        
 	        return false;
 	    }
 	    
 	    if(gridInsert.validate() == 0){
 			// do nothing
 		}else if (gridInsert.validate()[0].errors.length > 0) {
-	        alert('형식에 맞게 입력하세요.');
+	        //alert('형식에 맞게 입력하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '형식에 맞게 입력하세요.',
+            });	        
 	        return false;
 	    }
 	
+	
+		const isConfirmed = Swal.fire({
+	            title: '사용자 등록',
+	            text: "사용자 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					saveUsers(modifiedRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '사용자 등록완료',
+                        text: '사용자 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});	
+	
+		/*
 		if (confirm("등록 하시겠습니까??")){
 			saveUsers(modifiedRows);
 		}else{
 			return false;
 		}
+		*/
 		
 	});
 	
@@ -543,15 +627,54 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		const checkedRows = grid.getCheckedRows();
 		if (checkedRows.length === 0) {
-			alert('삭제할 항목을 선택해주세요.');
+			
+			//alert('삭제할 항목을 선택해주세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '삭제할 항목을 선택해주세요.',
+            });			
 	    	return;
 		}
-	  
+
+
+		const isConfirmed = Swal.fire({
+	            title: '사용자 등록',
+	            text: "사용자 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '삭제', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					deleteUsers(checkedRows.map(row => row.userId));
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '사용자 삭제완료',
+                        text: '사용자 삭제가 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+
+
+	  	/*
 		if (confirm("삭제하시겠습니까??")){
 			deleteUsers(checkedRows.map(row => row.userId));
 		}else{
 			return;
 		}
+		*/
 	});
 
     function deleteUsers(userIds) {
@@ -571,7 +694,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 		.catch(error => {
 			console.error('Delete error:', error);
-			alert('삭제 중 오류가 발생했습니다.');
+			//alert('삭제 중 오류가 발생했습니다.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '삭제 중 오류가 발생했습니다.',
+            });			
 		});
     }
     

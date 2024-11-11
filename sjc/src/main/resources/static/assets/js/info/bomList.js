@@ -486,25 +486,85 @@ document.addEventListener('DOMContentLoaded', function() {
 		    );
 		
 		    if (invalidRows.length > 0) {
-		        alert('입력값을 확인하세요.');
+				
+		        //alert('입력값을 확인하세요.');
+				Swal.fire({
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                'warning',		// !	
+	                //'info',		// i	
+	                //'question', 	// ?
+	                text: '필요수량 입력값을 확인하세요.',
+	            });				
 		        return false;
 		    }
 						
 			const description = document.querySelector('textarea[name="description"]').value;
 			if (!description || description.trim() === '') {
-			    alert('설명을 입력하세요.');
+			    //alert('설명을 입력하세요.');
+				Swal.fire({
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                'warning',		// !	
+	                //'info',		// i
+	                //'question', 	// ?
+	                text: '설명을 입력하세요.',
+	            });				
 			    return false;
 			}			
+
+
+
+		const isConfirmed = Swal.fire({
+	            title: 'BOM 등록',
+	            text: "BOM 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+	        		registerBoms(selectedRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'BOM 등록완료',
+                        text: 'BOM 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+
 			
+			/*
         	if (confirm("새로운 BOM을 등록하시겠습니까??") == true){
         		//registerBoms(selectedRows.map(row => row.mtCode));
         		registerBoms(selectedRows);
         	}else{
         		return false;
         	}
+        	*/
         	
         } else {
-            alert('자재를 선택하세요.');
+			//alert('자재를 선택하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '자재를 선택하세요.',
+            });				
+		    return false;
+			
         }
     });
 
@@ -670,6 +730,46 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
     document.getElementById('BomDetailModalDeleteBtn').addEventListener('click', function() {
+		
+		const isConfirmed = Swal.fire({
+            title: 'BOM 삭제',
+            text: "BOM을 삭제하시겠습니까?",
+            icon: 
+            //'success';	// v
+            //'error',		// X
+            'warning',		// !	
+            //'info',		// i
+            //'question', 	// ?
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '삭제',//수정필요.
+            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					const getData = gridBomDetailModal.getData();
+					console.log(getData);
+					
+					const map = getData.map(row => ({
+					    bomCode: row.bomCode,
+					    bdetailCode: row.bdetailCode
+					}));
+					console.log(map);
+					
+					deleteBoms(map);
+										
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'BOM 삭제완료',
+                        text: 'BOM 삭제가 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        })		
+		
+		/*
 		if (confirm("삭제하시겠습니까??")){
 
 
@@ -684,6 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			deleteBoms(map);
 		}
+		*/
     });
     function deleteBoms(bomVOs) {
 		fetch('boms', {
@@ -702,7 +803,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 		.catch(error => {
 			console.error('Delete error:', error);
-			alert('삭제 중 오류가 발생했습니다.');
+			//alert('삭제 중 오류가 발생했습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                'error',		// X
+                //'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '삭제 중 오류가 발생했습니다.',
+            });			
 		});
     }
 

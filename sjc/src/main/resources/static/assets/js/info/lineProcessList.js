@@ -147,15 +147,57 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const modifiedRows = gridLine.getModifiedRows().updatedRows;
 	    
 	    if (modifiedRows.length === 0) {
-	        alert('수정된 데이터가 없습니다.');
+	        //alert('수정된 데이터가 없습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '수정된 데이터가 없습니다.',
+            });	        
 	        return;
 	    }
 	
+
+		const isConfirmed = Swal.fire({
+	            title: '라인 수정',
+	            text: "라인 수정하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '수정', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					modifyLines(modifiedRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '라인 수정완료',
+                        text: '라인 수정이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+
+	
+		/*
 		if (confirm("수정 하시겠습니까??")){
 			modifyLines(modifiedRows);
 		}else{
 			return;
-		}	
+		}
+		*/	
 	});    
     
     function modifyLines(modifiedRows) {
@@ -243,5 +285,81 @@ document.addEventListener('DOMContentLoaded', function() {
 	    gridLine.finishEditing();
 	    gridProcess.finishEditing();
 	});
+	
+	
+	function fetchSetColums(){
+        const url = `prds`;
+
+        fetch(url)
+        .then(response => response.json())
+        .then(result => {
+			
+			const listPrdCode = result.map(productVO => ({
+				value: productVO.prdCode,
+				text: productVO.prdCode + " " + productVO.prdName
+			}));
+			
+			const listPrdName = result.map(productVO => ({
+				value: productVO.prdName,
+				text: productVO.prdName
+			}));
+			
+            gridLineSetColums(listPrdCode);
+            
+        })
+        .catch(error => {
+            console.error(error);
+        });
+	}
+	fetchSetColums();
+
+	function gridLineSetColums(listPrdCode){
+		
+		let listItemsAjax;
+	
+	    const columns = [
+	            {
+	                header: '라인코드',
+	                name: 'lineCode',
+	                align: 'center',
+	                sortingType: 'desc',
+	                sortable: true,
+	            },
+	            {
+	                header: '제품코드',
+	                name: 'prdCode',
+	                align: 'center',
+	                sortingType: 'desc',
+	                sortable: true,
+	                editor: 'text',
+	                editor: {
+	                  type: 'select',
+	                  options: {
+	                    listItems : listPrdCode
+	                  }
+	                },	                                  
+	            },
+	            /*
+	            {
+	                header: '제품명',
+	                name: 'prdName',
+	                align: 'center',
+	                sortingType: 'desc',
+	                sortable: true,
+	            },
+	            */
+	            {
+	                header: '사용여부',
+	                name: 'use',
+	                align: 'center',
+	                sortingType: 'desc',
+	                sortable: true                  
+	            },
+	        ];
+		
+		
+		gridLine.setColumns(columns);
+	}
+
         
 });

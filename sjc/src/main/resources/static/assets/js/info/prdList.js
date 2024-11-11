@@ -272,17 +272,70 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (bom) {
 		    console.log('bom : ', bom);
 		} else {
-		    alert('선택된 BOM이 없습니다.');
+		    //alert('선택된 BOM이 없습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i	
+                //'question', 	// ?
+                text: '선택된 BOM이 없습니다.',
+            });		    
 		    return false;
 		}
 		
 		if (prd) {
 		    console.log('prd : ', prd);
 		} else {
-		    alert('선택된 제품이 없습니다.');
+		    //alert('선택된 제품이 없습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i	
+                //'question', 	// ?
+                text: '선택된 제품이 없습니다.',
+            });			    
 		    return false;
 		}
 		
+		
+		const isConfirmed = Swal.fire({
+	            title: 'BOM 지정',
+	            text: "BOM 지정 하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '지정', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					const requestData = {
+					    prd: prd,
+					    bom: bom
+					};			
+					fetchBomPrd(requestData);
+										
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'BOM 지정완료',
+                        text: 'BOM 지정이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+		
+		/*
 		if(confirm("BOM 지정 하시겠습니까?")){
 			// prd bom 업데이트
 			// bom prd 업데이트
@@ -292,6 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			};			
 			fetchBomPrd(requestData);
 		}
+		*/
     });
     function fetchBomPrd(requestData) {
 	    fetch('prdBom', {
@@ -875,7 +929,7 @@ events.forEach(eventName => {
 		    	grid.uncheckAll();
 		    	grid.check(ev.rowKey);
 		    	const selectedRowData = grid.getRow(ev.rowKey);
-		    	console.log('mousedown1 : ', selectedRowData);
+		    	//console.log('mousedown : ', selectedRowData);
 	
 	    		if(selectedRowData == null){
 	            	return false;
@@ -904,7 +958,7 @@ events.forEach(eventName => {
 	           grid.uncheckAll();
 	           grid.check(ev.rowKey);
 	           const selectedRowData = grid.getRow(ev.rowKey);
-	           console.log('gridPrd : ', selectedRowData);
+	           //console.log('gridPrd : ', selectedRowData);
 	
 	           if(selectedRowData == null){
 	               return false;
@@ -1000,37 +1054,110 @@ events.forEach(eventName => {
 			    );
 			
 			    if (invalidRows.length > 0) {
-			        alert('필요수량 값을 확인하세요.');
+			        //alert('필요수량 값을 확인하세요.');
+					Swal.fire({
+		                icon: 
+		                'warning',		// !	
+		                text: '필요수량 값을 확인하세요.',
+		            });			        
 			        return false;
 			    }
 	        } else {
-	            alert('자재를 선택하세요.');
+	            //alert('자재를 선택하세요.');
+				Swal.fire({
+	                icon: 
+	                'warning',		// !	
+	                text: '자재를 선택하세요.',
+	            });		            
+	            
 	            return false;
 	        }
 			
 		}
 	    const prdCode = document.querySelector('input[type="text"][name="prdCode"]').value;
 		if (!prdCode || prdCode.trim() === '') {
-		    alert('제품코드를 입력하세요.');
+		    //alert('제품코드를 입력하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '제품코드를 입력하세요.',
+            });		    
 		    return false;
 		}	    
 	    const prdName = document.querySelector('input[type="text"][name="prdName"]').value;
 		if (!prdName || prdName.trim() === '') {
-		    alert('제품명을 입력하세요.');
+		    //alert('제품명을 입력하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '제품명을 입력하세요.',
+            });		    
 		    return false;
 		}	    
 	    const unitPrice = document.querySelector('input[type="text"][name="unitPrice"]').value;
 		if (!unitPrice || unitPrice.trim() === '') {
-		    alert('단가를 입력하세요.');
+		    //alert('단가를 입력하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '단가를 입력하세요.',
+            });		    
 		    return false;
 		}	    
 
 		const description = document.querySelector('textarea[name="description"]').value;
 		if (!description || description.trim() === '') {
-		    alert('설명을 입력하세요.');
+		    //alert('설명을 입력하세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '설명을 입력하세요.',
+            });		    
 		    return false;
 		}			
 		
+		
+		const isConfirmed = Swal.fire({
+	            title: '제품 등록',
+	            text: "제품을 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+		    		//registerBoms(selectedRows.map(row => row.mtCode));
+		    		//registerBoms(selectedRows);
+		    		registerPrdBom(selectedRows);
+
+			        $('#mtModal').modal('hide');
+				    document.querySelector('textarea[name="description"]').value="";
+				    //document.querySelector('input[type="date"][name="regDate"]').value="";
+				    document.querySelector('input[type="text"][name="manager"]').value="";
+				    document.querySelector('input[type="text"][name="prdCode"]').value="";
+				    document.querySelector('input[type="text"][name="prdName"]').value="";
+				    document.querySelector('input[type="text"][name="unitPrice"]').value="";
+				    document.querySelector('input[type="text"][name="comm"]').value="";
+		    							
+                    Swal.fire({
+                        icon: 'success',
+                        title: '제품 등록완료',
+                        text: '제품 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});		
+		
+		/*
     	if (confirm("새로운 제픔을 등록하시겠습니까??") == true){
     		//registerBoms(selectedRows.map(row => row.mtCode));
     		//registerBoms(selectedRows);
@@ -1038,16 +1165,10 @@ events.forEach(eventName => {
     	}else{
     		return false;
     	}
+    	*/
         	
         
-        $('#mtModal').modal('hide');
-	    document.querySelector('textarea[name="description"]').value="";
-	    //document.querySelector('input[type="date"][name="regDate"]').value="";
-	    document.querySelector('input[type="text"][name="manager"]').value="";
-	    document.querySelector('input[type="text"][name="prdCode"]').value="";
-	    document.querySelector('input[type="text"][name="prdName"]').value="";
-	    document.querySelector('input[type="text"][name="unitPrice"]').value="";
-	    document.querySelector('input[type="text"][name="comm"]').value="";
+
 
         
         
@@ -1257,7 +1378,12 @@ events.forEach(eventName => {
 		const checkedRows = gridPrd.getCheckedRows();
 		
 		if (checkedRows.length === 0) {
-			alert('수정할 제품을 선택해주세요.');
+			//alert('수정할 제품을 선택해주세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '수정할 제품을 선택해주세요.',
+            });			
 	    	return;
 		}
 		/*
@@ -1331,15 +1457,53 @@ events.forEach(eventName => {
 		
 		const checkedRows = gridPrd.getCheckedRows();
 		if (checkedRows.length === 0) {
-			alert('삭제할 제품을 선택해주세요.');
+			//alert('삭제할 제품을 선택해주세요.');
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '삭제할 제품을 선택해주세요.',
+            });			
+			
 	    	return;
 		}
-	  
+
+
+		const isConfirmed = Swal.fire({
+	            title: '제품 삭제',
+	            text: "제품을 삭제 하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					deletePrds(checkedRows.map(row => row.prdCode));
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '제품 삭제완료',
+                        text: '제품 삭제가 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});		
+
+	  	/*
 		if (confirm("삭제 하시겠습니까??")){
 			deletePrds(checkedRows.map(row => row.prdCode));
 		}else{
 			return;
 		}
+		*/
 	});    
     function deletePrds(prdCodes){
 		fetch("prds",{
@@ -1365,16 +1529,80 @@ events.forEach(eventName => {
 	    const updatedRows = gridPrdModal.getModifiedRows().updatedRows;
 	    
 	    if (updatedRows.length > 0) {
+			
+			
+		const isConfirmed = Swal.fire({
+	            title: '제품 수정',
+	            text: "제품을 수정 하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '수정', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					updatePrds(updatedRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '제품 수정완료',
+                        text: '제품 수정이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});			
+			
+			/*
 			if (confirm("수정 하시겠습니까??")){
 				updatePrds(updatedRows);
 			}else{
 				return;
-			}	
+			}
+			*/
+			
+	    }else{
+			
+			
+			const isConfirmed = Swal.fire({
+		            title: '수정 사항 없음',
+		            text: "수정한 내용이 없습니다. 종료 하시겠습니까?",
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                //'warning',		// !	
+	                'info',		// i
+	                //'question', 	// ?
+		            showCancelButton: true,
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: '확인', // 수정.
+		            cancelButtonText: '취소'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+						// do something.
+			        	$('#prdModal').modal('hide');
+						return false;
+	                }else{
+	    				return false;
+					}
+	        	});			
+			
+		}
+		/*	
 	    }else if(confirm("수정한 내용이 없습니다. 종료 하시겠습니까?")){
 	        $('#prdModal').modal('hide');
 			return false;
 			
 		}
+		*/
 	});
     function updatePrds(updatedRows) {
 	    fetch('prds', {
