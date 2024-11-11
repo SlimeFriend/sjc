@@ -255,14 +255,35 @@
 			data: JSON.stringify(list),
 			success: function(response){
 				console.log('입고 성공', response);
-				alert('입고 성공', response);
-				
+				//alert('입고 성공', response);
+				const isConfirmed = Swal.fire({
+		            title: '입고',
+		            text: "입고하시겠습니까?",
+		            icon: 'warning',
+		            showCancelButton: true,
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: '입고',
+		            cancelButtonText: '취소'
+		            }).then((result) => {
+		                if (result.isConfirmed) {
+		                    Swal.fire({
+		                        icon: 'success',
+		                        title: '입고접수',
+		                        text: '입고가 완료되었습니다.',
+		                    });
+		                }
+		        })
 				location.reload();
 			},
 			
 			error: function(xhr, status, error){
-				console.error('입고 실패', error);
-				alert('입고 실패', error);
+				//alert('입고 실패', error);
+				Swal.fire({
+                    icon: 'error',
+                    title: '입고 실패',
+                    text: '입고에 실패하었습니다.',
+                });
 			}
 		
 		})
@@ -303,15 +324,38 @@
 			contentType: 'application/json',
 			data: JSON.stringify(data),
 			success: function(response){
-				console.log('반품 성공', response);
-				alert('반품 성공', response);
-				
+				//alert('반품 성공', response);
+				const isConfirmed = Swal.fire({
+		            title: '반품',
+		            text: "반품하시겠습니까?",
+		            icon: 'warning',
+		            showCancelButton: true,
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: '반품',
+		            cancelButtonText: '취소'
+		            }).then((result) => {
+		                if (result.isConfirmed) {
+		                    Swal.fire({
+		                        icon: 'success',
+		                        title: '반품접수',
+		                        text: '반품 완료되었습니다.',
+		                    });
+		                }
+		        })
 				location.reload();
 			},
 			
 			error: function(xhr, status, error){
-				console.error('반품 실패', error);
-				alert('반품 실패', error);
+				//alert('반품 실패', error);
+		                    Swal.fire({
+		                        icon: 'error',
+		                        title: '반품 실패',
+		                        text: '반품에 실패하였습니다.',
+		                    });
+		                
+		        
+				
 			}
 		
 		})

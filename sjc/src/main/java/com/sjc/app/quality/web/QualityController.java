@@ -116,7 +116,7 @@ public class QualityController {
 
 			} else {
 				// 검사대기->검사중 - mtlOdStatus, mtlOdDetailStatus
-				 qualityService.mtlOdStatusUpdate(inspectionVO);
+				 qualityService.mtlOdStatusUpdate(inspectionVO);//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요//수정필요
 				 qualityService.mtlOdDetailStatusUpdate(inspectionVO);
 				// inspection 데이터 생성
 				qualityService.insertInspection(inspectionVO);
@@ -135,13 +135,13 @@ public class QualityController {
 
 			int countInsItem = qualityService.insItemCount(inspectionVO);
 
-			// 자재입고검사완료페이지- 검사리스트 출력
+			// 검사리스트 출력
 			testList = qualityService.testDetailSelect(inspectionVO);
 			if (countInsItem == 0) {
 
 				for (InspectionVO insVO : testList) {
 					insVO.setInsCode(insCode);
-					// 자재입고검사완료페이지- insDetail 생성
+					// insDetail 생성
 					qualityService.insertInsDetail(insVO);
 				}
 
@@ -149,7 +149,7 @@ public class QualityController {
 
 			InspectionVO insDetailVO = new InspectionVO();
 			insDetailVO.setInsCode(insCode);
-			// 자재입고검사완료페이지- insDetail 데이터 출력
+			// insDetail 데이터 출력
 			insDetailList = qualityService.insDetailList(insDetailVO);
 
 			List<InspectionVO> newList = new ArrayList<>();

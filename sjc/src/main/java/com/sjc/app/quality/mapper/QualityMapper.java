@@ -49,8 +49,10 @@ public interface QualityMapper {
 	public List<InspectionVO> selectTest();
 	//검사기준목록
 	public List<InspectionVO> selectTest2();
-	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
+	// 입고등록페이지 - 등록버튼 - mtl_od.mtl_od_status 검사완료
 	public void updateMtlOdSt(InspectionVO inspectionVO);
+	// 입고등록페이지 - 저장버튼 - inspection.ins_status 검사완료
+	public void updateMtlOdDetailSt(InspectionVO inspectionVO);
 	
 	
 	// 자재입고검사완료 - 조회

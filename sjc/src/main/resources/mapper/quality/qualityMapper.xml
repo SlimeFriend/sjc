@@ -61,6 +61,11 @@
 						AND 
 					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
 				)
+			OR (
+					o.mtl_od_status = '입고품질검사완료'
+						AND 
+					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
+				)
 		GROUP BY ROLLUP ((o.mtl_od_code 
 							, o.cp_code
 							, c.cp_name
@@ -79,6 +84,7 @@
 	<select id="selectMtlOdDetail" parameterType="String" resultType="map">
 	    SELECT 	d.mtl_od_code  			AS "mtlOdCode"
 	        	, d.mtl_od_detail_code 	AS "mtlOdDetailCode"
+	        	, d.mtl_od_detail_status 	AS "mtlOdDetailStatus"
 	        	, d.mt_code 			AS "mtCode"
 	        	, d.quantity 			AS "mtlOdDetailQuantity"
 	        	, m.mt_name 			AS "mtName"
@@ -110,11 +116,6 @@
 	</update>
 	
 
-	<update id="updateMtlOdDetailStatus">
-		UPDATE mtl_od_detail
-		SET mtl_od_detail_status = '개별입고품질검사중'
-		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
-	</update>
 
 	
 	
@@ -267,7 +268,12 @@
 		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
 	</update>
 	
-	
+
+	<update id="updateMtlOdDetailStatus">
+		UPDATE mtl_od_detail
+		SET mtl_od_detail_status = '개별입고품질검사중'
+		WHERE mtl_od_detail_code = #{mtlOdDetailCode}
+	</update>	
 	
 	<select id="selectInsDetail" resultType="InspectionVO">
 			SELECT 	ins_detail_code
