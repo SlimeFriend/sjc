@@ -132,6 +132,7 @@ public class EqServiceImpl implements EqService {
 	
 	// 비가동 목록 "가동"으로 변경
 	@Override
+	@Transactional
 	  public Map<String, Object> updateEqChck(EqVO eqVO) {
 		  
 		  Map<String, Object> map = new HashMap<>();
@@ -139,6 +140,11 @@ public class EqServiceImpl implements EqService {
 	  boolean isSuccessed = false;
 	  
 	  int result = eqMapper.updateEqChckInfo(eqVO);
+	  
+	  if(result == 1) { isSuccessed = true; }
+	  
+	  // start_date가 최근일자 점검완료.
+	  eqMapper.updateEqChckNew(eqVO);
 	  
 	  if(result == 1) { isSuccessed = true; }
 	  

@@ -170,7 +170,7 @@ from    eq
 	FROM eq_chck ec
 	join eq e
 	on ec.eq_code = e.eq_code
-	ORDER BY eq_code
+	ORDER BY ec.start_date desc, e.eq_code
 </select>
 
 <!-- 비가동 내역 검색 -->
@@ -244,6 +244,22 @@ from    eq
           eq_nextchck = #{eqNextChck}
         , eq_chckox = #{eqChckOx}
     WHERE eq_code = #{eqCode}
+</update>
+
+<update id="updateEqChckNew" parameterType="EqChckVO">
+	UPDATE  eq_chck
+	SET     end_date = SYSDATE
+	        ,eq_chckox = '점검완료'
+	WHERE (eq_code, start_date) IN (
+	    SELECT eq_code, start_date
+	    FROM (
+	        SELECT eq_code, start_date
+	        FROM eq_chck
+	        WHERE eq_code = #{eqCode}
+	        ORDER BY start_date DESC
+	    )
+	    WHERE ROWNUM = 1
+	)
 </update>
 
 </mapper>

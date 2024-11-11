@@ -124,7 +124,9 @@ tbody > tr {
                         <div class="mb-3">
                             <label for="use" class="form-label">사용여부</label> 
                             <select name="use" id="use" class="form-control">
-                                <option value="" selected>선택</option>
+                            	<!-- 
+                                <option value="" selected disabled>선택</option>
+                            	 -->
                                 <option id="use" value="Y">가동</option>
                                 <option id="use" value="N">비가동</option>
                             </select>
@@ -275,10 +277,30 @@ tbody > tr {
             const rowData = grid.getRow(rowKey);
             const eqCode = rowData.eqCode;
             const eqName = rowData.eqName;
+            const use = rowData.use;
 
             $('#eqCode').val(eqCode);
             $('#eqName').val(eqName);
-            $('#use').val(rowData.use === 'Y' ? 'Y' : 'N').trigger('change'); 
+            //$('#use').val(rowData.use === 'Y' ? 'Y' : 'N').trigger('change');
+            //$('#use').val(rowData.use);
+            // 가동이면 비가동만 선택, 비가동이면 가동만 선택.
+			const $use = $('#use');
+			const currentValue = use;  // 현재 값 저장
+			
+			// 모든 옵션 초기화
+			$use.find('option[value="Y"], option[value="N"]')
+			    .prop('disabled', false)
+			    .prop('selected', false);
+			
+			// 현재 값에 따라 처리
+			if (currentValue === 'Y') {
+			    $use.find('option[value="Y"]').prop('disabled', true);
+			    $use.val('N').trigger('change');;  // val()로 직접 값 설정
+			} else if (currentValue === 'N') {
+			    $use.find('option[value="N"]').prop('disabled', true);
+			    $use.val('Y').trigger('change');;  // val()로 직접 값 설정
+			}
+			
             $('#nOpModal').data('selectedRowKey', rowKey); 
             $('#nOpModal').modal('show');
         });
@@ -286,6 +308,7 @@ tbody > tr {
         $('#modalSubmitBtn').on('click', function() {
             const eqCode = $('#eqCode').val();
             const useValue = $('#use').val();
+            alert(useValue);
             const selectedRowKey = $('#nOpModal').data('selectedRowKey');
 
             if (useValue === 'Y') {
