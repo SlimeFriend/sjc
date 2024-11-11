@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'warning',		// !	
                 //'info',		// i	
                 //'question', 	// ?
-                text: '형식에 맞게 입력하세요.',
+                text: '업체명은 한글 및 영문만 가능합니다.',
             });		        
 	        return false;
 	    }
@@ -655,8 +655,8 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#updateBtn').on('click', function(){
 		
 		const isConfirmed = Swal.fire({
-	            title: 'BOM 등록',
-	            text: "BOM 등록하시겠습니까?",
+	            title: '업체 수정',
+	            text: "업체를 수정하시겠습니까?",
                 icon: 
                 //'success';	// v
                 //'error',		// X
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	            showCancelButton: true,
 	            confirmButtonColor: '#3085d6',
 	            cancelButtonColor: '#d33',
-	            confirmButtonText: '등록', // 수정.
+	            confirmButtonText: '수정', // 수정.
 	            cancelButtonText: '취소'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -694,8 +694,8 @@ document.addEventListener('DOMContentLoaded', function() {
 					
                     Swal.fire({
                         icon: 'success',
-                        title: 'BOM 등록완료',
-                        text: 'BOM 등록이 완료 되었습니다.',
+                        title: '업체 수정완료',
+                        text: '업체 수정이 완료 되었습니다.',
                     });
                 }else{
     				return false;

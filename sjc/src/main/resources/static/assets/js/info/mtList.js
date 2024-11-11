@@ -313,7 +313,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 align: 'center',
                 sortingType: 'desc',
                 sortable: true,
-                editor: 'text',                  
+                editor: 'text',
+                validation: {
+					required: true,
+			        regExp: /^[가-힣a-zA-Z]+$/
+                },                                  
             },
             {
                 header: '자재구분',
@@ -522,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'warning',		// !	
                 //'info',		// i
                 //'question', 	// ?
-                text: '형식에 맞게 입력하세요.',
+                text: '자재명은 한글 및 영문만 가능합니다.',
             });		        
 	        return false;
 	    }

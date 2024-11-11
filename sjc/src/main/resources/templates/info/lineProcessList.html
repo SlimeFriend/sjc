@@ -13,7 +13,7 @@
     <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 
 <style>
-	.gridClass td.tui-grid-cell-editable {
+	.tui-grid-cell-editable {
 	  cursor: pointer;
 	}
 </style>
@@ -45,7 +45,7 @@
 					   </div>						    
 						
 						<div class="col-auto ml-auto">
-					        <button class="btn btn-sm btn-success mr-3 text-nowrap" id="insertLineBtn">등록</button>
+					        <button class="btn btn-sm btn-success mr-3 text-nowrap" id="showLineInsertModalBtn">등록</button>
 					        <button class="btn btn-sm btn-warning mr-3 text-nowrap" id="updateLineBtn">수정</button>
 					        <button class="btn btn-sm btn-danger text-nowrap" id="deleteLineBtn">삭제</button>						    
 						</div>						
@@ -81,14 +81,49 @@
 
 					<div class="gridClass" id="gridProcess"></div>
 				</div>
-				
-
-
-				
 			</div>
 <!-- 
 		</div>
 	</div>
- -->			
+ -->
+ 
+ 
+ 	<div class="modal" id="lineInsertModal">
+		<div class="modal-dialog modal modal-dialog-centered">
+			<div class="modal-content">
+	            <div class="pd-20 card-box mb-20" style="width: 100%;">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">라인 등록</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="d-flex justify-content-between align-items-center align-middle mb-20">
+							<div>
+						        <h2 class="h5 mb-0">라인 목록</h2>
+							</div>
+							<div>
+						        <button class="btn btn-primary mr-3" id="appendLineBtn">행 추가</button>
+						        <!-- 
+						        <button class="btn btn-success mr-3" id="insertCpBtn">등록</button>
+						        <button class="btn btn-warning mr-3" id="updateCpBtn">수정</button>
+						        <button class="btn btn-danger" id="deleteCpBtn">삭제</button>
+						         -->
+							</div>
+						</div>							
+						<div id="gridLineInsertModal"></div>
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-success" id="insertLineBtn">저장</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelLineBtn">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+ 			
 </body>
 	<script th:src="@{/assets/js/info/lineProcessList.js}"></script>
