@@ -9,6 +9,13 @@
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JavaScript -->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <style>
 /* tui-grid 선택 테두리 제거 */
 .tui-grid-layer-focus-border {
@@ -26,32 +33,32 @@
 	<div class="pd-30 card-box mb-20">
 		<h4 class="h5 mb-20">발주 요청 등록</h4>
 
-			<!-- 업체 선택 -->
-			<div class="form-group">
-				<label for="cpCode">업체 선택</label> <select name="cpCode"
-					class="form-control" onchange="loadItemsForCpCode(this.value)">
-					<option value="">업체를 선택하세요</option>
-					<option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
-						th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}"
-						th:selected="${selectedCpCode == cp.cpCode}"></option>
-				</select>
-			</div>
-
-			<th:block sec:authorize="isAuthenticated()">
-				<label>담당자</label>
-				<input class="form-control" type="text" id="userName"
-					th:value="${#authentication.principal.authorities[2]}" readonly>
-				<input type="hidden"
-					th:value="${#authentication.principal.authorities[1]}"
-					name="userId" id="userId">
-			</th:block>
-
-
-			<!-- 발주 품목 선택 그리드 -->
-			<div id="itemGrid" style="width: 100%; height: 300px;"></div>
-			<button type="button" class="btn btn-primary mt-3"
-				onclick="submitOrderRequest()">발주 요청 제출</button>
+		<!-- 업체 선택 -->
+		<div class="form-group">
+			<label for="cpCode">업체 선택</label> <select name="cpCode"
+				class="form-control" onchange="loadItemsForCpCode(this.value)">
+				<option value="">업체를 선택하세요</option>
+				<option th:each="cp : ${cpInfoList}" th:if="${cp.cpType == '자재'}"
+					th:value="${cp.cpCode}" th:text="${cp.cpCode + ' / ' + cp.cpName}"
+					th:selected="${selectedCpCode == cp.cpCode}"></option>
+			</select>
 		</div>
+
+		<th:block sec:authorize="isAuthenticated()">
+			<label>담당자</label>
+			<input class="form-control" type="text" id="userName"
+				th:value="${#authentication.principal.authorities[2]}" readonly>
+			<input type="hidden"
+				th:value="${#authentication.principal.authorities[1]}" name="userId"
+				id="userId">
+		</th:block>
+
+
+		<!-- 발주 품목 선택 그리드 -->
+		<div id="itemGrid" style="width: 100%; height: 300px;"></div>
+		<button type="button" class="btn btn-primary mt-3"
+			onclick="submitOrderRequest()">발주 요청 제출</button>
+	</div>
 
 
 	<script>
@@ -105,7 +112,7 @@
 
         function submitOrderRequest() {
             const cpCode = document.querySelector("select[name='cpCode']").value;
-            const userId = document.getElementById("userId").value;  // 문자열 그대로 가져옴
+            const userId = document.getElementById("userId").value;  
             const items = itemGrid.getData().filter(item => item.quantity > 0);
 
             console.log("cpCode:", cpCode);
@@ -113,36 +120,68 @@
             console.log("items:", items);
 
             if (!cpCode) {
-                alert("업체를 선택하세요.");
+            	Swal.fire({
+                    icon: 'warning',
+                    text: '업체를 선택하세요.',
+                });
+               
                 return;
             }
             
             if (!userId) {
-                alert("담당자 ID가 올바르지 않습니다.");
+            	Swal.fire({
+                    icon: 'warning',
+                    text: '담당자 ID가 올바르지 않습니다.',
+                });
+               
                 return;
             }
 
             if (items.length === 0) {
-                alert("발주 수량을 입력하세요.");
-                return;
+             
+         	Swal.fire({
+                icon: 'warning',
+                text: '발주 수량을 입력하세요.',
+            });
+           
+            return;
             }
-
             fetch('/orderRequest/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cpCode, userId, items })
             })
             .then(response => {
-                if (response.ok) {
-                    window.location.href = "/orderRequestList";
+                if (response.ok) 
+                { 
+                	Swal.fire({
+                        title: '주문',
+                        text: "발주요청이 완료되었습니다.",
+                        icon: 'success',
+
+                        confirmButtonColor: '#3085d6',
+                     
+                        confirmButtonText: '확인',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                            	window.location.href = "/orderRequestList";
+                            }
+                    })
+                   
+                   
                 } else {
-                    alert("발주 요청 등록에 실패했습니다.");
+                	Swal.fire({
+                        icon: 'warning',
+                        text: '발주 요청 등록에 실패했습니다.',
+                    });
                 }
+              
+              
             })
             .catch(error => console.error("Error submitting order request:", error));
         }
         
-  
+        
 
 
     </script>
