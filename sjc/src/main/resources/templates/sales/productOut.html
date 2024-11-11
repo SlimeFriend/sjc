@@ -498,8 +498,10 @@
 			                    icon: 'warning',
 			                    title: '재고부족',
 			                    text: '해당 제품은 재고가 부족합니다.',
+			                }).then(()=>{
+			                	alertTriggered = true; // 알림이 발생했음을 기록
 			                });
-			                alertTriggered = true; // 알림이 발생했음을 기록
+			               
 			            }
 			            productLotGrid.setValue(i, 'OUT_QUANTITY', ""); // 출고량 초기화
 			            
