@@ -111,9 +111,9 @@ tbody > tr {
                                 </div>
                                 <div class="mb-3">
                                     <label for="nOpTime" class="form-label">비가동 기간 :
-                                    </label> 시작 <input type="datetime-local" id="modalStartDate" name="startDate" class="form-control">
+                                    </label> 시작 <input type="date" id="modalStartDate" name="startDate" class="form-control">
                                              <br />
-                                             종료 <input type="datetime-local" id="modalEndDate" name="endDate" class="form-control">
+                                             종료 <input type="date" id="modalEndDate" name="endDate" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="reason" class="form-label">사유 :</label> 
@@ -259,6 +259,7 @@ tbody > tr {
                     header : '종료날짜',
                     name : 'endDate',
                     align : 'center',
+                    
                 },
             ],
             rowHeaders : [ 'rowNum' ],
@@ -308,19 +309,19 @@ tbody > tr {
                             Swal.fire({
                                 icon: 'success',
                                 text: '"가동" 상태로 업데이트 되었습니다.',
+                            }).then(() => {
+                                location.reload(); // 페이지 새로고침
                             });
                         } else {
-                        	Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 text: '업데이트를 실패하였습니다.',
                             });
                         }
                         $('#nOpModal').modal('hide');
-                        $('#nOpModal').reset();
-                        
                     },
                     error: function(error) {
-                    	Swal.fire({
+                        Swal.fire({
                             icon: 'error',
                             text: '업데이트를 실패하였습니다.',
                         });
@@ -333,8 +334,6 @@ tbody > tr {
             const startDate = $('#modalStartDate').val();
             const endDate = $('#modalEndDate').val();
             const reason = $('#reason').val();
-			console.log(startDate);
-			console.log(endDate);
             $.ajax({
                 type: "POST",
                 url: "/nOpRegister",
@@ -350,10 +349,11 @@ tbody > tr {
                     grid.setValue(selectedRowKey, 'use', 'N'); // 테이블에 비가동 상태 반영
                     Swal.fire({
                         icon: 'success',
-                        text: '"비가동 상태로 전환되었습니다.',
+                        text: '"비가동" 상태로 전환되었습니다.',
+                    }).then(() => {
+                        location.reload(); // 페이지 새로고침
                     });
                     $('#nOpModal').modal('hide');
-                    $('#nOpModal').reset();
                 },
                 error: function () {
                     Swal.fire({
@@ -365,6 +365,7 @@ tbody > tr {
         });
     });
 </script>
+
 
 </body>
 </html>
