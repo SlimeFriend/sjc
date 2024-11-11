@@ -466,45 +466,106 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.getElementById('insertMtBtn').addEventListener('click', function() {
+	    // 빈 값 입력 시 오류 있음.
+	    let createdRows = gridMtInsertModal.getModifiedRows().createdRows;
+	    let updatedRows = gridMtInsertModal.getModifiedRows().updatedRows;
+
+		//createdRows = updatedRows;
 	    
-	    const createdRows = gridMtInsertModal.getModifiedRows().createdRows;
-	    const updatedRows = gridMtInsertModal.getModifiedRows().updatedRows;
-	    //const modifiedRows = gridInsert.getData();
-	    
+	    console.log('createdRows');
 	    console.log(createdRows);
+	    console.log('updatedRows');
 	    console.log(updatedRows);
 	    
 	    
 	    createdRows.forEach(object => {
 			if	(object == null || object == ""){
-		        alert('데이터 입력하세요.');
+		        //alert('데이터 입력하세요.');
+				Swal.fire({
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                'warning',		// !	
+	                //'info',		// i
+	                //'question', 	// ?
+	                text: '데이터를 입력하세요.',
+	            });				
 		        return false;
 			}
 			
 		});
 	    
 	    if (createdRows.length == 0) {
-	        alert('등록된 데이터가 없습니다.');
+	        //alert('등록된 데이터가 없습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '등록된 데이터가 없습니다.',
+            });	        
 	        return false;
 	    }
 	    
 	    if(gridMtInsertModal.validate() == 0){
 			// do nothing
 		}else if (gridMtInsertModal.validate()[0].errors.length > 0) {
-	        alert('형식에 맞게 입력하세요.');
+	        //alert('형식에 맞게 입력하세요.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '형식에 맞게 입력하세요.',
+            });		        
 	        return false;
 	    }
-	
+
+		const isConfirmed = Swal.fire({
+	            title: '자재 등록',
+	            text: "자재를 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					saveMts(createdRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '자재 등록완료',
+                        text: '자재 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+
+		/*
 		if (confirm("등록 하시겠습니까??")){
-			saveCps(createdRows);
+			saveMts(createdRows);
 		}else{
 			return false;
 		}
+		*/
 		
 	});
 	
 	
-    function saveCps(createdRows) {
+    function saveMts(createdRows) {
 	    fetch('mts', {
 	        method: 'PUT',
 	        headers: {
@@ -551,16 +612,57 @@ document.addEventListener('DOMContentLoaded', function() {
 		const checkedRows = grid.getCheckedRows();
 		console.log(checkedRows);
 		if (checkedRows.length === 0) {
-			alert('삭제할 자재를 선택해주세요.');
+			//alert('삭제할 자재를 선택해주세요.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '삭제할 자재를 선택해주세요.',
+            });			
 	    	return;
 		}
-	  
+
+
+		const isConfirmed = Swal.fire({
+	            title: '자재 삭제',
+	            text: "자재를 삭제하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '삭제', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					//deleteMts(checkedRows.map(row => row.MtCode)); // List<String>
+					deleteMts(checkedRows); // List<MtVO>
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '자재 삭제완료',
+                        text: '자재 삭제가 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+	  	/*
 		if (confirm("삭제하시겠습니까??")){
 			//deleteMts(checkedRows.map(row => row.MtCode)); // List<String>
 			deleteMts(checkedRows); // List<MtVO>
 		}else{
 			return;
 		}
+		*/
 	});
 
     function deleteMts(mtCodes) {
@@ -593,13 +695,18 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 		.catch(error => {
 			console.error('Delete error:', error);
-			alert('삭제 중 오류가 발생했습니다.');
+			//alert('삭제 중 오류가 발생했습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                'error',		// X
+                //'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '삭제 중 오류가 발생했습니다.',
+            });			
 		});
     }
-
-
-
-
 
 
 	grid.on('click', (ev) => {
@@ -640,16 +747,76 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const updatedRows = modifiedRows.updatedRows;
 	    
 	    if (updatedRows.length > 0) {
+			
+			const isConfirmed = Swal.fire({
+		            title: '자재 수정',
+		            text: "자재를 수정하시겠습니까?",
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                //'warning',		// !	
+	                'info',		// i
+	                //'question', 	// ?
+		            showCancelButton: true,
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: '등록', // 수정.
+		            cancelButtonText: '취소'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+						// do something.
+						updateMts(updatedRows);
+						
+	                    Swal.fire({
+	                        icon: 'success',
+	                        title: 'BOM 등록완료',
+	                        text: 'BOM 등록이 완료 되었습니다.',
+	                    });
+	                }else{
+	    				return false;
+					}
+	        	});			
+			/*
 			if (confirm("수정 하시겠습니까??")){
 				updateMts(updatedRows);
 			}else{
 				return false;
-			}	
+			}
+			*/	
+
+	    }else {
+
+			const isConfirmed = Swal.fire({
+		            title: '수정 사항 없음',
+		            text: "수정한 내용이 없습니다. 종료 하시겠습니까?",
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                'warning',		// !	
+	                //'info',		// i
+	                //'question', 	// ?
+		            showCancelButton: true,
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: '확인', // 수정.
+		            cancelButtonText: '취소'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+						// do something.
+				        $('#mtUpdateModal').modal('hide');
+						return false;
+
+	                }else{
+	    				return false;
+					}
+	        	});
+		}
+		/*			
 	    }else if(confirm("수정한 내용이 없습니다. 종료 하시겠습니까?")){
 	        $('#mtUpdateModal').modal('hide');
 			return false;
-			
 		}
+		*/
 	});
     function updateMts(updatedRows) {
 	    fetch('mts', {

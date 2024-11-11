@@ -301,29 +301,88 @@ document.addEventListener('DOMContentLoaded', function() {
 	    
 	    createdRows.forEach(object => {
 			if	(object == null || object == ""){
-		        alert('데이터 입력하세요.');
+		        //alert('데이터 입력하세요.');
+				Swal.fire({
+	                icon: 
+	                //'success';	// v
+	                //'error',		// X
+	                'warning',		// !	
+	                //'info',		// i	
+	                //'question', 	// ?
+	                text: '데이터 입력하세요.',
+	            });				
 		        return false;
 			}
 			
 		});
 	    
 	    if (createdRows.length == 0) {
-	        alert('등록된 데이터가 없습니다.');
+	        //alert('등록된 데이터가 없습니다.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i	
+                //'question', 	// ?
+                text: '등록된 데이터가 없습니다.',
+            });	        
 	        return false;
 	    }
 	    
 	    if(gridCpInsertModal.validate() == 0){
 			// do nothing
 		}else if (gridCpInsertModal.validate()[0].errors.length > 0) {
-	        alert('형식에 맞게 입력하세요.');
+	        //alert('형식에 맞게 입력하세요.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i	
+                //'question', 	// ?
+                text: '형식에 맞게 입력하세요.',
+            });		        
 	        return false;
 	    }
-	
+
+
+		const isConfirmed = Swal.fire({
+	            title: '업체 등록',
+	            text: "업체 등록하시겠습니까?",
+	            icon: 
+	            //'success';	// v
+	            //'error',		// X
+	            //'warning',		// !	
+	            'info',		// i
+	            //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록',
+	            cancelButtonText: '취소'
+            }).then((result) => {	
+                if (result.isConfirmed) {
+					// do something.
+					saveCps(createdRows);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: '업체 등록완료',
+                        text: '업체 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});
+
+		/*
 		if (confirm("등록 하시겠습니까??")){
 			saveCps(createdRows);
 		}else{
 			return false;
 		}
+		*/
 		
 	});
 	
@@ -425,7 +484,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	$('#editModeSwitch').on('change', function() {
 	    if(!$('#cpCode').val()) {
 	        $(this).prop('checked', false);
-	        alert('업체를 선택하세요.');
+	        //alert('업체를 선택하세요.');
+			Swal.fire({
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                'warning',		// !	
+                //'info',		// i
+                //'question', 	// ?
+                text: '업체를 선택하세요.',
+            });        
 	        return false;
 	    }
 	
@@ -441,6 +509,43 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	
     document.getElementById('deleteCpBtn').addEventListener('click', function() {
+		const isConfirmed = Swal.fire({
+	            title: '업체 삭제',
+	            text: "업체 삭제하시겠습니까?",
+	            icon: 
+	            //'success';	// v
+	            //'error',		// X
+	            //'warning',		// !	
+	            'info',		// i
+	            //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '삭제', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
+					const getData = gridCpModal.getData();
+					console.log(getData);
+					
+					const map = getData.map(row => ({
+					    cpCode: row.cpCode,
+					}));
+					console.log(map);
+					
+					deleteCps(map);
+								
+                    Swal.fire({
+                        icon: 'success',
+                        title: '업체 삭제완료',
+                        text: '업체 삭제가 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});		
+		/*
 		if (confirm("삭제하시겠습니까?")){
 			
 			const getData = gridCpModal.getData();
@@ -455,9 +560,51 @@ document.addEventListener('DOMContentLoaded', function() {
 		}else{
 			return false;
 		}
+		*/
     });
 	
 	$('#deleteBtn').on('click', function(){
+	const isConfirmed = Swal.fire({
+            title: '업체 삭제',
+            text: "업체 삭제하시겠습니까?",
+            icon: 
+            //'success';	// v
+            //'error',		// X
+            //'warning',		// !	
+            'info',		// i
+            //'question', 	// ?
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '삭제', // 수정.
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+				// do something.
+				const getData = $('#cpCode').val();
+				console.log(getData);
+				
+				const map = {
+				    cpCode: getData,
+				};
+				const mapAry = [{
+				    cpCode: getData,
+				}];
+				
+				console.log(mapAry);
+				deleteCps(mapAry);
+							
+                Swal.fire({
+                    icon: 'success',
+                    title: '업체 삭제완료',
+                    text: '업체 삭제가 완료 되었습니다.',
+                });
+            }else{
+				return false;
+			}
+    	});
+    			
+		/*
 		if (confirm("삭제 하시겠습니까?")){
 			
 			const getData = $('#cpCode').val();
@@ -475,6 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}else{
 			return false;
 		}
+		*/
 	});    
     
     
@@ -495,20 +643,67 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 		.catch(error => {
 			console.error('Delete error:', error);
-			alert('삭제 중 오류가 발생했습니다.');
+			//alert('삭제 중 오류가 발생했습니다.');
+			Swal.fire({
+                icon: 
+                'erorr',		// !	
+                text: '삭제 중 오류가 발생했습니다.',
+            });			
 		});
     }
     
     $('#updateBtn').on('click', function(){
-		if (confirm("수정 하시겠습니까?")){
+		
+		const isConfirmed = Swal.fire({
+	            title: 'BOM 등록',
+	            text: "BOM 등록하시겠습니까?",
+                icon: 
+                //'success';	// v
+                //'error',		// X
+                //'warning',		// !	
+                'info',		// i
+                //'question', 	// ?
+	            showCancelButton: true,
+	            confirmButtonColor: '#3085d6',
+	            cancelButtonColor: '#d33',
+	            confirmButtonText: '등록', // 수정.
+	            cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+					// do something.
 			
-			/*
-			const getData = $('#cpCode').val();
-			console.log(getData);
-			const map = {
-			    cpCode: getData,
-			};
-			*/
+					/*
+					const getData = $('#cpCode').val();
+					console.log(getData);
+					const map = {
+					    cpCode: getData,
+					};
+					*/
+					
+					const mapAry = [{
+					    cpCode: $('#cpCode').val(),
+					    cpName: $('#cpName').val(),
+					    cpType: $('#cpType').val(),
+					    businessNo: $('#businessNo').val(),
+					    address: $('#address').val(),
+					    tel: $('#tel').val(),
+					    comm: $('#comm').val(),
+					}];
+					console.log(mapAry);
+					updateCps(mapAry);
+					
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'BOM 등록완료',
+                        text: 'BOM 등록이 완료 되었습니다.',
+                    });
+                }else{
+    				return false;
+				}
+        	});		
+		
+		/*		
+		if (confirm("수정 하시겠습니까?")){
 			
 			const mapAry = [{
 			    cpCode: $('#cpCode').val(),
@@ -523,7 +718,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			updateCps(mapAry);
 		}else{
 			return false;
-		}		
+		}
+		*/		
 	});
     function updateCps(CpVOs) {
 		/*
