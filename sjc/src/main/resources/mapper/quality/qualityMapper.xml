@@ -2,28 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sjc.app.quality.mapper.QualityMapper">
 	<!-- 입고품질검사 검색기능 -->
-	<select id="searchMO" resultType="InspectionVO">
-		SELECT  mo.mtl_od_code
-		        , mo.mtl_od_date
-		        , mo.mtl_od_status
-		        , mo.cp_code
-		        , c.cp_name
-		        , o.mtl_od_status
-		FROM    mtl_od mo
-		LEFT JOIN cp c ON mo.cp_code = c.cp_code
+<!-- 	<select id="searchMO" resultType="InspectionVO">
+		SELECT  DISTINCT(o.mtl_od_code) AS mtl_od_code,
+				o.cp_code AS cp_code,
+				c.cp_name AS cp_name,
+				sum(od.quantity) AS mtl_od_quantity,
+				o.mtl_od_date AS mtl_od_date,
+				o.dilivery_date AS dilivery_date,
+				(SELECT SUM(COALESCE(m.UNIT_PRICE, 0) * COALESCE(od.QUANTITY, 0))
+					FROM MTL_OD_DETAIL od
+					LEFT JOIN MT m 
+					ON od.MT_CODE = m.MT_CODE
+					WHERE od.MTL_OD_CODE = o.MTL_OD_CODE)
+					 AS price,
+				o.user_id AS user_id,
+				o.mtl_od_status AS mtl_od_status,
+				o.comm AS comm
+		FROM    mtl_od o
+			JOIN cp c 
+			ON o.cp_code = c.cp_code
+			JOIN mtl_od_detail od 
+			ON od.mtl_od_code = o.mtl_od_code
 		WHERE 1=1
-		AND 	(	o.mtl_od_status = '입고품질검사대기'
+		AND 	(	mo.mtl_od_status = '입고품질검사대기'
                         OR
-					o.mtl_od_status = '입고품질검사중'
+					mo.mtl_od_status = '입고품질검사중'
                         OR 
-					o.mtl_od_status = '입고품질검사완료'
+					mo.mtl_od_status = '입고품질검사완료'
 						OR 
-					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
+					mod.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
                         and
-                    o.mtl_od_status not in '입고완료'
+                    mo.mtl_od_status not in '입고완료'
                  )
 		<if test="cpCode != null and cpCode != ''">
-	        AND mo.cp_code LIKE '%' || #{cpCode} || '%'
+	        AND o.cp_code LIKE '%' || #{cpCode} || '%'
 	    </if>
         <if test="cpName != null and cpName != ''">
 	        AND c.cp_name LIKE '%' || #{cpName} || '%'
@@ -34,9 +46,68 @@
 	    <if test="moEndDate != null and moEndDate != ''">
 	        AND mo.mtl_od_date <![CDATA[<=]]> TO_DATE(#{moEndDate}, 'YYYY-MM-DD') + 1
 	    </if>
-    	ORDER BY mo.mtl_od_date DESC
+    	GROUP BY ROLLUP ((mo.mtl_od_code 
+							, o.cp_code
+							, c.cp_name
+							, mo.mtl_od_date
+							, o.dilivery_date
+							, o.price
+							, o.user_id
+							, o.mtl_od_status
+							, o.comm
+						))
+		HAVING o.mtl_od_code IS NOT NULL
+		ORDER BY o.mtl_od_date DESC
 	</select>
-	
+ -->	
+ 	<select id="searchMO" resultType="InspectionVO">
+		SELECT
+				DISTINCT(o.mtl_od_code) AS mtl_od_code,
+				o.cp_code AS cp_code,
+				c.cp_name AS cp_name,
+				sum(od.quantity) AS mtl_od_quantity,
+				o.mtl_od_date AS mtl_od_date,
+				o.dilivery_date AS dilivery_date,
+				(SELECT SUM(COALESCE(m.UNIT_PRICE, 0) * COALESCE(od.QUANTITY, 0))
+					FROM MTL_OD_DETAIL od
+					LEFT JOIN MT m 
+					ON od.MT_CODE = m.MT_CODE
+					WHERE od.MTL_OD_CODE = o.MTL_OD_CODE)
+					 AS price,
+				o.user_id AS user_id,
+				o.mtl_od_status AS mtl_od_status,
+				o.comm AS comm
+		FROM mtl_od o
+			JOIN cp c 
+			ON o.cp_code = c.cp_code
+			JOIN mtl_od_detail od 
+			ON od.mtl_od_code = o.mtl_od_code
+		WHERE (o.mtl_od_status = '입고품질검사대기'
+                        OR
+					o.mtl_od_status = '입고품질검사중'
+                        OR 
+					o.mtl_od_status = '입고품질검사완료'
+						OR 
+					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
+                        and
+                    o.mtl_od_status not in '입고완료')
+         <if test="cpCode != null and cpCode != ''">
+	        AND o.cp_code LIKE '%' || #{cpCode} || '%'
+	    </if>
+		GROUP BY ROLLUP ((o.mtl_od_code 
+							, o.cp_code
+							, c.cp_name
+							, o.mtl_od_date
+							, o.dilivery_date
+							, o.price
+							, o.user_id
+							, o.mtl_od_status
+							, o.comm
+						))
+		HAVING o.mtl_od_code IS NOT NULL
+		ORDER BY o.mtl_od_date DESC
+	</select>
+ 
 	<!-- 입고품질검사 대기목록 1 (mtlOd)-->
 	<select id="selectMtlOd" resultType="InspectionVO">
 		SELECT
@@ -60,7 +131,7 @@
 			ON o.cp_code = c.cp_code
 			JOIN mtl_od_detail od 
 			ON od.mtl_od_code = o.mtl_od_code
-		WHERE o.mtl_od_status = '입고품질검사대기'
+		WHERE (o.mtl_od_status = '입고품질검사대기'
                         OR
 					o.mtl_od_status = '입고품질검사중'
                         OR 
@@ -68,7 +139,7 @@
 						OR 
 					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
                         and
-                    o.mtl_od_status not in '입고완료'
+                    o.mtl_od_status not in '입고완료')
 		GROUP BY ROLLUP ((o.mtl_od_code 
 							, o.cp_code
 							, c.cp_name

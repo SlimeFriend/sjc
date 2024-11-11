@@ -124,11 +124,15 @@
 
 			    const cpCode = document.getElementById('cpCode').value;
 			    const cpName = document.getElementById('cpName').value;
+			    const moStartDate = document.getElementById('moStartDate').value;
+			    const moEndDate = document.getElementById('moEndDate').value;
 			    
 			    
 			    const searchCriteria = {
 			    		cpCode: cpCode,
 			    		cpName: cpName,
+			    		moStartDate: moStartDate,
+			    		moEndDate: moEndDate
 			    };
 			    //alert("searchCriteria" + searchCriteria);
 			    searchAjax(searchCriteria);
@@ -136,11 +140,17 @@
 			});
 			document.getElementById('cpName').addEventListener('input', () => {
 
+				const cpCode = document.getElementById('cpCode').value;
 			    const cpName = document.getElementById('cpName').value;
+			    const moStartDate = document.getElementById('moStartDate').value;
+			    const moEndDate = document.getElementById('moEndDate').value;
 			    
 			    
 			    const searchCriteria = {
+			    		cpCode: cpCode,
 			    		cpName: cpName,
+			    		moStartDate: moStartDate,
+			    		moEndDate: moEndDate
 			    };
 			    //alert("searchCriteria" + searchCriteria);
 			    searchAjax(searchCriteria);
@@ -148,11 +158,17 @@
 			});
 			document.getElementById('moStartDate').addEventListener('input', () => {
 
+				const cpCode = document.getElementById('cpCode').value;
+			    const cpName = document.getElementById('cpName').value;
 			    const moStartDate = document.getElementById('moStartDate').value;
+			    const moEndDate = document.getElementById('moEndDate').value;
 			    
 			    
 			    const searchCriteria = {
+			    		cpCode: cpCode,
+			    		cpName: cpName,
 			    		moStartDate: moStartDate,
+			    		moEndDate: moEndDate
 			    };
 			    //alert("searchCriteria" + searchCriteria);
 			    searchAjax(searchCriteria);
@@ -160,11 +176,17 @@
 			});
 			document.getElementById('moEndDate').addEventListener('input', () => {
 
+				const cpCode = document.getElementById('cpCode').value;
+			    const cpName = document.getElementById('cpName').value;
+			    const moStartDate = document.getElementById('moStartDate').value;
 			    const moEndDate = document.getElementById('moEndDate').value;
 			    
 			    
 			    const searchCriteria = {
-			    		moEndDate: moEndDate,
+			    		cpCode: cpCode,
+			    		cpName: cpName,
+			    		moStartDate: moStartDate,
+			    		moEndDate: moEndDate
 			    };
 			    //alert("searchCriteria" + searchCriteria);
 			    searchAjax(searchCriteria);
