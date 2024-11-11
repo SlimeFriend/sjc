@@ -98,8 +98,8 @@
 
 							<div style="display: flex; width: 100%; gap: 20px;">
 								<div class="pd-30 card-box mb-20" style="width: 100%;">
-									<h4 class="h5 mb-20">검사상세등록</h4>
-									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 조회 </button></div>
+									<h4 class="h5 mb-20">검사상세입력</h4>
+									<div id="modalInspectionDetail"><button class="btn btn-primary" id="testInsert" type="button"> 입력 </button></div>
 									
 								</div>
 <!-- 								<div class="pd-20 card-box mb-20" style="width: 50%;">
@@ -693,6 +693,12 @@
 	                            cancelButtonText: '취소'
 	                            }).then((result) => {
 	                                if (result.isConfirmed) {
+	                                	
+	                                	$('#myModal').modal('hide');
+	                					grid.resetData(gridData);
+	                					gridDetail.resetData(gridDetailData);
+	                					
+	                					
 	                                    Swal.fire({
 	                                        icon: 'success',
 	                                        title: '품질 검사 등록 완료',
@@ -700,8 +706,6 @@
 	                                    });
 	                                }
 	                        })
-					$('#myModal').modal('hide');
-					location.reload();
 					},
 					error: function(xhr, status, error) {
 					console.error('Error during request', error);

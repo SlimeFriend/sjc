@@ -8,10 +8,20 @@
 		        , mo.mtl_od_status
 		        , mo.cp_code
 		        , c.cp_name
+		        , o.mtl_od_status
 		FROM    mtl_od mo
 		LEFT JOIN cp c ON mo.cp_code = c.cp_code
 		WHERE 1=1
-		AND mo.mtl_od_status = '입고품질검사대기'
+		AND 	(	o.mtl_od_status = '입고품질검사대기'
+                        OR
+					o.mtl_od_status = '입고품질검사중'
+                        OR 
+					o.mtl_od_status = '입고품질검사완료'
+						OR 
+					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
+                        and
+                    o.mtl_od_status not in '입고완료'
+                 )
 		<if test="cpCode != null and cpCode != ''">
 	        AND mo.cp_code LIKE '%' || #{cpCode} || '%'
 	    </if>
@@ -50,22 +60,15 @@
 			ON o.cp_code = c.cp_code
 			JOIN mtl_od_detail od 
 			ON od.mtl_od_code = o.mtl_od_code
-		WHERE o.mtl_od_status = '입고품질검사대기' -- 완료
-			OR (
+		WHERE o.mtl_od_status = '입고품질검사대기'
+                        OR
 					o.mtl_od_status = '입고품질검사중'
-						AND 
-					od.MTL_OD_DETAIL_STATUS IS NULL
-				)
-			OR (
-					o.mtl_od_status = '입고품질검사중'
-						AND 
-					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
-				)
-			OR (
+                        OR 
 					o.mtl_od_status = '입고품질검사완료'
-						AND 
+						OR 
 					od.MTL_OD_DETAIL_STATUS = '개별입고품질검사중'
-				)
+                        and
+                    o.mtl_od_status not in '입고완료'
 		GROUP BY ROLLUP ((o.mtl_od_code 
 							, o.cp_code
 							, c.cp_name
@@ -501,8 +504,8 @@
 			JOIN    sjc_user u
 			ON      u.user_id = po.manager
 		WHERE   po.status = 'b3'
-			OR po.status = '완제품품질검사중' 
-            OR pd.status = '개별완제품품질검사중'
+			OR po.status = '완제품품질검사중'
+			OR (po.status = '완제품품질검사완료' And pd.status = '개별완제품품질검사중')
 		GROUP BY po.porder_code
                 , po.porder_date
         ORDER BY po.porder_date DESC
@@ -521,7 +524,8 @@
 		JOIN porder po
 		ON po.porder_code = pd.porder_code
 		WHERE po.porder_code = #{porderCode}
-		AND     pd.status = 'b3'
+		AND    ( pd.status = 'b3'
+		OR pd.status = '개별완제품품질검사중')
 	</select>
 <!-- Update Status (porder, pdetail) -->
 	<update id="updatePOrderStatus">
