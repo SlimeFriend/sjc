@@ -87,14 +87,13 @@
 				<div class="pd-ltr-20">
 					<h2 class="h2 mb-20">검사등록</h2>
 
-					<div class="pd-30 card-box mb-20">
-					<div style="display: flex; align-items: center; gap: 10px;">
-						<button class="btn btn-primary mb-3" id="registerBtn">
-							검사 등록</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal"
-							id="cancelBtn">취소</button>
-							</div>
+						<div class="pd-30 card-box mb-20">
 						<h4 class="h5 mb-20">검사대상 목록</h4>
+							<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; justify-content: end;">
+								<button class="btn btn-primary" id="registerBtn">
+									검사 등록</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">취소</button>
+							</div>
 						<div id="modalInspection"></div>
 					</div>
 
@@ -102,7 +101,7 @@
 						<div class="pd-30 card-box mb-20" style="width: 100%;">
 							<h4 class="h5 mb-20">검사상세등록</h4>
 							<div id="modalInspectionDetail">
-								<button class="btn btn-primary" id="testInsert" type="button">
+								<button class="btn btn-primary mb-3" style="float: right;" id="testInsert" type="button">
 									입력</button>
 							</div>
 						</div>
