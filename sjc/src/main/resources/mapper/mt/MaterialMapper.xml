@@ -71,11 +71,13 @@
     </select>
 
 <select id="selectMaterialsByPlanCode" parameterType="String" resultType="com.sjc.app.mt.service.MtVO">
-       SELECT
+    SELECT
+        m.CP_CODE, 
         bd.MT_CODE,
         m.MT_NAME,
         SUM(pd.QUANTITY) AS QUANTITY,
-       m.CURRENT_STC,
+     
+         m.CURRENT_STC,
         m.SAFETY_STOCK,
         SUM(bd.QUANTITY_REQUIRED * pd.QUANTITY) AS TOTAL_REQUIRED
     FROM
@@ -89,8 +91,9 @@
     JOIN
         MT m ON bd.MT_CODE = m.MT_CODE
     WHERE
-        p.PLAN_CODE = #{planCode}  
+        p.PLAN_CODE = #{planCode}  <!-- planCode를 기준으로 조회 -->
     GROUP BY
+         m.CP_CODE,
         bd.MT_CODE,
         m.MT_NAME,
         m.CURRENT_STC,
