@@ -1103,7 +1103,28 @@ events.forEach(eventName => {
                 text: '단가를 입력하세요.',
             });		    
 		    return false;
-		}	    
+		}
+        if(!/^\d*$/.test(unitPrice)) {
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '숫자만 입력하세요.',
+            });	
+	        unitPrice = unitPrice.replace(/[^0-9]/g, '');
+		    return false;
+    	}
+        const num = parseInt(unitPrice);
+        
+        // 0이하인 경우 체크
+        if(num <= 0) {
+			Swal.fire({
+                icon: 
+                'warning',		// !	
+                text: '0보다 큰 값을 입력하세요.',
+            });			
+            unitPrice = '';
+        }    	
+    	
 
 		const description = document.querySelector('textarea[name="description"]').value;
 		if (!description || description.trim() === '') {
@@ -1656,6 +1677,28 @@ events.forEach(eventName => {
 	}
 	$('#prdCode').on('input', checkPrdCode);
 
+	
+	
+	function searchPrds() {
+	    const productVO = {
+	        PrdCode: $('#inputPrdCode').val(),
+	        prdName: $('#inputPrdName').val(),
+	    };
+	
+	    $.ajax({
+	        url: "prds",
+	        method: "GET",
+	        data: productVO,
+	        success: function(response) {
+	            gridPrd.resetData(response);
+	        },
+	        error: function(error) {
+	            console.log(error);
+	        }
+	    });
+	}
+	$('#inputPrdCode, #inputPrdName').on('input', searchPrds);	
+	
 	
 	document.addEventListener('click', (e) => {
 	    gridMtModal.finishEditing();
