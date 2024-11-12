@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="defaultSidebar">
 	<div class="left-side-bar">
 		<div class="brand-logo">
@@ -80,7 +80,9 @@
 							<li><a th:href="@{infoPrdList}">제품 관리</a></li>
 							<li><a th:href="@{infoLineProcessList}">라인 관리</a></li>
 							<li><a th:href="@{infoCpList}">업체 관리</a></li>
-							<li><a th:href="@{infoUserList}">사용자 관리</a></li>
+							<li sec:authorize="hasRole('ROLE_ADMIN')">
+								<a th:href="@{infoUserList}">사용자 관리</a>
+							</li>							
 							<!-- 
 							<li><a th:href="@{infoChartSixth}">차트</a></li>
 							<li><a th:href="@{infoChartOcta}">차트</a></li>
