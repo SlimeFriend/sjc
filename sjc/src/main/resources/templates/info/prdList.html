@@ -57,24 +57,36 @@
 		<div class="pd-ltr-20">
 	 -->
 		<h2 class="h2 mb-20">기준정보 > 제품 관리</h2>
+		<div class="mb-20 d-flex align-items-center" style="font-size: 18px; font-weight: bold;">
+			<i class="fa-solid fa-house" style="margin-right : 8px;"></i> > 기준정보  >  <span style="color: #575757; margin-left : 8px;">제품관리</span>
+		</div>		
 	        <div style="display: flex; width: 100%; gap: 20px;">
 	        
 	            <div class="pd-30 card-box mb-20" style="width: 50%;">
-					<div class="d-flex justify-content-between align-items-center align-middle mb-20">
-				        <h4 class="h5 mb-0">제품 목록</h4>
-						<div>
-							<!-- 
-							<button type="button" class="btn btn-success" id="openBomBtn">BOM 생성</button>
-							 -->
-							<button type="button" class="btn btn-success mr-3" id="openPrdBtn">등록</button>
-					        <button class="btn btn-warning mr-3" id="updatePrdBtn">수정</button>							
-					        <button class="btn btn-danger" id="deletePrdBtn">삭제</button>
-							<!-- 
-							<button type="button" class="btn btn-warning" id="">수정</button>
-							<button type="button" class="btn btn-danger" id="">삭제</button>
-							 -->
-						</div>
+					<div>
+				        <h4 class="h5 mb-20 text-nowrap">제품 목록</h4>
+					</div>
+					
+					<div class="form-group row align-items-center">
+					    
+					    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">제품코드</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputPrdCode" placeholder="">
+					   </div>
+					   						    
+					   <label class="col-sm-1 col-form-label text-nowrap h4 mb-0">제품명</label>
+					   <div class="col-sm-2 mb-0 py-0">
+					       <input class="form-control form-control-sm" type="text" id="inputPrdName" placeholder="">
+					   </div>						    
+						
+						<div class="col-auto ml-auto">
+					        <button class="btn btn-sm btn-success mr-3 text-nowrap" id="openPrdBtn">등록</button>
+					        <button class="btn btn-sm btn-warning mr-3 text-nowrap" id="updatePrdBtn">수정</button>
+					        <button class="btn btn-sm btn-danger text-nowrap" id="deletePrdBtn">삭제</button>						    
+						</div>						
 					</div>	            
+
 					<div class="gridClass" id="gridPrd"></div>
 	            </div>
 				<div style="display: flex; flex-direction: column; width: 50%;">
