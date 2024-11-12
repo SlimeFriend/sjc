@@ -49,10 +49,10 @@
 					<input class="form-control" id="cpCode" type="text"
 						placeholder="업체코드">
 				</div>
-			</div>
-			<div class="form-group row">
+<!-- 			</div>
+			<div class="form-group row"> -->
 				<label class="col-sm-12 col-md-1 col-form-label">업체명</label>
-				<div class="col-sm-12 col-md-3">
+				<div class="col-sm-5 col-md-3">
 					<input class="form-control" id="cpName" type="text"
 						placeholder="업체명">
 				</div>
@@ -64,7 +64,7 @@
 					<input class="form-control" id="moStartDate" type="date">
 				</div>
 				<div
-					class="col-sm-12 col-md-auto d-flex align-items-center justify-content-center">
+					class="col-sm-12 col-md-1 d-flex align-items-center justify-content-center">
 					<span style="font-size: 1rem;">~</span>
 				</div>
 				<div class="col-sm-12 col-md-3">
@@ -368,10 +368,6 @@
 					sortable: true,
 				}, ],
 				rowHeaders : [ 'rowNum' ],
-				pageOptions : {
-					useClient : true,
-					perPage : 5
-				}
 			});
 			
 			let mtlOdDetailCodeValue = "";
