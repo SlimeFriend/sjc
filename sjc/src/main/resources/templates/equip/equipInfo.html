@@ -285,8 +285,12 @@
 	                    	Swal.fire({
 	                            icon: 'success',
 	                            text: '삭제가 완료되었습니다.',
-	                        });
+	                        }).then((result) => {
+	                        	if (result.isConfirmed){
 	                        location.href = '/eqList'; // 삭제 후 목록 페이지로 이동
+	                        	}
+	                        });
+	                        	
 	                    } else {
 	                    	Swal.fire({
 	                            icon: 'error',
@@ -299,8 +303,6 @@
 	                }
 	            });
 
-	            // 모달 닫기
-	            $('#deleteConfirmModal').modal('hide');
 	        });
 
 	    });
