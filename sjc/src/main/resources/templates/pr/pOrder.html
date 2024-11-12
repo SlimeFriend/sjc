@@ -265,7 +265,11 @@
 					const rowData = grid.getData()[rowIndex];
 					
 					if(rowData.use === 'N'){
-						alert('해당 라인은 사용 불가능 합니다.');
+						Swal.fire({
+	    	                icon: 'warning',
+	    	                text: '해당 라인은 사용 불가능 합니다.',
+	    	            })
+						
 					}
 				});
 				
