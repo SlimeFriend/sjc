@@ -93,7 +93,17 @@
                     o.mtl_od_status not in '입고완료')
          <if test="cpCode != null and cpCode != ''">
 	        AND o.cp_code LIKE '%' || #{cpCode} || '%'
-	    </if>
+	    	</if>
+	        <if test="cpName != null and cpName != ''">
+		        AND c.cp_name LIKE '%' || #{cpName} || '%'
+		    </if>
+		    <if test="moStartDate != null and moStartDate != ''">
+		        AND o.mtl_od_date <![CDATA[>=]]> TO_DATE(#{moStartDate}, 'YYYY-MM-DD')
+		    </if>
+		    <if test="moEndDate != null and moEndDate != ''">
+		        AND o.mtl_od_date <![CDATA[<=]]> TO_DATE(#{moEndDate}, 'YYYY-MM-DD') + 1
+		    </if>
+	    
 		GROUP BY ROLLUP ((o.mtl_od_code 
 							, o.cp_code
 							, c.cp_name
