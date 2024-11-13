@@ -82,7 +82,8 @@ public class InfoUserController {
 	// 사용자 관리 페이지
 	@GetMapping("infoUserList")
 	public String infoUserList() {
-		return "info/userList";
+//		return "info/userList";
+		return "admin/userList";
 	}
 
 	
