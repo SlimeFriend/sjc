@@ -31,9 +31,9 @@ public class SpringSecurityConfig {
 //				.requestMatchers("/user/**").hasRole("USER")
 				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/infoUserList").hasRole("ADMIN")  //        
 	            // Spring Boot Admin과 Actuator 엔드포인트 허용
 	            .requestMatchers("/actuator/**", "/instances/**", "/assets/**",  "/login", "/error").permitAll()
-	         
 				.anyRequest().authenticated() // 위 경로 제외 인증되면 접속 허가. 권한 필요 없음.
 		)
 		.formLogin(formlogin -> formlogin
