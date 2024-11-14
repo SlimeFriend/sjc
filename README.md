@@ -7,6 +7,8 @@
 
 
   ## 1-1. 용어 설명
+  ![SJC - 최종_0005](https://github.com/user-attachments/assets/e51a580c-b5ed-4f80-9a33-e7552401b9f4)
+
 ![SJC - 최종_0006](https://github.com/user-attachments/assets/85e7ef67-88bf-4b1d-8a64-537b041ba7bc)
 
 
@@ -74,25 +76,28 @@
 
 
  ## 4-3. 생산
-![SJC - 최종_0059](https://github.com/user-attachments/assets/5804637a-e6c8-422c-85df-d5ae74547899)
-![SJC - 최종_0058](https://github.com/user-attachments/assets/f45167a4-d4b9-4fdc-8f91-8d3d65867be0)
+ ![SJC - 최종_0058](https://github.com/user-attachments/assets/f45167a4-d4b9-4fdc-8f91-8d3d65867be0)
+ ![SJC - 최종_0059](https://github.com/user-attachments/assets/5804637a-e6c8-422c-85df-d5ae74547899)
+
 
 
 
  ## 4-4. 자재
+ ![SJC - 최종_0071](https://github.com/user-attachments/assets/58b1afd3-6bb3-45d7-a217-e535d0d51e5c)
 ![SJC - 최종_0072](https://github.com/user-attachments/assets/9122b014-106d-454c-8941-5e9f69ffd604)
-![SJC - 최종_0071](https://github.com/user-attachments/assets/58b1afd3-6bb3-45d7-a217-e535d0d51e5c)
+
 
 
 
  ## 4-5. 품질
+ ![SJC - 최종_0080](https://github.com/user-attachments/assets/60606298-aeb1-473d-a370-faa4ded51356)
 ![SJC - 최종_0081](https://github.com/user-attachments/assets/5afb3bfc-026c-4781-a274-eb7535112db2)
-![SJC - 최종_0080](https://github.com/user-attachments/assets/60606298-aeb1-473d-a370-faa4ded51356)
+
 
 
 
  ## 4-6. 설비
+ ![SJC - 최종_0086](https://github.com/user-attachments/assets/897e4363-6571-443f-852f-96eccf16dc1f)
 ![SJC - 최종_0087](https://github.com/user-attachments/assets/447437c1-7092-4411-ad82-e5ff9d2d8e4c)
-![SJC - 최종_0086](https://github.com/user-attachments/assets/897e4363-6571-443f-852f-96eccf16dc1f)
 
 
