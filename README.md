@@ -7,7 +7,7 @@
 
 
   ## 1-1. 용어 설명
-  ![SJC - 최종_0005](https://github.com/user-attachments/assets/e51a580c-b5ed-4f80-9a33-e7552401b9f4)
+![김동훈-008](https://github.com/user-attachments/assets/372fd836-662d-4e43-aa8b-baae882a9043)
   ![김동훈-053](https://github.com/user-attachments/assets/f1414642-f2bb-4772-8e2d-4dd3f46e1cee)
 
 
