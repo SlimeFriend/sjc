@@ -7,10 +7,8 @@
 
 
   ## 1-1. 용어 설명
-![김동훈-008](https://github.com/user-attachments/assets/372fd836-662d-4e43-aa8b-baae882a9043)
-![김동훈-007 (1)](https://github.com/user-attachments/assets/869b95e8-3a81-4848-bee4-0426cca2263e)
-
-
+![007](https://github.com/user-attachments/assets/d4077cd8-cd6d-4a39-94d9-a42009480e5f)
+![006](https://github.com/user-attachments/assets/b7f3e4cf-87f2-40c5-9185-4b7e9afb53e1)
 
 
   ## 1-2. 공정 흐름도
